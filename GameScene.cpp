@@ -60,8 +60,7 @@ void GameScene::Initialize() {
 	
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
-	floor_ = std::make_unique<Floor>();
-	floor_->Initialize("floor");
+
 	sphere_ = std::make_unique<GameObject>();
 	sphere_->Initialize("sphere");
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });

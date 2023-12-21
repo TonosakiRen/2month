@@ -12,7 +12,6 @@
 #include "GameObject.h"
 
 #include "Skydome.h"
-#include "Floor.h"
 #include "Player.h"
 #include "DustParticle.h"
 #include "WhiteParticle.h"
@@ -61,7 +60,6 @@ private:
 	WorldTransform spriteTransform_;
 
 	std::unique_ptr<Skydome> skydome_;
-	std::unique_ptr<Floor> floor_;
 	std::unique_ptr<GameObject> sphere_;
 
 	std::unique_ptr<Player> player_;

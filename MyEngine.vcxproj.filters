@@ -94,9 +94,6 @@
     <ClCompile Include="Skydome.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Floor.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="DustParticle.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -265,9 +262,6 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Skydome.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Floor.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="DustParticle.h">
