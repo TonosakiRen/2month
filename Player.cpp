@@ -6,12 +6,11 @@ void Player::Initialize(const std::string name)
 	GameObject::Initialize(name);
 	input_ = Input::GetInstance();
 	modelSize_ = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	Vector3 modelCenter = ModelManager::GetInstance()->GetModelCenter(modelHandle_);
-	collider_.Initialize(&worldTransform_, name,modelSize_, modelCenter);
+	collider_.Initialize(&worldTransform_, name, modelHandle_);
 	worldTransform_.translation_ = { 0.0f,modelSize_.y / 2.0f,-7.0f };
 	modelWorldTransform_.Initialize();
 	modelWorldTransform_.SetParent(&worldTransform_);
-	//modelの中心からmodelの高さの半分したにmodelWorldTransformを配置
+	//modelの中心からmodelの高さの半分下にmodelWorldTransformを配置
 	modelWorldTransform_.translation_ = { 0.0f, -modelSize_.y / 2.0f,0.0f };
 
 	velocisity_ = { 0.0f,0.0f,0.0f };

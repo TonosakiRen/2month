@@ -208,9 +208,6 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Engine\Model</Filter>
     </ClCompile>
-    <ClCompile Include="Collider.cpp">
-      <Filter>Engine\PostEffect</Filter>
-    </ClCompile>
     <ClCompile Include="DeferredRenderer.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
@@ -228,6 +225,9 @@
     </ClCompile>
     <ClCompile Include="ViewProjection.cpp">
       <Filter>Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider.cpp">
+      <Filter>Engine\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

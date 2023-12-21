@@ -1,5 +1,6 @@
 #include "Collider.h"
 #include "ImGuiManager.h"
+#include "ModelManager.h"
 #include "Input.h"
 
 bool Collider::isDrawCollider = false;
@@ -26,6 +27,16 @@ void Collider::Initialize(WorldTransform* objectWorldTransform, const std::strin
 	worldTransform_.SetParent(objectWorldTransform);
 	worldTransform_.scale_ = initialScale;
 	worldTransform_.translation_ = initialPos;
+	name_ = name;
+	cube_.Initialize("box1x1");
+}
+
+void Collider::Initialize(WorldTransform* objectWorldTransform, const std::string name, uint32_t modelHandle)
+{
+	worldTransform_.Initialize();
+	worldTransform_.SetParent(objectWorldTransform);
+	worldTransform_.scale_ = ModelManager::GetInstance()->GetModelSize(modelHandle);
+	worldTransform_.translation_ = ModelManager::GetInstance()->GetModelCenter(modelHandle);
 	name_ = name;
 	cube_.Initialize("box1x1");
 }
@@ -91,7 +102,7 @@ bool Collider::Collision(Collider& colliderB, Vector3& pushBuckVector)
 	obb1.size = MakeScale(worldTransform_.matWorld_) / 2.0f;
 	obb2.size = MakeScale(colliderB.worldTransform_.matWorld_) / 2.0f;
 	if (!SphereCollision(obb1.center, obb1.size, obb2.center, obb2.size)) {
- 		pushBuckVector = { 0.0f,0.0f,0.0f };
+		pushBuckVector = { 0.0f,0.0f,0.0f };
 		return false;
 	}
 	Matrix4x4 rotateMatrix1 = NormalizeMakeRotateMatrix(worldTransform_.matWorld_);
@@ -123,8 +134,8 @@ bool Collider::Collision(Collider& colliderB, Vector3& pushBuckVector)
 
 bool Collider::SphereCollision(Vector3 position1, Vector3 size1, Vector3 position2, Vector3 size2)
 {
-	float radius1 = Length(size1) ;
-	float radius2 = Length(size2) ;
+	float radius1 = Length(size1);
+	float radius2 = Length(size2);
 	float distance = Length(position1 - position2);
 	if (distance < radius2 + radius1) {
 		return true;
@@ -197,7 +208,7 @@ void Collider::Draw(Vector4 color)
 
 	if (isDrawCollider) {
 		MatrixUpdate();
-		cube_.Draw(worldTransform_ ,color);
+		cube_.Draw(worldTransform_, color);
 	}
 
 }
