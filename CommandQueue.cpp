@@ -5,6 +5,7 @@
 #include "Helper.h"
 #include <assert.h>
 #include "DirectXCommon.h"
+#include <thread>
 
 CommandQueue::~CommandQueue() {
     Destroy();
