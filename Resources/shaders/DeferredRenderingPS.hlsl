@@ -68,7 +68,7 @@ float4 main(VSOutput input) : SV_TARGET
 	color.xyz *= (diffuse + specluer + ambient);
 
 	output.color.xyz = color.xyz;
-	output.w = 1.0f;
+	output.color.w = 1.0f;
 
 	return output.color;
 }
