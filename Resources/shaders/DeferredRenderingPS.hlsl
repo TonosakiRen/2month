@@ -5,7 +5,7 @@ struct VSOutput {
 };
 
 struct PixelShaderOutput {
-	float32_t4 color : SV_TARGET;
+	float32_t4 color : SV_TARGET0;
 };
 
 struct ViewProjection {
@@ -68,6 +68,7 @@ float4 main(VSOutput input) : SV_TARGET
 	color.xyz *= (diffuse + specluer + ambient);
 
 	output.color.xyz = color.xyz;
+	output.w = 1.0f;
 
 	return output.color;
 }
