@@ -59,6 +59,9 @@
     <Filter Include="Engine\Camera">
       <UniqueIdentifier>{3cb05c3c-7617-4c7d-871f-5267f6ef035e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Stage">
+      <UniqueIdentifier>{a1455d2e-93d7-4409-bbd5-0168b5fadb9d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -228,6 +231,9 @@
     </ClCompile>
     <ClCompile Include="Collider.cpp">
       <Filter>Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Stage\Stage.cpp">
+      <Filter>Game\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="ViewProjection.h">
       <Filter>Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\Stage.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

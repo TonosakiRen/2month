@@ -48,16 +48,9 @@ void GameScene::Initialize() {
 	player_ = std::make_unique<Player>();
 	player_->Initialize("GoalWell");
 
-	walls_.resize(3);
-	uint32_t wallModelHandle_ = ModelManager::Load("wall");
-	float sizeX = ModelManager::GetInstance()->ModelManager::GetModelSize(wallModelHandle_).x;
-	walls_[0] = std::make_unique<Wall>();
-	walls_[0]->Initialize({ -sizeX ,-2.0f,0.0f});
-	walls_[1] = std::make_unique<Wall>();
-	walls_[1]->Initialize({ 0.0f,-2.0f,0.0f });
-	walls_[2] = std::make_unique<Wall>();
-	walls_[2]->Initialize({ +sizeX,-2.0f,0.0f });
-	
+	stage_ = std::make_unique<Stage>();
+	stage_->initialize();
+
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
 
@@ -159,14 +152,12 @@ void GameScene::InGameUpdate() {
 
 	skydome_->Update();
 
-	for (auto& wall : walls_) {
-		wall->Update();
-	}
+	stage_->Update();
 
 	player_->Update();
 
-	for (auto& wall : walls_) {
-		player_->Collision(wall->collider_);
+	for (uint32_t index = 0; index < stage_->GetWallSize(); index++) {
+		player_->Collision(stage_->GetWallCollider(index));
 	}
 }
 
@@ -178,9 +169,7 @@ void GameScene::ModelDraw()
 		break;
 	case GameScene::Scene::InGame:
 		skydome_->Draw();
-		for (auto& wall : walls_) {
-			wall->Draw();
-		}
+		stage_->Draw();
 		player_->Draw();
 		sphere_->Draw();
 		break;

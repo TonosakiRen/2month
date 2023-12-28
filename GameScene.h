@@ -15,8 +15,8 @@
 #include "Player.h"
 #include "DustParticle.h"
 #include "WhiteParticle.h"
-#include "Wall.h"
 
+#include "Game/Stage/Stage.h"
 
 #include <optional>
 class GameScene
@@ -68,7 +68,7 @@ private:
 
 	std::unique_ptr<WhiteParticle> whiteParticle_;
 
-	std::vector<std::unique_ptr<Wall>> walls_;
+	std::unique_ptr<Stage> stage_;
 
 	Vector4 color = {1.0f,1.0f,1.0f,1.0f};
 
