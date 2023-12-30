@@ -241,6 +241,9 @@
     <ClCompile Include="Scene\InGameScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\CreateStageScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -424,6 +427,9 @@
       <Filter>Game\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Scene\InGameScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CreateStageScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>

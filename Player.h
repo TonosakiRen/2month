@@ -11,6 +11,7 @@ public:
     void Update();
     void Collision(Collider& otherCollider);
     void Draw();
+    void DrawImGui();
 public:
     Collider collider_;
 private:

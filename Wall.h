@@ -9,6 +9,8 @@ public:
     void Initialize(Vector3 position);
     void Update();
     void Draw();
+    void DrawImGui();
+
 public:
     Collider collider_;
 };

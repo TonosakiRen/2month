@@ -11,6 +11,7 @@ public:
 	void initialize();
 	void Update();
 	void Draw();
+	void DrawImGui();
 
 	Collider& GetWallCollider(uint32_t number) const { return walls_.at(number)->collider_; }
 	const uint32_t& GetWallSize() const { return static_cast<uint32_t>(walls_.size()); }
