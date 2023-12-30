@@ -150,6 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
+    <ClCompile Include="Scene\InGameScene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -212,6 +213,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RootSignature.h" />
+    <ClInclude Include="Scene\InGameScene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Sprite.h" />

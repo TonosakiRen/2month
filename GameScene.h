@@ -17,9 +17,10 @@
 #include "WhiteParticle.h"
 
 #include "Game/Stage/Stage.h"
+#include "Scene/InGameScene.h"
 
 #include <optional>
-class GameScene
+class GameScene 
 {
 
 public:
@@ -62,17 +63,16 @@ private:
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<GameObject> sphere_;
 
-	std::unique_ptr<Player> player_;
-
 	std::unique_ptr<DustParticle> dustParticle_;
 
 	std::unique_ptr<WhiteParticle> whiteParticle_;
 
-	std::unique_ptr<Stage> stage_;
-
 	Vector4 color = {1.0f,1.0f,1.0f,1.0f};
 
 	std::unique_ptr<Compute> compute_;
+
+	// Scene用クラス
+	std::unique_ptr<InGameScene> inGameScene_;
 
 	//Scene
 	enum class Scene {

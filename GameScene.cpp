@@ -39,20 +39,19 @@ void GameScene::Initialize() {
 	directionalLights_.Initialize();
 	directionalLights_.Update();
 
+	// InGameSceneの生成と初期化
+	inGameScene_ = std::make_unique<InGameScene>();
+	inGameScene_->Initialize();
+	
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize(textureHandle_, { 0.0f,0.0f });
 
-	player_ = std::make_unique<Player>();
-	player_->Initialize("GoalWell");
-
-	stage_ = std::make_unique<Stage>();
-	stage_->initialize();
-
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
+	//skydome_->SetParentTranslate(inGameScene_->GetPlayerTrans());
 
 	sphere_ = std::make_unique<GameObject>();
 	sphere_->Initialize("sphere");
@@ -89,7 +88,7 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		else {
 			currentViewProjection_ = camera_.get();
-			camera_->Update(player_->GetWorldTransform()->translation_.x);
+			camera_->Update(inGameScene_->GetPlayerTrans()->translation_.x);
 		}
 		
 		// light
@@ -142,7 +141,10 @@ void GameScene::TitleUpdate() {
 
 }
 void GameScene::InGameInitialize() {
-
+	if (inGameScene_) {
+		inGameScene_.reset(new InGameScene());
+		inGameScene_->Initialize();
+	}
 }
 void GameScene::InGameUpdate() {
 
@@ -150,15 +152,9 @@ void GameScene::InGameUpdate() {
 		sceneRequest_ = Scene::Title;
 	}
 
-	skydome_->Update();
+	inGameScene_->Update();
 
-	stage_->Update();
-
-	player_->Update();
-
-	for (uint32_t index = 0; index < stage_->GetWallSize(); index++) {
-		player_->Collision(stage_->GetWallCollider(index));
-	}
+	skydome_->Update(inGameScene_->GetPlayerTrans()->translation_);
 }
 
 void GameScene::ModelDraw()
@@ -169,8 +165,7 @@ void GameScene::ModelDraw()
 		break;
 	case GameScene::Scene::InGame:
 		skydome_->Draw();
-		stage_->Draw();
-		player_->Draw();
+		inGameScene_->Draw();
 		sphere_->Draw();
 		break;
 	default:
