@@ -2,6 +2,7 @@
 #include <variant>
 #include <map>
 #include <string>
+#include <vector>
 #include "Mymath.h"
 class GlobalVariables {
 public:
@@ -65,6 +66,12 @@ public:
 	int32_t GetIntValue(const std::string& groupName, const std::string& key) const;
 	float GetFloatValue(const std::string& groupName, const std::string& key) const;
 	Vector3 GetVector3Value(const std::string& groupName, const std::string& key) const;
+
+	/// <summary>
+	/// ディレクトリ内の全ファイル名の取得
+	/// </summary>
+	/// <param name="fileName"></param>
+	void ChackFiles(std::vector<std::string>& fileName);
 
 private:
 	GlobalVariables() = default;

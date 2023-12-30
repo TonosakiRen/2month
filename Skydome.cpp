@@ -6,6 +6,7 @@ void Skydome::Initialize(const std::string name)
 	material_.enableLighting_ = false;
 	material_.Update();
 	worldTransform_.scale_ = worldTransform_.scale_ * 50.0f;
+	worldTransform_.Update();
 }
 
 void Skydome::Update(const Vector3& translate)
