@@ -259,7 +259,9 @@
     <ClCompile Include="ShadowMap.cpp">
       <Filter>ShadowMap</Filter>
     </ClCompile>
-    <ClCompile Include="Enemies.cpp" />
+    <ClCompile Include="Enemies.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -457,7 +459,9 @@
     <ClInclude Include="ShadowMap.h">
       <Filter>ShadowMap</Filter>
     </ClInclude>
-    <ClInclude Include="Enemies.h" />
+    <ClInclude Include="Enemies.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
