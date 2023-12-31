@@ -23,20 +23,28 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
     std::unordered_map<std::string, uint32_t> vertexDefinitionMap;
     std::string directoryPath = "Resources/models/" + modelIndex.name + "/";
     std::ifstream file(directoryPath + modelIndex.name + ".obj"); //ファイルを開く
+    std::unordered_map<std::string, uint32_t> materialHandles;
     int multiMeshIndex = -1;
     Vector3 minModelSize{};
-    Vector3 maxModelSize{};
+    Vector3 maxModelSize{ FLT_MIN,FLT_MIN,FLT_MIN };
     assert(file.is_open());//とりあえず開けなったら止める
 
     while (std::getline(file, line)) {
         std::string identifier;
         std::istringstream s(line);
-        s >> identifier;//先頭の識別子を読む
+        s >> identifier ;//先頭の識別子を読む
         if (identifier == "usemtl") {
+            std::string identifier2;
+            s >> identifier2;
             indexes.clear();
-            multiMeshIndex++;
-            if (modelIndex.meshes.size() <= multiMeshIndex) {
-                modelIndex.meshes.emplace_back();
+            multiMeshIndex++; 
+            modelIndex.meshes.emplace_back();
+            auto it = materialHandles.find(identifier2);
+            if (it != materialHandles.end()) {
+                modelIndex.meshes[multiMeshIndex].uvHandle_ = it->second;
+            }
+            else {
+                modelIndex.meshes[multiMeshIndex].uvHandle_ = 0;
             }
         }
         else if (identifier == "v") {
@@ -48,19 +56,19 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
             if (minModelSize.x > position.x) {
                 minModelSize.x = position.x;
             }
-            else if(maxModelSize.x < position.x){
+            if(maxModelSize.x < position.x){
                 maxModelSize.x = position.x;
             }
             if (minModelSize.y > position.y) {
                 minModelSize.y = position.y;
             }
-            else if (maxModelSize.y < position.y) {
+            if (maxModelSize.y < position.y) {
                 maxModelSize.y = position.y;
             }
             if (minModelSize.z > position.z) {
                 minModelSize.z = position.z;
             }
-            else if (maxModelSize.z < position.z) {
+            if (maxModelSize.z < position.z) {
                 maxModelSize.z = position.z;
             }  
         }
@@ -134,19 +142,28 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
             std::string uvFilePass;//構築するMaterialData
             std::string line;//fileから読んだ１行を格納するもの
             std::ifstream file("Resources/models/" + modelIndex.name + "/" + modelIndex.name + ".mtl"); //ファイルを開く
+            std::string materialName;
             assert(file.is_open());//とりあえず開けなかったら止める
             while (std::getline(file, line)) {
                 std::string identifier;
                 std::istringstream s(line);
                 s >> identifier;
                 //identifierに応じた処理
+                if (identifier == "newmtl") {
+                    std::string identifier2;
+                    s >> identifier2;
+                    materialName = identifier2;
+
+                }else
                 if (identifier == "map_Kd") {
                     std::string textureFilename;
                     s >> textureFilename;
                     //連結してファイルパスにする
                     uvFilePass = directoryPath + textureFilename;
-                    auto& mesh = modelIndex.meshes.emplace_back();
-                    mesh.uvHandle_ = TextureManager::LoadUv(textureFilename, uvFilePass);
+
+                    uint32_t uvHandle = TextureManager::LoadUv(textureFilename, uvFilePass);
+                    materialHandles.insert({ materialName , uvHandle });
+                    
                 }
             }
         }

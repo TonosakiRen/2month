@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "WorldTransform.h"
 #include "Input.h"
+#include "Audio.h"
 #include "Sprite.h"
 #include "DirectionalLights.h"
 #include "PointLights.h"
@@ -60,6 +61,7 @@ public:
 private: 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
+	Audio* audio_ = nullptr;
 
 	std::unique_ptr <DebugCamera> debugCamera_;
 	ViewProjection* currentViewProjection_ = nullptr;
@@ -71,8 +73,9 @@ private:
 
 	uint32_t textureHandle_;
 
-	std::unique_ptr<Sprite>sprite_;
-	WorldTransform spriteTransform_;
+	std::unique_ptr<Sprite> sprite_;
+
+	std::unique_ptr<Sprite> ui_;
 
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<GameObject> sphere_;

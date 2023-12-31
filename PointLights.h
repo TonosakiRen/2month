@@ -9,7 +9,7 @@ class PointLights
 {
 public:
 
-	static const uint32_t  lightNum = 1;
+	static const uint32_t  lightNum = 2;
 
 	struct PointLight {
 		Vector4 color = { 1.0f, 1.0f, 1.0f,1.0f };
@@ -17,7 +17,6 @@ public:
 		float intensity = 1.0f;
 		float radius = 1.0f;
 		float decay = 1.0f;
-		UploadBuffer constBuffer_;
 	};
 
 	struct ConstBufferData {
@@ -26,7 +25,6 @@ public:
 		float intensity = 1.0f;
 		float radius = 1.0f;
 		float decay = 1.0f;
-		float padding[2];
 	};
 
 	void Initialize();
@@ -34,6 +32,8 @@ public:
 
 public:
 	std::vector<PointLight> lights_;
+	UploadBuffer structureBuffer_;
+	DescriptorHandle srvHandle_;
 private:
 
 };

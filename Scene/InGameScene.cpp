@@ -2,7 +2,7 @@
 
 void InGameScene::Initialize() {
 	player_ = std::make_unique<Player>();
-	player_->Initialize("GoalWell");
+	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
 	stage_->initialize();

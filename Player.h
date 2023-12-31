@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Input.h"
+#include "Audio.h"
 #include "Collider.h"
 class Player :
     public GameObject
@@ -20,4 +21,5 @@ private:
     Vector3 acceleration_;
     Vector3 modelSize_;
     Input* input_;
+    Audio* audio_;
 };

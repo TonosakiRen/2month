@@ -123,7 +123,7 @@ size_t Audio::SoundLoadWave(const char* filename) {
 
 #pragma region ファイルオープン
     //directryPass
-    std::string directryPass = "Resources/Sounds/";
+    std::string directryPass = "Resources/sounds/";
     // ファイル入出ストリームのインスタンス
     std::ifstream file;
     // wavファイルをバイナリモードで開く
@@ -131,6 +131,8 @@ size_t Audio::SoundLoadWave(const char* filename) {
     // ファイルオープン失敗を検出する
     assert(file.is_open());
 #pragma endregion
+
+
 #pragma region wavデータ読み込み
     // RIFFヘッターの読み込み
     RiffHeader riff;
@@ -143,66 +145,100 @@ size_t Audio::SoundLoadWave(const char* filename) {
     if (strncmp(riff.type, "WAVE", 4) != 0) {
         assert(0);
     }
-    // Formatチャンクの読み込み
-    FormatChunk format = {};
-    // チャンクヘッターの確認
-    file.read((char*)&format, sizeof(ChunkHearder));
-    if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
-        assert(0);
+
+    auto SearchChunk = [&file](const char* id, ChunkHearder& dest) {
+        ChunkHearder data{};
+        const uint32_t kMaxSearchCount = 100;
+        for (uint32_t i = 0; i < kMaxSearchCount;) {
+            file.read((char*)&data, sizeof(ChunkHearder));
+            // 目的のチャンクだったら終了
+            if (strncmp(data.id, id, 4) == 0) {
+                dest = data;
+                return true;
+            }
+            // 余計なチャンクを飛ばす
+            file.seekg(data.size, std::ios_base::cur);
+        }
+        return false;
+    };
+
+    FormatChunk formatChunk{};
+    if (!SearchChunk("fmt ", formatChunk.chunk)) {
+        assert(false);
     }
     // チャンク本体の読み込み
-    assert(format.chunk.size <= sizeof(format.fmt));
-    file.read((char*)&format.fmt, format.chunk.size);
-    // Dataチャンクの読み込み
-    ChunkHearder data;
-    file.read((char*)&data, sizeof(data));
-    // JUNKチャンクを検出した場合
-    if (strncmp(data.id, "JUNK", 4) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
+    std::vector<char> formatData(formatChunk.chunk.size);
+    file.read(formatData.data(), formatChunk.chunk.size);
+    memcpy(&formatChunk.fmt, formatData.data(), sizeof(formatChunk.fmt));
+
+    ChunkHearder dataChunk{};
+    if (!SearchChunk("data", dataChunk)) {
+        assert(false);
     }
-    // LISTチャンクを検出した場合
-    if (strncmp(data.id, "LIST", 4) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
-    }
-    // bextチャンクを検出した場合
-    if (strncmp(data.id, "bext", 4) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
-    }
-    // INFOチャンクを検出した場合
-    if (strncmp(data.id, "INFO", 4) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
-    }
-    // REAPERチャンクを検出した場合
-    if (strncmp(data.id, "REAPER", 6) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
-    }
-    if (strncmp(data.id, "junk", 4) == 0) {
-        // 読み取りチャンクを検出した場合
-        file.seekg(data.size, std::ios_base::cur);
-        // 再読み込み
-        file.read((char*)&data, sizeof(data));
-    }
-    if (strncmp(data.id, "data", 4) != 0) {
-        assert(0);
-    }
+
+
+    //// Formatチャンクの読み込み
+    //FormatChunk format = {};
+    //// チャンクヘッターの確認
+    //file.read((char*)&format, sizeof(ChunkHearder));
+    //if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
+    //    assert(0);
+    //}
+    //// チャンク本体の読み込み
+    //assert(format.chunk.size <= sizeof(format.fmt));
+    //file.read((char*)&format.fmt, format.chunk.size);
+    //// Dataチャンクの読み込み
+    //ChunkHearder data;
+    //file.read((char*)&data, sizeof(data));
+
+    //// JUNKチャンクを検出した場合
+    //if (strncmp(data.id, "JUNK", 4) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //// LISTチャンクを検出した場合
+    //if (strncmp(data.id, "LIST", 4) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //// bextチャンクを検出した場合
+    //if (strncmp(data.id, "bext", 4) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //// INFOチャンクを検出した場合
+    //if (strncmp(data.id, "INFO", 4) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //// REAPERチャンクを検出した場合
+    //if (strncmp(data.id, "REAPER", 6) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //if (strncmp(data.id, "junk", 4) == 0) {
+    //    // 読み取りチャンクを検出した場合
+    //    file.seekg(data.size, std::ios_base::cur);
+    //    // 再読み込み
+    //    file.read((char*)&data, sizeof(data));
+    //}
+    //if (strncmp(data.id, "data", 4) != 0) {
+    //    assert(0);
+    //}
+    // 
     // Dataチャンクのデータ部（波形データ）の読み込み
-    std::vector<BYTE> pBuffer(data.size);
-    file.read(reinterpret_cast<char*>(pBuffer.data()), data.size);
+    std::vector<BYTE> pBuffer(dataChunk.size);
+    file.read(reinterpret_cast<char*>(pBuffer.data()), dataChunk.size);
 
     // Waveファイルを閉じる
     file.close();
@@ -211,9 +247,9 @@ size_t Audio::SoundLoadWave(const char* filename) {
     // returnする為の音声データ
     SoundData soundData = {};
     soundData.filename = filename;
-    soundData.wfex = format.fmt;
+    soundData.wfex = formatChunk.fmt;
     soundData.pBuffer = std::move(pBuffer);
-    soundData.bufferSize = data.size;
+    soundData.bufferSize = dataChunk.size;
 #pragma endregion
     soundData_.emplace_back(soundData);
 

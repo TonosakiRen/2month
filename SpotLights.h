@@ -9,7 +9,7 @@ class SpotLights
 {
 public:
 
-	static const uint32_t  lightNum = 1;
+	static const uint32_t  lightNum = 3;
 
 	struct SpotLight {
 		Vector4 color = { 1.0f, 1.0f, 1.0f,1.0f };
@@ -19,7 +19,6 @@ public:
 		float distance = 1.0f;
 		float decay = 1.0f;
 		float cosAngle = Radian(45.0f);
-		UploadBuffer constBuffer_;
 	};
 
 	struct ConstBufferData {
@@ -30,7 +29,6 @@ public:
 		float distance = 1.0f;
 		float decay = 1.0f;
 		float cosAngle = Radian(45.0f);
-		float padding[2];
 	};
 
 	void Initialize();
@@ -38,6 +36,8 @@ public:
 
 public:
 	std::vector<SpotLight> lights_;
+	UploadBuffer structureBuffer_;
+	DescriptorHandle srvHandle_;
 private:
 
 };

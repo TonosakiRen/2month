@@ -1,21 +1,39 @@
 #include "SpotLights.h"
+#include "DirectXCommon.h"
 
 void SpotLights::Initialize() {
-    lights_.push_back(SpotLight{});
-    lights_[0].constBuffer_.Create((sizeof(ConstBufferData) + 0xff) & ~0xff);
+    lights_.resize(lightNum);
+    // インスタンシングデータのサイズ
+    UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
+    structureBuffer_.Create(sizeINB);
+
+    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+    srvDesc.Format = DXGI_FORMAT_UNKNOWN;
+    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+    srvDesc.Buffer.FirstElement = 0;
+    srvDesc.Buffer.NumElements = lightNum;
+    srvDesc.Buffer.StructureByteStride = sizeof(ConstBufferData);
+
+    srvHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+    DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(structureBuffer_, &srvDesc, srvHandle_);
     Update();
 }
 
 void SpotLights::Update() {
 
-    // 定数バッファに書き込み
-    ConstBufferData bufferData;
-    bufferData.color = lights_[0].color;
-    bufferData.position = lights_[0].position;
-    bufferData.intensity = lights_[0].intensity;
-    bufferData.direction = lights_[0].direction;
-    bufferData.distance = lights_[0].distance;
-    bufferData.decay = lights_[0].decay;
-    bufferData.cosAngle = lights_[0].cosAngle;
-    lights_[0].constBuffer_.Copy(bufferData);
+    std::vector<ConstBufferData> bufferData;
+    bufferData.reserve(lightNum);
+    for (int i = 0; i < lightNum; i++) {
+        ConstBufferData data;
+        data.color = lights_[i].color;
+        data.position = lights_[i].position;
+        data.intensity = lights_[i].intensity;
+        data.direction = lights_[i].direction;
+        data.distance = lights_[i].distance;
+        data.decay = lights_[i].decay;
+        data.cosAngle = lights_[i].cosAngle;
+        bufferData.emplace_back(data);
+    }
+    structureBuffer_.Copy(bufferData.data(), sizeof(bufferData[0]) * bufferData.size());
 }

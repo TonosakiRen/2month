@@ -4,7 +4,7 @@
 #include <string>
 
 void Stage::initialize() {
-	uint32_t wallModelHandle_ = ModelManager::Load("wall");
+	uint32_t wallModelHandle_ = ModelManager::Load("scene");
 	float sizeX = ModelManager::GetInstance()->ModelManager::GetModelSize(wallModelHandle_).x;
 
 	const uint8_t wallSize = 3;

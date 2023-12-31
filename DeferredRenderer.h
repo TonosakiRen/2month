@@ -27,6 +27,8 @@ public:
 		kPointLights,
 		kSpotLights,
 
+		kLightNum,
+		
 		ParameterNum
 	};
 
@@ -46,9 +48,14 @@ private:
 	ColorBuffer* colorTexture_;
 	ColorBuffer* normalTexture_;
 	DepthBuffer* depthTexture_;
-	
-	DescriptorHandle uavHandle_;
-	
+
+	struct LightNum {
+		int32_t directionalLightNum;
+		int32_t pointLightNum;
+		int32_t spotLightNum;
+	};
+
+	UploadBuffer lightNumBuffer_;
 
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	D3D12_INDEX_BUFFER_VIEW ibView_{};

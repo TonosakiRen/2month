@@ -5,6 +5,7 @@ void Player::Initialize(const std::string name)
 {
 	GameObject::Initialize(name);
 	input_ = Input::GetInstance();
+	audio_ = Audio::GetInstance();
 	modelSize_ = ModelManager::GetInstance()->GetModelSize(modelHandle_);
 	collider_.Initialize(&worldTransform_, name, modelHandle_);
 	worldTransform_.translation_ = { 0.0f,modelSize_.y / 2.0f,-7.0f };
@@ -12,6 +13,8 @@ void Player::Initialize(const std::string name)
 	modelWorldTransform_.SetParent(&worldTransform_);
 	//modelの中心からmodelの高さの半分下にmodelWorldTransformを配置
 	modelWorldTransform_.translation_ = { 0.0f, -modelSize_.y / 2.0f,0.0f };
+
+	worldTransform_.quaternion_ = MakeFromAngleAxis({ 0.0f,1.0f,0.0f }, -Radian(90.0f));
 
 	velocisity_ = { 0.0f,0.0f,0.0f };
 	acceleration_ = { 0.0f,-0.05f,0.0f };
@@ -36,12 +39,15 @@ void Player::Update()
 	}
 
 	if (input_->TriggerKey(DIK_SPACE)) {
-		velocisity_.y = 1.0f;
+		velocisity_.y = 0.3f;
+		size_t handle = audio_->SoundLoadWave("jump.wav");
+		size_t jumpHandle = audio_->SoundPlayWave(handle);
+		audio_->SetValume(jumpHandle, 0.1f);
 	}
 
 	worldTransform_.translation_ += move;
 	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelSize_.y / 2.0f, FLT_MAX);
-	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -11.0f + modelSize_.z / 2.0f, FLT_MAX);
+	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + modelSize_.z / 2.0f, FLT_MAX);
 
 #ifdef _DEBUG
 	ImGui::Begin("Player");
