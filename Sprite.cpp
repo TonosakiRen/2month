@@ -1,19 +1,12 @@
 #include "Sprite.h"
 #include "TextureManager.h"
 #include <cassert>
-#include <d3dcompiler.h>
-#include "externals/DirectXTex/d3dx12.h"
-#include "DirectXCommon.h"
-#include "externals/DirectXTex/DirectXTex.h"
 #include "WinApp.h"
 #include "ShaderManager.h"
 #include "Renderer.h"
 
-#pragma comment(lib, "d3dcompiler.lib")
-
-using namespace DirectX;
 using namespace Microsoft::WRL;
-ID3D12GraphicsCommandList* Sprite::commandList_ = nullptr;
+CommandContext* Sprite::commandContext_ = nullptr;
 std::unique_ptr<RootSignature> Sprite::rootSignature_;
 std::unique_ptr<PipelineState> Sprite::pipelineState_;
 Matrix4x4 Sprite::matProjection_;
@@ -120,18 +113,18 @@ void Sprite::StaticInitialize() {
 	matProjection_ = MakeOrthograohicmatrix(0.0f, 0.0f, (float)WinApp::kWindowWidth, (float)WinApp::kWindowHeight,  0.0f, 1.0f);
 }
 
-void Sprite::PreDraw(ID3D12GraphicsCommandList* commandList) {
-	assert(Sprite::commandList_ == nullptr);
+void Sprite::PreDraw(CommandContext* commandContext) {
+	assert(Sprite::commandContext_ == nullptr);
 
-	commandList_ = commandList;
+	commandContext_ = commandContext;
 
-	commandList->SetPipelineState(*pipelineState_);
-	commandList->SetGraphicsRootSignature(*rootSignature_);
-	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	commandContext_->SetPipelineState(*pipelineState_);
+	commandContext_->SetGraphicsRootSignature(*rootSignature_);
+	commandContext_->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 }
 
 void Sprite::PostDraw() {
-	Sprite::commandList_ = nullptr;
+	Sprite::commandContext_ = nullptr;
 }
 
 void Sprite::Initialize(uint32_t textureHandle, Vector2 position, Vector4 color, Vector2 anchorpoint, bool isFlipX, bool isFlipY) {
@@ -186,13 +179,13 @@ void Sprite::Draw() {
 
 	constBuffer_.Copy(mapData);
 
-	commandList_->IASetVertexBuffers(0, 1, &vbView_);
+	commandContext_->SetVertexBuffer(0, 1, &vbView_);
 
-	commandList_->SetGraphicsRootConstantBufferView(0, constBuffer_.GetGPUVirtualAddress());
+	commandContext_->SetConstantBuffer(0, constBuffer_.GetGPUVirtualAddress());
 
-	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList_, 1, textureHandle_);
+	TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext_, 1, textureHandle_);
 	
-	commandList_->DrawInstanced(4, 1, 0, 0);
+	commandContext_->DrawInstanced(4, 1, 0, 0);
 }
 
 void Sprite::TransferVertices() {

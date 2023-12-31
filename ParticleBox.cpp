@@ -1,15 +1,12 @@
 #include "ParticleBox.h"
-#include "externals/DirectXTex/DirectXTex.h"
-#include <d3dcompiler.h>
 #include "ShaderManager.h"
 #include "DirectXCommon.h"
 #include "Renderer.h"
-
-#pragma comment(lib, "d3dcompiler.lib")
+#include "TextureManager.h"
 
 using namespace Microsoft::WRL;
 
-ID3D12GraphicsCommandList* ParticleBox::commandList_ = nullptr;
+CommandContext* ParticleBox::commandContext_ = nullptr;
 std::unique_ptr<RootSignature> ParticleBox::rootSignature_;
 std::unique_ptr<PipelineState> ParticleBox::pipelineState_;
 
@@ -20,22 +17,21 @@ void ParticleBox::StaticInitialize() {
     CreatePipeline();
 }
 
-void ParticleBox::PreDraw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProjection, const DirectionalLights& directionalLight) {
-    assert(ParticleBox::commandList_ == nullptr);
+void ParticleBox::PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection) {
+    assert(ParticleBox::commandContext_ == nullptr);
 
-    commandList_ = commandList;
+    commandContext_ = commandContext;
 
-    commandList->SetPipelineState(*pipelineState_);
-    commandList->SetGraphicsRootSignature(*rootSignature_);
+    commandContext_->SetPipelineState(*pipelineState_);
+    commandContext_->SetGraphicsRootSignature(*rootSignature_);
     // CBVをセット（ビュープロジェクション行列）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
-    // CBVをセット（ライト）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kDirectionalLight), directionalLight.GetGPUVirtualAddress());
-    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
+  
+    commandContext_->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void ParticleBox::PostDraw() {
-    commandList_ = nullptr;
+    commandContext_ = nullptr;
 }
 
 ParticleBox* ParticleBox::Create(uint32_t particleNum) {
@@ -75,7 +71,6 @@ void ParticleBox::CreatePipeline() {
         rootparams[int(RootParameter::kViewProjection)].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
         rootparams[int(RootParameter::kTexture)].InitAsDescriptorTable(1, &descRangeSRVTexture, D3D12_SHADER_VISIBILITY_ALL);
         rootparams[int(RootParameter::kMaterial)].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[int(RootParameter::kDirectionalLight)].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 
         // スタティックサンプラー
@@ -243,7 +238,6 @@ void ParticleBox::CreateMesh() {
     instancingSrvDesc.Buffer.FirstElement = 0;
     instancingSrvDesc.Buffer.NumElements = kParticleBoxNum;
     instancingSrvDesc.Buffer.StructureByteStride = sizeof(InstancingBufferData);
-    UINT incrementSize = DirectXCommon::GetInstance()->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
     srvHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(instancingBuffer_, &instancingSrvDesc, srvHandle_);
@@ -255,7 +249,7 @@ void ParticleBox::Initialize() {
 }
 
 void ParticleBox::Draw(const std::vector<InstancingBufferData>& bufferData, const Vector4& color, const uint32_t textureHadle) {
-    assert(commandList_);
+    assert(commandContext_);
     assert(!bufferData.empty());
 
     //マッピング
@@ -264,12 +258,12 @@ void ParticleBox::Draw(const std::vector<InstancingBufferData>& bufferData, cons
     material_.color_ = color;
     material_.Update();
 
-    commandList_->IASetVertexBuffers(0, 1, &vbView_);
-    commandList_->IASetIndexBuffer(&ibView_);
-    commandList_->SetGraphicsRootDescriptorTable(0, srvHandle_);
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kMaterial), material_.GetGPUVirtualAddress());
+    commandContext_->SetVertexBuffer(0, 1, &vbView_);
+    commandContext_->SetIndexBuffer(ibView_);
+    commandContext_->SetDescriptorTable(0, srvHandle_);
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material_.GetGPUVirtualAddress());
  
-    TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList_, static_cast<UINT>(RootParameter::kTexture), textureHadle);
+    TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext_, static_cast<UINT>(RootParameter::kTexture), textureHadle);
 
-    commandList_->DrawIndexedInstanced(static_cast<UINT>(indices_.size()), static_cast<UINT>(bufferData.size()), 0, 0, 0);
+    commandContext_->DrawIndexedInstanced(static_cast<UINT>(indices_.size()), static_cast<UINT>(bufferData.size()), 0, 0, 0);
 }

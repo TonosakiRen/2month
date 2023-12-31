@@ -1042,6 +1042,17 @@ inline Matrix4x4 MakeViewMatirx(const Quaternion& q, const Vector3& tranlate) {
 	return Inverse(cameraWorldMatrix);
 }
 
+inline Matrix4x4 MakeLookRotationMatrix(const Vector3& direction, const Vector3& up = {0.0f,1.0f,0.0f})  {
+	Vector3 z = Normalize(direction);
+	Vector3 x = Normalize(Cross(Normalize(up), z));
+	Vector3 y = Cross(z, x);
+	return {
+		x.x, x.y, x.z, 0.0f,
+		y.x, y.y, y.z, 0.0f,
+		z.x, z.y, z.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f };
+}
+
 #pragma endregion
 #pragma endregion
 #pragma region	Quaternion

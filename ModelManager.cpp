@@ -67,7 +67,7 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
         else if (identifier == "vn") {
             Vector3 normal;
             s >> normal.x >> normal.y >> normal.z;
-           /* normal.z *= -1.0f;*/
+            normal.z *= -1.0f;
             normals.push_back(normal);
         }
         else if (identifier == "vt") {
@@ -155,7 +155,7 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
     modelIndex.modelSize = (maxModelSize - minModelSize);
     modelIndex.modelCenter = maxModelSize - Vector3(modelIndex.modelSize / 2.0f) ;
     //もしmodelの原点を一番下にしていたら
-    if (minModelSize.y < 0.5f || minModelSize.y < -0.5f) {
+    if (minModelSize.y < 0.5f && minModelSize.y > -0.5f) {
         modelIndex.modelCenter.y = minModelSize.y;
     }
     
@@ -194,19 +194,51 @@ ModelManager* ModelManager::GetInstance() {
 	return &instance;
 }
 
-void ModelManager::DrawInstanced(ID3D12GraphicsCommandList* commandList, uint32_t modelHandle, UINT textureRootParamterIndex) {
+void ModelManager::DrawInstanced(CommandContext* commandContext, uint32_t modelHandle)
+{
+    assert(modelHandle < kNumModels);
+    // 頂点バッファの設定
+    commandContext->SetVertexBuffer(0, 1, &models_[modelHandle].vbView_);
+
+    for (auto& mesh : models_[modelHandle].meshes) {
+       
+        // インデックスバッファの設定
+        commandContext->SetIndexBuffer(*mesh.GetIbView());
+        // 描画コマンド
+        commandContext->DrawIndexedInstanced(static_cast<UINT>(mesh.indices_.size()), 1, 0, 0, 0);
+    }
+}
+
+void ModelManager::DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex) {
 	assert(modelHandle < kNumModels);
 
     // 頂点バッファの設定
-    commandList->IASetVertexBuffers(0, 1, &models_[modelHandle].vbView_);
+    commandContext->SetVertexBuffer(0, 1, &models_[modelHandle].vbView_);
 
     for (auto& mesh : models_[modelHandle].meshes) {
         // srvセット
-        TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandList, textureRootParamterIndex, mesh.GetUv());
+        TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext, textureRootParamterIndex, mesh.GetUv());
         // インデックスバッファの設定
-        commandList->IASetIndexBuffer(mesh.GetIbView());
+        commandContext->SetIndexBuffer(*mesh.GetIbView());
         // 描画コマンド
-        commandList->DrawIndexedInstanced(static_cast<UINT>(mesh.indices_.size()), 1, 0, 0, 0);
+        commandContext->DrawIndexedInstanced(static_cast<UINT>(mesh.indices_.size()), 1, 0, 0, 0);
+    }
+}
+
+void ModelManager::DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex, uint32_t textureHandle)
+{
+    assert(modelHandle < kNumModels);
+
+    // 頂点バッファの設定
+    commandContext->SetVertexBuffer(0, 1, &models_[modelHandle].vbView_);
+
+    for (auto& mesh : models_[modelHandle].meshes) {
+        // srvセット
+        TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext, textureRootParamterIndex, textureHandle);
+        // インデックスバッファの設定
+        commandContext->SetIndexBuffer(*mesh.GetIbView());
+        // 描画コマンド
+        commandContext->DrawIndexedInstanced(static_cast<UINT>(mesh.indices_.size()), 1, 0, 0, 0);
     }
 }
 

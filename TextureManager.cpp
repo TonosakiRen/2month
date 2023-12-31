@@ -32,10 +32,10 @@ const D3D12_RESOURCE_DESC TextureManager::GetResoureDesc(uint32_t textureHandle)
 	return textures_[textureHandle].resource->GetDesc();
 }
 
-void TextureManager::SetGraphicsRootDescriptorTable(ID3D12GraphicsCommandList* commandList, UINT rootParamIndex,uint32_t textureHandle) { // デスクリプタヒープの配列
+void TextureManager::SetGraphicsRootDescriptorTable(CommandContext* commandContext, UINT rootParamIndex,uint32_t textureHandle) { // デスクリプタヒープの配列
 	assert(textureHandle < kNumTextures);
 	// シェーダリソースビューをセット
-	commandList->SetGraphicsRootDescriptorTable(rootParamIndex, textures_[textureHandle].srvHandle);
+	commandContext->SetDescriptorTable(rootParamIndex, textures_[textureHandle].srvHandle);
 }
 
 uint32_t TextureManager::LoadInternal(const std::string& fileName) {

@@ -43,6 +43,7 @@ public:
     void SetRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE rtv) { SetRenderTargets(1, &rtv); }
     void SetRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE rtv, D3D12_CPU_DESCRIPTOR_HANDLE dsv) { SetRenderTargets(1, &rtv, dsv); }
 
+    void SetDepthStencil(D3D12_CPU_DESCRIPTOR_HANDLE dsv);
 
     void SetViewport(const D3D12_VIEWPORT& viewport);
     void SetViewport(FLOAT x, FLOAT y, FLOAT w, FLOAT h, FLOAT minDepth = 0.0f, FLOAT maxDepth = 1.0f);
@@ -184,6 +185,11 @@ inline void CommandContext::SetRenderTargets(UINT numRTVs, const D3D12_CPU_DESCR
     commandList_->OMSetRenderTargets(numRTVs, rtvs, FALSE, &dsv);
 }
 
+
+inline void CommandContext::SetDepthStencil(D3D12_CPU_DESCRIPTOR_HANDLE dsv)
+{
+    commandList_->OMSetRenderTargets(0, nullptr, FALSE, &dsv);
+}
 
 inline void CommandContext::SetViewport(const D3D12_VIEWPORT& viewport) {
     commandList_->RSSetViewports(1, &viewport);

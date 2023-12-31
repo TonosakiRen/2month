@@ -65,6 +65,12 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{6e7d2daa-9b73-4332-8bf7-23b1244a8d45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Light">
+      <UniqueIdentifier>{e2d2a9da-f2bd-4b73-9bdb-aa663bd4e5eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ShadowMap">
+      <UniqueIdentifier>{971fd058-a497-4ad5-bf36-9c124fba408c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -144,9 +150,6 @@
     </ClCompile>
     <ClCompile Include="DescriptorHeap.cpp">
       <Filter>Engine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionalLights.cpp">
-      <Filter>Engine\GameComponent</Filter>
     </ClCompile>
     <ClCompile Include="GlobalVariables.cpp">
       <Filter>Engine\GameComponent</Filter>
@@ -244,6 +247,18 @@
     <ClCompile Include="Scene\CreateStageScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="DirectionalLights.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLights.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLights.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>ShadowMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -332,9 +347,6 @@
     </ClInclude>
     <ClInclude Include="DescriptorHeap.h">
       <Filter>Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLights.h">
-      <Filter>Engine\GameComponent</Filter>
     </ClInclude>
     <ClInclude Include="GlobalVariables.h">
       <Filter>Engine\GameComponent</Filter>
@@ -426,11 +438,23 @@
     <ClInclude Include="Game\Stage\Stage.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\CreateStageScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Scene\InGameScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\CreateStageScene.h">
-      <Filter>Game\Scene</Filter>
+    <ClInclude Include="DirectionalLights.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLights.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLights.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>ShadowMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

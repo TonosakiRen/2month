@@ -1,19 +1,19 @@
 #pragma once
-#include "TextureManager.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
 #include <Windows.h>
-#include <d3d12.h>
-#include "externals/DirectXTex/d3dx12.h"
+#include <memory>
 #include <vector>
-#include <wrl.h>
-#include "Mymath.h"
-#include "DirectionalLights.h"
-#include "Material.h"
-#include "DescriptorHandle.h"
+
 #include "PipelineState.h"
 #include "RootSignature.h"
+#include "DescriptorHandle.h"
 #include "UploadBuffer.h"
+#include "CommandContext.h"
+
+#include "ViewProjection.h"
+#include "WorldTransform.h"
+#include "DirectionalLights.h"
+#include "Material.h"
+#include "Mesh.h"
 
 class DirectXCommon;
 
@@ -28,7 +28,7 @@ public:
 		kViewProjection,
 		kTexture,
 		kMaterial,
-		kDirectionalLight,
+
 		parameterNum
 	};
 
@@ -43,7 +43,7 @@ public:
 	};
 
 	static void StaticInitialize();
-	static void PreDraw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProjection, const DirectionalLights& directionalLight);
+	static void PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection);
 	static void PostDraw();
 	static ParticleBox* Create(uint32_t particleNum);
 
@@ -58,7 +58,7 @@ public:
 private:
 	static void CreatePipeline();
 private:
-	static ID3D12GraphicsCommandList* commandList_;
+	static CommandContext* commandContext_;
 	static std::unique_ptr<RootSignature> rootSignature_;
 	static std::unique_ptr<PipelineState> pipelineState_;
 

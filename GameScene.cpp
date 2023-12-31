@@ -4,6 +4,7 @@
 #include "CommandContext.h"
 #include "Renderer.h"
 #include "ModelManager.h"
+#include "ShadowMap.h"
 
 void (GameScene::* GameScene::SceneUpdateTable[])() = {
 	&GameScene::TitleUpdate,
@@ -38,6 +39,12 @@ void GameScene::Initialize() {
 
 	directionalLights_.Initialize();
 	directionalLights_.Update();
+
+	pointLights_.Initialize();
+	pointLights_.Update();
+
+	spotLights_.Initialize();
+	spotLights_.Update();
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
@@ -174,6 +181,22 @@ void GameScene::ModelDraw()
 	
 }
 
+void GameScene::ShadowDraw()
+{
+	switch (scene_)
+	{
+	case GameScene::Scene::Title:
+		break;
+	case GameScene::Scene::InGame:
+		inGameScene_->Draw();
+		sphere_->Draw();
+		break;
+	default:
+		break;
+	}
+}
+
+
 void GameScene::ParticleDraw()
 {
 	switch (scene_)
@@ -231,34 +254,42 @@ void GameScene::PostSpriteDraw()
 
 void GameScene::Draw(CommandContext& commandContext) {
 
+
 	// 背景スプライト描画
-	Sprite::PreDraw(commandContext);
+	Sprite::PreDraw(&commandContext);
 	PreSpriteDraw();
 	Sprite::PostDraw();
 
 	Renderer::GetInstance()->ClearMainDepthBuffer();
 
 	//3Dオブジェクト描画
-	Model::PreDraw(commandContext, *currentViewProjection_, directionalLights_);
+	Model::PreDraw(&commandContext, *currentViewProjection_, directionalLights_);
 	ModelDraw();
 	Model::PostDraw();
 
 	//Particle描画
-	Particle::PreDraw(commandContext, *currentViewProjection_);
+	Particle::PreDraw(&commandContext, *currentViewProjection_);
 	ParticleDraw();
 	Particle::PostDraw();
 
 	//Particle描画
-	ParticleBox::PreDraw(commandContext, *currentViewProjection_, directionalLights_);
+	ParticleBox::PreDraw(&commandContext, *currentViewProjection_);
 	ParticleBoxDraw();
 	ParticleBox::PostDraw();
 
 }
 
+void GameScene::ShadowMapDraw(CommandContext& commandContext)
+{
+	ShadowMap::PreDraw(&commandContext, directionalLights_);
+	ShadowDraw();
+	ShadowMap::PostDraw();
+}
+
 void GameScene::UIDraw(CommandContext& commandContext)
 {
 	// 前景スプライト描画
-	Sprite::PreDraw(commandContext);
+	Sprite::PreDraw(&commandContext);
 	PostSpriteDraw();
 	Sprite::PostDraw();
 }

@@ -11,7 +11,8 @@
 
 class ViewProjection;
 class DirectionalLights;
-
+class PointLights;
+class SpotLights;
 
 class DeferredRenderer
 {
@@ -23,6 +24,8 @@ public:
 		
 		kViewProjection,
 		kDirectionalLights,
+		kPointLights,
+		kSpotLights,
 
 		ParameterNum
 	};
@@ -32,7 +35,7 @@ public:
 		Vector2 uv;
 	};
 	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, DepthBuffer* depthTexture);
-	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, const DirectionalLights& directionalLight);
+	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, const DirectionalLights& directionalLight,const PointLights& pointLights, const SpotLights& spotLights);
 
 private:
 	void CreatePipeline();

@@ -1,56 +1,52 @@
 #include "Model.h"
-#include "externals/DirectXTex/DirectXTex.h"
-#include <d3dcompiler.h>
-#include <fstream>
-#include <sstream>
-#pragma comment(lib, "d3dcompiler.lib")
 #include "TextureManager.h"
 #include "ModelManager.h"
 #include "ShaderManager.h"
 #include "Renderer.h"
 
-using namespace DirectX;
 using namespace Microsoft::WRL;
 
-ID3D12GraphicsCommandList* Model::commandList_ = nullptr;
+CommandContext* Model::commandContext_ = nullptr;
 std::unique_ptr<RootSignature> Model::rootSignature_;
 std::unique_ptr<PipelineState> Model::pipelineState_;
 void Model::StaticInitialize() {
     CreatePipeline();
 }
 
-void Model::PreDraw(ID3D12GraphicsCommandList* commandList, const ViewProjection& viewProjection, const DirectionalLights& directionalLight) {
-    assert(Model::commandList_ == nullptr);
+void Model::PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection, const DirectionalLights& directionalLights) {
+    assert(Model::commandContext_ == nullptr);
 
-    commandList_ = commandList;
+    commandContext_ = commandContext;
 
-    commandList->SetPipelineState(*pipelineState_);
-    commandList->SetGraphicsRootSignature(*rootSignature_);
+    commandContext_->SetPipelineState(*pipelineState_);
+    commandContext_->SetGraphicsRootSignature(*rootSignature_);
 
     // CBVをセット（ビュープロジェクション行列）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
-    // CBVをセット（ライト）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kDirectionalLights), directionalLight.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
 
-    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    // CBVをセット（ビュープロジェクション行列）
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kDirectionalLights), directionalLights.lights_[0].constBuffer_.GetGPUVirtualAddress());
+
+    commandContext_->SetDescriptorTable(static_cast<UINT>(RootParameter::kShadowMap), directionalLights.lights_[0].shadowMap_.GetSRV());
+
+    commandContext_->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Model::PostDraw() {
-    commandList_ = nullptr;
+    commandContext_ = nullptr;
 }
 
 void Model::CreatePipeline() {
     HRESULT result = S_FALSE;
     ComPtr<IDxcBlob> vsBlob;    
     ComPtr<IDxcBlob> psBlob;    
-    ComPtr<ID3DBlob> errorBlob; 
 
     auto shaderManager = ShaderManager::GetInstance();
 
-    vsBlob = shaderManager->Compile(L"BasicVS.hlsl",ShaderManager::kVertex);
+    vsBlob = shaderManager->Compile(L"ModelVS.hlsl",ShaderManager::kVertex);
     assert(vsBlob != nullptr);
 
-    psBlob = shaderManager->Compile(L"BasicPS.hlsl", ShaderManager::kPixel);
+    psBlob = shaderManager->Compile(L"ModelPS.hlsl", ShaderManager::kPixel);
     assert(psBlob != nullptr);
 
     rootSignature_ = std::make_unique<RootSignature>();
@@ -62,13 +58,18 @@ void Model::CreatePipeline() {
         CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
         descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
+        // デスクリプタレンジ
+        CD3DX12_DESCRIPTOR_RANGE descRangeSRVShadow;
+        descRangeSRVShadow.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); // t1 レジスタ
+
         // ルートパラメータ
-        CD3DX12_ROOT_PARAMETER rootparams[5] = {};
-        rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[4].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
+        CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::parameterNum)] = {};
+        rootparams[int(RootParameter::kWorldTransform)].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kViewProjection)].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kDirectionalLights)].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kTexture)].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kShadowMap)].InitAsDescriptorTable(1, &descRangeSRVShadow, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kMaterial)].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
 
         // スタティックサンプラー
         CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
@@ -153,21 +154,21 @@ void Model::CreatePipeline() {
 void Model::Draw(uint32_t modelHandle, const WorldTransform& worldTransform,const Material& material) {
 
     // CBVをセット（ワールド行列）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kWorldTransform),worldTransform.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform),worldTransform.GetGPUVirtualAddress());
 
     // CBVをセット（マテリアル）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kMaterial), material.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material.GetGPUVirtualAddress());
 
-    ModelManager::GetInstance()->DrawInstanced(commandList_, modelHandle, static_cast<UINT>(RootParameter::kTexture));
+    ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle, static_cast<UINT>(RootParameter::kTexture));
 }
 
 void Model::Draw(uint32_t modelHandle, const WorldTransform& worldTransform, const Material& material, uint32_t textureHandle) {
 
     // CBVをセット（ワールド行列）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
     // CBVをセット（マテリアル）
-    commandList_->SetGraphicsRootConstantBufferView(static_cast<UINT>(RootParameter::kMaterial), material.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material.GetGPUVirtualAddress());
 
-    ModelManager::GetInstance()->DrawInstanced(commandList_, modelHandle, static_cast<UINT>(RootParameter::kTexture));
+    ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle, static_cast<UINT>(RootParameter::kTexture), textureHandle);
 }

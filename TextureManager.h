@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "externals/DirectXTex/d3dx12.h"
+#include "CommandContext.h"
 #include <string>
 #include <unordered_map>
 #include <wrl.h>
@@ -30,7 +30,7 @@ public:
 	const D3D12_RESOURCE_DESC GetResoureDesc(uint32_t textureHandle);
 
 	void SetGraphicsRootDescriptorTable(
-		ID3D12GraphicsCommandList* commandList, UINT rootParamIndex, uint32_t textureHandle);
+		CommandContext* commandList, UINT rootParamIndex, uint32_t textureHandle);
 
 private:
 	TextureManager() = default;

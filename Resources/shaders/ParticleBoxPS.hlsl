@@ -3,24 +3,17 @@ struct ViewProjection {
 	float32_t4x4 inverseViewProjection;
 	float32_t3 viewPosition;
 };
-ConstantBuffer<ViewProjection> gViewProjection  : register(b1);
+ConstantBuffer<ViewProjection> gViewProjection  : register(b0);
 
 Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
-
-struct DirectionLight {
-	float32_t4 color;     //ライトの色
-	float32_t3 direction; //ライト向き
-	float32_t intensity;   //輝度
-};
-ConstantBuffer<DirectionLight> gDirectionLight  : register(b2);
 
 struct Material {
 	float32_t4 materialcolor; //Materialの色
 	float32_t4x4 uvTransfrom;//uvtransform
 	int32_t enableLighting; //lighitngするか
 };
-ConstantBuffer<Material> gMaterial  : register(b3);
+ConstantBuffer<Material> gMaterial  : register(b1);
 
 struct VSOutput {
 	float32_t4 pos : SV_POSITION; // システム用頂点座標

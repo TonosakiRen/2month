@@ -31,7 +31,9 @@ public:
     void BeginFrame();
     void BeginMainRender();
     void EndMainRender();
-    void deferredRender(const ViewProjection& viewProjection, const DirectionalLights& directionalLight);
+    void DeferredRender(const ViewProjection& viewProjection, const DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights);
+    void BeginShadowMapRender(DirectionalLights& directionalLights);
+    void EndShadowMapRender(DirectionalLights& directionalLights);
     void BeginUIRender();
     void EndUIRender();
     void Shutdown();

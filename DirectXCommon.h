@@ -15,8 +15,9 @@ class DirectXCommon
 public:
 
 	//うんち設計
-	uint32_t kSrvHeapDescritorNum = 1024;
-	uint32_t kRtvHeapDescritorNum = 32;
+	uint32_t kSrvHeapDescriptorNum = 1024;
+	uint32_t kRtvHeapDescriptorNum = 32;
+	uint32_t kDsvHeapDescriptorNum = 16;
 
 	//mainColorBufferNum
 	uint32_t kMainColorBufferNum = 1;

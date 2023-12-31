@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "externals/DirectXTex/d3dx12.h"
+#include "CommandContext.h"
 #include <string>
 #include <unordered_map>
 #include <wrl.h>
@@ -44,7 +44,9 @@ public:
 
 	Vector3 GetModelCenter(uint32_t modelHandle);
 
-	void DrawInstanced(ID3D12GraphicsCommandList* commandList,uint32_t modelHandle,UINT textureRootParamterIndex);
+	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle);
+	void DrawInstanced(CommandContext* commandContext,uint32_t modelHandle,UINT textureRootParamterIndex);
+	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex,uint32_t textureHandle);
 
 private:
 	ModelManager() = default;

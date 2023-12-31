@@ -8,6 +8,8 @@
 #include "Input.h"
 #include "Sprite.h"
 #include "DirectionalLights.h"
+#include "PointLights.h"
+#include "SpotLights.h"
 #include "Compute.h"
 #include "GameObject.h"
 
@@ -30,15 +32,25 @@ public:
 	void Initialize();
 	void Update(CommandContext& commandContext);
 	void ModelDraw();
+	void ShadowDraw();
 	void ParticleDraw();
 	void ParticleBoxDraw();
 	void PreSpriteDraw();
 	void PostSpriteDraw();
 	void Draw(CommandContext& commandContext);
+	void ShadowMapDraw(CommandContext& commandContext);
 	void UIDraw(CommandContext& commandContext);
 
-	const DirectionalLights& GetDirectionalLights() {
+	DirectionalLights& GetDirectionalLights() {
 		return directionalLights_;
+	}
+
+	PointLights& GetPointLights() {
+		return pointLights_;
+	}
+
+	SpotLights& GetSpotLights() {
+		return spotLights_;
 	}
 
 	const ViewProjection& GetViewProjection() {
@@ -54,6 +66,8 @@ private:
 	
 	std::unique_ptr<Camera> camera_;
 	DirectionalLights directionalLights_;
+	PointLights pointLights_;
+	SpotLights spotLights_;
 
 	uint32_t textureHandle_;
 

@@ -9,6 +9,7 @@
 #include "ShaderManager.h"
 #include "Renderer.h"
 #include "Compute.h"
+#include "ShadowMap.h"
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	WinApp* win = nullptr;
@@ -36,6 +37,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// 3Dオブジェクト静的初期化
 	Model::StaticInitialize();
+
+	ShadowMap::StaticInitialize();
 
 	// 3Dオブジェクト静的初期化
 	Particle::StaticInitialize();
@@ -71,12 +74,18 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		gameScene->Update(renderer->GetCommandContext());
 
 		// 描画開始
+		renderer->BeginShadowMapRender(gameScene->GetDirectionalLights());
+
+		gameScene->ShadowMapDraw(renderer->GetCommandContext());
+
+		renderer->EndShadowMapRender(gameScene->GetDirectionalLights());
+		
 		renderer->BeginMainRender();
 
 		// ゲームシーンの描画
 		gameScene->Draw(renderer->GetCommandContext());
 		
-		renderer->deferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights());
+		renderer->DeferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights(),gameScene->GetPointLights(), gameScene->GetSpotLights());
 
 		renderer->EndMainRender();
 

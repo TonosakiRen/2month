@@ -1,11 +1,12 @@
 #pragma once
 
 #include <Windows.h>
-#include <d3d12.h>
 #include <string>
 #include <wrl.h>
 #include <memory>
 #include "Mymath.h"
+
+#include "CommandContext.h"
 #include "PipelineState.h"
 #include "GPUResource.h"
 #include "PipelineState.h"
@@ -25,7 +26,7 @@ public:
 	};
 
 	static void StaticInitialize();
-	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
+	static void PreDraw(CommandContext* commandContext);
 	static void PostDraw();
 	
 	void Initialize(uint32_t textureHandle, Vector2 position, Vector4 color = { 1, 1, 1, 1 }, Vector2 anchorpoint = { 0.5f, 0.5f }, bool isFlipX = false, bool isFlipY = false);
@@ -47,7 +48,7 @@ public:
 	Vector2 texSize_ = { 100.0f, 100.0f };
 
 private:
-	static ID3D12GraphicsCommandList* commandList_;
+	static CommandContext* commandContext_;
 	static std::unique_ptr<RootSignature> rootSignature_;
 	static std::unique_ptr<PipelineState> pipelineState_;
 	static Matrix4x4 matProjection_;
