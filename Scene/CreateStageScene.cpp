@@ -8,7 +8,7 @@ void CreateStageScene::Initialize() {
 	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->initialize();
+	stage_->initialize("test");
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
@@ -34,7 +34,7 @@ void CreateStageScene::Update() {
 	player_->Update();
 	skydome_->Update(player_->GetWorldTransform()->translation_);
 
-	for (uint32_t index = 0; index < stage_->GetWallSize(); index++) {
+	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
 	}
 }
@@ -58,9 +58,11 @@ void CreateStageScene::DrawImGui() {
 					g->SetValue(itemName_, "WallConfirmation" + std::string(), static_cast<int>(stage_->GetWalls().size()));
 					for (uint32_t index = 0u; index < stage_->GetWalls().size(); index++) {
 						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Scale").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->scale_);
+						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Rotate").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->quaternion_);
 						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Translate").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->translation_);
 					}
 					g->SetValue(itemName_, "Player : Scale" + std::string(), player_->GetWorldTransform()->scale_);
+					g->SetValue(itemName_, "Player : Rotate" + std::string(), player_->GetWorldTransform()->quaternion_);
 					g->SetValue(itemName_, "Player : Translate" + std::string(), player_->GetWorldTransform()->translation_);
 
 					g->SaveFile(itemName_);
@@ -76,6 +78,7 @@ void CreateStageScene::DrawImGui() {
 				if (ImGui::Button("Load")) {
 					stage_->Load(loadSelectName_);
 					player_->GetWorldTransform()->scale_ = g->GetVector3Value(loadSelectName_, "Player : Scale");
+					player_->GetWorldTransform()->quaternion_ = g->GetQuaternionValue(loadSelectName_, "Player : Rotate");
 					player_->GetWorldTransform()->translation_ = g->GetVector3Value(loadSelectName_, "Player : Translate");
 				}
 				ImGui::TreePop();

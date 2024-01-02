@@ -9,16 +9,28 @@ public:
 	Stage() = default;
 	~Stage() = default;
 
-	void initialize();
+	void initialize(const std::filesystem::path& loadFile);
 	void Update();
 	void Draw();
 	void DrawImGui();
 	void Load(const std::filesystem::path& loadFile);
 
 	Collider& GetWallCollider(uint32_t number) const { return walls_.at(number)->collider_; }
-	const uint32_t& GetWallSize() const { return static_cast<uint32_t>(walls_.size()); }
 	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
+	
+	/// <summary>
+	/// *playerを渡し座標を移動させる
+	/// </summary>
+	/// <param name="player">playerのポインタ</param>
+	void SetPlayerRespawn(class Player* const player) const;
 private:
 	std::vector<std::unique_ptr<Wall>> walls_;
+public:
+	struct SRT {
+		Vector3 scale;
+		Quaternion rotate;
+		Vector3 translate;
+	};
+	SRT playerRespawnPoint_;
 
 };

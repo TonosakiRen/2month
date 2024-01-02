@@ -1,5 +1,11 @@
 {
     "test": {
+        "Player : Rotate": [
+            0.0,
+            -0.7071067690849304,
+            0.0,
+            0.7071067690849304
+        ],
         "Player : Scale": [
             1.0,
             1.0,
@@ -7,10 +13,16 @@
         ],
         "Player : Translate": [
             0.0,
-            3.492241382598877,
+            1.3547025918960571,
             -7.0
         ],
         "WallConfirmation": 3,
+        "WallNumber : 0 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
         "WallNumber : 0 : Scale": [
             1.0,
             1.0,
@@ -21,6 +33,12 @@
             -2.0,
             0.0
         ],
+        "WallNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
         "WallNumber : 1 : Scale": [
             1.0,
             1.0,
@@ -30,6 +48,12 @@
             0.0,
             -2.0,
             0.0
+        ],
+        "WallNumber : 2 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
         ],
         "WallNumber : 2 : Scale": [
             1.0,

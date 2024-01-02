@@ -3,10 +3,13 @@
 #include "externals/imgui/imgui.h"
 #include <string>
 #include "GlobalVariables.h"
+#include "Player.h"
 
-void Stage::initialize() {
+void Stage::initialize(const std::filesystem::path& loadFile) {
 	uint32_t wallModelHandle_ = ModelManager::Load("scene");
-	float sizeX = ModelManager::GetInstance()->ModelManager::GetModelSize(wallModelHandle_).x;
+	Load(loadFile);
+
+	/*float sizeX = ModelManager::GetInstance()->ModelManager::GetModelSize(wallModelHandle_).x;
 
 	const uint8_t wallSize = 3;
 	Vector3 wallIniPos[wallSize]{
@@ -17,7 +20,7 @@ void Stage::initialize() {
 
 	for (uint8_t index = 0u; index < wallSize; index++) {
 		walls_.emplace_back(std::make_unique<Wall>())->Initialize(wallIniPos[index]);
-	}
+	}*/
 }
 
 void Stage::Update() {
@@ -63,11 +66,26 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	int num = global->GetIntValue(selectName, "WallConfirmation");
 	walls_.clear(); // 要素の全削除
 	for (int i = 0; i < num; i++) {
-		Vector3 trans = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Translate").c_str());
 		Vector3 scal = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("WallNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Translate").c_str());
 		auto& wall = walls_.emplace_back(std::make_unique<Wall>());
-		wall->GetWorldTransform()->translation_ = trans;
 		wall->GetWorldTransform()->scale_ = scal;
+		wall->GetWorldTransform()->quaternion_ = rotate;
+		wall->GetWorldTransform()->translation_ = trans;
 		wall->Initialize(trans);
 	}
+
+	// playerの初期位置
+	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
+	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
+	playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
+
+}
+
+void Stage::SetPlayerRespawn(Player* const player) const {
+	player->GetWorldTransform()->scale_ = playerRespawnPoint_.scale;
+	player->GetWorldTransform()->quaternion_ = playerRespawnPoint_.rotate;
+	player->GetWorldTransform()->translation_ = playerRespawnPoint_.translate;
+	player->GetWorldTransform()->Update();
 }

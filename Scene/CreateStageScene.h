@@ -19,7 +19,7 @@ public:
 	/// プレイモードかのフラグを返す
 	/// </summary>
 	/// <returns>true:debugCamera/false:followCamera</returns>
-	const bool& GetPlay() const { return !isPlay; }
+	bool GetPlay() const { return !isPlay; }
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
 
 private:

@@ -5,7 +5,8 @@ void InGameScene::Initialize() {
 	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->initialize();
+	stage_->initialize("test");
+	stage_->SetPlayerRespawn(player_.get());
 }
 
 void InGameScene::Update() {
@@ -13,7 +14,7 @@ void InGameScene::Update() {
 
 	player_->Update();
 
-	for (uint32_t index = 0; index < stage_->GetWallSize(); index++) {
+	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
 	}
 }

@@ -55,6 +55,11 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 					Vector3 value = std::get<Vector3>(item);
 					root[groupName][itemName] = json::array({ value.x, value.y, value.z });
 				}
+				else
+					if (std::holds_alternative<Quaternion>(item)) {
+						Quaternion value = std::get<Quaternion>(item);
+						root[groupName][itemName] = nlohmann::json::array({ value.x, value.y, value.z, value.w });
+					}
 	}
 
 	//ディレクトリがなければ作成する
@@ -155,6 +160,11 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
 			SetValue(groupName, itemName, value);
 		}
+		else if (itItem->is_array() && itItem->size() == 4) {
+			//float型のjson配列登録
+			Quaternion value = { itItem->at(0), itItem->at(1), itItem->at(2), itItem->at(3) };
+			SetValue(groupName, itemName, value);
+		}
 	}
 
 }
@@ -252,6 +262,16 @@ void GlobalVariables::SetValue(
 	group[key] = newItem;
 }
 
+void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, const Quaternion& value) {
+	// グループの参照を取得
+	Group& group = datas_[groupName];
+	// 新しい項目のデータを設定
+	Item newItem{};
+	newItem = value;
+	// 設定した項目をstd::mapに追加
+	group[key] = newItem;
+}
+
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
 	// グループを検索
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
@@ -277,6 +297,19 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 }
 // 項目の追加(Vector3)
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value) {
+	//グループを検索
+	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+
+	// 項目が未登録なら
+	if (itGroup != datas_.end()) {
+		Group& group = datas_[groupName];
+		if (!group.contains(key)) {
+			SetValue(groupName, key, value);
+		}
+	}
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Quaternion& value) {
 	//グループを検索
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
 
@@ -330,10 +363,31 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	// グループの参照を取得
 	const Group& group = datas_.at(groupName);
 
-	assert(group.contains(key));
-
+	// 値がなければ零ベクトルを返す
+	if (!group.contains(key)) {
+		return Vector3(0.0f,0.0f,0.0f);
+	}
 	const Item& item = group.at(key);
 	return std::get<Vector3>(item);
+}
+
+Quaternion GlobalVariables::GetQuaternionValue(const std::string& groupName, const std::string& key) const {
+#ifdef _DEBUG
+	// グループを検索
+	const auto& groupIt = datas_.find(groupName);
+	// 未登録チェック
+	assert(groupIt != datas_.end());
+#endif // _DEBUG
+	// グループの参照を取得
+	const Group& group = datas_.at(groupName);
+
+	// 値がなければ単位Quaternionを返す
+	if (!group.contains(key)) {
+		return IdentityQuaternion();
+	}
+
+	const Item& item = group.at(key);
+	return std::get<Quaternion>(item);
 }
 
 void GlobalVariables::ChackFiles(std::vector<std::string>& fileName) {
