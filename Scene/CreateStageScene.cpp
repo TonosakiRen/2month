@@ -1,23 +1,38 @@
 #include "CreateStageScene.h"
 #include "externals/imgui/imgui.h"
+#include "GlobalVariables.h"
+
 
 void CreateStageScene::Initialize() {
 	player_ = std::make_unique<Player>();
-	player_->Initialize("GoalWell");
+	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
 	stage_->initialize();
+
+	skydome_ = std::make_unique<Skydome>();
+	skydome_->Initialize("skydome");
+
+	g = GlobalVariables::GetInstance();
+	g->ChackFiles(fileName_);
+	for (auto& i : fileName_) {
+		g->CreateGroup(i.c_str());
+	}
+	fileNumber_ = 0;
+	loadSelectName_ = fileName_[fileNumber_].c_str();
+
 }
 
 void CreateStageScene::Update() {
+	DrawImGui();
 	if (!isPlay) {
-		DrawImGui();
 		return;
 	}
 
 	// 以下通常通りの更新処理
 	stage_->Update();
 	player_->Update();
+	skydome_->Update(player_->GetWorldTransform()->translation_);
 
 	for (uint32_t index = 0; index < stage_->GetWallSize(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
@@ -27,20 +42,62 @@ void CreateStageScene::Update() {
 void CreateStageScene::Draw() {
 	stage_->Draw();
 	player_->Draw();
+	skydome_->Draw();
 }
 
 void CreateStageScene::DrawImGui() {
 #ifdef _DEBUG
+	g = GlobalVariables::GetInstance();
 	ImGui::Begin("CreateStage", nullptr, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar()) {
+		if (ImGui::BeginMenu("Initialize")) {
+			if (ImGui::TreeNode("FileSave")) {
+				ImGui::InputText("FileName", itemName_, sizeof(itemName_));
+				if (ImGui::Button("Save")) {
+					g->CreateGroup(itemName_);
+					g->SetValue(itemName_, "WallConfirmation" + std::string(), static_cast<int>(stage_->GetWalls().size()));
+					for (uint32_t index = 0u; index < stage_->GetWalls().size(); index++) {
+						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Scale").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->scale_);
+						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Translate").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->translation_);
+					}
+					g->SetValue(itemName_, "Player : Scale" + std::string(), player_->GetWorldTransform()->scale_);
+					g->SetValue(itemName_, "Player : Translate" + std::string(), player_->GetWorldTransform()->translation_);
+
+					g->SaveFile(itemName_);
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("FileLoad")) {
+				for (size_t i = 0; i < fileName_.size(); i++) {
+					if (ImGui::RadioButton(fileName_[i].c_str(), &fileNumber_, static_cast<int>(i))) {
+						loadSelectName_ = fileName_[fileNumber_].c_str();
+					}
+				}
+				if (ImGui::Button("Load")) {
+					stage_->Load(loadSelectName_);
+					player_->GetWorldTransform()->scale_ = g->GetVector3Value(loadSelectName_, "Player : Scale");
+					player_->GetWorldTransform()->translation_ = g->GetVector3Value(loadSelectName_, "Player : Translate");
+				}
+				ImGui::TreePop();
+			}
+			
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("isPlay")) {
+			if (ImGui::Button("play")) {
+				isPlay = !isPlay;
+			}
+			ImGui::EndMenu();
+		}
 
 		stage_->DrawImGui();
 		if (ImGui::BeginMenu("Player")) {
 			player_->DrawImGui();
+			ImGui::EndMenu();
 		}
 
 
-		ImGui::EndMenu();
+		ImGui::EndMenuBar();
 	}
 	ImGui::End();
 	

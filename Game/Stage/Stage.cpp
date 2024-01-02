@@ -2,6 +2,7 @@
 #include "ModelManager.h"
 #include "externals/imgui/imgui.h"
 #include <string>
+#include "GlobalVariables.h"
 
 void Stage::initialize() {
 	uint32_t wallModelHandle_ = ModelManager::Load("scene");
@@ -52,4 +53,21 @@ void Stage::DrawImGui() {
 	}
 	
 #endif // _DEBUG
+}
+
+void Stage::Load(const std::filesystem::path& loadFile) {
+	GlobalVariables* global = GlobalVariables::GetInstance();
+	std::string selectName = loadFile.string();
+	global->LoadFile(selectName);
+
+	int num = global->GetIntValue(selectName, "WallConfirmation");
+	walls_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 trans = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Translate").c_str());
+		Vector3 scal = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Scale").c_str());
+		auto& wall = walls_.emplace_back(std::make_unique<Wall>());
+		wall->GetWorldTransform()->translation_ = trans;
+		wall->GetWorldTransform()->scale_ = scal;
+		wall->Initialize(trans);
+	}
 }

@@ -9,11 +9,13 @@
 void (GameScene::* GameScene::SceneUpdateTable[])() = {
 	&GameScene::TitleUpdate,
 	&GameScene::InGameUpdate,
+	&GameScene::EditorUpdate,
 };
 
 void (GameScene::* GameScene::SceneInitializeTable[])() = {
 	&GameScene::TitleInitialize,
 	&GameScene::InGameInitialize,
+	&GameScene::EditorInitialize,
 };
 
 
@@ -73,6 +75,9 @@ void GameScene::Initialize() {
 	inGameScene_ = std::make_unique<InGameScene>();
 	inGameScene_->Initialize();
 	
+	// 
+	editorScene_ = std::make_unique<CreateStageScene>();
+	editorScene_->Initialize();
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
@@ -85,7 +90,6 @@ void GameScene::Initialize() {
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
-	//skydome_->SetParentTranslate(inGameScene_->GetPlayerTrans());
 
 	sphere_ = std::make_unique<GameObject>();
 	sphere_->Initialize("sphere");
@@ -106,6 +110,16 @@ void GameScene::Initialize() {
 	size_t bgmHandle = audio_->SoundLoadWave("BGM.wav");
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
 	audio_->SetValume(bgmPlayHandle, 0.1f);
+
+	// シーンリクエスト
+	// editor使用時のみ初期からDebugCameraを使用
+	sceneRequest_ = Scene::Editor;
+	if (sceneRequest_ == Scene::Editor) {
+		ViewProjection::isUseDebugCamera = true;
+	}
+
+
+
 }
 
 void GameScene::Update(CommandContext& commandContext){
@@ -114,19 +128,27 @@ void GameScene::Update(CommandContext& commandContext){
 	//fps表示
 #ifdef _DEBUG
 	ImGui::Begin("fps");
-	auto io = ImGui::GetIO();
+	auto& io = ImGui::GetIO();
 	ImGui::Text("%f", io.Framerate);
 	ImGui::End();
 #endif
 	//camera light
 	{
+		if (scene_ == Scene::Editor) {
+			ViewProjection::isUseDebugCamera = editorScene_->GetPlay();
+		}
+
 		if (ViewProjection::isUseDebugCamera) {
 			currentViewProjection_ = debugCamera_.get();
 			debugCamera_->Update();
 		}
 		else {
 			currentViewProjection_ = camera_.get();
-			camera_->Update(inGameScene_->GetPlayerTrans()->translation_.x);
+			float float_x = inGameScene_->GetPlayerTrans()->translation_.x;
+			if (scene_ == Scene::Editor) {
+				float_x = editorScene_->GetPlayerTrans()->translation_.x;
+			}
+			camera_->Update(float_x);
 		}
 		
 		// light
@@ -244,6 +266,17 @@ void GameScene::InGameUpdate() {
 	skydome_->Update(inGameScene_->GetPlayerTrans()->translation_);
 }
 
+void GameScene::EditorInitialize() {
+	if (editorScene_) {
+		editorScene_.reset(new CreateStageScene());
+		editorScene_->Initialize();
+	}
+}
+
+void GameScene::EditorUpdate() {
+	editorScene_->Update();
+}
+
 void GameScene::ModelDraw()
 {
 	switch (scene_)
@@ -254,6 +287,9 @@ void GameScene::ModelDraw()
 		skydome_->Draw();
 		inGameScene_->Draw();
 		sphere_->Draw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->Draw();
 		break;
 	default:
 		break;

@@ -2,6 +2,9 @@
 #include <memory>
 #include "Player.h"
 #include "Game/Stage/Stage.h"
+#include "Skydome.h"
+
+class GlobalVariables;
 
 class CreateStageScene {
 public:
@@ -12,6 +15,13 @@ public:
 	void Update();
 	void Draw();
 
+	/// <summary>
+	/// プレイモードかのフラグを返す
+	/// </summary>
+	/// <returns>true:debugCamera/false:followCamera</returns>
+	const bool& GetPlay() const { return !isPlay; }
+	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
+
 private:
 	void DrawImGui();
 	
@@ -19,5 +29,12 @@ private:
 
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Stage> stage_;
+	std::unique_ptr<Skydome> skydome_;
+
+	GlobalVariables* g = nullptr;
+	std::vector<std::string> fileName_;
+	std::string loadSelectName_;
+	char itemName_[256]{};
+	int fileNumber_ = 0;
 
 };

@@ -1,0 +1,45 @@
+{
+    "test": {
+        "Player : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Player : Translate": [
+            0.0,
+            3.492241382598877,
+            -7.0
+        ],
+        "WallConfirmation": 3,
+        "WallNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallNumber : 0 : Translate": [
+            -18.0,
+            -2.0,
+            0.0
+        ],
+        "WallNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallNumber : 1 : Translate": [
+            0.0,
+            -2.0,
+            0.0
+        ],
+        "WallNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallNumber : 2 : Translate": [
+            18.0,
+            -2.0,
+            0.0
+        ]
+    }
+}

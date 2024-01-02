@@ -21,6 +21,7 @@
 
 #include "Game/Stage/Stage.h"
 #include "Scene/InGameScene.h"
+#include "Scene/CreateStageScene.h"
 
 #include <optional>
 class GameScene 
@@ -90,11 +91,13 @@ private:
 
 	// Scene用クラス
 	std::unique_ptr<InGameScene> inGameScene_;
+	std::unique_ptr<CreateStageScene> editorScene_;
 
 	//Scene
 	enum class Scene {
 		Title,
 		InGame,
+		Editor,
 
 		SceneNum
 	};
@@ -111,5 +114,11 @@ private:
 	//インゲーム
 	void InGameInitialize();
 	void InGameUpdate();
+	
+	// エディター
+	void EditorInitialize();
+	void EditorUpdate();
+
+
 };
 
