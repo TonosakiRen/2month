@@ -1,27 +1,25 @@
-#include "Wall.h"
+#include "WallLight.h"
 #include "ModelManager.h"
 #include "externals/imgui/imgui.h"
-void Wall::Initialize(Vector3 position)
-{
-	GameObject::Initialize("scene");
-	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, "scene", { modelSize.x, modelSize.y, 2.0f }, { 0.0f, 5.0f, 6.8f });
-	worldTransform_.translation_ = position;
+
+void WallLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
+	GameObject::Initialize("wallLight");
+	worldTransform_.scale_ = scale;
+	worldTransform_.quaternion_ = quaternion;
+	worldTransform_.translation_ = translate;
+	UpdateMatrix();
+
+}
+
+void WallLight::Update() {
 	UpdateMatrix();
 }
 
-void Wall::Update()
-{
-	collider_.AdjustmentScale();
-	UpdateMatrix();
-}
-
-void Wall::Draw() {
-	collider_.Draw();
+void WallLight::Draw() {
 	GameObject::Draw();
 }
 
-void Wall::DrawImGui() {
+void WallLight::DrawImGui() {
 #ifdef _DEBUG
 	static Vector3 rotate;
 	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);

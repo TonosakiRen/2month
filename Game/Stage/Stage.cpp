@@ -66,14 +66,11 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	int num = global->GetIntValue(selectName, "WallConfirmation");
 	walls_.clear(); // 要素の全削除
 	for (int i = 0; i < num; i++) {
-		Vector3 scal = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Scale").c_str());
+		Vector3 scale = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(selectName, ("WallNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(selectName, ("WallNumber : " + std::to_string(i) + " : Translate").c_str());
 		auto& wall = walls_.emplace_back(std::make_unique<Wall>());
-		wall->GetWorldTransform()->scale_ = scal;
-		wall->GetWorldTransform()->quaternion_ = rotate;
-		wall->GetWorldTransform()->translation_ = trans;
-		wall->Initialize(trans);
+		wall->Initialize(scale,rotate,trans);
 	}
 
 	// playerの初期位置

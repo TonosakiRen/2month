@@ -223,9 +223,6 @@
     <ClCompile Include="EdgeRenderer.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="DebugCamera.cpp">
       <Filter>Engine\Camera</Filter>
     </ClCompile>
@@ -261,6 +258,12 @@
     </ClCompile>
     <ClCompile Include="Enemies.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Stage\WallLight.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Stage\Wall.cpp">
+      <Filter>Game\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +429,6 @@
     <ClInclude Include="EdgeRenderer.h">
       <Filter>Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="DebugCamera.h">
       <Filter>Engine\Camera</Filter>
     </ClInclude>
@@ -461,6 +461,12 @@
     </ClInclude>
     <ClInclude Include="Enemies.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\WallLight.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\Wall.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

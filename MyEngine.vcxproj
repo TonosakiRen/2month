@@ -133,6 +133,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game\Stage\Stage.cpp" />
+    <ClCompile Include="Game\Stage\Wall.cpp" />
+    <ClCompile Include="Game\Stage\WallLight.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="GlobalVariables.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -163,7 +165,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
     <ClCompile Include="ViewProjection.cpp" />
-    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WhiteParticle.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
@@ -200,6 +201,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Game\Stage\Stage.h" />
+    <ClInclude Include="Game\Stage\Wall.h" />
+    <ClInclude Include="Game\Stage\WallLight.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="GPUResource.h" />
@@ -231,7 +234,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UploadBuffer.h" />
     <ClInclude Include="ViewProjection.h" />
-    <ClInclude Include="Wall.h" />
     <ClInclude Include="WhiteParticle.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="WorldTransform.h" />
