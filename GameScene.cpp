@@ -221,7 +221,7 @@ void GameScene::Update(CommandContext& commandContext){
 
 	//コンピュートシェーダテスト
 	{
-		compute_->Dispatch(commandContext);
+		//compute_->Dispatch(commandContext);
 		uint32_t* date = static_cast<uint32_t*>(compute_->GetData());
 
 		int a = date[1];
