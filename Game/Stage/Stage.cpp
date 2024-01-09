@@ -75,6 +75,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		wall->Initialize(scale,rotate,trans);
 	}
 
+	//num = global->GetIntValue(selectName, "WallLightConfirmation");
+	//wallLights_.clear(); // 要素の全削除
+	//for (int i = 0; i < num; i++) {
+	//	Vector3 scale = global->GetVector3Value(selectName, ("WallLightNumber : " + std::to_string(i) + " : Scale").c_str());
+	//	Quaternion rotate = global->GetQuaternionValue(selectName, ("WallLightNumber : " + std::to_string(i) + " : Rotate").c_str());
+	//	Vector3 trans = global->GetVector3Value(selectName, ("WallLightNumber : " + std::to_string(i) + " : Translate").c_str());
+	//	auto& wallLight = wallLights_.emplace_back(std::make_unique<WallLight>());
+	//	wallLight->Initialize(scale,rotate,trans);
+	//}
+
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");

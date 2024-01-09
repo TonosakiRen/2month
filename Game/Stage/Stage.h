@@ -1,5 +1,6 @@
 #pragma once
 #include "Wall.h"
+#include "WallLight.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -27,6 +28,7 @@ public:
 	void SetPlayerRespawn(class Player* const player) const;
 private:
 	std::vector<std::unique_ptr<Wall>> walls_;
+	std::vector<std::unique_ptr<WallLight>> wallLights_;
 public:
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
