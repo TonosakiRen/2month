@@ -27,12 +27,14 @@ void SpotLights::Update() {
     for (int i = 0; i < lightNum; i++) {
         ConstBufferData data;
         data.color = lights_[i].color;
-        data.position = lights_[i].position;
+        lights_[i].worldTransform.Update();
+        data.position = MakeTranslation(lights_[i].worldTransform.matWorld_);
         data.intensity = lights_[i].intensity;
         data.direction = lights_[i].direction;
         data.distance = lights_[i].distance;
         data.decay = lights_[i].decay;
         data.cosAngle = lights_[i].cosAngle;
+        data.isActive = static_cast<float>(lights_[i].isActive);
         bufferData.emplace_back(data);
     }
     structureBuffer_.Copy(bufferData.data(), sizeof(bufferData[0]) * bufferData.size());

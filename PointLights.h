@@ -4,6 +4,7 @@
 #include "UploadBuffer.h"
 #include "DepthBuffer.h"
 #include <vector>
+#include "WorldTransform.h"
 
 class PointLights
 {
@@ -13,10 +14,11 @@ public:
 
 	struct PointLight {
 		Vector4 color = { 1.0f, 1.0f, 1.0f,1.0f };
-		Vector3 position = { 0.0f,0.0f,-1.0f };
+		WorldTransform worldTransform;
 		float intensity = 1.0f;
 		float radius = 1.0f;
 		float decay = 1.0f;
+		bool isActive = false;
 	};
 
 	struct ConstBufferData {
@@ -25,6 +27,7 @@ public:
 		float intensity = 1.0f;
 		float radius = 1.0f;
 		float decay = 1.0f;
+		float isActive = false;
 	};
 
 	void Initialize();

@@ -51,33 +51,36 @@ void GameScene::Initialize() {
 	pointLights_.Update();
 
 	spotLights_.Initialize();
-	spotLights_.lights_[0].position = { -5.43f,6.71f,4.02f };
+	spotLights_.lights_[0].worldTransform.translation_ = { -5.43f,6.71f,4.02f };
 	spotLights_.lights_[0].color = {1.0f,1.0f,0.58f };
 	spotLights_.lights_[0].intensity = 5.85f;
 	spotLights_.lights_[0].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[0].distance = 10.460f ;
+	spotLights_.lights_[0].isActive = true;
 
-	spotLights_.lights_[1].position = { 5.85f,6.71f,4.02f };
+	spotLights_.lights_[1].worldTransform.translation_ = { 5.85f,6.71f,4.02f };
 	spotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
 	spotLights_.lights_[1].intensity = 5.85f;
 	spotLights_.lights_[1].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[1].distance = 10.460f;
+	spotLights_.lights_[1].isActive = true;
 
-	spotLights_.lights_[2].position = {0.03f,6.71f,-5.36f };
+	spotLights_.lights_[2].worldTransform.translation_ = {0.03f,6.71f,-5.36f };
 	spotLights_.lights_[2].color = { 1.0f,1.0f,0.58f };
 	spotLights_.lights_[2].intensity = 5.85f;
 	spotLights_.lights_[2].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[2].distance = 10.460f;
+	spotLights_.lights_[2].isActive = true;
 	spotLights_.Update();
 
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
-	inGameScene_->Initialize();
+	inGameScene_->Initialize(&pointLights_,&spotLights_);
 	
 	// 
 	editorScene_ = std::make_unique<CreateStageScene>();
-	editorScene_->Initialize();
+	editorScene_->Initialize(&pointLights_, &spotLights_);
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
@@ -163,7 +166,7 @@ void GameScene::Update(CommandContext& commandContext){
 
 #ifdef _DEBUG
 		ImGui::Begin("pointLight");
-		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[0].position.x, 0.01f);
+		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[0].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &pointLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &pointLights_.lights_[0].intensity, 0.01f, 0.0f);
 		ImGui::DragFloat("radius", &pointLights_.lights_[0].radius, 0.01f, 0.0f);
@@ -171,7 +174,7 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::End();
 
 		ImGui::Begin("pointLight2");
-		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[1].position.x, 0.01f);
+		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[1].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &pointLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &pointLights_.lights_[1].intensity, 0.01f, 0.0f);
 		ImGui::DragFloat("radius", &pointLights_.lights_[1].radius, 0.01f, 0.0f);
@@ -182,7 +185,7 @@ void GameScene::Update(CommandContext& commandContext){
 
 #ifdef _DEBUG
 		ImGui::Begin("spotLight");
-		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[0].position.x, 0.01f);
+		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[0].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &spotLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &spotLights_.lights_[0].intensity, 0.01f, 0.0f);
 		ImGui::DragFloat3("direction", &spotLights_.lights_[0].direction.x, 0.01f, 0.0f);
@@ -192,7 +195,7 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::End();
 
 		ImGui::Begin("spotLight2");
-		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[1].position.x, 0.01f);
+		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[1].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &spotLights_.lights_[1].color.x, 1.0f, 0.0f, 255.0f);
 		ImGui::DragFloat("intensity", &spotLights_.lights_[1].intensity, 0.01f, 0.0f);
 		ImGui::DragFloat3("direction", &spotLights_.lights_[1].direction.x, 0.01f, 0.0f);
@@ -250,7 +253,7 @@ void GameScene::TitleUpdate() {
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize();
+		inGameScene_->Initialize(&pointLights_, &spotLights_);
 	}
 }
 void GameScene::InGameUpdate() {
@@ -267,7 +270,7 @@ void GameScene::InGameUpdate() {
 void GameScene::EditorInitialize() {
 	if (editorScene_) {
 		editorScene_.reset(new CreateStageScene());
-		editorScene_->Initialize();
+		editorScene_->Initialize(&pointLights_, &spotLights_);
 	}
 }
 

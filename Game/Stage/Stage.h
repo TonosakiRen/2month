@@ -3,13 +3,15 @@
 #include <memory>
 #include <vector>
 #include <filesystem>
+class SpotLights;
+class PointLights;
 
 class Stage {
 public:
 	Stage() = default;
 	~Stage() = default;
 
-	void initialize(const std::filesystem::path& loadFile);
+	void Initialize(const std::filesystem::path& loadFile, SpotLights* spotLight, PointLights* pointLight);
 	void Update();
 	void Draw();
 	void DrawImGui();
@@ -26,6 +28,10 @@ public:
 private:
 	std::vector<std::unique_ptr<Wall>> walls_;
 public:
+	SpotLights* spotLights_;
+	PointLights* pointLights_;
+
+
 	struct SRT {
 		Vector3 scale;
 		Quaternion rotate;

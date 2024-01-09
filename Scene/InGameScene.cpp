@@ -1,11 +1,13 @@
 #include "InGameScene.h"
+#include "PointLights.h"
+#include "SpotLights.h"
 
-void InGameScene::Initialize() {
+void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights) {
 	player_ = std::make_unique<Player>();
 	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->initialize("test");
+	stage_->Initialize("test", spotLights, pointLights);
 	stage_->SetPlayerRespawn(player_.get());
 }
 

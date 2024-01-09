@@ -2,13 +2,15 @@
 #include "Player.h"
 #include "Game/Stage/Stage.h"
 #include <memory>
+class PointLights;
+class SpotLights;
 
 class InGameScene {
 public:
 	InGameScene() = default;
 	~InGameScene() = default;
 
-	void Initialize();
+	void Initialize(PointLights* pointLights, SpotLights* spotLights);
 	void Update();
 	void Draw();
 

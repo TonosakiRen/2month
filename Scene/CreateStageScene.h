@@ -5,13 +5,16 @@
 #include "Skydome.h"
 
 class GlobalVariables;
+class PointLights;
+class SpotLights;
+
 
 class CreateStageScene {
 public:
 	CreateStageScene() = default;
 	~CreateStageScene() = default;
 
-	void Initialize();
+	void Initialize(PointLights* pointLights, SpotLights* spotLights);
 	void Update();
 	void Draw();
 

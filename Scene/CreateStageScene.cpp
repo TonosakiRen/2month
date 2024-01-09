@@ -1,14 +1,18 @@
 #include "CreateStageScene.h"
 #include "externals/imgui/imgui.h"
 #include "GlobalVariables.h"
+#include "PointLights.h"
+#include "SpotLights.h"
 
 
-void CreateStageScene::Initialize() {
+void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLights) {
+
+
 	player_ = std::make_unique<Player>();
 	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->initialize("test");
+	stage_->Initialize("test", spotLights, pointLights);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");

@@ -4,8 +4,10 @@
 #include <string>
 #include "GlobalVariables.h"
 #include "Player.h"
+#include "SpotLights.h"
+#include "PointLights.h"
 
-void Stage::initialize(const std::filesystem::path& loadFile) {
+void Stage::Initialize(const std::filesystem::path& loadFile, SpotLights* spotLight, PointLights* pointLight) {
 	uint32_t wallModelHandle_ = ModelManager::Load("scene");
 	Load(loadFile);
 
@@ -39,7 +41,7 @@ void Stage::DrawImGui() {
 #ifdef _DEBUG
 	if (ImGui::BeginMenu("Walls")) {
 		if (ImGui::Button("Create")) {
-			walls_.emplace_back(std::make_unique<Wall>())->Initialize(Vector3(0.0f,0.0f,0.0f));
+			walls_.emplace_back(std::make_unique<Wall>())->Initialize(Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(0.0f,0.0f,0.0f));
 		}
 		// 要素数確認
 		ImGui::Text("ElementCount = %d", walls_.size());
