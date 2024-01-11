@@ -1,8 +1,7 @@
 #include "Wall.h"
 #include "ModelManager.h"
 #include "externals/imgui/imgui.h"
-void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate)
-{
+void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	GameObject::Initialize("factory");
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
