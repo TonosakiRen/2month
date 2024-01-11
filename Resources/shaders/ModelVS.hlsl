@@ -11,20 +11,11 @@ struct ViewProjection {
 };
 ConstantBuffer<ViewProjection> gViewProjection  : register(b1);
 
-struct DirectionLight {
-	float32_t4 color;
-	float32_t3 direction;
-	float32_t intensity;
-	float32_t4x4 viewProjection;
-};
-ConstantBuffer<DirectionLight> gDirectionLight  : register(b2);
-
 struct VSOutput {
 	float32_t4 pos : SV_POSITION; 
 	float32_t3 normal : NORMAL;     
 	float32_t2 uv : TEXCOORD;   
 	float32_t4 worldPosition : POSITION0;
-	float32_t4 lightViewPosition : POSITION1;
 };
 
 VSOutput main(float32_t4 pos : POSITION, float32_t3 normal : NORMAL, float32_t2 uv : TEXCOORD) {
@@ -33,6 +24,5 @@ VSOutput main(float32_t4 pos : POSITION, float32_t3 normal : NORMAL, float32_t2 
 	output.normal = mul(normal, (float32_t3x3)gWorldTransform.world);
 	output.uv = uv;
 	output.worldPosition = mul(pos, gWorldTransform.world);
-	output.lightViewPosition = mul(output.worldPosition,gDirectionLight.viewProjection);
 	return output;
 }

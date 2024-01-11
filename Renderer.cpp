@@ -52,8 +52,7 @@ void Renderer::Initialize() {
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Initialize(window);
 
-    //shadowMap
-    /*shadowMap_.Create(1024, 1024, DXGI_FORMAT_D32_FLOAT);*/
+    lightNumBuffer_.Create();
 
 }
 
@@ -83,22 +82,21 @@ void Renderer::BeginMainRender() {
     commandContext_.SetViewportAndScissorRect(0, 0, colorBuffers_[kColor].GetWidth(), colorBuffers_[kColor].GetHeight());
 }
 
-void Renderer::DeferredRender(const ViewProjection& viewProjection, const DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights)
+void Renderer::DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights)
 {
-    deferredRenderer_.Render(commandContext_, &resultBuffer_, viewProjection, directionalLight, pointLights,spotLights);
+    deferredRenderer_.Render(commandContext_, &resultBuffer_, viewProjection, directionalLight, pointLights,spotLights,lightNumBuffer_);
 }
 
 void Renderer::BeginShadowMapRender(DirectionalLights& directionalLights)
 {
-    commandContext_.TransitionResource(directionalLights.lights_[0].shadowMap_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-    commandContext_.SetDepthStencil(directionalLights.lights_[0].shadowMap_.GetDSV());
-    commandContext_.ClearDepth(directionalLights.lights_[0].shadowMap_);
-    commandContext_.SetViewportAndScissorRect(0, 0, directionalLights.lights_[0].shadowMap_.GetWidth(), directionalLights.lights_[0].shadowMap_.GetHeight());
+    commandContext_.SetViewportAndScissorRect(0, 0, DirectionalLights::shadowWidth, DirectionalLights::shadowHeight);
 }
 
 void Renderer::EndShadowMapRender(DirectionalLights& directionalLights)
 {
-    commandContext_.TransitionResource(directionalLights.lights_[0].shadowMap_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    for (int i = 0; i < DirectionalLights::lightNum;i++) {
+        commandContext_.TransitionResource(directionalLights.lights_[i].shadowMap_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    }
 }
 
 void Renderer::EndMainRender() {

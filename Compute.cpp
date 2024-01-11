@@ -55,7 +55,7 @@ void Compute::Initialize()
 	copyBuffer_->Map(0, nullptr, &data_);
 }
 
-void Compute::Dispatch(CommandContext& commandContext, ColorBuffer* colorBuffer1, ColorBuffer* colorBuffer2)
+void Compute::Dispatch(CommandContext& commandContext, ColorBuffer* colorBuffer1)
 {
 
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
@@ -63,7 +63,6 @@ void Compute::Dispatch(CommandContext& commandContext, ColorBuffer* colorBuffer1
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture1), colorBuffer1->GetSRV());
-	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture2), colorBuffer2->GetSRV());
 	commandContext.Dispatch(kNum,1,1);
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 	
@@ -87,14 +86,12 @@ void Compute::CreatePipeline()
 	uavBlob = shaderManager->Compile(L"CS.hlsl", ShaderManager::kCompute);
 	assert(uavBlob != nullptr);
 
-	CD3DX12_DESCRIPTOR_RANGE ranges[2]{};
+	CD3DX12_DESCRIPTOR_RANGE ranges[1]{};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
-	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
 	rootparams[(int)RootParameter::kColorTexture1].InitAsDescriptorTable(1, &ranges[0]);
-	rootparams[(int)RootParameter::kColorTexture2].InitAsDescriptorTable(1, &ranges[1]);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =

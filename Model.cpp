@@ -24,11 +24,6 @@ void Model::PreDraw(CommandContext* commandContext, const ViewProjection& viewPr
     // CBVをセット（ビュープロジェクション行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
 
-    // CBVをセット（ビュープロジェクション行列）
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kDirectionalLights), directionalLights.lights_[0].constBuffer_.GetGPUVirtualAddress());
-
-    commandContext_->SetDescriptorTable(static_cast<UINT>(RootParameter::kShadowMap), directionalLights.lights_[0].shadowMap_.GetSRV());
-
     commandContext_->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
@@ -66,10 +61,8 @@ void Model::CreatePipeline() {
         CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::parameterNum)] = {};
         rootparams[int(RootParameter::kWorldTransform)].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
         rootparams[int(RootParameter::kViewProjection)].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[int(RootParameter::kDirectionalLights)].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
         rootparams[int(RootParameter::kTexture)].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[int(RootParameter::kShadowMap)].InitAsDescriptorTable(1, &descRangeSRVShadow, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[int(RootParameter::kMaterial)].InitAsConstantBufferView(3, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kMaterial)].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 
         // スタティックサンプラー
         CD3DX12_STATIC_SAMPLER_DESC samplerDesc =

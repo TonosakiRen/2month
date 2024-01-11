@@ -160,6 +160,13 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat4("lightColor", &directionalLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
 		ImGui::End();
+
+		ImGui::Begin("DirectionalLight2");
+		ImGui::DragFloat3("lightDirection", &directionalLights_.lights_[1].direction.x, 0.01f);
+		ImGui::DragFloat3("lightPosition", &directionalLights_.lights_[1].position.x, 1.0f);
+		ImGui::DragFloat4("lightColor", &directionalLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("intensity", &directionalLights_.lights_[1].intensity, 0.01f, 0.0f);
+		ImGui::End();
 #endif
 		directionalLights_.lights_[0].direction = Normalize(directionalLights_.lights_[0].direction);
 		directionalLights_.Update();

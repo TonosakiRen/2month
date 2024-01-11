@@ -265,6 +265,15 @@
     <ClCompile Include="Game\Stage\Wall.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowSpotLights.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLightShadowMap.cpp">
+      <Filter>ShadowMap</Filter>
+    </ClCompile>
+    <ClCompile Include="LightNumBuffer.cpp">
+      <Filter>Engine\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -468,11 +477,17 @@
     <ClInclude Include="Game\Stage\Wall.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowSpotLights.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLightShadowMap.h">
+      <Filter>ShadowMap</Filter>
+    </ClInclude>
+    <ClInclude Include="LightNumBuffer.h">
+      <Filter>Engine\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\shaders\Basic.hlsli">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="Resources\shaders\Particle.hlsli">
       <Filter>shaders</Filter>
     </None>
@@ -481,12 +496,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\shaders\BasicPS.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\BasicVS.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
@@ -539,6 +548,24 @@
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\EdgeVS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapPS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowMapVS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ModelPS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ModelVS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SpotLightShadowMapPS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\SpotLightShadowMapVS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

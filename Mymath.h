@@ -1142,6 +1142,16 @@ inline Quaternion MakeForZAxis(float angle) {
 	return Quaternion(0.0f, 0.0f, std::sin(angle / 2.0f), std::cos(angle / 2.0f));
 }
 
+inline Quaternion MakeXAxisFromQuaternion(Quaternion q) {
+	return Quaternion(q.x, 0.0f, 0.0f, q.w);
+}
+inline Quaternion MakeYAxisFromQuaternion(Quaternion q) {
+	return Quaternion(0.0f, q.y, 0.0f, q.w);
+}
+inline Quaternion MakeZAxisFromQuaternion(Quaternion q) {
+	return Quaternion(0.0f, 0.0f, q.z, q.w);
+}
+
 inline Quaternion MakeFromAngleAxis(const Vector3& axis, float angle) {
 	Vector3 v = Normalize(axis) * std::sinf(angle * 0.5f);
 	Quaternion result;

@@ -1,6 +1,6 @@
-#include "SpotLights.h"
+#include "ShadowSpotLights.h"
 #include "DirectXCommon.h"
-void SpotLights::Initialize() {
+void ShadowSpotLights::Initialize() {
     lights_.resize(lightNum);
     // インスタンシングデータのサイズ
     UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
@@ -19,7 +19,7 @@ void SpotLights::Initialize() {
     Update();
 }
 
-void SpotLights::Update() {
+void ShadowSpotLights::Update() {
 
     std::vector<ConstBufferData> bufferData;
     bufferData.reserve(lightNum);

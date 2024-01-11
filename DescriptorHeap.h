@@ -31,6 +31,10 @@ public:
         return handle;
     }
 
+    DescriptorHandle GetDiscriptorStartHandle() {
+        return descriptorStart_;
+    }
+
 private:
     // コピー禁止
     DescriptorHeap(const DescriptorHeap&) = delete;

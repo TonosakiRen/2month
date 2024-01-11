@@ -49,7 +49,12 @@ void Player::Update()
 	}
 
 	worldTransform_.translation_ += move;
-	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelSize_.y / 2.0f, FLT_MAX);
+
+	velocisity_.y = clamp(velocisity_.y, -0.5f, 200.0f);
+	velocisity_ += acceleration_;
+	worldTransform_.translation_ += velocisity_;
+
+	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelSize_.y / 2.0f - 1.0f, FLT_MAX);
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + modelSize_.z / 2.0f, FLT_MAX);
 
 #ifdef _DEBUG
@@ -61,9 +66,6 @@ void Player::Update()
 #endif
 
 	collider_.AdjustmentScale();
-	velocisity_.y = clamp(velocisity_.y, -0.5f, 200.0f);
-	velocisity_ += acceleration_;
-	worldTransform_.translation_ += velocisity_;
 	worldTransform_.Update();
 	modelWorldTransform_.Update();
 }

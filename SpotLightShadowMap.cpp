@@ -1,52 +1,47 @@
-#include "ShadowMap.h"
+#include "SpotLightShadowMap.h"
 #include "TextureManager.h"
 #include "ModelManager.h"
 #include "ShaderManager.h"
 #include "Renderer.h"
-#include "LightNumBuffer.h"
-#include "DirectionalLights.h"
+#include "ShadowSpotLights.h"
 
 using namespace Microsoft::WRL;
 
-bool ShadowMap::isDrawShadowMap = false;
-CommandContext* ShadowMap::commandContext_ = nullptr;
-std::unique_ptr<RootSignature> ShadowMap::rootSignature_;
-std::unique_ptr<PipelineState> ShadowMap::pipelineState_;
-DirectionalLights* ShadowMap::directionalLights_;
-void ShadowMap::StaticInitialize() {
+bool SpotLightShadowMap::isDrawShadowMap = false;
+CommandContext* SpotLightShadowMap::commandContext_ = nullptr;
+std::unique_ptr<RootSignature> SpotLightShadowMap::rootSignature_;
+std::unique_ptr<PipelineState> SpotLightShadowMap::pipelineState_;
+void SpotLightShadowMap::StaticInitialize() {
     CreatePipeline();
 }
 
-void ShadowMap::PreDraw(CommandContext* commandContext,DirectionalLights& directionalLight) {
-    assert(ShadowMap::commandContext_ == nullptr);
+void SpotLightShadowMap::PreDraw(CommandContext* commandContext, const ShadowSpotLights& shadowSpotLights) {
+    assert(SpotLightShadowMap::commandContext_ == nullptr);
 
     commandContext_ = commandContext;
-    directionalLights_ = &directionalLight;
     isDrawShadowMap = true;
 
     commandContext_->SetPipelineState(*pipelineState_);
     commandContext_->SetGraphicsRootSignature(*rootSignature_);
 
-    for (int i = 0; i < DirectionalLights::lightNum; i++) {
-        commandContext_->TransitionResource(directionalLights_->lights_[i].shadowMap_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-        commandContext_->ClearDepth(directionalLights_->lights_[i].shadowMap_);
-    }
+    // CBVをセット（ライト）
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kSpotLights), shadowSpotLights.lights_[0].constBuffer_.GetGPUVirtualAddress());
 
     commandContext_->SetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void ShadowMap::PostDraw() {
+void SpotLightShadowMap::PostDraw() {
     commandContext_ = nullptr;
     isDrawShadowMap = false;
 }
 
-void ShadowMap::CreatePipeline() {
+void SpotLightShadowMap::CreatePipeline() {
     HRESULT result = S_FALSE;
     ComPtr<IDxcBlob> vsBlob;
 
     auto shaderManager = ShaderManager::GetInstance();
 
-    vsBlob = shaderManager->Compile(L"ShadowMapVS.hlsl", ShaderManager::kVertex);
+    vsBlob = shaderManager->Compile(L"SpotLightShadowMapVS.hlsl", ShaderManager::kVertex);
     assert(vsBlob != nullptr);
 
 
@@ -55,10 +50,10 @@ void ShadowMap::CreatePipeline() {
 
     {
 
-         // ルートパラメータ
+        // ルートパラメータ
         CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::parameterNum)] = {};
         rootparams[int(RootParameter::kWorldTransform)].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[(int)RootParameter::kDirectionalLight].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[int(RootParameter::kSpotLights)].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 
         // スタティックサンプラー
         CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
@@ -115,15 +110,11 @@ void ShadowMap::CreatePipeline() {
     }
 }
 
-void ShadowMap::Draw(uint32_t modelHandle, const WorldTransform& worldTransform) {
+void SpotLightShadowMap::Draw(uint32_t modelHandle, const WorldTransform& worldTransform) {
 
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    for (int i = 0; i < DirectionalLights::lightNum; i++) {
-        commandContext_->SetDepthStencil(directionalLights_->lights_[i].shadowMap_.GetDSV());
-        commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kDirectionalLight), directionalLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
-        ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
-    }
+    ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
 }
 

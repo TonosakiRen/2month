@@ -39,6 +39,7 @@ DescriptorHandle DescriptorHeap::Allocate() {
         allocationHandle.gpu_ = descriptorStart_;
         allocationHandle.gpu_.ptr += uint64_t(freeDescriptorOffset_) * descriptorSize_;
     }
+    allocationHandle.index_ = freeDescriptorOffset_;
     ++freeDescriptorOffset_;
 
     return allocationHandle;

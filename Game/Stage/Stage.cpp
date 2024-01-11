@@ -89,7 +89,6 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
 	playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
-
 }
 
 void Stage::SetPlayerRespawn(Player* const player) const {

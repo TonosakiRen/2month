@@ -10,6 +10,7 @@
 
 #include "DeferredRenderer.h"
 #include "EdgeRenderer.h"
+#include "LightNumBuffer.h"
 
 class viewProjection;
 class DirectionalLights;
@@ -31,7 +32,7 @@ public:
     void BeginFrame();
     void BeginMainRender();
     void EndMainRender();
-    void DeferredRender(const ViewProjection& viewProjection, const DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights);
+    void DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights);
     void BeginShadowMapRender(DirectionalLights& directionalLights);
     void EndShadowMapRender(DirectionalLights& directionalLights);
     void BeginUIRender();
@@ -67,5 +68,7 @@ private:
 
     Bloom bloom_;
     PostEffect postEffect_;
+
+    LightNumBuffer lightNumBuffer_;
 };
 

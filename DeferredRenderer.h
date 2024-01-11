@@ -13,6 +13,7 @@ class ViewProjection;
 class DirectionalLights;
 class PointLights;
 class SpotLights;
+class LightNumBuffer;
 
 class DeferredRenderer
 {
@@ -27,6 +28,8 @@ public:
 		kPointLights,
 		kSpotLights,
 
+		kDirectionalightTextures,
+
 		kLightNum,
 		
 		ParameterNum
@@ -37,7 +40,7 @@ public:
 		Vector2 uv;
 	};
 	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, DepthBuffer* depthTexture);
-	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, const DirectionalLights& directionalLight,const PointLights& pointLights, const SpotLights& spotLights);
+	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, DirectionalLights& directionalLight,const PointLights& pointLights, const SpotLights& spotLights,const LightNumBuffer& lightNumBuffer);
 
 private:
 	void CreatePipeline();
@@ -55,7 +58,6 @@ private:
 		int32_t spotLightNum;
 	};
 
-	UploadBuffer lightNumBuffer_;
 
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	D3D12_INDEX_BUFFER_VIEW ibView_{};

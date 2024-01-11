@@ -11,13 +11,12 @@ public:
 	enum class RootParameter {
 		kRwStructure,
 		kColorTexture1,
-		kColorTexture2,
 		
 		ParameterNum
 	};
 	static void StaticInitialize();
 	void Initialize();
-	void Dispatch(CommandContext& commandContext,ColorBuffer* colorBuffer1,ColorBuffer* colorBuffer2);
+	void Dispatch(CommandContext& commandContext,ColorBuffer* colorBuffer1);
 	void* GetData();
 	void UnMap();
 private:
