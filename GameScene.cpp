@@ -169,6 +169,7 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::End();
 #endif
 		directionalLights_.lights_[0].direction = Normalize(directionalLights_.lights_[0].direction);
+		directionalLights_.lights_[1].direction = Normalize(directionalLights_.lights_[1].direction);
 		directionalLights_.Update();
 
 #ifdef _DEBUG
