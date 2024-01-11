@@ -55,7 +55,7 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("Player");
 	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);
-	//ImGui::DragFloat3("rotation", &worldTransform_.quaternion_.x, 0.1f);
+	ImGui::DragFloat3("rotation", &worldTransform_.quaternion_.x, 0.1f);
 	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
 	ImGui::End();
 #endif
@@ -71,7 +71,7 @@ void Player::Update()
 void Player::Collision(Collider& otherCollider)
 {
 	Vector3 pushBackVector;
-	if (collider_.Collision(otherCollider, pushBackVector)) {
+ 	if (collider_.Collision(otherCollider, pushBackVector)) {
 		worldTransform_.translation_ += pushBackVector;
 		worldTransform_.Update();
 		modelWorldTransform_.Update();

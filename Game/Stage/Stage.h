@@ -1,6 +1,8 @@
 #pragma once
 #include "Wall.h"
 #include "WallLight.h"
+#include "Floor.h"
+
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -17,6 +19,7 @@ public:
 	void Draw();
 	void DrawImGui();
 	void Load(const std::filesystem::path& loadFile);
+	void Save(const char* itemName);
 
 	Collider& GetWallCollider(uint32_t number) const { return walls_.at(number)->collider_; }
 	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
@@ -26,9 +29,14 @@ public:
 	/// </summary>
 	/// <param name="player">playerのポインタ</param>
 	void SetPlayerRespawn(class Player* const player) const;
+
+private:
+	void SetSpotLight();
+
 private:
 	std::vector<std::unique_ptr<Wall>> walls_;
 	std::vector<std::unique_ptr<WallLight>> wallLights_;
+	std::vector<std::unique_ptr<Floor>> floors_;
 public:
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

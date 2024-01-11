@@ -265,6 +265,9 @@
     <ClCompile Include="Game\Stage\Wall.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\Floor.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -466,6 +469,9 @@
       <Filter>Game\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Game\Stage\Wall.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\Floor.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
