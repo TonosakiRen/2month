@@ -1,9 +1,26 @@
 {
     "test": {
+        "FloorConfirmation": 1,
+        "FloorNumber : 0 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "FloorNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "FloorNumber : 0 : Translate": [
+            0.0,
+            -1.2000000476837158,
+            -3.0
+        ],
         "Player : Rotate": [
-            0.0,
+            -0.0,
             -0.7071067690849304,
-            0.0,
+            -0.0,
             0.7071067690849304
         ],
         "Player : Scale": [
@@ -16,12 +33,29 @@
             1.3547025918960571,
             -7.0
         ],
-        "WallConfirmation": 3,
-        "WallNumber : 0 : Rotate": [
+        "WallConfirmation": 1,
+        "WallLightConfirmation": 1,
+        "WallLightNumber : 0 : Rotate": [
             0.0,
             0.0,
             0.0,
             1.0
+        ],
+        "WallLightNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallLightNumber : 0 : Translate": [
+            -5.5,
+            6.0,
+            3.0
+        ],
+        "WallNumber : 0 : Rotate": [
+            -0.0,
+            1.0,
+            -0.0,
+            -4.371138828673793e-08
         ],
         "WallNumber : 0 : Scale": [
             1.0,
@@ -29,9 +63,9 @@
             1.0
         ],
         "WallNumber : 0 : Translate": [
-            -46.79999923706055,
-            -2.0,
-            0.0
+            0.0,
+            7.0,
+            10.0
         ],
         "WallNumber : 1 : Rotate": [
             0.0,
@@ -45,9 +79,9 @@
             1.0
         ],
         "WallNumber : 1 : Translate": [
-            0.0,
-            -2.0,
-            0.0
+            23.0,
+            7.0,
+            10.0
         ],
         "WallNumber : 2 : Rotate": [
             0.0,

@@ -274,6 +274,9 @@
     <ClCompile Include="LightNumBuffer.cpp">
       <Filter>Engine\Light</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\Floor.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -485,6 +488,9 @@
     </ClInclude>
     <ClInclude Include="LightNumBuffer.h">
       <Filter>Engine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\Floor.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

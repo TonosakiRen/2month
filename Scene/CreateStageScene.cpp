@@ -59,12 +59,8 @@ void CreateStageScene::DrawImGui() {
 				ImGui::InputText("FileName", itemName_, sizeof(itemName_));
 				if (ImGui::Button("Save")) {
 					g->CreateGroup(itemName_);
-					g->SetValue(itemName_, "WallConfirmation" + std::string(), static_cast<int>(stage_->GetWalls().size()));
-					for (uint32_t index = 0u; index < stage_->GetWalls().size(); index++) {
-						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Scale").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->scale_);
-						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Rotate").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->quaternion_);
-						g->SetValue(itemName_, ("WallNumber : " + std::to_string(index) + " : Translate").c_str(), stage_->GetWalls()[index]->GetWorldTransform()->translation_);
-					}
+					stage_->Save(itemName_);
+
 					g->SetValue(itemName_, "Player : Scale" + std::string(), player_->GetWorldTransform()->scale_);
 					g->SetValue(itemName_, "Player : Rotate" + std::string(), player_->GetWorldTransform()->quaternion_);
 					g->SetValue(itemName_, "Player : Translate" + std::string(), player_->GetWorldTransform()->translation_);
