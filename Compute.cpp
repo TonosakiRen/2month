@@ -60,14 +60,17 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 
 void Compute::Dispatch(CommandContext& commandContext)
 {
+	D3D12_RESOURCE_DESC resourceDesc = copyBuffer_->GetDesc();
+	UINT bufferSizeInBytes = static_cast<UINT>(resourceDesc.Width);
+	memset(data_, 0, bufferSizeInBytes);
 
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
 	for (int i = 0; i < ShadowSpotLights::lightNum;i++) {
-		commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture1), shadowSpotLights_->lights_[i].collisionData.GetSRV());
-		commandContext.Dispatch(kNum, 1, 1);
+		commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), shadowSpotLights_->lights_[i].collisionData.GetSRV());
+		commandContext.Dispatch(kNum, kNum, 1);
 	}
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 	
@@ -96,7 +99,7 @@ void Compute::CreatePipeline()
 
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
-	rootparams[(int)RootParameter::kColorTexture1].InitAsDescriptorTable(1, &ranges[0]);
+	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =

@@ -12,7 +12,7 @@ class Compute
 public:
 	enum class RootParameter {
 		kRwStructure,
-		kColorTexture1,
+		kColorTexture,
 		
 		ParameterNum
 	};
@@ -30,7 +30,7 @@ private:
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
 	void* data_;
-	const uint32_t kNum = 1024 * 1024;
+	const uint32_t kNum = 1024;
 	DescriptorHandle uavHandle_;
 };
 

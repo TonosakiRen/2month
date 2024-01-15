@@ -254,13 +254,19 @@ void GameScene::Update(CommandContext& commandContext){
 
 	//コンピュートシェーダテスト
 	{
-		//compute_->Dispatch(commandContext);
 		uint32_t* date = static_cast<uint32_t*>(compute_->GetData());
 
-		int a = date[1];
+		int a = date[0];
+		if (a) {
+			sphereColor_ = { 1.0f,0.0f,0.0f,1.0f };
+		}
+		else {
+			sphereColor_ = { 1.0f,1.0f,1.0f,1.0f };
+		}
 #ifdef _DEBUG
 		ImGui::Text("%d", int(a));
 #endif
+		compute_->Dispatch(commandContext);
 	}
 	
 #ifdef _DEBUG
@@ -320,7 +326,7 @@ void GameScene::ModelDraw()
 	case GameScene::Scene::InGame:
 		skydome_->Draw();
 		inGameScene_->Draw();
-		sphere_->Draw();
+		sphere_->Draw(sphereColor_);
 		break;
 	case GameScene::Scene::Editor:
 		editorScene_->Draw();
