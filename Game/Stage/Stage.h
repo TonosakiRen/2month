@@ -2,6 +2,7 @@
 #include "Wall.h"
 #include "WallLight.h"
 #include "Floor.h"
+#include "Truck.h"
 
 #include <memory>
 #include <vector>
@@ -37,6 +38,7 @@ private:
 	std::vector<std::unique_ptr<Wall>> walls_;
 	std::vector<std::unique_ptr<WallLight>> wallLights_;
 	std::vector<std::unique_ptr<Floor>> floors_;
+	std::vector<std::unique_ptr<Truck>> trucks_;
 public:
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
