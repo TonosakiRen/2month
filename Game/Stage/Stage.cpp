@@ -25,6 +25,9 @@ void Stage::Update() {
 	for (auto& floor : floors_) {
 		floor->Update();
 	}
+	for (auto& truck : trucks_) {
+		truck->Update();
+	}
 
 }
 
@@ -37,6 +40,9 @@ void Stage::Draw() {
 	}
 	for (auto& floor : floors_) {
 		floor->Draw();
+	}
+	for (auto& truck : trucks_) {
+		truck->Draw();
 	}
 }
 
@@ -86,7 +92,7 @@ void Stage::DrawImGui() {
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", floors_.size());
 			for (int i = 0; i < floors_.size(); i++) {
-				if (ImGui::TreeNode(("WallRightNumber : " + std::to_string(i)).c_str())) {
+				if (ImGui::TreeNode(("FloorNumber : " + std::to_string(i)).c_str())) {
 					floors_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
 						floors_.erase(floors_.begin() + i);
@@ -96,6 +102,26 @@ void Stage::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Trucks")) {
+			if (ImGui::Button("Create")) {
+				trucks_.emplace_back(std::make_unique<Truck>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", trucks_.size());
+			for (int i = 0; i < trucks_.size(); i++) {
+				if (ImGui::TreeNode(("TruckNumber : " + std::to_string(i)).c_str())) {
+					trucks_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						trucks_.erase(trucks_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
+
 		ImGui::EndMenu();
 	}
 
@@ -138,6 +164,15 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		floors->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "TruckConfirmation");
+	trucks_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("TruckNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("TruckNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("TruckNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& truck = trucks_.emplace_back(std::make_unique<Truck>());
+		truck->Initialize(scale, rotate, trans);
+	}
 
 
 	// playerの初期位置
@@ -170,7 +205,12 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("FloorNumber : " + std::to_string(index) + " : Translate").c_str(), floors_[index]->GetWorldTransform()->translation_);
 	}
 
-
+	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trucks_.size()); index++) {
+		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Scale").c_str(), trucks_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Rotate").c_str(), trucks_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Translate").c_str(), trucks_[index]->GetWorldTransform()->translation_);
+	}
 
 }
 
