@@ -1,7 +1,9 @@
 #pragma once
 #include "Player.h"
 #include "Game/Stage/Stage.h"
+#include "Game/Character/NormalEnemy.h"
 #include <memory>
+#include <vector>
 class PointLights;
 class SpotLights;
 
@@ -20,5 +22,6 @@ public:
 private:
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Stage> stage_;
+	std::vector<std::unique_ptr<NormalEnemy>> nEnemy_;
 
 };

@@ -71,6 +71,9 @@
     <Filter Include="ShadowMap">
       <UniqueIdentifier>{971fd058-a497-4ad5-bf36-9c124fba408c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Character">
+      <UniqueIdentifier>{ad0acef1-320e-495e-854d-242f1018fb82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -279,6 +282,12 @@
     </ClCompile>
     <ClCompile Include="Game\Stage\Truck.cpp">
       <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\NormalEnemy.cpp">
+      <Filter>Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\BaseCharacter.cpp" />
+      <Filter>Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="ShadowEdgeRenderer.cpp">
       <Filter>Engine\PostEffect</Filter>
@@ -500,6 +509,12 @@
     </ClInclude>
     <ClInclude Include="Game\Stage\Truck.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\NormalEnemy.h">
+      <Filter>Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\BaseCharacter.h">
+      <Filter>Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="ShadowEdgeRenderer.h">
       <Filter>Engine\PostEffect</Filter>
