@@ -494,14 +494,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\shaders\Particle.hlsli">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="Resources\shaders\Sprite.hlsli">
-      <Filter>shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>

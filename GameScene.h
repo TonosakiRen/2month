@@ -11,6 +11,7 @@
 #include "DirectionalLights.h"
 #include "PointLights.h"
 #include "SpotLights.h"
+#include "ShadowSpotLights.h"
 #include "Compute.h"
 #include "GameObject.h"
 
@@ -35,12 +36,14 @@ public:
 	void Update(CommandContext& commandContext);
 	void ModelDraw();
 	void ShadowDraw();
+	void SpotLightShadowDraw();
 	void ParticleDraw();
 	void ParticleBoxDraw();
 	void PreSpriteDraw();
 	void PostSpriteDraw();
 	void Draw(CommandContext& commandContext);
 	void ShadowMapDraw(CommandContext& commandContext);
+	void SpotLightShadowMapDraw(CommandContext& commandContext);
 	void UIDraw(CommandContext& commandContext);
 
 	DirectionalLights& GetDirectionalLights() {
@@ -53,6 +56,10 @@ public:
 
 	SpotLights& GetSpotLights() {
 		return spotLights_;
+	}
+
+	ShadowSpotLights& GetShadowSpotLights() {
+		return shadowSpotLights_;
 	}
 
 	const ViewProjection& GetViewProjection() {
@@ -70,6 +77,7 @@ private:
 	std::unique_ptr<Camera> camera_;
 	DirectionalLights directionalLights_;
 	PointLights pointLights_;
+	ShadowSpotLights shadowSpotLights_;
 	SpotLights spotLights_;
 
 	uint32_t textureHandle_;
@@ -80,6 +88,7 @@ private:
 
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<GameObject> sphere_;
+	UploadBuffer sphereIndex_;
 
 	std::unique_ptr<DustParticle> dustParticle_;
 

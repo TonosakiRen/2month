@@ -25,3 +25,9 @@ void InGameScene::Draw() {
 	stage_->Draw();
 	player_->Draw();
 }
+
+void InGameScene::ShadowDraw()
+{
+	//plyerを最後にして
+	player_->Draw();
+}

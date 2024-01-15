@@ -3,15 +3,21 @@ struct VSOutput {
 };
 
 struct PixelShaderOutput {
-	float32_t4 color : SV_TARGET0;
+	float32_t2 color : SV_TARGET0;
 };
+
+struct CollisionData {
+	float32_t2 collisionData;
+};
+ConstantBuffer<CollisionData> gCollisionData  : register(b2);
+
 
 PixelShaderOutput main(VSOutput input)
 {
 
 	PixelShaderOutput output;
 
-	output.color = float32_t4(0.5f, 0.5f, 0.5f, 1.0f);
+	output.color = gCollisionData.collisionData;
 
 	return output;
 }

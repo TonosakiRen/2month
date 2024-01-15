@@ -5,6 +5,10 @@
 #include "Helper.h"
 #include "WinApp.h"
 
+#include "ViewProjection.h"
+#include "DirectionalLights.h"
+#include "ShadowSpotLights.h"
+
 Renderer* Renderer::GetInstance() {
     static Renderer instance;
     return &instance;
@@ -82,9 +86,9 @@ void Renderer::BeginMainRender() {
     commandContext_.SetViewportAndScissorRect(0, 0, colorBuffers_[kColor].GetWidth(), colorBuffers_[kColor].GetHeight());
 }
 
-void Renderer::DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights)
+void Renderer::DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights)
 {
-    deferredRenderer_.Render(commandContext_, &resultBuffer_, viewProjection, directionalLight, pointLights,spotLights,lightNumBuffer_);
+    deferredRenderer_.Render(commandContext_, &resultBuffer_, viewProjection, directionalLight, pointLights,spotLights, shadowSpotLights,lightNumBuffer_);
 }
 
 void Renderer::BeginShadowMapRender(DirectionalLights& directionalLights)
@@ -96,6 +100,18 @@ void Renderer::EndShadowMapRender(DirectionalLights& directionalLights)
 {
     for (int i = 0; i < DirectionalLights::lightNum;i++) {
         commandContext_.TransitionResource(directionalLights.lights_[i].shadowMap_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    }
+}
+
+void Renderer::BeginSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
+{
+    commandContext_.SetViewportAndScissorRect(0, 0, ShadowSpotLights::shadowWidth, ShadowSpotLights::shadowHeight);
+}
+
+void Renderer::EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
+{
+    for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
+        commandContext_.TransitionResource(shadowSpotLights.lights_[i].shadowMap_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
     }
 }
 

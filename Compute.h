@@ -5,6 +5,8 @@
 #include "CommandContext.h"
 #include "DescriptorHandle.h"
 #include "ColorBuffer.h"
+
+class ShadowSpotLights;
 class Compute
 {
 public:
@@ -15,8 +17,8 @@ public:
 		ParameterNum
 	};
 	static void StaticInitialize();
-	void Initialize();
-	void Dispatch(CommandContext& commandContext,ColorBuffer* colorBuffer1);
+	void Initialize(ShadowSpotLights& shadowSpotLights);
+	void Dispatch(CommandContext& commandContext);
 	void* GetData();
 	void UnMap();
 private:
@@ -24,6 +26,7 @@ private:
 private:
 	static PipelineState pipelineState_;
 	static RootSignature rootSignature_;
+	ShadowSpotLights* shadowSpotLights_;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
 	void* data_;

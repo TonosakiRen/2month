@@ -8,8 +8,6 @@ void DirectionalLights::Initialize() {
         lights_[i].constBuffer_.Create((sizeof(ConstBufferData) + 0xff) & ~0xff);
         lights_[i].descriptorHeapIndex = lights_[i].shadowMap_.GetSRV().GetIndex();
     }
-    
-
     // インスタンシングデータのサイズ
     UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
     structureBuffer_.Create(sizeINB);
@@ -24,15 +22,14 @@ void DirectionalLights::Initialize() {
 
     srvHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
     DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(structureBuffer_, &srvDesc, srvHandle_);
-
     Update();
 }
 
 void DirectionalLights::Update() {
 
     // 定数バッファに書き込み
-    std::vector<ConstBufferData> bufferDatas;
-    bufferDatas.reserve(lightNum);
+    std::vector<ConstBufferData> bufferData;
+    bufferData.reserve(lightNum);
 
     for (int i = 0; i < lightNum; i++) {
 
@@ -42,16 +39,16 @@ void DirectionalLights::Update() {
         viewMatrix.m[3][2] = lights_[i].position.z;
         viewMatrix = Inverse(viewMatrix);
 
-        ConstBufferData bufferData;
-        bufferData.color = lights_[i].color;
-        bufferData.direction = Normalize(lights_[i].direction);
-        bufferData.intensity = lights_[i].intensity;
-        bufferData.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
-        bufferData.descriptorHeapIndex = lights_[i].descriptorHeapIndex;
+        ConstBufferData data;
+        data.color = lights_[i].color;
+        data.direction = Normalize(lights_[i].direction);
+        data.intensity = lights_[i].intensity;
+        data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fovAngleY_, aspectRatio_, nearZ_, farZ_);
+        data.descriptorHeapIndex = lights_[i].descriptorHeapIndex;
 
-        lights_[i].constBuffer_.Copy(bufferData);
-        bufferDatas.emplace_back(bufferData);
+        lights_[i].constBuffer_.Copy(data);
+        bufferData.emplace_back(data);
     }
 
-    structureBuffer_.Copy(bufferDatas.data(), sizeof(bufferDatas[0]) * bufferDatas.size());
+    structureBuffer_.Copy(bufferData.data(), sizeof(bufferData[0]) * bufferData.size());
 }

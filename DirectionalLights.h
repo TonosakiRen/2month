@@ -9,7 +9,7 @@ class DirectionalLights
 {
 public:
 
-	static const uint32_t  lightNum = 2;
+	static const uint32_t  lightNum = 1;
 	static const uint32_t shadowWidth = 1024;
 	static const uint32_t shadowHeight = 1024;
 

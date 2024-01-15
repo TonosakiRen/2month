@@ -13,6 +13,7 @@ public:
 	void Initialize(PointLights* pointLights, SpotLights* spotLights);
 	void Update();
 	void Draw();
+	void ShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
 

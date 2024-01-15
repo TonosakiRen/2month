@@ -5,5 +5,12 @@ SamplerState smp : register(s0);
 [numthreads(1, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID )
 {
-	Output[DTid.x] = DTid.x;
+	float32_t2 texSize;
+	//テクスチャーのサイズ
+	colorTex.GetDimensions(texSize.x, texSize.y);
+
+	uint v;
+	InterlockedExchange(Output[0], 1, v);
+
+
 }

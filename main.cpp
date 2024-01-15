@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "WinApp.h"
 #include "TextureManager.h"
+#include "Input.h"
+#include "Audio.h"
 #include "GameScene.h"
 #include "Particle.h"
 #include "ParticleBox.h"
@@ -10,6 +12,7 @@
 #include "Renderer.h"
 #include "Compute.h"
 #include "ShadowMap.h"
+#include "SpotLightShadowMap.h"
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	WinApp* win = nullptr;
@@ -17,6 +20,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//汎用機能
 	GameScene* gameScene = nullptr;
 	Input* input = nullptr;
+	Audio* audio = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -31,6 +35,9 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	input = Input::GetInstance();
 	input->Initialize(win->GetHInstance(), win->GetHwnd());
 
+	audio = Audio::GetInstance();
+	audio->Initialize();
+
 	// テクスチャマネージャの初期化
 	TextureManager::GetInstance()->Initialize();
 	TextureManager::Load("white1x1.png");
@@ -39,6 +46,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Model::StaticInitialize();
 
 	ShadowMap::StaticInitialize();
+
+	SpotLightShadowMap::StaticInitialize();
 
 	// 3Dオブジェクト静的初期化
 	Particle::StaticInitialize();
@@ -69,6 +78,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		// 入力関連の毎フレーム処理
 		input->Update();
+		audio->Update();
 
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update(renderer->GetCommandContext());
@@ -79,13 +89,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		gameScene->ShadowMapDraw(renderer->GetCommandContext());
 
 		renderer->EndShadowMapRender(gameScene->GetDirectionalLights());
+
+		renderer->BeginSpotLightShadowMapRender(gameScene->GetShadowSpotLights());
+
+		gameScene->SpotLightShadowMapDraw(renderer->GetCommandContext());
+
+		renderer->EndSpotLightShadowMapRender(gameScene->GetShadowSpotLights());
 		
 		renderer->BeginMainRender();
 
 		// ゲームシーンの描画
 		gameScene->Draw(renderer->GetCommandContext());
 		
-		renderer->DeferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights(),gameScene->GetPointLights(), gameScene->GetSpotLights());
+		renderer->DeferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights(),gameScene->GetPointLights(), gameScene->GetSpotLights(), gameScene->GetShadowSpotLights());
 
 		renderer->EndMainRender();
 

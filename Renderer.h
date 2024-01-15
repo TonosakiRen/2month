@@ -14,6 +14,7 @@
 
 class viewProjection;
 class DirectionalLights;
+class ShadowSpotLights;
 
 class Renderer
 {
@@ -32,9 +33,11 @@ public:
     void BeginFrame();
     void BeginMainRender();
     void EndMainRender();
-    void DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights);
+    void DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights);
     void BeginShadowMapRender(DirectionalLights& directionalLights);
     void EndShadowMapRender(DirectionalLights& directionalLights);
+    void BeginSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights);
+    void EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights);
     void BeginUIRender();
     void EndUIRender();
     void Shutdown();

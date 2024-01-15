@@ -4,6 +4,7 @@
 #include "ShaderManager.h"
 #include "Helper.h"
 #include <assert.h>
+#include "ShadowSpotLights.h"
 
 using namespace Microsoft::WRL;
 
@@ -15,10 +16,10 @@ void Compute::StaticInitialize()
 	CreatePipeline();
 }
 
-void Compute::Initialize()
+void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 {
 	auto device = DirectXCommon::GetInstance()->GetDevice();
-	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t) * kNum), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
 	device->CreateCommittedResource(
 		&heapProps,
@@ -32,7 +33,7 @@ void Compute::Initialize()
 	uavHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
 	viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-	viewDesc.Buffer.NumElements = kNum;
+	viewDesc.Buffer.NumElements = 1;
 	viewDesc.Buffer.StructureByteStride = sizeof(uint32_t);
 	device->CreateUnorderedAccessView(
 		rwStructureBuffer_,
@@ -41,7 +42,7 @@ void Compute::Initialize()
 		uavHandle_
 	);
 
-	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t) * kNum));
+	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t)));
 	D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
 	device->CreateCommittedResource(
 		&copyHeapProps,
@@ -53,17 +54,21 @@ void Compute::Initialize()
 	);
 
 	copyBuffer_->Map(0, nullptr, &data_);
+
+	shadowSpotLights_ = &shadowSpotLights;
 }
 
-void Compute::Dispatch(CommandContext& commandContext, ColorBuffer* colorBuffer1)
+void Compute::Dispatch(CommandContext& commandContext)
 {
 
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
-	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture1), colorBuffer1->GetSRV());
-	commandContext.Dispatch(kNum,1,1);
+	for (int i = 0; i < ShadowSpotLights::lightNum;i++) {
+		commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture1), shadowSpotLights_->lights_[i].collisionData.GetSRV());
+		commandContext.Dispatch(kNum, 1, 1);
+	}
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 	
 }

@@ -83,7 +83,7 @@ void Player::Collision(Collider& otherCollider)
 
 void Player::Draw() {
 	collider_.Draw();
-	GameObject::Draw(modelWorldTransform_,{1.0f,1.0f,1.0f});
+	GameObject::PlayerDraw(modelWorldTransform_,{1.0f,1.0f,1.0f});
 }
 
 void Player::DrawImGui() {

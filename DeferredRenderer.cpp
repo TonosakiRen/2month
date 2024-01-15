@@ -10,6 +10,7 @@
 #include "PointLights.h"
 #include "SpotLights.h"
 #include "LightNumBuffer.h"
+#include "ShadowSpotLights.h"
 
 using namespace Microsoft::WRL;
 
@@ -25,7 +26,7 @@ void DeferredRenderer::Initialize(ColorBuffer* colorTexture, ColorBuffer* normal
 	CreateMesh();
 }
 
-void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights,const LightNumBuffer& lightNumBuffer)
+void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, const ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer)
 {
 	commandContext.TransitionResource(*originalBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
 	commandContext.SetRenderTarget(originalBuffer->GetRTV());
@@ -46,9 +47,10 @@ void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* origin
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kDirectionalLights), directionalLight.srvHandle_);
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kPointLights), pointLights.srvHandle_);
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kSpotLights), spotLights.srvHandle_);
+	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kShadowSpotLights), shadowSpotLights.srvHandle_);
 
 
-	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kDirectionalightTextures),DirectXCommon::GetInstance()->GetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV).GetDiscriptorStartHandle());
+	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::k2DTextures),DirectXCommon::GetInstance()->GetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV).GetDiscriptorStartHandle());
 
 	commandContext.SetConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
 	commandContext.SetConstantBuffer(static_cast<UINT>(RootParameter::kLightNum), lightNumBuffer.GetGPUVirtualAddress());
@@ -77,7 +79,7 @@ void DeferredRenderer::CreatePipeline()
 
 	{
 
-		CD3DX12_DESCRIPTOR_RANGE ranges[7]{};
+		CD3DX12_DESCRIPTOR_RANGE ranges[8]{};
 		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 		ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 		ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
@@ -85,8 +87,9 @@ void DeferredRenderer::CreatePipeline()
 		ranges[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 3);
 		ranges[4].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 4);
 		ranges[5].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 5);
+		ranges[6].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 6);
 
-		ranges[6].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, DirectXCommon::GetInstance()->DirectXCommon::kSrvHeapDescriptorNum, 0, 1);
+		ranges[7].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, DirectXCommon::GetInstance()->DirectXCommon::kSrvHeapDescriptorNum, 0, 1);
 
 		CD3DX12_ROOT_PARAMETER rootParameters[(int)RootParameter::ParameterNum]{};
 		rootParameters[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[(int)RootParameter::kColorTexture]);
@@ -97,8 +100,9 @@ void DeferredRenderer::CreatePipeline()
 		rootParameters[(int)RootParameter::kDirectionalLights].InitAsDescriptorTable(1, &ranges[3]);
 		rootParameters[(int)RootParameter::kPointLights].InitAsDescriptorTable(1, &ranges[4]);
 		rootParameters[(int)RootParameter::kSpotLights].InitAsDescriptorTable(1, &ranges[5]);
+		rootParameters[(int)RootParameter::kShadowSpotLights].InitAsDescriptorTable(1, &ranges[6]);
 
-		rootParameters[(int)RootParameter::kDirectionalightTextures].InitAsDescriptorTable(1, &ranges[6]);
+		rootParameters[(int)RootParameter::k2DTextures].InitAsDescriptorTable(1, &ranges[7]);
 
 
 		rootParameters[(int)RootParameter::kLightNum].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);

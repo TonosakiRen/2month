@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "ModelManager.h"
 #include "ShadowMap.h"
+#include "SpotLightShadowMap.h"
 
 void (GameScene::* GameScene::SceneUpdateTable[])() = {
 	&GameScene::TitleUpdate,
@@ -27,7 +28,6 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	audio_->Initialize();
 
 	Vector3 initializeCameraPos = { 0.0f,8.45f,-26.0f };
 	Vector3 initializeCameraRotate = { 0.21f,0.0f,0.0f };
@@ -56,23 +56,33 @@ void GameScene::Initialize() {
 	spotLights_.lights_[0].intensity = 5.85f;
 	spotLights_.lights_[0].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[0].distance = 10.460f ;
-	spotLights_.lights_[0].isActive = true;
+	spotLights_.lights_[0].isActive = false;
 
 	spotLights_.lights_[1].worldTransform.translation_ = { 5.85f,6.71f,4.02f };
 	spotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
 	spotLights_.lights_[1].intensity = 5.85f;
 	spotLights_.lights_[1].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[1].distance = 10.460f;
-	spotLights_.lights_[1].isActive = true;
+	spotLights_.lights_[1].isActive = false;
 
 	spotLights_.lights_[2].worldTransform.translation_ = {0.03f,6.71f,-5.36f };
 	spotLights_.lights_[2].color = { 1.0f,1.0f,0.58f };
 	spotLights_.lights_[2].intensity = 5.85f;
 	spotLights_.lights_[2].direction = { 0.0f,-1.0f,0.0f };
 	spotLights_.lights_[2].distance = 10.460f;
-	spotLights_.lights_[2].isActive = true;
+	spotLights_.lights_[2].isActive = false;
 	spotLights_.Update();
 
+	shadowSpotLights_.Initialize();
+	shadowSpotLights_.lights_[0].worldTransform.translation_ = { 0.0f,1.3f,-12.0f };
+	shadowSpotLights_.lights_[0].color = { 1.0f,1.0f,0.58f };
+	shadowSpotLights_.lights_[0].intensity = 5.5f;
+	shadowSpotLights_.lights_[0].direction = { 0.0f,0.0f,1.0f };
+	shadowSpotLights_.lights_[0].distance = 20.0f;
+	shadowSpotLights_.lights_[0].cosAngle = 0.8f;
+	shadowSpotLights_.lights_[0].isActive = true;
+
+	shadowSpotLights_.Update();
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
@@ -99,6 +109,10 @@ void GameScene::Initialize() {
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });
 	sphere_->UpdateMatrix();
 
+	Vector2 sphereCollision = {2.0f,0.0f};
+	sphereIndex_.Create(sizeof(Vector2));
+	sphereIndex_.Copy(sphereCollision);
+
 	dustParticle_ = std::make_unique<DustParticle>();
 	dustParticle_->SetIsEmit(true);
 	dustParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
@@ -108,7 +122,7 @@ void GameScene::Initialize() {
 	whiteParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
 
 	compute_ = std::make_unique<Compute>();
-	compute_->Initialize();
+	compute_->Initialize(shadowSpotLights_);
 
 	size_t bgmHandle = audio_->SoundLoadWave("BGM.wav");
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
@@ -116,7 +130,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -161,15 +175,9 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
 		ImGui::End();
 
-		ImGui::Begin("DirectionalLight2");
-		ImGui::DragFloat3("lightDirection", &directionalLights_.lights_[1].direction.x, 0.01f);
-		ImGui::DragFloat3("lightPosition", &directionalLights_.lights_[1].position.x, 1.0f);
-		ImGui::DragFloat4("lightColor", &directionalLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &directionalLights_.lights_[1].intensity, 0.01f, 0.0f);
-		ImGui::End();
+		
 #endif
 		directionalLights_.lights_[0].direction = Normalize(directionalLights_.lights_[0].direction);
-		directionalLights_.lights_[1].direction = Normalize(directionalLights_.lights_[1].direction);
 		directionalLights_.Update();
 
 #ifdef _DEBUG
@@ -213,7 +221,24 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::End();
 #endif
 		spotLights_.lights_[0].direction = Normalize(spotLights_.lights_[0].direction);
+		spotLights_.lights_[1].direction = Normalize(spotLights_.lights_[1].direction);
 		spotLights_.Update();
+
+#ifdef _DEBUG
+		ImGui::Begin("shadowSpotLight");
+		ImGui::DragFloat3("lightPosition", &shadowSpotLights_.lights_[0].worldTransform.translation_.x, 0.01f);
+		ImGui::DragFloat3("lightColor", &shadowSpotLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("intensity", &shadowSpotLights_.lights_[0].intensity, 0.01f, 0.0f);
+		ImGui::DragFloat3("direction", &shadowSpotLights_.lights_[0].direction.x, 0.01f, 0.0f);
+		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[0].distance, 0.01f, 0.0f);
+		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[0].decay, 0.01f, 0.0f);
+		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
+		ImGui::End();
+
+#endif
+		shadowSpotLights_.lights_[0].lockUp = { 0.0f,1.0f,0.0f };
+		shadowSpotLights_.lights_[0].direction = Normalize(shadowSpotLights_.lights_[0].direction);
+		shadowSpotLights_.Update();
 	}
 	//Scene
 	{
@@ -313,8 +338,23 @@ void GameScene::ShadowDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		inGameScene_->Draw();
+		inGameScene_->ShadowDraw();
 		sphere_->Draw();
+		break;
+	default:
+		break;
+	}
+}
+
+void GameScene::SpotLightShadowDraw()
+{
+	switch (scene_)
+	{
+	case GameScene::Scene::Title:
+		break;
+	case GameScene::Scene::InGame:
+		sphere_->EnemyDraw(sphereIndex_, *sphere_->GetWorldTransform());
+		inGameScene_->ShadowDraw();
 		break;
 	default:
 		break;
@@ -409,6 +449,13 @@ void GameScene::ShadowMapDraw(CommandContext& commandContext)
 	ShadowMap::PreDraw(&commandContext, directionalLights_);
 	ShadowDraw();
 	ShadowMap::PostDraw();
+}
+
+void GameScene::SpotLightShadowMapDraw(CommandContext& commandContext)
+{
+	SpotLightShadowMap::PreDraw(&commandContext, shadowSpotLights_);
+	SpotLightShadowDraw();
+	SpotLightShadowMap::PostDraw();
 }
 
 void GameScene::UIDraw(CommandContext& commandContext)
