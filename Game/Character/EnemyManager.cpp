@@ -20,7 +20,7 @@ void EnemyManager::Initialize() {
 
 	for (uint32_t index = 0u; index < 1u; index++) {
 		auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
-		enemy->Initialize();
+		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
 	}
 
 }
