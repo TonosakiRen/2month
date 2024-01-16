@@ -7,6 +7,7 @@
 class GlobalVariables;
 class PointLights;
 class SpotLights;
+class ShadowSpotLights;
 
 
 class CreateStageScene {
@@ -14,7 +15,7 @@ public:
 	CreateStageScene() = default;
 	~CreateStageScene() = default;
 
-	void Initialize(PointLights* pointLights, SpotLights* spotLights);
+	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
 

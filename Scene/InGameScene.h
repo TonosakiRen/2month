@@ -6,13 +6,14 @@
 #include <vector>
 class PointLights;
 class SpotLights;
+class ShadowSpotLights;
 
 class InGameScene {
 public:
 	InGameScene() = default;
 	~InGameScene() = default;
 
-	void Initialize(PointLights* pointLights, SpotLights* spotLights);
+	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
 	void ShadowDraw();

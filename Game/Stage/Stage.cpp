@@ -6,11 +6,14 @@
 #include "Player.h"
 #include "SpotLights.h"
 #include "PointLights.h"
+#include "ShadowSpotLights.h"
 
-void Stage::Initialize(const std::filesystem::path& loadFile, SpotLights* spotLight, PointLights* pointLight) {
+void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
 	uint32_t wallModelHandle_ = ModelManager::Load("scene");
 	Load(loadFile);
+	pointLights_ = pointLight;
 	spotLights_ = spotLight;
+	shadowSpotLights_ = shadowSpotLight;
 	SetSpotLight();
 
 }

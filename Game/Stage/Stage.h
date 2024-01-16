@@ -9,13 +9,14 @@
 #include <filesystem>
 class SpotLights;
 class PointLights;
+class ShadowSpotLights;
 
 class Stage {
 public:
 	Stage() = default;
 	~Stage() = default;
 
-	void Initialize(const std::filesystem::path& loadFile, SpotLights* spotLight, PointLights* pointLight);
+	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
 	void Update();
 	void Draw();
 	void DrawImGui();
@@ -42,6 +43,7 @@ private:
 public:
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
+	ShadowSpotLights* shadowSpotLights_;
 
 
 	struct SRT {

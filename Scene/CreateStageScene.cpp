@@ -3,16 +3,17 @@
 #include "GlobalVariables.h"
 #include "PointLights.h"
 #include "SpotLights.h"
+#include "ShadowSpotLights.h"
 
 
-void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLights) {
+void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLights,ShadowSpotLights* shadowSpotLights) {
 
 
 	player_ = std::make_unique<Player>();
 	player_->Initialize("player");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize("test", spotLights, pointLights);
+	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");

@@ -85,11 +85,11 @@ void GameScene::Initialize() {
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
-	inGameScene_->Initialize(&pointLights_,&spotLights_);
+	inGameScene_->Initialize(&pointLights_,&spotLights_,&shadowSpotLights_);
 	
 	// 
 	editorScene_ = std::make_unique<CreateStageScene>();
-	editorScene_->Initialize(&pointLights_, &spotLights_);
+	editorScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
@@ -294,7 +294,7 @@ void GameScene::TitleUpdate() {
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize(&pointLights_, &spotLights_);
+		inGameScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
 	}
 }
 void GameScene::InGameUpdate() {
@@ -311,7 +311,7 @@ void GameScene::InGameUpdate() {
 void GameScene::EditorInitialize() {
 	if (editorScene_) {
 		editorScene_.reset(new CreateStageScene());
-		editorScene_->Initialize(&pointLights_, &spotLights_);
+		editorScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
 	}
 }
 
