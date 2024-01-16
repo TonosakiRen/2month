@@ -11,20 +11,31 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, "Enemy", modelHandle_);
 
 	// とりあえず一個だけ
 	auto& modelTrans = modelTransform_.emplace_back(WorldTransform());
 	modelTrans.Initialize();
 	modelTrans.SetParent(&worldTransform_);
+	//modelTrans.translation_.y += modelSize.y / 2.0f;
 	modelTrans.Update();
 
+	collider_.Initialize(&worldTransform_, "Enemy", modelHandle_);
 }
 
-void NormalEnemy::Update(const float& sensedDistance) {
+void NormalEnemy::Update(const Vector3& playerPosition) {
+	ImGui::Begin("Enemy");
 	DrawImGui();
-
-	Move();
+	ImGui::End();
+	
+	float distance = Distance(playerPosition, worldTransform_.translation_);
+	const float kMaxDistance = 50.0f;
+	// Playerとの距離が一定数以下なら早期リターン
+	// 後で調整。画面外で処理を走らせないのが目的
+	if (distance > kMaxDistance) {
+		return;
+	}
+	
+	Move(playerPosition);
 
 	
 	UpdateTransform();
@@ -33,29 +44,31 @@ void NormalEnemy::Update(const float& sensedDistance) {
 void NormalEnemy::OnCollision(Collider& collider) {
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
-		
+		worldTransform_.translation_ += pushBackVector;
+		UpdateTransform();
 	}
 }
 
 void NormalEnemy::Draw() {
 	collider_.Draw();
-	GameObject::Draw(modelTransform_.at(0), color);
+	GameObject::Draw(modelTransform_.at(0));
 }
 
-void NormalEnemy::Move() {
-	static bool flag = true;
-	Vector3 vel;
-	count++;
-	if (count > 30) {
-		flag = !flag;
-		count = 0;
+void NormalEnemy::Move(const Vector3& playerPosition) {
+
+	Vector3 vec = playerPosition - worldTransform_.translation_;
+	vec = Normalize(vec);
+	if (isnan(vec.x) || isnan(vec.y) || isnan(vec.z)) {
+		vec = Vector3(0.0f, 0.0f, 0.0f);
 	}
-	const float speed = 0.5f;
+	vec.y = 0.0f;
 
-	flag ? vel.x = -speed : vel.x = speed;
 
-	worldTransform_.translation_ += vel;
+	const float kSpeed = 0.05f;
+
+	worldTransform_.translation_ += vec * kSpeed;
 	UpdateMatrix();
+
 }
 
 void NormalEnemy::UpdateTransform() {

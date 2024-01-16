@@ -7,7 +7,7 @@
 class BaseCharacter : public GameObject {
 public:
 	virtual void Initialize(const Vector3& scale = Vector3(1.0f, 1.0f, 1.0f), const Quaternion& quaternion = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), const Vector3& translate = Vector3(0.0f, 0.0f, 0.0f)) {};
-	virtual void Update(const float& sensedDistance) {};
+	virtual void Update(const Vector3& playerPosition) {};
 	virtual void OnCollision(Collider& collider) {}; // 衝突判定とその後の処理
 	virtual void Draw() {};
 	virtual void DrawImGui();

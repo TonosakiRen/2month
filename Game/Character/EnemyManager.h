@@ -10,8 +10,11 @@ public:
 	~EnemyManager();
 
 	void Initialize(); // 将来的にリスポーン構造体ptrを渡す
-
+	void Update(const Vector3& playerPosition);
 	void OnCollisionPlayer(Collider& collider); // playerとの衝突判定を取得
+
+	void Draw();
+	void ShadowDraw();
 
 private:
 
