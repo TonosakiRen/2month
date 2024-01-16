@@ -23,11 +23,12 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
+	float distance = Distance(playerPosition, worldTransform_.translation_);
 	ImGui::Begin("Enemy");
 	DrawImGui();
+	ImGui::Text("distance : %f", distance);
 	ImGui::End();
 	
-	float distance = Distance(playerPosition, worldTransform_.translation_);
 	const float kMaxDistance = 50.0f;
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
