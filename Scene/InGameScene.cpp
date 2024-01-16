@@ -19,14 +19,16 @@ void InGameScene::Update() {
 	stage_->Update();
 
 	player_->Update();
-
-	for (auto& enemy : nEnemy_) {
-		enemy->Update();
-	}
-
+	
 	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
 	}
+
+	for (auto& enemy : nEnemy_) {
+		float distance = Distance(player_->GetWorldTransform()->translation_,enemy->GetWorldTransform()->translation_);
+		enemy->Update(distance);
+	}
+
 }
 
 void InGameScene::Draw() {
