@@ -35,7 +35,6 @@ void GameScene::Initialize() {
 	debugCamera_ = std::make_unique<DebugCamera>();
 	debugCamera_->Initialize(initializeCameraPos, initializeCameraRotate);
 
-
 	camera_ = std::make_unique<Camera>();
 	camera_->Initialize(initializeCameraPos, MakeFromEulerAngle(initializeCameraRotate));
 
@@ -197,6 +196,9 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("decay", &pointLights_.lights_[1].decay, 0.01f, 0.0f);
 		ImGui::End();
 #endif
+		pointLights_.lights_[0].isActive = true;
+		pointLights_.lights_[1].isActive = true;
+
 		pointLights_.Update();
 
 #ifdef _DEBUG

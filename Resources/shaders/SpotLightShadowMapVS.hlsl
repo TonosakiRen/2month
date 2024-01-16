@@ -10,9 +10,13 @@ struct ShadowSpotLight {
 	float32_t3 direction;
 	float32_t distance;
 	float32_t decay;
-	float32_t conAngle;
+	float32_t cosAngle;
 	float32_t isActive;
-	uint32_t descriptorIndex;
+	uint32_t shadowDescriptorIndex;
+	uint32_t collisionDescriptorIndex;
+	uint32_t padding;
+	uint32_t padding1;
+	uint32_t padding2;
 	float32_t4x4 viewProjection;
 };
 ConstantBuffer<ShadowSpotLight> gShadowSpotLight  : register(b1);

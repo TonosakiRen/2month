@@ -71,6 +71,9 @@
     <Filter Include="ShadowMap">
       <UniqueIdentifier>{971fd058-a497-4ad5-bf36-9c124fba408c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Coumpute">
+      <UniqueIdentifier>{0b07330f-4bf6-4632-9cd0-489434d24142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -202,9 +205,6 @@
     <ClCompile Include="DWParam.cpp">
       <Filter>Engine\Helper</Filter>
     </ClCompile>
-    <ClCompile Include="Compute.cpp">
-      <Filter>Engine\GameComponent</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Rederer</Filter>
     </ClCompile>
@@ -282,6 +282,12 @@
     </ClCompile>
     <ClCompile Include="ShadowEdgeRenderer.cpp">
       <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Compute.cpp">
+      <Filter>Engine\Coumpute</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowIsCollision.cpp">
+      <Filter>Engine\Coumpute</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +432,6 @@
     <ClInclude Include="DWParam.h">
       <Filter>Engine\Helper</Filter>
     </ClInclude>
-    <ClInclude Include="Compute.h">
-      <Filter>Engine\GameComponent</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Engine\Rederer</Filter>
     </ClInclude>
@@ -503,6 +506,12 @@
     </ClInclude>
     <ClInclude Include="ShadowEdgeRenderer.h">
       <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Compute.h">
+      <Filter>Engine\Coumpute</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowIsCollision.h">
+      <Filter>Engine\Coumpute</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

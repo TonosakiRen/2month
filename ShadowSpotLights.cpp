@@ -7,7 +7,8 @@ void ShadowSpotLights::Initialize() {
         lights_[i].shadowMap_.Create(shadowWidth, shadowHeight, DXGI_FORMAT_D32_FLOAT);
         lights_[i].constBuffer_.Create((sizeof(ConstBufferData) + 0xff) & ~0xff);
         lights_[i].collisionData.Create(shadowWidth, shadowHeight, DXGI_FORMAT_R32G32_FLOAT);
-        lights_[i].descriptorHeapIndex = lights_[i].shadowMap_.GetSRV().GetIndex();
+        lights_[i].shadowDescriptorHeapIndex = lights_[i].shadowMap_.GetSRV().GetIndex();
+        lights_[i].collisionDescriptorHeapIndex = lights_[i].collisionData.GetSRV().GetIndex();
     }
     // インスタンシングデータのサイズ
     UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
@@ -55,7 +56,8 @@ void ShadowSpotLights::Update() {
         data.isActive = static_cast<float>(lights_[i].isActive);
 
         data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance);
-        data.descriptorHeapIndex = lights_[i].descriptorHeapIndex;
+        data.shadowDescriptorHeapIndex = lights_[i].shadowDescriptorHeapIndex;
+        data.collisionDescriptorHeapIndex = lights_[i].collisionDescriptorHeapIndex;
 
         lights_[i].constBuffer_.Copy(data);
         bufferData.emplace_back(data);

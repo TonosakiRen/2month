@@ -23,7 +23,7 @@ struct DirectionLight {
 	float32_t3 direction; 
 	float32_t intensity;
 	float32_t4x4 viewProjection;
-	uint32_t descriptorIndex;
+	uint32_t shadowDescriptorIndex;
 };
 StructuredBuffer<DirectionLight> gDirectionLights  : register(t3);
 
@@ -58,7 +58,11 @@ struct ShadowSpotLight {
 	float32_t decay;
 	float32_t cosAngle;
 	float32_t isActive;
-	uint32_t descriptorIndex;
+	uint32_t shadowDescriptorIndex;
+	uint32_t collisionDescriptorIndex;
+	uint32_t padding;
+	uint32_t padding1;
+	uint32_t padding2;
 	float32_t4x4 viewProjection;
 };
 StructuredBuffer<ShadowSpotLight> gShadowSpotLights  : register(t6);
@@ -201,11 +205,14 @@ PixelShaderOutput main(VSOutput input)
 				if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
 					&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
 					) {
-					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].descriptorIndex].Sample(smp, shadowMapUV).r;
+					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(smp, shadowMapUV).r;
 					if (zInShadowMap != 1.0f) {
 						if (zInLVP - 0.00001 > zInShadowMap) {
 							shading *= 0.5f;
 							output.shadow.x = 1.0f;
+							if (Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex][shadowMapUV.xy * 1024].x == 2) {
+								output.shadow.y = 2.0f;
+							}
 						}
 					}
 				}
@@ -244,7 +251,7 @@ PixelShaderOutput main(VSOutput input)
 		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
 			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
 			) {
-			float32_t zInShadowMap = Texture2DTable[gDirectionLights[k].descriptorIndex].Sample(smp, shadowMapUV).r;
+			float32_t zInShadowMap = Texture2DTable[gDirectionLights[k].shadowDescriptorIndex].Sample(smp, shadowMapUV).r;
 			if (zInLVP - 0.00001 > zInShadowMap) {
 				shading *= 0.5f;
 			}

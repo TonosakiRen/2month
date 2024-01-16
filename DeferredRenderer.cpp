@@ -27,7 +27,7 @@ void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* nor
 	CreateMesh();
 }
 
-void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, const ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer)
+void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer)
 {
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { originalBuffer->GetRTV(),shadowTexture_->GetRTV() };
@@ -57,6 +57,9 @@ void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* origin
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kSpotLights), spotLights.srvHandle_);
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kShadowSpotLights), shadowSpotLights.srvHandle_);
 
+	for (int i = 0; i < ShadowSpotLights::lightNum;i++) {
+		commandContext.TransitionResource(shadowSpotLights.lights_[i].collisionData,D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	}
 
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::k2DTextures),DirectXCommon::GetInstance()->GetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV).GetDiscriptorStartHandle());
 

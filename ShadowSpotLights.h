@@ -28,7 +28,8 @@ public:
 		DepthBuffer shadowMap_;
 		UploadBuffer constBuffer_;
 		ColorBuffer collisionData;
-		uint32_t descriptorHeapIndex;
+		uint32_t shadowDescriptorHeapIndex;
+		uint32_t collisionDescriptorHeapIndex;
 	};
 
 	struct ConstBufferData {
@@ -40,7 +41,11 @@ public:
 		float decay = 1.0f;
 		float cosAngle = Radian(45.0f);
 		float isActive = false;
-		uint32_t descriptorHeapIndex;
+		uint32_t shadowDescriptorHeapIndex;
+		uint32_t collisionDescriptorHeapIndex;
+		uint32_t padding;
+		uint32_t padding2;
+		uint32_t padding3;
 		Matrix4x4 viewProjection;
 	};
 
@@ -55,6 +60,6 @@ private:
 	//影用viewProjection
 	float fovAngleY_ = 45.0f * std::numbers::pi_v <float> / 180.0f;
 	float aspectRatio_ = (float)1 / (float)1;
-	float nearZ_ = 0.01f;
+	float nearZ_ = 0.001f;
 };
 

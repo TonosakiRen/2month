@@ -161,6 +161,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Scene\InGameScene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShadowEdgeRenderer.cpp" />
+    <ClCompile Include="ShadowIsCollision.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="ShadowSpotLights.cpp" />
     <ClCompile Include="Skydome.cpp" />
@@ -236,6 +237,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Scene\InGameScene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShadowEdgeRenderer.h" />
+    <ClInclude Include="ShadowIsCollision.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="ShadowSpotLights.h" />
     <ClInclude Include="Skydome.h" />
