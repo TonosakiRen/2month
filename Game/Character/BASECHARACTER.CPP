@@ -11,3 +11,8 @@ void BaseCharacter::DrawImGui() {
 	UpdateMatrix();
 #endif // _DEBUG
 }
+
+void BaseCharacter::CreateInitialize() {
+	buffer_.Create(sizeof(Vector2));
+
+}
