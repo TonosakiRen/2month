@@ -280,6 +280,9 @@
     <ClCompile Include="Game\Stage\Truck.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowEdgeRenderer.cpp">
+      <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -498,6 +501,9 @@
     <ClInclude Include="Game\Stage\Truck.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowEdgeRenderer.h">
+      <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
@@ -570,6 +576,12 @@
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\SpotLightShadowMapVS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowEdgePS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowEdgeVS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

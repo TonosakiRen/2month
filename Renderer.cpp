@@ -49,8 +49,11 @@ void Renderer::Initialize() {
     bloom_.Initialize(&colorBuffers_[kColor]);
     postEffect_.Initialize();
 
-    deferredRenderer_.Initialize(&colorBuffers_[kColor], &colorBuffers_[kNormal], &mainDepthBuffer_);
+    deferredRenderer_.Initialize(&colorBuffers_[kColor], &colorBuffers_[kNormal],&shadowTexture_, &mainDepthBuffer_);
     edgeRenderer_.Initialize(&colorBuffers_[kColor], &colorBuffers_[kNormal], &mainDepthBuffer_);
+
+    shadowEdgeRenderer_.Initialize(&colorBuffers_[kColor], &shadowTexture_);
+    shadowTexture_.Create(colorBuffers_[kColor].GetWidth(), colorBuffers_[kColor].GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
     // ImGuiを初期化
     auto imguiManager = ImGuiManager::GetInstance();
@@ -118,6 +121,7 @@ void Renderer::EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
 void Renderer::EndMainRender() {
  
     edgeRenderer_.Render(commandContext_, &resultBuffer_);
+    shadowEdgeRenderer_.Render(commandContext_, &resultBuffer_);
     //bloom_.Render(commandContext_, &resultBuffer_);
 }
 

@@ -8,6 +8,7 @@ struct VSOutput {
 
 struct PixelShaderOutput {
 	float32_t4 color : SV_TARGET0;
+	float32_t4 shadow : SV_TARGET1;
 };
 
 struct ViewProjection {
@@ -88,9 +89,11 @@ Texture2D<float4> Texture2DTable[]  : register(t0, MY_TEXTURE2D_SPACE);
 
 SamplerState smp : register(s0);
 
-float4 main(VSOutput input) : SV_TARGET
+PixelShaderOutput main(VSOutput input)
 {
 	PixelShaderOutput output;
+
+	output.shadow.xyzw = float32_t4(0.0f, 0.0f, 0.0f,0.0f);
 
 	float32_t3 color = colorTex.Sample(smp, input.uv).xyz;
 	float32_t3 normal = normalTex.Sample(smp, input.uv).xyz;
@@ -202,6 +205,7 @@ float4 main(VSOutput input) : SV_TARGET
 					if (zInShadowMap != 1.0f) {
 						if (zInLVP - 0.00001 > zInShadowMap) {
 							shading *= 0.5f;
+							output.shadow.x = 1.0f;
 						}
 					}
 				}
@@ -268,5 +272,5 @@ float4 main(VSOutput input) : SV_TARGET
 	output.color.xyz = color.xyz;
 	output.color.w = 1.0f;
 
-	return output.color;
+	return output;
 }

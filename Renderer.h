@@ -11,6 +11,7 @@
 #include "DeferredRenderer.h"
 #include "EdgeRenderer.h"
 #include "LightNumBuffer.h"
+#include "ShadowEdgeRenderer.h"
 
 class viewProjection;
 class DirectionalLights;
@@ -68,6 +69,9 @@ private:
 
     DeferredRenderer deferredRenderer_;
     EdgeRenderer edgeRenderer_;
+    ShadowEdgeRenderer shadowEdgeRenderer_;
+    ColorBuffer shadowTexture_;
+    
 
     Bloom bloom_;
     PostEffect postEffect_;

@@ -12,13 +12,11 @@
 class ViewProjection;
 
 
-class EdgeRenderer
+class ShadowEdgeRenderer
 {
 public:
 	enum class RootParameter {
-		kColorTexture,
-		kNormalTexture,
-		kDepthTexture,
+		kShadowTexture,
 		kEdgeColor,
 
 		ParameterNum
@@ -28,7 +26,7 @@ public:
 		Vector4 pos;
 		Vector2 uv;
 	};
-	void Initialize(ColorBuffer* originalTexture,ColorBuffer* normalTexture, DepthBuffer* depthTexture);
+	void Initialize(ColorBuffer* originalTexture,ColorBuffer* shadowTexture);
 	void Render(CommandContext& commandContext, ColorBuffer* originalTexture);
 
 private:
@@ -40,8 +38,7 @@ private:
 	RootSignature edgeRootSignature_;
 	RootSignature multiplyRootSignature_;
 
-	ColorBuffer* normalTexture_;
-	DepthBuffer* depthTexture_;
+	ColorBuffer* shadowTexture_;
 
 	ColorBuffer edgeTexture_;
 

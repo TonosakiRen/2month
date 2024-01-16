@@ -17,19 +17,27 @@ using namespace Microsoft::WRL;
 RootSignature DeferredRenderer::rootSignature_;
 PipelineState DeferredRenderer::pipelineState_;
 
-void DeferredRenderer::Initialize(ColorBuffer* colorTexture, ColorBuffer* normalTexture, DepthBuffer* depthTexture)
+void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, ColorBuffer* shadowTexture, DepthBuffer* depthTexture)
 {
 	normalTexture_ = normalTexture;
 	depthTexture_ = depthTexture;
-	colorTexture_ = colorTexture;
+	colorTexture_ = originalTexture;
+	shadowTexture_ = shadowTexture;
 	CreatePipeline();
 	CreateMesh();
 }
 
 void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, const ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer)
 {
+
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { originalBuffer->GetRTV(),shadowTexture_->GetRTV() };
+
 	commandContext.TransitionResource(*originalBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET);
-	commandContext.SetRenderTarget(originalBuffer->GetRTV());
+	commandContext.TransitionResource(*shadowTexture_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+	commandContext.ClearColor(*shadowTexture_);
+	
+	commandContext.SetRenderTargets(2, rtvHandle);
 	commandContext.SetViewportAndScissorRect(0, 0, originalBuffer->GetWidth(), originalBuffer->GetHeight());
 
 	commandContext.TransitionResource(*colorTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
@@ -167,8 +175,9 @@ void DeferredRenderer::CreatePipeline()
 		// 図形の形状設定（三角形）
 		gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-		gpipeline.NumRenderTargets = 1;                            // 描画対象は1つ
+		gpipeline.NumRenderTargets = 2;                            // 描画対象は1つ
 		gpipeline.RTVFormats[0] = Renderer::GetInstance()->GetRTVFormat(Renderer::kColor); // 0～255指定のRGBA
+		gpipeline.RTVFormats[1] = DXGI_FORMAT_R32G32B32A32_FLOAT; // 0～255指定のRGBA
 		gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 		gpipeline.pRootSignature = rootSignature_;
