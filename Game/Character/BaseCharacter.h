@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Collider.h"
 #include "ImGuiManager.h"
+#include "UploadBuffer.h"
 
 class BaseCharacter : public GameObject {
 public:
@@ -12,8 +13,11 @@ public:
 	virtual void DrawImGui();
 
 	Collider collider_;
+	UploadBuffer buffer_;
 
 protected:
+	// bufferの作成
+	void CreateInitialize();
 	// 回転用
 	Vector3 rotate;
 
