@@ -248,8 +248,8 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Translate").c_str(), trucks_[index]->GetWorldTransform()->translation_);
 	}
 
-	global->SetValue(itemName, "WoodBoxConfirmation" + std::string(), static_cast<int>(trucks_.size()));
-	for (uint32_t index = 0u; index < static_cast<uint32_t>(trucks_.size()); index++) {
+	global->SetValue(itemName, "WoodBoxConfirmation" + std::string(), static_cast<int>(woodboxs_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(woodboxs_.size()); index++) {
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Scale").c_str(), woodboxs_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Rotate").c_str(), woodboxs_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Translate").c_str(), woodboxs_[index]->GetWorldTransform()->translation_);

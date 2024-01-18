@@ -66,6 +66,22 @@
             2.0,
             2.4000000953674316
         ],
+        "TruckNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "TruckNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "TruckNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "WallConfirmation": 3,
         "WallLightConfirmation": 1,
         "WallLightNumber : 0 : Rotate": [
@@ -85,9 +101,9 @@
             3.0
         ],
         "WallNumber : 0 : Rotate": [
-            -0.0,
-            1.0,
-            -0.0,
+            0.0,
+            -1.0,
+            0.0,
             -4.371138828673793e-08
         ],
         "WallNumber : 0 : Scale": [
@@ -101,9 +117,9 @@
             10.0
         ],
         "WallNumber : 1 : Rotate": [
-            -0.0,
-            1.0,
-            -0.0,
+            0.0,
+            -1.0,
+            0.0,
             -4.371138828673793e-08
         ],
         "WallNumber : 1 : Scale": [
@@ -117,10 +133,10 @@
             10.0
         ],
         "WallNumber : 2 : Rotate": [
-            0.0,
+            -8.74227694680485e-08,
             -1.0,
-            0.0,
-            -4.371138828673793e-08
+            -8.74227694680485e-08,
+            -4.3711395392165286e-08
         ],
         "WallNumber : 2 : Scale": [
             1.0,
@@ -132,7 +148,7 @@
             8.0,
             10.0
         ],
-        "WoodBoxConfirmation": 1,
+        "WoodBoxConfirmation": 2,
         "WoodBoxNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -148,6 +164,22 @@
             28.899999618530273,
             0.800000011920929,
             3.0999999046325684
+        ],
+        "WoodBoxNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "WoodBoxNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
         ]
     }
 }
