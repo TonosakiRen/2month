@@ -46,9 +46,12 @@ void Collider::AdjustmentScale()
 #ifdef _DEBUG
 
 	const std::string col = "collider";
-	ImGui::Begin((name_ + col).c_str());
-	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
-	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);
+	ImGui::Begin(col.c_str());
+	if ((ImGui::TreeNode((name_ + col).c_str()))) {
+		ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
+		ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);
+		ImGui::TreePop();
+	}
 	ImGui::End();
 
 #endif

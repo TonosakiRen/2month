@@ -36,7 +36,7 @@ public:
 	const uint32_t& GetModelHandle() const {
 		return modelHandle_;
 	}
-protected:
+//protected:
 	uint32_t modelHandle_;
 	WorldTransform worldTransform_;
 	Material material_;
