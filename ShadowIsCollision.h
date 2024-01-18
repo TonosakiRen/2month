@@ -13,6 +13,7 @@ class ShadowIsCollision
 public:
 	enum class RootParameter {
 		kRwStructure,
+		kIndexBuffer,
 		kColorTexture,
 		kIndexTexture,
 

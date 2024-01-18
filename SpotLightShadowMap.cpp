@@ -230,7 +230,7 @@ void SpotLightShadowMap::Draw(uint32_t modelHandle, const WorldTransform& worldT
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), unCollisionData_->GetGPUVirtualAddress());
+    commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), 0.0f, 0.0f);
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
