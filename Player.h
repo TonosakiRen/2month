@@ -3,9 +3,16 @@
 #include "Input.h"
 #include "Audio.h"
 #include "Collider.h"
-class Player :
-    public GameObject
-{
+
+
+// enemyなどに送るための情報
+struct PlayerDate {
+    Vector3 position_; // 現在地
+    int damage_ = 0; // ダメージ量
+    bool isAttack_ = false; // 攻撃中か
+};
+
+class Player : public GameObject {
 public:
 
     void Initialize(const std::string name);
@@ -49,5 +56,8 @@ private:
 public:
     Collider headCollider_;
 private:
+
+public:
+    PlayerDate date_;
 
 };
