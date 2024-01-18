@@ -33,7 +33,7 @@ public:
 	WorldTransform* GetWorldTransform() {
 		return &worldTransform_;
 	}
-	uint32_t& const GetModelHandle() {
+	const uint32_t& GetModelHandle() {
 		return modelHandle_;
 	}
 protected:
