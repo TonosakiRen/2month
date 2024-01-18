@@ -18,9 +18,9 @@
             -3.0
         ],
         "Player : Rotate": [
-            0.0,
+            -0.0,
             -0.7071067690849304,
-            0.0,
+            -0.0,
             0.7071067690849304
         ],
         "Player : Scale": [
@@ -30,8 +30,8 @@
         ],
         "Player : Translate": [
             0.0,
-            1.5,
-            0.0
+            0.9722579717636108,
+            -7.0
         ],
         "TruckConfirmation": 1,
         "TruckNumber : 0 : Rotate": [
@@ -115,6 +115,23 @@
             18.0,
             7.0,
             16.0
+        ],
+        "WoodBoxConfirmation": 1,
+        "WoodBoxNumber : 0 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "WoodBoxNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 0 : Translate": [
+            0.0,
+            0.0,
+            0.0
         ]
     }
 }

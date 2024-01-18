@@ -177,6 +177,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="ViewProjection.cpp" />
     <ClCompile Include="WhiteParticle.cpp" />
     <ClCompile Include="WinApp.cpp" />
+    <ClCompile Include="WoodBox.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +257,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="ViewProjection.h" />
     <ClInclude Include="WhiteParticle.h" />
     <ClInclude Include="WinApp.h" />
+    <ClInclude Include="WoodBox.h" />
     <ClInclude Include="WorldTransform.h" />
   </ItemGroup>
   <ItemGroup>

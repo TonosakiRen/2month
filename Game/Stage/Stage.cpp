@@ -30,6 +30,9 @@ void Stage::Update() {
 	for (auto& truck : trucks_) {
 		truck->Update();
 	}
+	for (auto& woodbox : woodboxs_) {
+		woodbox->Update();
+	}
 
 }
 
@@ -45,6 +48,9 @@ void Stage::Draw() {
 	}
 	for (auto& truck : trucks_) {
 		truck->Draw();
+	}
+	for (auto& woodbox : woodboxs_) {
+		woodbox->Draw();
 	}
 }
 
@@ -123,6 +129,24 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("WoodBox")) {
+			if (ImGui::Button("Create")) {
+				woodboxs_.emplace_back(std::make_unique<WoodBox>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", woodboxs_.size());
+			for (int i = 0; i < woodboxs_.size(); i++) {
+				if (ImGui::TreeNode(("WoodBoxNumber : " + std::to_string(i)).c_str())) {
+					woodboxs_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						woodboxs_.erase(woodboxs_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
 
 		ImGui::EndMenu();
 	}
@@ -177,6 +201,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	}
 
 
+	num = global->GetIntValue(selectName, "WoodBoxConfirmation");
+	woodboxs_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("WoodBoxNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("WoodBoxNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("WoodBoxNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& woodbox = woodboxs_.emplace_back(std::make_unique<WoodBox>());
+		woodbox->Initialize(scale, rotate, trans);
+	}
+
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
@@ -212,6 +246,13 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Scale").c_str(), trucks_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Rotate").c_str(), trucks_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Translate").c_str(), trucks_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "WoodBoxConfirmation" + std::string(), static_cast<int>(trucks_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trucks_.size()); index++) {
+		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Scale").c_str(), woodboxs_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Rotate").c_str(), woodboxs_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Translate").c_str(), woodboxs_[index]->GetWorldTransform()->translation_);
 	}
 
 }
