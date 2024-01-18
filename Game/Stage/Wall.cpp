@@ -4,7 +4,7 @@
 void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "tatemono";
 	GameObject::Initialize(name);
-	worldTransform_.scale_ = scale;
+	worldTransform_.scale_ = scale; 
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
 	UpdateMatrix();
