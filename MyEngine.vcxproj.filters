@@ -614,5 +614,8 @@
     <FxCompile Include="Resources\shaders\ShadowEdgeVS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ShadowIsCollisionCS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -13,6 +13,12 @@ void Model::StaticInitialize() {
     CreatePipeline();
 }
 
+void Model::Finalize()
+{
+    rootSignature_.reset();
+    pipelineState_.reset();
+}
+
 void Model::PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection, const DirectionalLights& directionalLights) {
     assert(Model::commandContext_ == nullptr);
 

@@ -26,6 +26,7 @@ public:
 	};
 
 	static void StaticInitialize();
+	static void Finalize();
 	static void PreDraw(CommandContext* commandContext);
 	static void PostDraw();
 	

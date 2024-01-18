@@ -17,6 +17,12 @@ void Particle::StaticInitialize() {
     CreatePipeline();
 }
 
+void Particle::Finalize()
+{
+    rootSignature_.reset();
+    pipelineState_.reset();
+}
+
 void Particle::PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection) {
     assert(Particle::commandContext_ == nullptr);
     commandContext_ = commandContext;

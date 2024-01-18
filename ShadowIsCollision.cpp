@@ -8,16 +8,11 @@
 
 using namespace Microsoft::WRL;
 
-RootSignature ShadowIsCollision::rootSignature_;
-PipelineState ShadowIsCollision::pipelineState_;
-
-void ShadowIsCollision::StaticInitialize()
+void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer)
 {
+
 	CreatePipeline();
-}
 
-void ShadowIsCollision::Initialize(ColorBuffer* colorBuffer)
-{
 	auto device = DirectXCommon::GetInstance()->GetDevice();
 	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
@@ -54,7 +49,7 @@ void ShadowIsCollision::Initialize(ColorBuffer* colorBuffer)
 	);
 
 	copyBuffer_->Map(0, nullptr, &data_);
-
+	resultBuffer_ = resultBuffer;
 }
 
 void ShadowIsCollision::Dispatch(CommandContext& commandContext)
@@ -67,12 +62,8 @@ void ShadowIsCollision::Dispatch(CommandContext& commandContext)
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
-	for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
-		commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), shadowSpotLights_->lights_[i].collisionData.GetSRV());
-		commandContext.Dispatch(kNum, kNum, 1);
-	}
+	
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
-
 }
 
 void* ShadowIsCollision::GetData()

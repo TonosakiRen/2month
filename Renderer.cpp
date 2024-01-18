@@ -28,38 +28,53 @@ void Renderer::Initialize() {
 
     // スワップチェーンを初期化
     auto window = WinApp::GetInstance();
-    swapChain_.Create(window->GetHwnd());
+    swapChain_ = std::make_unique<SwapChain>();
+    swapChain_->Create(window->GetHwnd());
 
     // メインとなるバッファを初期化
-    auto& swapChainBuffer = swapChain_.GetColorBuffer();
+    auto& swapChainBuffer = swapChain_->GetColorBuffer();
     float clearColor[4] = { 0.0f,0.0f,0.3f,0.0f };
-    colorBuffers_[kColor].SetClearColor(clearColor);
-    colorBuffers_[kColor].Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+    colorBuffers_[kColor] = std::make_unique<ColorBuffer>();
+    colorBuffers_[kColor]->SetClearColor(clearColor);
+    colorBuffers_[kColor]->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 
-    resultBuffer_.Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+    resultBuffer_ = std::make_unique<ColorBuffer>();
+    resultBuffer_->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
    
-    mainDepthBuffer_.Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_D32_FLOAT);
+    mainDepthBuffer_ = std::make_unique<DepthBuffer>();
+    mainDepthBuffer_->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_D32_FLOAT);
 
     float clearNormal[4] = { 0.0f,0.0f,0.0f,1.0f };
-    colorBuffers_[kNormal].SetClearColor(clearNormal);
-    colorBuffers_[kNormal].Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
+    colorBuffers_[kNormal] = std::make_unique<ColorBuffer>();
+    colorBuffers_[kNormal]->SetClearColor(clearNormal);
+    colorBuffers_[kNormal]->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
 
     // ブルームを初期化
-    bloom_.Initialize(&colorBuffers_[kColor]);
-    postEffect_.Initialize();
+    bloom_ = std::make_unique<Bloom>();
+    bloom_->Initialize(colorBuffers_[kColor].get());
 
-    deferredRenderer_.Initialize(&colorBuffers_[kColor], &colorBuffers_[kNormal],&shadowTexture_, &mainDepthBuffer_);
-    edgeRenderer_.Initialize(&colorBuffers_[kColor], &colorBuffers_[kNormal], &mainDepthBuffer_);
+    postEffect_ = std::make_unique<PostEffect>();
+    postEffect_->Initialize();
 
-    shadowEdgeRenderer_.Initialize(&colorBuffers_[kColor], &shadowTexture_);
-    shadowTexture_.Create(colorBuffers_[kColor].GetWidth(), colorBuffers_[kColor].GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
+    shadowTexture_ = std::make_unique<ColorBuffer>();
+    shadowTexture_->Create(colorBuffers_[kColor]->GetWidth(), colorBuffers_[kColor]->GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
+
+    deferredRenderer_ = std::make_unique<DeferredRenderer>();
+    deferredRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), shadowTexture_.get(), mainDepthBuffer_.get());
+
+    edgeRenderer_ = std::make_unique<EdgeRenderer>();
+    edgeRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), mainDepthBuffer_.get());
+
+    shadowEdgeRenderer_ = std::make_unique<ShadowEdgeRenderer>();
+    shadowEdgeRenderer_->Initialize(colorBuffers_[kColor].get(), shadowTexture_.get());
 
     // ImGuiを初期化
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Initialize(window);
 
-    lightNumBuffer_.Create();
+    lightNumBuffer_ = std::make_unique<LightNumBuffer>();
+    lightNumBuffer_->Create();
 
 }
 
@@ -72,26 +87,26 @@ void Renderer::BeginFrame()
 void Renderer::BeginMainRender() {
 
     // メインカラーバッファをレンダ―ターゲットに
-    commandContext_.TransitionResource(colorBuffers_[kColor], D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.TransitionResource(colorBuffers_[kNormal], D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.TransitionResource(mainDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+    commandContext_.TransitionResource(*colorBuffers_[kColor], D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.TransitionResource(*colorBuffers_[kNormal], D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.TransitionResource(*mainDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { colorBuffers_[kColor].GetRTV(),colorBuffers_[kNormal].GetRTV() };
-    commandContext_.SetRenderTargets(kRenderTargetNum, rtvHandle, mainDepthBuffer_.GetDSV());
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { colorBuffers_[kColor]->GetRTV(),colorBuffers_[kNormal]->GetRTV() };
+    commandContext_.SetRenderTargets(kRenderTargetNum, rtvHandle, mainDepthBuffer_->GetDSV());
    
     for (int i = 0; i < kRenderTargetNum;i++) {
-        commandContext_.ClearColor(colorBuffers_[i]);
+        commandContext_.ClearColor(*colorBuffers_[i]);
     }
-    commandContext_.TransitionResource(resultBuffer_, D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.ClearColor(resultBuffer_);
+    commandContext_.TransitionResource(*resultBuffer_, D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.ClearColor(*resultBuffer_);
 
-    commandContext_.ClearDepth(mainDepthBuffer_);
-    commandContext_.SetViewportAndScissorRect(0, 0, colorBuffers_[kColor].GetWidth(), colorBuffers_[kColor].GetHeight());
+    commandContext_.ClearDepth(*mainDepthBuffer_);
+    commandContext_.SetViewportAndScissorRect(0, 0, colorBuffers_[kColor]->GetWidth(), colorBuffers_[kColor]->GetHeight());
 }
 
 void Renderer::DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights)
 {
-    deferredRenderer_.Render(commandContext_, &resultBuffer_, viewProjection, directionalLight, pointLights,spotLights, shadowSpotLights,lightNumBuffer_);
+    deferredRenderer_->Render(commandContext_, resultBuffer_.get(), viewProjection, directionalLight, pointLights, spotLights, shadowSpotLights, *lightNumBuffer_);
 }
 
 void Renderer::BeginShadowMapRender(DirectionalLights& directionalLights)
@@ -120,8 +135,8 @@ void Renderer::EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
 
 void Renderer::EndMainRender() {
  
-    edgeRenderer_.Render(commandContext_, &resultBuffer_);
-    shadowEdgeRenderer_.Render(commandContext_, &resultBuffer_);
+    edgeRenderer_->Render(commandContext_, resultBuffer_.get());
+    shadowEdgeRenderer_->Render(commandContext_, resultBuffer_.get());
     //bloom_.Render(commandContext_, &resultBuffer_);
 }
 
@@ -132,14 +147,14 @@ void Renderer::BeginUIRender()
     //commandContext_.CopyBuffer(swapChain_.GetColorBuffer(), *resultBuffer_);
 
     //コピーしようとするとき消して
-    commandContext_.TransitionResource(resultBuffer_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+    commandContext_.TransitionResource(*resultBuffer_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-    commandContext_.SetViewportAndScissorRect(0, 0, resultBuffer_.GetWidth(), resultBuffer_.GetHeight());
-    commandContext_.TransitionResource(swapChain_.GetColorBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET);
-    commandContext_.SetRenderTarget(swapChain_.GetRTV());
-    commandContext_.ClearColor(swapChain_.GetColorBuffer());
+    commandContext_.SetViewportAndScissorRect(0, 0, resultBuffer_->GetWidth(), resultBuffer_->GetHeight());
+    commandContext_.TransitionResource(swapChain_->GetColorBuffer(), D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.SetRenderTarget(swapChain_->GetRTV());
+    commandContext_.ClearColor(swapChain_->GetColorBuffer());
 
-    postEffect_.Draw(resultBuffer_.GetSRV(),commandContext_);
+    postEffect_->Draw(resultBuffer_->GetSRV(),commandContext_);
 }
 
 void Renderer::EndUIRender()
@@ -149,12 +164,12 @@ void Renderer::EndUIRender()
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Draw(commandContext_);
 
-    commandContext_.TransitionResource(swapChain_.GetColorBuffer(), D3D12_RESOURCE_STATE_PRESENT);
+    commandContext_.TransitionResource(swapChain_->GetColorBuffer(), D3D12_RESOURCE_STATE_PRESENT);
     commandContext_.Close();
     CommandQueue& commandQueue = graphics_->GetCommandQueue();
     
     commandQueue.Excute(commandContext_);
-    swapChain_.Present();
+    swapChain_->Present();
 
     commandQueue.Signal();
     commandQueue.WaitForGPU();
@@ -164,6 +179,29 @@ void Renderer::EndUIRender()
 }
 
 void Renderer::Shutdown() {
+   
+    for (int i = 0; i < kRenderTargetNum; i++) {
+        colorBuffers_[i].reset();
+    }
+
+    mainDepthBuffer_.reset();
+
+    resultBuffer_.reset();
+
+    deferredRenderer_.reset();
+   edgeRenderer_.reset();
+   shadowEdgeRenderer_.reset();
+   shadowTexture_.reset();
+
+
+    bloom_.reset();
+    postEffect_.reset();
+
+    lightNumBuffer_.reset();
+
+    swapChain_.reset();
+    commandContext_.ShutDown();
+
     graphics_->Shutdown();
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Finalize();

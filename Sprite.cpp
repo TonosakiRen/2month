@@ -113,6 +113,12 @@ void Sprite::StaticInitialize() {
 	matProjection_ = MakeOrthograohicmatrix(0.0f, 0.0f, (float)WinApp::kWindowWidth, (float)WinApp::kWindowHeight,  0.0f, 1.0f);
 }
 
+void Sprite::Finalize()
+{
+	rootSignature_.reset();
+	pipelineState_.reset();
+}
+
 void Sprite::PreDraw(CommandContext* commandContext) {
 	assert(Sprite::commandContext_ == nullptr);
 

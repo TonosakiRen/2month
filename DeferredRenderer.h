@@ -48,8 +48,8 @@ private:
 	void CreatePipeline();
 	void CreateMesh();
 private:
-	static PipelineState pipelineState_;
-	static RootSignature rootSignature_;
+	PipelineState pipelineState_;
+	RootSignature rootSignature_;
 	ColorBuffer* colorTexture_;
 	ColorBuffer* normalTexture_;
 	DepthBuffer* depthTexture_;

@@ -43,14 +43,14 @@ public:
     void EndUIRender();
     void Shutdown();
 
-    SwapChain& GetSwapChain() { return swapChain_; }
+    SwapChain& GetSwapChain() { return *swapChain_; }
     CommandContext& GetCommandContext() { return commandContext_; }
-    Bloom& GetBloom() { return bloom_; }
+    Bloom& GetBloom() { return *bloom_; }
 
-    DXGI_FORMAT GetRTVFormat(RenderTargetType rtvType) { return colorBuffers_[rtvType].GetFormat(); }
-    DXGI_FORMAT GetDSVFormat() { return mainDepthBuffer_.GetFormat(); }
+    DXGI_FORMAT GetRTVFormat(RenderTargetType rtvType) { return colorBuffers_[rtvType]->GetFormat(); }
+    DXGI_FORMAT GetDSVFormat() { return mainDepthBuffer_->GetFormat(); }
 
-    void ClearMainDepthBuffer() { commandContext_.ClearDepth(mainDepthBuffer_); }
+    void ClearMainDepthBuffer() { commandContext_.ClearDepth(*mainDepthBuffer_); }
 
 private:
     Renderer() = default;
@@ -59,23 +59,23 @@ private:
 
 
     DirectXCommon* graphics_ = nullptr;
-    SwapChain swapChain_;
+    std::unique_ptr<SwapChain> swapChain_;
     CommandContext commandContext_;
 
-    ColorBuffer colorBuffers_[kRenderTargetNum];
-    DepthBuffer mainDepthBuffer_;
+    std::unique_ptr<ColorBuffer> colorBuffers_[kRenderTargetNum];
+    std::unique_ptr<DepthBuffer> mainDepthBuffer_;
 
-    ColorBuffer resultBuffer_;
+    std::unique_ptr<ColorBuffer> resultBuffer_;
 
-    DeferredRenderer deferredRenderer_;
-    EdgeRenderer edgeRenderer_;
-    ShadowEdgeRenderer shadowEdgeRenderer_;
-    ColorBuffer shadowTexture_;
+    std::unique_ptr<DeferredRenderer> deferredRenderer_;
+    std::unique_ptr<EdgeRenderer> edgeRenderer_;
+    std::unique_ptr<ShadowEdgeRenderer> shadowEdgeRenderer_;
+    std::unique_ptr<ColorBuffer> shadowTexture_;
     
 
-    Bloom bloom_;
-    PostEffect postEffect_;
+    std::unique_ptr<Bloom> bloom_;
+    std::unique_ptr<PostEffect> postEffect_;
 
-    LightNumBuffer lightNumBuffer_;
+    std::unique_ptr<LightNumBuffer> lightNumBuffer_;
 };
 

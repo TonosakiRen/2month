@@ -17,6 +17,12 @@ void ParticleBox::StaticInitialize() {
     CreatePipeline();
 }
 
+void ParticleBox::Finalize()
+{
+    rootSignature_.reset();
+    pipelineState_.reset();
+}
+
 void ParticleBox::PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection) {
     assert(ParticleBox::commandContext_ == nullptr);
 

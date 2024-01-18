@@ -7,9 +7,6 @@
 using namespace Microsoft::WRL;
 
 ID3D12GraphicsCommandList* GaussianBlur::sCommandList = nullptr;
-std::unique_ptr<RootSignature> GaussianBlur::sRootSignature;
-std::unique_ptr<PipelineState> GaussianBlur::sHorizontalBlurPipelineState;
-std::unique_ptr<PipelineState> GaussianBlur::sVerticalBlurPipelineState;
 uint32_t GaussianBlur::gbInstanceCount = 0;
 
 GaussianBlur::GaussianBlur() {
@@ -20,10 +17,6 @@ GaussianBlur::~GaussianBlur()
 {
     assert(gbInstanceCount > 0);
     gbInstanceCount--;
-}
-
-void GaussianBlur::StaticInitialize() {
-    InitializeGraphicsPipeline();
 }
 
 void GaussianBlur::CreateMesh()
@@ -77,6 +70,8 @@ void GaussianBlur::CreateMesh()
 void GaussianBlur::Initialize(ColorBuffer* originalTexture)
 {
     assert(originalTexture);
+
+    InitializeGraphicsPipeline();
 
     // メッシュ生成
     CreateMesh();

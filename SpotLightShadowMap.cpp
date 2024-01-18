@@ -15,23 +15,35 @@ std::unique_ptr<PipelineState> SpotLightShadowMap::pipelineState_;
 D3D12_VERTEX_BUFFER_VIEW SpotLightShadowMap::vbView_;
 D3D12_INDEX_BUFFER_VIEW SpotLightShadowMap::ibView_;
 ShadowSpotLights* SpotLightShadowMap::shadowSpotLights_;
-UploadBuffer SpotLightShadowMap::unCollisionData_;
-UploadBuffer SpotLightShadowMap::playerCollisionData_;
+std::unique_ptr<UploadBuffer> SpotLightShadowMap::unCollisionData_;
+std::unique_ptr<UploadBuffer> SpotLightShadowMap::playerCollisionData_;
 
 std::vector<SpotLightShadowMap::VertexData> SpotLightShadowMap::vertices_;
 std::vector<uint16_t> SpotLightShadowMap::indices_;
-UploadBuffer SpotLightShadowMap::vertexBuffer_;
-UploadBuffer SpotLightShadowMap::indexBuffer_;
+std::unique_ptr<UploadBuffer> SpotLightShadowMap::vertexBuffer_;
+std::unique_ptr<UploadBuffer> SpotLightShadowMap::indexBuffer_;
 
 void SpotLightShadowMap::StaticInitialize() {
     CreatePipeline();
     CreateMesh();
     Vector2 playerData = { 1.0f,0.0f };
     Vector2 nonData = { 0.0f,0.0f };
-    playerCollisionData_.Create(sizeof(Vector2));
-    playerCollisionData_.Copy(playerData);
-    unCollisionData_.Create(sizeof(Vector2));
-    unCollisionData_.Copy(nonData);
+    playerCollisionData_ = std::make_unique<UploadBuffer>();
+    playerCollisionData_->Create(sizeof(Vector2));
+    playerCollisionData_->Copy(playerData);
+    unCollisionData_ = std::make_unique<UploadBuffer>();
+    unCollisionData_->Create(sizeof(Vector2));
+    unCollisionData_->Copy(nonData);
+}
+
+void SpotLightShadowMap::Finalize()
+{
+    rootSignature_.reset();
+    pipelineState_.reset();
+    playerCollisionData_.reset();
+    unCollisionData_.reset();
+    vertexBuffer_.reset();
+    indexBuffer_.reset();
 }
 
 void SpotLightShadowMap::PreDraw(CommandContext* commandContext, ShadowSpotLights& shadowSpotLights) {
@@ -185,12 +197,14 @@ void SpotLightShadowMap::CreateMesh()
     // 頂点データのサイズ
     UINT sizeVB = static_cast<UINT>(sizeof(VertexData) * vertices_.size());
 
-    vertexBuffer_.Create(sizeVB);
+    vertexBuffer_ = std::make_unique<UploadBuffer>();
 
-    vertexBuffer_.Copy(vertices_.data(), sizeVB);
+    vertexBuffer_->Create(sizeVB);
+
+    vertexBuffer_->Copy(vertices_.data(), sizeVB);
 
     // 頂点バッファビューの作成
-    vbView_.BufferLocation = vertexBuffer_.GetGPUVirtualAddress();
+    vbView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
     vbView_.SizeInBytes = sizeVB;
     vbView_.StrideInBytes = sizeof(vertices_[0]);
 
@@ -198,12 +212,14 @@ void SpotLightShadowMap::CreateMesh()
     // インデックスデータのサイズ
     UINT sizeIB = static_cast<UINT>(sizeof(uint16_t) * indices_.size());
 
-    indexBuffer_.Create(sizeIB);
+    indexBuffer_ = std::make_unique<UploadBuffer>();
 
-    indexBuffer_.Copy(indices_.data(), sizeIB);
+    indexBuffer_->Create(sizeIB);
+
+    indexBuffer_->Copy(indices_.data(), sizeIB);
 
     // インデックスバッファビューの作成
-    ibView_.BufferLocation = indexBuffer_.GetGPUVirtualAddress();
+    ibView_.BufferLocation = indexBuffer_->GetGPUVirtualAddress();
     ibView_.Format = DXGI_FORMAT_R16_UINT;
     ibView_.SizeInBytes = sizeIB;
 
@@ -214,7 +230,7 @@ void SpotLightShadowMap::Draw(uint32_t modelHandle, const WorldTransform& worldT
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), unCollisionData_.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), unCollisionData_->GetGPUVirtualAddress());
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
@@ -228,7 +244,7 @@ void SpotLightShadowMap::PlayerDraw(uint32_t modelHandle, const WorldTransform& 
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), playerCollisionData_.GetGPUVirtualAddress());
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), playerCollisionData_->GetGPUVirtualAddress());
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());

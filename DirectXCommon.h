@@ -29,16 +29,16 @@ public:
 	DescriptorHandle AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE type);
 
 	ID3D12Device* GetDevice() { return device_.Get(); }
-	CommandQueue& GetCommandQueue() { return commandQueue_; }
+	CommandQueue& GetCommandQueue() { return *commandQueue_.get(); }
 
-	DescriptorHeap& GetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type) { return descriptorHeaps_[type]; }
+	DescriptorHeap& GetDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE type) { return *descriptorHeaps_[type]; }
 
 private:
 
 	Microsoft::WRL::ComPtr<ID3D12Device> device_;
-	CommandQueue commandQueue_;
+	std::unique_ptr<CommandQueue> commandQueue_;
 
-	DescriptorHeap descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
+	std::unique_ptr <DescriptorHeap> descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES];
 
 private:
 	void CreateDevice();

@@ -22,19 +22,30 @@ DirectXCommon* DirectXCommon::GetInstance() {
 void DirectXCommon::Initialize() {
 
 	CreateDevice();
-	commandQueue_.Create();
+	commandQueue_ = std::make_unique<CommandQueue>();
+	commandQueue_->Create();
+
+	for (int i = 0; i < D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES; i++) {
+		descriptorHeaps_[i] = std::make_unique<DescriptorHeap>();
+	}
 
 	/*descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_RTV].Create(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, SwapChain::kNumBuffers + kMainColorBufferNum)*/;
-	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_RTV].Create(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, kRtvHeapDescriptorNum);
-	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_DSV].Create(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, kDsvHeapDescriptorNum);
-	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV].Create(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kSrvHeapDescriptorNum);
+	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_RTV]->Create(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, kRtvHeapDescriptorNum);
+	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_DSV]->Create(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, kDsvHeapDescriptorNum);
+	descriptorHeaps_[D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV]->Create(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kSrvHeapDescriptorNum);
 
 }
 
 void DirectXCommon::Shutdown()
 {
-	commandQueue_.Signal();
-	commandQueue_.WaitForGPU();
+	commandQueue_->Signal();
+	commandQueue_->WaitForGPU();
+	for (int i = 0; i < D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES; i++) {
+		descriptorHeaps_[i].reset();
+	}
+	commandQueue_.reset();
+	device_.Reset();
+
 }
 
 void DirectXCommon::CreateDevice() {
@@ -116,12 +127,12 @@ void DirectXCommon::CreateDevice() {
 		//エラー時に泊まる
 		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
 		//警告時に泊まる
-		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
+		//infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);
 
 		//抑制するメッセージのID
 		D3D12_MESSAGE_ID denyIds[] = {
 			//Windows11でのDXGIデバックレイヤーとDX12デバッグレイヤーの相方作用バグによるエラーメッセージ
-			//https://stackoverflow.com/questions/69805245/directx-12-application-is-crashing-in-windows-11
+			//https://stackoverflow.com/questions/69805245/directx-12--is-crashing-in-windows-11
 			D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
 		};
 		//抑制するレベル
@@ -139,5 +150,5 @@ void DirectXCommon::CreateDevice() {
 }
 
 DescriptorHandle DirectXCommon::AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE type) {
-	return descriptorHeaps_[type].Allocate();
+	return descriptorHeaps_[type]->Allocate();
 }

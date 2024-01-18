@@ -13,10 +13,6 @@
 #include "ShadowSpotLights.h"
 
 using namespace Microsoft::WRL;
-
-RootSignature DeferredRenderer::rootSignature_;
-PipelineState DeferredRenderer::pipelineState_;
-
 void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, ColorBuffer* shadowTexture, DepthBuffer* depthTexture)
 {
 	normalTexture_ = normalTexture;

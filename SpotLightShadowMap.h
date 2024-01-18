@@ -32,6 +32,7 @@ public:
 	static bool isDrawSpotLightShadowMap;
 
 	static void StaticInitialize();
+	static void Finalize();
 	static void PreDraw(CommandContext* commandContext, ShadowSpotLights& shadowSpotLights);
 	static void PostDraw();
 
@@ -50,11 +51,11 @@ private:
 	static D3D12_VERTEX_BUFFER_VIEW vbView_;
 	static D3D12_INDEX_BUFFER_VIEW ibView_;
 	static ShadowSpotLights* shadowSpotLights_;
-	static UploadBuffer playerCollisionData_;
-	static UploadBuffer unCollisionData_;
+	static std::unique_ptr<UploadBuffer> playerCollisionData_;
+	static std::unique_ptr<UploadBuffer> unCollisionData_;
 
 	static std::vector<VertexData> vertices_;
 	static std::vector<uint16_t> indices_;
-	static UploadBuffer vertexBuffer_;
-	static UploadBuffer indexBuffer_;
+	static std::unique_ptr<UploadBuffer> vertexBuffer_;
+	static std::unique_ptr<UploadBuffer> indexBuffer_;
 };

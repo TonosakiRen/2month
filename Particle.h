@@ -41,6 +41,7 @@ public:
 	};
 
 	static void StaticInitialize();
+	static void Finalize();
 	static void PreDraw(CommandContext* commandContext, const ViewProjection& viewProjection);
 	static void PostDraw();
 	static Particle* Create(uint32_t particleNum);

@@ -16,21 +16,20 @@ public:
 
 		ParameterNum
 	};
-	static void StaticInitialize();
 	void Initialize(ColorBuffer* resultBuffer);
 	void Dispatch(CommandContext& commandContext);
 	void* GetData();
 	void UnMap();
 private:
-	static void CreatePipeline();
+	void CreatePipeline();
 private:
-	static PipelineState pipelineState_;
-	static RootSignature rootSignature_;
+	PipelineState pipelineState_;
+	RootSignature rootSignature_;
 	ShadowSpotLights* shadowSpotLights_;
+	ColorBuffer* resultBuffer_ = nullptr;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
 	void* data_;
-	const uint32_t kNum = 1024;
 	DescriptorHandle uavHandle_;
 };
 

@@ -19,6 +19,7 @@ class CommandContext
 public:
     void Create();
     void SetDescriptorHeap();
+    void ShutDown();
 
     void Close();
     void Reset();
@@ -70,7 +71,7 @@ public:
     void SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibv);
 
 
-    void Dispatch(uint32_t x,uint32_t y,uint32_t z);
+    void Dispatch(uint32_t x, uint32_t y, uint32_t z);
 
     void Draw(UINT vertexCount, UINT vertexStartOffset = 0);
     void DrawIndexed(UINT indexCount, UINT startIndexLocation = 0, INT baseVertexLocation = 0);
@@ -297,7 +298,7 @@ inline void CommandContext::SetIndexBuffer(const D3D12_INDEX_BUFFER_VIEW& ibv) {
 inline void CommandContext::Dispatch(uint32_t x, uint32_t y, uint32_t z)
 {
     FlushResourceBarriers();
-    commandList_->Dispatch(x,y,z);
+    commandList_->Dispatch(x, y, z);
 }
 
 inline void CommandContext::Draw(UINT vertexCount, UINT vertexStartOffset) {

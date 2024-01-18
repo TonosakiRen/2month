@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "WinApp.h"
 #include "TextureManager.h"
+#include "ModelManager.h"
 #include "Input.h"
 #include "Audio.h"
 #include "GameScene.h"
@@ -13,8 +14,27 @@
 #include "Compute.h"
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
+
+#include <d3d12.h>
+#include <dxgidebug.h>
+#include <dxgi1_3.h>
+
+#pragma comment(lib,"dxguid.lib")
+
+struct ResourceLeakChecker {
+	~ResourceLeakChecker() {
+		Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+		if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
+			debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
+			debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		}
+	}
+};
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
+	ResourceLeakChecker leakCheck;
 	WinApp* win = nullptr;
 	Renderer* renderer = nullptr;
 	//汎用機能
@@ -39,26 +59,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	audio->Initialize();
 
 	// テクスチャマネージャの初期化
-	TextureManager::GetInstance()->Initialize();
-	TextureManager::Load("white1x1.png");
+	TextureManager* textureManager = TextureManager::GetInstance();
+	textureManager->Initialize();
+	textureManager->Load("white1x1.png");
+
+	ModelManager* modelManager = ModelManager::GetInstance();
 
 	// 3Dオブジェクト静的初期化
 	Model::StaticInitialize();
-
 	ShadowMap::StaticInitialize();
-
 	SpotLightShadowMap::StaticInitialize();
-
-	// 3Dオブジェクト静的初期化
 	Particle::StaticInitialize();
 	ParticleBox::StaticInitialize();
-
-	GaussianBlur::StaticInitialize();
-
-	//　スプライト静的初期化
 	Sprite::StaticInitialize();
-
-	Compute::StaticInitialize();
 
 
 #pragma endregion 変数
@@ -114,6 +127,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	}
 
 
+	Model::Finalize();
+	ShadowMap::Finalize();
+	modelManager->Finalize();
+	textureManager->Finalize();
+	SpotLightShadowMap::Finalize();
+	Particle::Finalize();
+	ParticleBox::Finalize();
+	Sprite::Finalize();
+
+	delete gameScene;
 	// ImGui解放
 	renderer->Shutdown();
 	// ゲームウィンドウの破棄

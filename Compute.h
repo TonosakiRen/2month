@@ -16,16 +16,15 @@ public:
 		
 		ParameterNum
 	};
-	static void StaticInitialize();
 	void Initialize(ShadowSpotLights& shadowSpotLights);
 	void Dispatch(CommandContext& commandContext);
 	void* GetData();
 	void UnMap();
 private:
-	static void CreatePipeline();
+	void CreatePipeline();
 private:
-	static PipelineState pipelineState_;
-	static RootSignature rootSignature_;
+	PipelineState pipelineState_;
+	RootSignature rootSignature_;
 	ShadowSpotLights* shadowSpotLights_;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;

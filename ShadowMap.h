@@ -25,6 +25,8 @@ public:
 	static bool isDrawShadowMap;
 
 	static void StaticInitialize();
+	static void Finalize();
+
 	static void PreDraw(CommandContext* commandContext, DirectionalLights& directionalLights);
 	static void PostDraw();
 

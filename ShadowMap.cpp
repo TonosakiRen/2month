@@ -17,6 +17,12 @@ void ShadowMap::StaticInitialize() {
     CreatePipeline();
 }
 
+void ShadowMap::Finalize()
+{
+    rootSignature_.reset();
+    pipelineState_.reset();
+}
+
 void ShadowMap::PreDraw(CommandContext* commandContext,DirectionalLights& directionalLight) {
     assert(ShadowMap::commandContext_ == nullptr);
 
@@ -49,7 +55,6 @@ void ShadowMap::CreatePipeline() {
     vsBlob = shaderManager->Compile(L"ShadowMapVS.hlsl", ShaderManager::kVertex);
     assert(vsBlob != nullptr);
 
-
     rootSignature_ = std::make_unique<RootSignature>();
     pipelineState_ = std::make_unique<PipelineState>();
 
@@ -77,7 +82,6 @@ void ShadowMap::CreatePipeline() {
     }
 
     {
-
 
         D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
           {

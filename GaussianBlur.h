@@ -23,7 +23,6 @@ public:
 	~GaussianBlur();
 
 	static uint32_t gbInstanceCount;
-	static void StaticInitialize();
 	void CreateMesh();
 
 	void Initialize(ColorBuffer* originalTexture);
@@ -32,12 +31,12 @@ public:
 
 	ColorBuffer& GetResult() { return verticalBlurTexture_; }
 private:
-	static void InitializeGraphicsPipeline();
+	void InitializeGraphicsPipeline();
 private:
 	static ID3D12GraphicsCommandList* sCommandList;
-	static std::unique_ptr<RootSignature> sRootSignature;
-	static std::unique_ptr<PipelineState> sHorizontalBlurPipelineState;
-	static std::unique_ptr<PipelineState> sVerticalBlurPipelineState;
+	std::unique_ptr<RootSignature> sRootSignature;
+	std::unique_ptr<PipelineState> sHorizontalBlurPipelineState;
+	std::unique_ptr<PipelineState> sVerticalBlurPipelineState;
 
 	D3D12_VERTEX_BUFFER_VIEW vbView_{};
 	D3D12_INDEX_BUFFER_VIEW ibView_{};

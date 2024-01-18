@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include "DescriptorHandle.h"
 #include "UploadBuffer.h"
+#include <memory>
 
 class ModelManager
 {
@@ -45,16 +46,17 @@ public:
 	Vector3 GetModelCenter(uint32_t modelHandle);
 
 	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle);
-	void DrawInstanced(CommandContext* commandContext,uint32_t modelHandle,UINT textureRootParamterIndex);
-	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex,uint32_t textureHandle);
+	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex);
+	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex, uint32_t textureHandle);
 
+	void Finalize();
 private:
 	ModelManager() = default;
 	~ModelManager() = default;
 	ModelManager(const ModelManager&) = delete;
 	ModelManager& operator=(const ModelManager&) = delete;
 
-	std::array<ModelIndex, kNumModels> models_;
+	std::unique_ptr<std::array<ModelIndex, kNumModels>> models_;
 	uint32_t useModelCount_ = 0;
 
 	uint32_t LoadInternal(const std::string& fileName);
