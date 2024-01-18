@@ -9,7 +9,6 @@
 #include "ShadowSpotLights.h"
 
 void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
-	uint32_t wallModelHandle_ = ModelManager::Load("scene");
 	Load(loadFile);
 	pointLights_ = pointLight;
 	spotLights_ = spotLight;

@@ -3,7 +3,8 @@
 #include "ImGuiManager.h"
 
 void Floor::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
-	GameObject::Initialize("stagefloor");
+	std::string name = "stagefloor";
+	GameObject::Initialize(name);
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -12,7 +13,7 @@ void Floor::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) 
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, "Floor", modelHandle_);
+	collider_.Initialize(&worldTransform_, name, modelHandle_);
 }
 
 void Floor::Update() {

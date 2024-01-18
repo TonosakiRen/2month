@@ -1,8 +1,9 @@
 #include "Wall.h"
 #include "ModelManager.h"
-#include "externals/imgui/imgui.h"
+#include "ImGuiManager.h"
 void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
-	GameObject::Initialize("factory");
+	std::string name = "tatemono";
+	GameObject::Initialize(name);
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -11,7 +12,7 @@ void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, "factory", modelHandle_);
+	collider_.Initialize(&worldTransform_, name, modelHandle_);
 	
 }
 

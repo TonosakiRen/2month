@@ -1,9 +1,10 @@
 #include "WallLight.h"
 #include "ModelManager.h"
-#include "externals/imgui/imgui.h"
+#include "ImGuiManager.h"
 
 void WallLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
-	GameObject::Initialize("wallLight");
+	std::string name = "wallLight";
+	GameObject::Initialize(name);
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
