@@ -28,7 +28,6 @@ void InGameScene::Update() {
 	}
 	enemy_->OnCollisionPlayer(player_->collider_);
 
-
 }
 
 void InGameScene::Draw() {

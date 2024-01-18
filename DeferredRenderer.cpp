@@ -98,6 +98,7 @@ void DeferredRenderer::CreatePipeline()
 
 		ranges[7].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, DirectXCommon::GetInstance()->DirectXCommon::kSrvHeapDescriptorNum, 0, 1);
 
+
 		CD3DX12_ROOT_PARAMETER rootParameters[(int)RootParameter::ParameterNum]{};
 		rootParameters[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[(int)RootParameter::kColorTexture]);
 		rootParameters[(int)RootParameter::kNormalTexture].InitAsDescriptorTable(1, &ranges[(int)RootParameter::kNormalTexture]);
@@ -116,15 +117,16 @@ void DeferredRenderer::CreatePipeline()
 		
 		
 		// スタティックサンプラー
-		CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
-			CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
+		CD3DX12_STATIC_SAMPLER_DESC samplerDesc[2]; 
+		samplerDesc [0] = CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
+		samplerDesc[1] = CD3DX12_STATIC_SAMPLER_DESC(1, D3D12_FILTER_MIN_MAG_MIP_POINT);
 
 		// ルートシグネチャの設定
 		D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc;
 		rootSignatureDesc.pParameters = rootParameters;
 		rootSignatureDesc.NumParameters = _countof(rootParameters);
-		rootSignatureDesc.pStaticSamplers = &samplerDesc;
-		rootSignatureDesc.NumStaticSamplers = 1;
+		rootSignatureDesc.pStaticSamplers = samplerDesc;
+		rootSignatureDesc.NumStaticSamplers = _countof(samplerDesc);
 		rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 		rootSignature_.Create(rootSignatureDesc);

@@ -8,7 +8,7 @@
 
 using namespace Microsoft::WRL;
 
-void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer)
+void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer, ColorBuffer* indexBuffer)
 {
 
 	CreatePipeline();
@@ -50,10 +50,11 @@ void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer)
 
 	copyBuffer_->Map(0, nullptr, &data_);
 	resultBuffer_ = resultBuffer;
+	indexBuffer_ = indexBuffer;
 }
 
-void ShadowIsCollision::Dispatch(CommandContext& commandContext)
-{
+void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& index){
+
 	D3D12_RESOURCE_DESC resourceDesc = copyBuffer_->GetDesc();
 	UINT bufferSizeInBytes = static_cast<UINT>(resourceDesc.Width);
 	memset(data_, 0, bufferSizeInBytes);
@@ -61,7 +62,10 @@ void ShadowIsCollision::Dispatch(CommandContext& commandContext)
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
+	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture),resultBuffer_->GetSRV());
+	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kIndexTexture), indexBuffer_->GetSRV());
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
+	commandContext.Dispatch(resultBuffer_->GetWidth(), resultBuffer_->GetHeight(), 1);
 	
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 }
@@ -84,16 +88,18 @@ void ShadowIsCollision::CreatePipeline()
 	uavBlob = shaderManager->Compile(L"ShadowIsCollisionCS.hlsl", ShaderManager::kCompute);
 	assert(uavBlob != nullptr);
 
-	CD3DX12_DESCRIPTOR_RANGE ranges[1]{};
+	CD3DX12_DESCRIPTOR_RANGE ranges[2]{};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
+	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[1]);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
-		CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_LINEAR);
+		CD3DX12_STATIC_SAMPLER_DESC(0, D3D12_FILTER_MIN_MAG_MIP_POINT);
 
 	// ルートシグネチャの設定
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};

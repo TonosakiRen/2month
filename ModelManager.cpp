@@ -175,6 +175,7 @@ void ModelManager::CreateMeshes(ModelIndex& modelIndex)
 	modelIndex.modelCenter = maxModelSize - Vector3(modelIndex.modelSize / 2.0f);
 	//もしmodelの原点を一番下にしていたら
 	if (minModelSize.y < 0.5f && minModelSize.y > -0.5f) {
+		modelIndex.isUnderModelCenter = true;
 		modelIndex.modelCenter.y = minModelSize.y;
 	}
 
@@ -307,4 +308,5 @@ Vector3 ModelManager::GetModelCenter(uint32_t modelHandle)
 {
 	return  (*models_)[modelHandle].modelCenter;
 }
+
 

@@ -5,6 +5,7 @@
 #include "CommandContext.h"
 #include "DescriptorHandle.h"
 #include "ColorBuffer.h"
+#include "Mymath.h"
 
 class ShadowSpotLights;
 class ShadowIsCollision
@@ -13,11 +14,12 @@ public:
 	enum class RootParameter {
 		kRwStructure,
 		kColorTexture,
+		kIndexTexture,
 
 		ParameterNum
 	};
-	void Initialize(ColorBuffer* resultBuffer);
-	void Dispatch(CommandContext& commandContext);
+	void Initialize(ColorBuffer* resultBuffer , ColorBuffer* indexBuffer);
+	void Dispatch(CommandContext& commandContext, const Vector2& index);
 	void* GetData();
 	void UnMap();
 private:
@@ -27,6 +29,7 @@ private:
 	RootSignature rootSignature_;
 	ShadowSpotLights* shadowSpotLights_;
 	ColorBuffer* resultBuffer_ = nullptr;
+	ColorBuffer* indexBuffer_ = nullptr;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
 	void* data_;
