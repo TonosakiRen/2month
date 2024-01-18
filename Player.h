@@ -36,6 +36,16 @@ private:
     
     GameObject HeadModel_;
     WorldTransform headModelTransform_;
+    Vector3 headRotate;
+    Vector3 rotate;
+
+    struct AttackParameter {
+        int phase;
+        bool isAttacked = false; // 攻撃中か
+        
+    };
+    AttackParameter attackParam_;
+
 public:
     Collider headCollider_;
 private:
