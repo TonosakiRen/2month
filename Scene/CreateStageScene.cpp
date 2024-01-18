@@ -10,7 +10,7 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 
 
 	player_ = std::make_unique<Player>();
-	player_->Initialize("player");
+	player_->Initialize("playerBody");
 
 	stage_ = std::make_unique<Stage>();
 	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);

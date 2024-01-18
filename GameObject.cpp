@@ -64,10 +64,10 @@ void GameObject::Draw(const WorldTransform& worldTransform, Vector4 color)
 void GameObject::PlayerDraw(const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
-		ShadowMap::Draw(modelHandle_, worldTransform_);
+		ShadowMap::Draw(modelHandle_, worldTransform);
 	}
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
-		SpotLightShadowMap::PlayerDraw(modelHandle_, worldTransform_);
+		SpotLightShadowMap::PlayerDraw(modelHandle_, worldTransform);
 	}
 	else {
 		material_.color_ = color;
@@ -79,10 +79,10 @@ void GameObject::PlayerDraw(const WorldTransform& worldTransform, Vector4 color)
 void GameObject::EnemyDraw(const UploadBuffer& enemyIndex,const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
-		ShadowMap::Draw(modelHandle_, worldTransform_);
+		ShadowMap::Draw(modelHandle_, worldTransform);
 	}
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
-		SpotLightShadowMap::EnemyDraw(enemyIndex,modelHandle_, worldTransform_);
+		SpotLightShadowMap::EnemyDraw(enemyIndex,modelHandle_, worldTransform);
 	}
 	else {
 		material_.color_ = color;
@@ -94,10 +94,10 @@ void GameObject::EnemyDraw(const UploadBuffer& enemyIndex,const WorldTransform& 
 void GameObject::Draw(const WorldTransform& worldTransform, uint32_t textureHandle, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
-		ShadowMap::Draw(modelHandle_, worldTransform_);
+		ShadowMap::Draw(modelHandle_, worldTransform);
 	}
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
-		SpotLightShadowMap::Draw(modelHandle_, worldTransform_);
+		SpotLightShadowMap::Draw(modelHandle_, worldTransform);
 	}
 	else {
 		material_.color_ = color;

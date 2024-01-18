@@ -50,6 +50,7 @@ void Collider::AdjustmentScale()
 	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("translation", &worldTransform_.translation_.x, 0.1f);
 	ImGui::End();
+
 #endif
 
 	MatrixUpdate();

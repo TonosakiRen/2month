@@ -13,13 +13,31 @@ public:
     void Collision(Collider& otherCollider);
     void Draw();
     void DrawImGui();
+private:
+    void Move();
+    void Jump();
+    void Attack();
+    void MoveLimit();
+
 public:
     Collider collider_;
 private:
     WorldTransform modelWorldTransform_;
-    Vector3 velocisity_;
-    Vector3 acceleration_;
     Vector3 modelSize_;
-    Input* input_;
-    Audio* audio_;
+    struct JumpParameter {
+        Vector3 velocisity_;
+        Vector3 acceleration_;
+        bool isJumped_ = false; // jump中か
+    };
+    JumpParameter jumpParam_;
+
+    Input* input_ = nullptr;
+    Audio* audio_ = nullptr;
+    
+    GameObject HeadModel_;
+    WorldTransform headModelTransform_;
+public:
+    Collider headCollider_;
+private:
+
 };
