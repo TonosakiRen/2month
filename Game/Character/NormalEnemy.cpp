@@ -2,7 +2,7 @@
 #include "ModelManager.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
-	GameObject::Initialize("player");
+	GameObject::Initialize("enemy01");
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -23,11 +23,12 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
+	float distance = Distance(playerPosition, worldTransform_.translation_);
 	ImGui::Begin("Enemy");
 	DrawImGui();
+	ImGui::Text("distance : %f", distance);
 	ImGui::End();
 	
-	float distance = Distance(playerPosition, worldTransform_.translation_);
 	const float kMaxDistance = 50.0f;
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
@@ -65,6 +66,8 @@ void NormalEnemy::Move(const Vector3& playerPosition) {
 
 
 	const float kSpeed = 0.05f;
+
+	worldTransform_.quaternion_ = MakeLookRotation(-vec);
 
 	worldTransform_.translation_ += vec * kSpeed;
 	UpdateMatrix();

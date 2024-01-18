@@ -1,6 +1,6 @@
 #include "Floor.h"
 #include "ModelManager.h"
-#include "externals/imgui/imgui.h"
+#include "ImGuiManager.h"
 
 void Floor::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	GameObject::Initialize("stagefloor");
