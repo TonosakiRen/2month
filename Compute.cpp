@@ -14,7 +14,8 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 	CreatePipeline();
 
 	auto device = DirectXCommon::GetInstance()->GetDevice();
-	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	uint32_t bufferSize[2];
+	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
 	device->CreateCommittedResource(
 		&heapProps,
@@ -29,7 +30,7 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 	D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
 	viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	viewDesc.Buffer.NumElements = 1;
-	viewDesc.Buffer.StructureByteStride = sizeof(uint32_t);
+	viewDesc.Buffer.StructureByteStride = sizeof(bufferSize);
 	device->CreateUnorderedAccessView(
 		rwStructureBuffer_,
 		nullptr,
@@ -37,7 +38,7 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 		uavHandle_
 	);
 
-	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(uint32_t)));
+	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)));
 	D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
 	device->CreateCommittedResource(
 		&copyHeapProps,

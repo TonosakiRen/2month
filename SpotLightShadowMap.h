@@ -39,7 +39,7 @@ public:
 	static void Draw(uint32_t modelHandle, const WorldTransform& worldTransform);
 
 	static void PlayerDraw(uint32_t modelHandle, const WorldTransform& worldTransform);
-	static void EnemyDraw(const UploadBuffer& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform);
+	static void EnemyDraw(const Vector2& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform);
 
 private:
 	static void CreatePipeline();

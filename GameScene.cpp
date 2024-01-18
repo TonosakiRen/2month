@@ -108,7 +108,7 @@ void GameScene::Initialize() {
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });
 	sphere_->UpdateMatrix();
 
-	Vector2 sphereCollision = {2.0f,0.0f};
+	Vector2 sphereCollision = {2.0f,1.0f};
 	sphereIndex_.Create(sizeof(Vector2));
 	sphereIndex_.Copy(sphereCollision);
 
@@ -259,7 +259,8 @@ void GameScene::Update(CommandContext& commandContext){
 		uint32_t* date = static_cast<uint32_t*>(compute_->GetData());
 
 		int a = date[0];
-		if (a) {
+		int b = date[1];
+		if (a && b == 1) {
 			sphereColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		}
 		else {
@@ -361,7 +362,7 @@ void GameScene::SpotLightShadowDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		sphere_->EnemyDraw(sphereIndex_, *sphere_->GetWorldTransform());
+		sphere_->EnemyDraw({2.0f,1.0f}, *sphere_->GetWorldTransform());
 		inGameScene_->ShadowDraw();
 		break;
 	default:

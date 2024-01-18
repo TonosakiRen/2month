@@ -31,6 +31,8 @@ public:
 		//model全体のsize
 		Vector3 modelSize{};
 		Vector3 modelCenter{};
+		bool isUnderModelCenter = false;
+		Vector3 modelUnderCenter{};
 		uint32_t meshNum = 0;
 	};
 

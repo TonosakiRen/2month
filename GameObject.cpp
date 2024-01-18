@@ -76,7 +76,7 @@ void GameObject::PlayerDraw(const WorldTransform& worldTransform, Vector4 color)
 	}
 }
 
-void GameObject::EnemyDraw(const UploadBuffer& enemyIndex,const WorldTransform& worldTransform, Vector4 color)
+void GameObject::EnemyDraw(const Vector2& enemyIndex,const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
 		ShadowMap::Draw(modelHandle_, worldTransform);

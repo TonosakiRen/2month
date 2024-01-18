@@ -22,9 +22,7 @@ public:
 	enum class RootParameter {
 		kWorldTransform,
 		kViewProjection,
-		kDirectionalLights,
 		kTexture,
-		kShadowMap,
 		kMaterial,
 
 		parameterNum

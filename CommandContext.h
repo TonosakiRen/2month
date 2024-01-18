@@ -61,6 +61,14 @@ public:
     void SetConstants(UINT rootIndex, DWParam x, DWParam y);
     void SetConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z);
     void SetConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z, DWParam w);
+
+    void SetComputeConstantArray(UINT rootIndex, UINT numConstants, const void* constants);
+    void SetComputeConstant(UINT rootIndex, UINT offset, DWParam value);
+    void SetComputeConstants(UINT rootIndex, DWParam x);
+    void SetComputeConstants(UINT rootIndex, DWParam x, DWParam y);
+    void SetComputeConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z);
+    void SetComputeConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z, DWParam w);
+
     void SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address);
     void SetComputeUAVBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address);
     void SetDescriptorTable(UINT rootIndex, D3D12_GPU_DESCRIPTOR_HANDLE baseDescriptor);
@@ -264,6 +272,36 @@ inline void CommandContext::SetConstants(UINT rootIndex, DWParam x, DWParam y, D
     commandList_->SetGraphicsRoot32BitConstant(rootIndex, y.v.u, 1);
     commandList_->SetGraphicsRoot32BitConstant(rootIndex, z.v.u, 2);
     commandList_->SetGraphicsRoot32BitConstant(rootIndex, w.v.u, 3);
+}
+
+inline void CommandContext::SetComputeConstantArray(UINT rootIndex, UINT numConstants, const void* constants) {
+    commandList_->SetComputeRoot32BitConstants(rootIndex, numConstants, constants, 0);
+}
+
+inline void CommandContext::SetComputeConstant(UINT rootIndex, UINT offset, DWParam value) {
+    commandList_->SetComputeRoot32BitConstant(rootIndex, value.v.u, offset);
+}
+
+inline void CommandContext::SetComputeConstants(UINT rootIndex, DWParam x) {
+    commandList_->SetComputeRoot32BitConstant(rootIndex, x.v.u, 0);
+}
+
+inline void CommandContext::SetComputeConstants(UINT rootIndex, DWParam x, DWParam y) {
+    commandList_->SetComputeRoot32BitConstant(rootIndex, x.v.u, 0);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, y.v.u, 1);
+}
+
+inline void CommandContext::SetComputeConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z) {
+    commandList_->SetComputeRoot32BitConstant(rootIndex, x.v.u, 0);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, y.v.u, 1);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, z.v.u, 2);
+}
+
+inline void CommandContext::SetComputeConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z, DWParam w) {
+    commandList_->SetComputeRoot32BitConstant(rootIndex, x.v.u, 0);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, y.v.u, 1);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, z.v.u, 2);
+    commandList_->SetComputeRoot32BitConstant(rootIndex, w.v.u, 3);
 }
 
 inline void CommandContext::SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address) {

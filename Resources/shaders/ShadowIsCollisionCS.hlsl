@@ -1,5 +1,6 @@
 RWStructuredBuffer<uint> Output : register(u0);
 Texture2D<float4> colorTex : register(t0);
+Texture2D<float4> indexTex : register(t1);
 SamplerState smp : register(s0);
 
 [numthreads(1, 1, 1)]

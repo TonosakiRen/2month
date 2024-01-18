@@ -49,13 +49,25 @@ void main( uint3 DTid : SV_DispatchThreadID)
 	rightData = colorTex[rightIndex].xy;
 
 	if (centerData.x == 1.0f){
-		if (topData.x == 2.0f ||
-			bottomData.x == 2.0f ||
-			leftData.x == 2.0f ||
-			rightData.x == 2.0f 
-			) {
+		if (topData.x == 2.0f ) {
 			uint v;
 			InterlockedExchange(Output[0], 1, v);
+			InterlockedExchange(Output[1], topData.y,v );
+		}
+		else if (bottomData.y == 2.0f) {
+			uint v;
+			InterlockedExchange(Output[0], 1, v);
+			InterlockedExchange(Output[1], bottomData.y, v);
+		}
+		else if (leftData.y == 2.0f) {
+			uint v;
+			InterlockedExchange(Output[0], 1, v);
+			InterlockedExchange(Output[1], rightData.y, v);
+		}
+		else if (rightData.y == 2.0f) {
+			uint v;
+			InterlockedExchange(Output[0], 1, v);
+			InterlockedExchange(Output[1], leftData.y, v);
 		}
 	}
 	

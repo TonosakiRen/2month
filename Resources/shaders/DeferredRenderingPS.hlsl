@@ -92,6 +92,8 @@ Texture2D<float4> depthTex : register(t2);
 Texture2D<float4> Texture2DTable[]  : register(t0, MY_TEXTURE2D_SPACE);
 
 SamplerState smp : register(s0);
+SamplerState pointSmp : register(s1);
+
 
 PixelShaderOutput main(VSOutput input)
 {
@@ -110,9 +112,121 @@ PixelShaderOutput main(VSOutput input)
 
 	float32_t3 shading = { 1.0f,1.0f,1.0f };
 
+
+	//shadowSpotLight
+	for (int l = 0; l < lightNum.shadowSpotLight; l++) {
+		if (gShadowSpotLights[l].isActive) {
+			float32_t3 spotLightDirectionOnSurface = normalize(worldPos - gShadowSpotLights[l].position);
+			float32_t distance = length(gShadowSpotLights[l].position - worldPos);
+			float32_t factor = pow(saturate(-distance / gShadowSpotLights[l].distance + 1.0), gShadowSpotLights[l].decay);
+			float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowSpotLights[l].direction);
+			float32_t falloffFactor = saturate((cosAngle - gShadowSpotLights[l].cosAngle) / (1.0f - gShadowSpotLights[l].cosAngle));
+
+
+			//spotLightDiffuse
+			float32_t NdotL = dot(normal, -spotLightDirectionOnSurface);
+			float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+			float32_t3 spotLightdiffuse = gShadowSpotLights[l].color.xyz * cos * gShadowSpotLights[l].intensity * factor * falloffFactor;
+
+
+			//spotLightSpecular
+			float32_t3 viewDirection = normalize(gShadowSpotLights[l].position - worldPos.xyz);
+
+			float32_t3 reflectVec = reflect(spotLightDirectionOnSurface, normal);
+			float32_t specluerPower = 10.0f;
+			float32_t RdotE = dot(reflectVec, viewDirection);
+			float32_t specularPow = pow(saturate(RdotE), specluerPower);
+			float32_t3 spotLightSpecluer = gShadowSpotLights[l].color.xyz * gShadowSpotLights[l].intensity * specularPow * factor * falloffFactor;
+
+			lighting += (spotLightdiffuse + spotLightSpecluer);
+
+			//影
+			float32_t4 wp = float4(worldPos.xyz, 1.0f);
+			float32_t4 lightViewPosition = mul(wp, gShadowSpotLights[l].viewProjection);
+			float32_t2 shadowMapUV = lightViewPosition.xy / lightViewPosition.w;
+			shadowMapUV *= float32_t2(0.5f, -0.5f);
+			shadowMapUV += 0.5f;
+
+			if (lightViewPosition.z > 0.0f ) {
+				float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
+
+				if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+					&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+					) {
+					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
+					if (zInShadowMap != 1.0f) {
+						if (zInLVP < 1.0f && zInLVP  > zInShadowMap ) {
+							if (Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp,shadowMapUV).x == 2.0f) {
+								output.shadow.x = 1.0f;
+								output.shadow.y = 2.0f;
+								color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
+							}
+							else {
+								output.shadow.x = 1.0f;
+							}
+							shading *= 0.5f;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	for (int k = 0; k < lightNum.directionalLight; k++) {
+
+		//directionalLightDiffuse
+		float32_t NdotL = dot(normal, -gDirectionLights[k].direction);
+		float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+		float32_t3 directionalLightdiffuse = gDirectionLights[k].color.xyz * cos * gDirectionLights[k].intensity;
+
+		//directionalLightSpecular
+		float32_t3 viewDirection = normalize(gViewProjection.viewPosition - worldPos.xyz);
+
+		float32_t3 reflectVec = reflect(gDirectionLights[k].direction, normal);
+		float32_t specluerPower = 10.0f;
+		float32_t RdotE = dot(reflectVec, viewDirection);
+		float32_t specularPow = pow(saturate(RdotE), specluerPower);
+		float32_t3 directionalLightSpecluer = gDirectionLights[k].color.xyz * gDirectionLights[k].intensity * specularPow;
+
+		lighting += (directionalLightdiffuse + directionalLightSpecluer);
+
+		//影
+		float32_t4 wp = float4(worldPos.xyz, 1.0f);
+		float32_t4 lightViewPosition = mul(wp, gDirectionLights[k].viewProjection);
+		float32_t2 shadowMapUV = lightViewPosition.xy / lightViewPosition.w;
+		shadowMapUV *= float32_t2(0.5f, -0.5f);
+		shadowMapUV += 0.5f ;
+
+		float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
+
+		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+			) {
+			float32_t zInShadowMap = Texture2DTable[gDirectionLights[k].shadowDescriptorIndex].Sample(smp, shadowMapUV).r;
+			if (zInLVP - 0.00001 > zInShadowMap) {
+				shading *= 0.5f;
+			}
+		}
+
+		
+	}
+
+	//アンビエント
+	float32_t3 ambient = float32_t3(0.0f, 0.0f, 0.0f);
+
+	// フレネル
+		//float32_t3 fresnelColor = float32_t3(1.0f, 0.0f, 0.0f);
+		//float32_t power = 2.0f;
+		//float32_t fresnel = pow((1.0f - saturate(dot(normal, viewDirection))), power);
+		////output.color.xyz = lerp(1.0f - fresnel, output.color.xyz, fresnelColor);
+		//output.color.xyz += fresnelColor * fresnel;
+
+	lighting *= shading;
+
 	//pointLight
 
-	for (int i = 0; i < lightNum.pointLight;i++) {
+	for (int i = 0; i < lightNum.pointLight; i++) {
 		if (gPointLights[i].isActive) {
 			float32_t3 pointLightDirection = normalize(worldPos - gPointLights[i].position);
 			float32_t distance = length(gPointLights[i].position - worldPos);
@@ -165,112 +279,6 @@ PixelShaderOutput main(VSOutput input)
 		}
 	}
 
-	//shadowSpotLight
-	for (int l = 0; l < lightNum.shadowSpotLight; l++) {
-		if (gShadowSpotLights[l].isActive) {
-			float32_t3 spotLightDirectionOnSurface = normalize(worldPos - gShadowSpotLights[l].position);
-			float32_t distance = length(gShadowSpotLights[l].position - worldPos);
-			float32_t factor = pow(saturate(-distance / gShadowSpotLights[l].distance + 1.0), gShadowSpotLights[l].decay);
-			float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowSpotLights[l].direction);
-			float32_t falloffFactor = saturate((cosAngle - gShadowSpotLights[l].cosAngle) / (1.0f - gShadowSpotLights[l].cosAngle));
-
-
-			//spotLightDiffuse
-			float32_t NdotL = dot(normal, -spotLightDirectionOnSurface);
-			float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-			float32_t3 spotLightdiffuse = gShadowSpotLights[l].color.xyz * cos * gShadowSpotLights[l].intensity * factor * falloffFactor;
-
-
-			//spotLightSpecular
-			float32_t3 viewDirection = normalize(gShadowSpotLights[l].position - worldPos.xyz);
-
-			float32_t3 reflectVec = reflect(spotLightDirectionOnSurface, normal);
-			float32_t specluerPower = 10.0f;
-			float32_t RdotE = dot(reflectVec, viewDirection);
-			float32_t specularPow = pow(saturate(RdotE), specluerPower);
-			float32_t3 spotLightSpecluer = gShadowSpotLights[l].color.xyz * gShadowSpotLights[l].intensity * specularPow * factor * falloffFactor;
-
-			lighting += (spotLightdiffuse + spotLightSpecluer);
-
-			//影
-			float32_t4 wp = float4(worldPos.xyz, 1.0f);
-			float32_t4 lightViewPosition = mul(wp, gShadowSpotLights[l].viewProjection);
-			float32_t2 shadowMapUV = lightViewPosition.xy / lightViewPosition.w;
-			shadowMapUV *= float32_t2(0.5f, -0.5f);
-			shadowMapUV += 0.5f;
-
-			if (lightViewPosition.z > 0.0f) {
-				float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
-
-				if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-					&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
-					) {
-					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(smp, shadowMapUV).r;
-					if (zInShadowMap != 1.0f) {
-						if (zInLVP - 0.00001 > zInShadowMap) {
-							shading *= 0.5f;
-							output.shadow.x = 1.0f;
-							if (Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex][shadowMapUV.xy * 1024].x == 2) {
-								output.shadow.y = 2.0f;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-
-	for (int k = 0; k < lightNum.directionalLight; k++) {
-
-		//directionalLightDiffuse
-		float32_t NdotL = dot(normal, -gDirectionLights[k].direction);
-		float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-		float32_t3 directionalLightdiffuse = gDirectionLights[k].color.xyz * cos * gDirectionLights[k].intensity;
-
-		//directionalLightSpecular
-		float32_t3 viewDirection = normalize(gViewProjection.viewPosition - worldPos.xyz);
-
-		float32_t3 reflectVec = reflect(gDirectionLights[k].direction, normal);
-		float32_t specluerPower = 10.0f;
-		float32_t RdotE = dot(reflectVec, viewDirection);
-		float32_t specularPow = pow(saturate(RdotE), specluerPower);
-		float32_t3 directionalLightSpecluer = gDirectionLights[k].color.xyz * gDirectionLights[k].intensity * specularPow;
-
-		lighting += (directionalLightdiffuse + directionalLightSpecluer);
-
-		//影
-		float32_t4 wp = float4(worldPos.xyz, 1.0f);
-		float32_t4 lightViewPosition = mul(wp, gDirectionLights[k].viewProjection);
-		float32_t2 shadowMapUV = lightViewPosition.xy / lightViewPosition.w;
-		shadowMapUV *= float32_t2(0.5f, -0.5f);
-		shadowMapUV += 0.5f;
-
-		float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
-
-		if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-			&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
-			) {
-			float32_t zInShadowMap = Texture2DTable[gDirectionLights[k].shadowDescriptorIndex].Sample(smp, shadowMapUV).r;
-			if (zInLVP - 0.00001 > zInShadowMap) {
-				shading *= 0.5f;
-			}
-		}
-
-		
-	}
-
-	//アンビエント
-	float32_t3 ambient = float32_t3(0.0f, 0.0f, 0.0f);
-
-	// フレネル
-		//float32_t3 fresnelColor = float32_t3(1.0f, 0.0f, 0.0f);
-		//float32_t power = 2.0f;
-		//float32_t fresnel = pow((1.0f - saturate(dot(normal, viewDirection))), power);
-		////output.color.xyz = lerp(1.0f - fresnel, output.color.xyz, fresnelColor);
-		//output.color.xyz += fresnelColor * fresnel;
-
-	lighting *= shading;
 
 	lighting += ambient;
 	

@@ -97,7 +97,7 @@ void SpotLightShadowMap::CreatePipeline() {
         CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::parameterNum)] = {};
         rootparams[int(RootParameter::kWorldTransform)].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
         rootparams[(int)RootParameter::kShadowSpotLight].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
-        rootparams[(int)RootParameter::kCollisionData].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
+        rootparams[(int)RootParameter::kCollisionData].InitAsConstants(2, 2);
 
         // スタティックサンプラー
         CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
@@ -244,7 +244,7 @@ void SpotLightShadowMap::PlayerDraw(uint32_t modelHandle, const WorldTransform& 
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), playerCollisionData_->GetGPUVirtualAddress());
+    commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), 1.0f, 0.0f);
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
@@ -253,12 +253,12 @@ void SpotLightShadowMap::PlayerDraw(uint32_t modelHandle, const WorldTransform& 
     }
 }
 
-void SpotLightShadowMap::EnemyDraw(const UploadBuffer& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform)
+void SpotLightShadowMap::EnemyDraw(const Vector2& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform)
 {
     // CBVをセット（ワールド行列）
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
 
-    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kCollisionData), enemyIndex.GetGPUVirtualAddress());
+    commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), enemyIndex.x, enemyIndex.y);
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
