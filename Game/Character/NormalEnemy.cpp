@@ -2,7 +2,7 @@
 #include "ModelManager.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
-	GameObject::Initialize("player");
+	GameObject::Initialize("enemy01");
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -66,6 +66,8 @@ void NormalEnemy::Move(const Vector3& playerPosition) {
 
 
 	const float kSpeed = 0.05f;
+
+	worldTransform_.quaternion_ = MakeLookRotation(-vec);
 
 	worldTransform_.translation_ += vec * kSpeed;
 	UpdateMatrix();
