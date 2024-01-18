@@ -95,7 +95,7 @@ void ShadowIsCollision::CreatePipeline()
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
-	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[1]);
+	rootparams[(int)RootParameter::kIndexTexture].InitAsDescriptorTable(1, &ranges[1]);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
