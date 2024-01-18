@@ -32,9 +32,9 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 	}
 }
 
-void EnemyManager::OnCollisionPlayer(Collider& collider) {
+void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
 	for (auto& enemy : nEnemis_) {
-		enemy->OnCollision(collider);
+		enemy->OnCollision(collider, date);
 	}
 }
 
