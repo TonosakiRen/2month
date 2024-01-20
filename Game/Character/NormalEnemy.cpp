@@ -49,13 +49,18 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 }
 
 void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
+	// 攻撃Idがリセットされているのであれば都度リセット
+	if (date.id == 0u) {
+		id_ = date.id;
+	}
+
 	Vector3 pushBackVector;
-	date;
 	if (collider_.Collision(collider, pushBackVector)) {
 		
-		if (!isHit_ ) {
+		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
 			isHit_ = true;
-			knockBackVector = playerPosition_ - worldTransform_.translation_;
+			id_ = date.id;
+			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
 		}
 
 		UpdateTransform();
@@ -95,7 +100,7 @@ void NormalEnemy::UpdateTransform() {
 }
 
 void NormalEnemy::KnockBack() {
-	Vector3 vec = knockBackVector;
+	Vector3 vec = knockBackVector_;
 	vec = Normalize(vec);
 	vec.y = 0.0f;
 	const float speed = 1.5f;

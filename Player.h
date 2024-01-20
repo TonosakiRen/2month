@@ -8,8 +8,9 @@
 // enemyなどに送るための情報
 struct PlayerDate {
     Vector3 position_; // 現在地
-    int damage_ = 0; // ダメージ量
+    uint32_t damage_ = 0u; // ダメージ量
     bool isAttack_ = false; // 攻撃中か
+    uint32_t id = 0u; //
 };
 
 class Player : public GameObject {
@@ -25,6 +26,8 @@ private:
     void Jump();
     void Attack();
     void MoveLimit();
+    void InsertData();
+    void UpdateTrans();
 
 public:
     Collider collider_;
@@ -47,9 +50,10 @@ private:
     Vector3 rotate;
 
     struct AttackParameter {
-        int phase;
+        int phase = 0;
         bool isAttacked = false; // 攻撃中か
-        
+        uint32_t damage_ = 0u;
+        uint32_t id_; //
     };
     AttackParameter attackParam_;
 

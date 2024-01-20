@@ -56,12 +56,9 @@ void Player::Update()
 	MoveLimit();
 
 
-	collider_.AdjustmentScale();
-	worldTransform_.Update();
-	modelWorldTransform_.Update();
-
-	headCollider_.AdjustmentScale();
-	headModelTransform_.Update();
+	
+	UpdateTrans();
+	InsertData();
 }
 
 void Player::Collision(Collider& otherCollider)
@@ -144,6 +141,7 @@ void Player::Attack() {
 	if (input_->TriggerKey(DIK_V) && !attackParam_.isAttacked) {
 		attackParam_.phase = 0;
 		attackParam_.isAttacked = true;
+		attackParam_.id_++;
 	}
 	if (attackParam_.isAttacked) {
 		switch (attackParam_.phase) {
@@ -160,6 +158,7 @@ void Player::Attack() {
 		case 2:
 			headRotate.x = 0.0f;
 			attackParam_.isAttacked = false;
+			attackParam_.id_ = 0u;
 			break;
 		}
 	}
@@ -176,4 +175,21 @@ void Player::MoveLimit() {
 	}
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + modelSize_.z / 2.0f, FLT_MAX);
 
+}
+
+void Player::InsertData() {
+	Matrix4x4 worldMat = worldTransform_.matWorld_;
+	date_.position_ = Vector3(worldMat.m[3][0],worldMat.m[3][1],worldMat.m[3][2]); // playerのworldPosition
+	date_.isAttack_ = attackParam_.isAttacked;
+	date_.damage_ = attackParam_.damage_;
+	date_.id = attackParam_.id_;
+}
+
+void Player::UpdateTrans() {
+	collider_.AdjustmentScale();
+	worldTransform_.Update();
+	modelWorldTransform_.Update();
+
+	headCollider_.AdjustmentScale();
+	headModelTransform_.Update();
 }
