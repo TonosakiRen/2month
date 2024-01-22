@@ -16,6 +16,7 @@ public:
 	void Draw(const WorldTransform& worldTransform, uint32_t textureHandle, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void Draw(const WorldTransform& worldTransform, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void PlayerDraw(const WorldTransform& worldTransform, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
+	void PlayerDraw(const WorldTransform& worldTransform, uint32_t modelHandle, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void EnemyDraw(const Vector2& enemyIndex,const WorldTransform& worldTransform, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 
 	void SetEnableLighting(bool enableLighting) {

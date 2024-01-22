@@ -309,4 +309,9 @@ Vector3 ModelManager::GetModelCenter(uint32_t modelHandle)
 	return  (*models_)[modelHandle].modelCenter;
 }
 
+bool ModelManager::GetIsUnderModelCenter(uint32_t modelHandle)
+{
+	return  (*models_)[modelHandle].isUnderModelCenter;
+}
+
 

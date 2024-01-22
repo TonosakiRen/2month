@@ -3,16 +3,26 @@
 #include "ModelManager.h"
 void Player::Initialize(const std::string name)
 {
-	GameObject::Initialize(name);
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	modelSize_ = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, name, modelHandle_);
-	worldTransform_.translation_ = { 0.0f,modelSize_.y / 2.0f,-7.0f };
-	modelWorldTransform_.Initialize();
-	modelWorldTransform_.SetParent(&worldTransform_);
-	//modelの中心からmodelの高さの半分下にmodelWorldTransformを配置
-	modelWorldTransform_.translation_ = { 0.0f, -modelSize_.y / 2.0f,0.0f };
+
+	// 体のモデルの初期化
+	GameObject::Initialize(name);
+	bodyModelSize_ = ModelManager::GetInstance()->GetModelSize(modelHandle_);
+	// 頭のモデルの初期化
+	headModelHandle_ = ModelManager::GetInstance()->Load("playerHead");
+	headModelSize_ = ModelManager::GetInstance()->GetModelSize(headModelHandle_);
+
+	modelHeight_ = bodyModelSize_.y + headModelSize_.y;
+	worldTransform_.translation_ = { 0.0f,modelHeight_ / 2.0f,-7.0f };
+
+	//体のWorldTransform
+	bodyWorldTransform_.Initialize();
+	bodyWorldTransform_.SetParent(&worldTransform_);
+	bodyWorldTransform_.translation_ = { 0.0f, -bodyModelSize_.y / 2.0f - (modelHeight_ / 2.0f - bodyModelSize_.y),0.0f };
+
+	//体のコライダー
+	bodyCollider_.Initialize(&bodyWorldTransform_, name, modelHandle_);
 
 	worldTransform_.quaternion_ = MakeFromAngleAxis({ 0.0f,1.0f,0.0f }, -Radian(90.0f));
 
@@ -21,24 +31,16 @@ void Player::Initialize(const std::string name)
 	jumpParam_.isJumped_ = false;
 
 	worldTransform_.Update();
-	modelWorldTransform_.Update();
+	bodyWorldTransform_.Update();
 
+	//頭のWorldTransform
+	headWorldTransform_.Initialize();
+	headWorldTransform_.SetParent(&worldTransform_);
+	headWorldTransform_.translation_ = { 0.0f,-headModelSize_.y / 2.0f + bodyModelSize_.y - modelHeight_ / 2.0f + headModelSize_.y,0.0f };
+	headCollider_.Initialize(&headWorldTransform_, "playerHead", headModelHandle_);
 
-	// 頭のモデルの初期化
-	HeadModel_.Initialize("playerHead");
-	headModelTransform_.Initialize();
-	headCollider_.Initialize(&headModelTransform_, "playerHead", HeadModel_.GetModelHandle());
-	Vector3 headSize = ModelManager::GetInstance()->GetModelSize(HeadModel_.GetModelHandle());
-	HeadModel_.worldTransform_.translation_ = Vector3(0.0f, -headSize.y / 2.0f, 0.0f);
-	HeadModel_.worldTransform_.Update();
-
-	headModelTransform_.SetParent(&modelWorldTransform_);
-	headModelTransform_.translation_ = Vector3(0.0f, 2.0f, 0.0f);
-	headModelTransform_.quaternion_ = worldTransform_.quaternion_;
-	headModelTransform_.Update();
-	
-	HeadModel_.SetParent(&headModelTransform_);
-
+	headWorldTransform_.quaternion_ = worldTransform_.quaternion_;
+	headWorldTransform_.Update();
 }
 
 void Player::Update()
@@ -64,41 +66,41 @@ void Player::Update()
 void Player::Collision(Collider& otherCollider)
 {
 	Vector3 pushBackVector;
- 	if (collider_.Collision(otherCollider, pushBackVector)) {
+ 	if (bodyCollider_.Collision(otherCollider, pushBackVector)) {
 		worldTransform_.translation_ += pushBackVector;
 		worldTransform_.Update();
-		modelWorldTransform_.Update();
-		headModelTransform_.Update();
+		bodyWorldTransform_.Update();
+		headWorldTransform_.Update();
 	}
 	if (headCollider_.Collision(otherCollider, pushBackVector)) {
 		worldTransform_.translation_ += pushBackVector;
 		worldTransform_.Update();
-		modelWorldTransform_.Update();
-		headModelTransform_.Update();
+		bodyWorldTransform_.Update();
+		headWorldTransform_.Update();
 	}
 
 }
 
 void Player::Draw() {
-	collider_.Draw();
-	GameObject::PlayerDraw(modelWorldTransform_,{1.0f,1.0f,1.0f});
+	bodyCollider_.Draw();
+	GameObject::PlayerDraw(bodyWorldTransform_,{1.0f,1.0f,1.0f,1.0f});
 	
 	headCollider_.Draw();
-	HeadModel_.PlayerDraw(headModelTransform_,{1.0f,1.0f,1.0f});
+	GameObject::PlayerDraw(headWorldTransform_, headModelHandle_);
 }
 
 void Player::DrawImGui() {
 #ifdef _DEBUG
-	ImGui::DragFloat3("scale", &headModelTransform_.scale_.x, 0.1f);
+	ImGui::DragFloat3("scale", &headWorldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
-	headModelTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	ImGui::DragFloat3("translate", &headModelTransform_.translation_.x, 0.1f);
+	headWorldTransform_.quaternion_ = MakeFromEulerAngle(handle);
+	ImGui::DragFloat3("translate", &headWorldTransform_.translation_.x, 0.1f);
 	
 	// 座標更新
 	worldTransform_.Update();
-	modelWorldTransform_.Update();
-	headModelTransform_.Update();
+	bodyWorldTransform_.Update();
+	headWorldTransform_.Update();
 #endif // _DEBUG
 }
 
@@ -164,16 +166,16 @@ void Player::Attack() {
 	}
 
 	Vector3 handle = Vector3(Radian(headRotate.x), Radian(headRotate.y), Radian(headRotate.z));
-	headModelTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	headModelTransform_.Update();
+	headWorldTransform_.quaternion_ = MakeFromEulerAngle(handle);
+	headWorldTransform_.Update();
 }
 
 void Player::MoveLimit() {
-	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelSize_.y / 2.0f - 1.0f, FLT_MAX);
-	if (worldTransform_.translation_.y <= modelSize_.y / 2.0f - 1.0f) {
+	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelHeight_ / 2.0f - 1.0f, FLT_MAX);
+	if (worldTransform_.translation_.y <= modelHeight_ / 2.0f - 1.0f) {
 		jumpParam_.isJumped_ = false;
 	}
-	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + modelSize_.z / 2.0f, FLT_MAX);
+	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + bodyModelSize_.z / 2.0f, FLT_MAX);
 
 }
 
@@ -186,10 +188,10 @@ void Player::InsertData() {
 }
 
 void Player::UpdateTrans() {
-	collider_.AdjustmentScale();
+	bodyCollider_.AdjustmentScale();
 	worldTransform_.Update();
-	modelWorldTransform_.Update();
+	bodyWorldTransform_.Update();
 
 	headCollider_.AdjustmentScale();
-	headModelTransform_.Update();
+	headWorldTransform_.Update();
 }

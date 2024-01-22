@@ -30,10 +30,12 @@ private:
     void UpdateTrans();
 
 public:
-    Collider collider_;
+    Collider bodyCollider_;
 private:
-    WorldTransform modelWorldTransform_;
-    Vector3 modelSize_;
+    WorldTransform bodyWorldTransform_;
+    Vector3 bodyModelSize_;
+    Vector3 headModelSize_;
+    float modelHeight_;
     struct JumpParameter {
         Vector3 velocisity_;
         Vector3 acceleration_;
@@ -44,8 +46,8 @@ private:
     Input* input_ = nullptr;
     Audio* audio_ = nullptr;
     
-    GameObject HeadModel_;
-    WorldTransform headModelTransform_;
+    uint32_t headModelHandle_;
+    WorldTransform headWorldTransform_;
     Vector3 headRotate;
     Vector3 rotate;
 

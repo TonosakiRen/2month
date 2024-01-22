@@ -10,6 +10,7 @@ public:
 
 	void Initialize(WorldTransform* objectWorldTransform, const std::string name, Vector3 initialScale = { 1.0f,1.0f,1.0f }, Vector3 initialPos = { 0.0f,0.0f,0.0f });
 	void Initialize(WorldTransform* objectWorldTransform, const std::string name,uint32_t modelHandle);
+	void Initialize(WorldTransform* objectWorldTransform, const std::string name, uint32_t modelHandle,Vector3 initialPos);
 	//ただの四角形用
 	void Initialize(const std::string name);
 	bool Collision(Collider& colliderB);

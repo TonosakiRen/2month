@@ -26,7 +26,7 @@ void InGameScene::Update() {
 	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
 	}
-	enemy_->OnCollisionPlayer(player_->collider_, player_->date_);
+	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
 
 }
 

@@ -17,7 +17,7 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	auto& modelTrans = modelTransform_.emplace_back(WorldTransform());
 	modelTrans.Initialize();
 	modelTrans.SetParent(&worldTransform_);
-	//modelTrans.translation_.y += modelSize.y / 2.0f;
+	modelTrans.translation_.y += modelSize.y / 2.0f;
 	modelTrans.Update();
 
 	collider_.Initialize(&worldTransform_, "Enemy", modelHandle_);

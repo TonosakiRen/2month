@@ -47,6 +47,8 @@ public:
 
 	Vector3 GetModelCenter(uint32_t modelHandle);
 
+	bool GetIsUnderModelCenter(uint32_t modelHandle);
+
 	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle);
 	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex);
 	void DrawInstanced(CommandContext* commandContext, uint32_t modelHandle, UINT textureRootParamterIndex, uint32_t textureHandle);

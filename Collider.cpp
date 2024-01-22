@@ -36,7 +36,21 @@ void Collider::Initialize(WorldTransform* objectWorldTransform, const std::strin
 	worldTransform_.Initialize();
 	worldTransform_.SetParent(objectWorldTransform);
 	worldTransform_.scale_ = ModelManager::GetInstance()->GetModelSize(modelHandle);
+	bool isUnderCenter = ModelManager::GetInstance()->GetIsUnderModelCenter(modelHandle);
 	worldTransform_.translation_ = ModelManager::GetInstance()->GetModelCenter(modelHandle);
+	if (isUnderCenter) {
+		worldTransform_.translation_.y += ModelManager::GetInstance()->GetModelSize(modelHandle).y / 2.0f;
+	}
+	name_ = name;
+	cube_.Initialize("box1x1");
+}
+
+void Collider::Initialize(WorldTransform* objectWorldTransform, const std::string name, uint32_t modelHandle, Vector3 initialPos)
+{
+	worldTransform_.Initialize();
+	worldTransform_.SetParent(objectWorldTransform);
+	worldTransform_.scale_ = ModelManager::GetInstance()->GetModelSize(modelHandle);
+	worldTransform_.translation_ = initialPos;
 	name_ = name;
 	cube_.Initialize("box1x1");
 }

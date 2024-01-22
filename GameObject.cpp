@@ -76,6 +76,21 @@ void GameObject::PlayerDraw(const WorldTransform& worldTransform, Vector4 color)
 	}
 }
 
+void GameObject::PlayerDraw(const WorldTransform& worldTransform, uint32_t modelHandle, Vector4 color)
+{
+	if (ShadowMap::isDrawShadowMap) {
+		ShadowMap::Draw(modelHandle, worldTransform);
+	}
+	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
+		SpotLightShadowMap::PlayerDraw(modelHandle, worldTransform);
+	}
+	else {
+		material_.color_ = color;
+		material_.Update();
+		Model::Draw(modelHandle, worldTransform, material_);
+	}
+}
+
 void GameObject::EnemyDraw(const Vector2& enemyIndex,const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
