@@ -364,7 +364,7 @@ void GameScene::SpotLightShadowDraw()
 		break;
 	case GameScene::Scene::InGame:
 		sphere_->EnemyDraw({2.0f,1.0f}, *sphere_->GetWorldTransform());
-		inGameScene_->ShadowDraw();
+		inGameScene_->SpotLightShadowDraw();
 		break;
 	default:
 		break;

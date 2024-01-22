@@ -36,8 +36,14 @@ void InGameScene::Draw() {
 	player_->Draw();
 }
 
-void InGameScene::ShadowDraw()
-{
+void InGameScene::ShadowDraw() {
+	enemy_->ShadowDraw();
+	//plyerを最後にして
+	player_->Draw();
+}
+
+void InGameScene::SpotLightShadowDraw() {
+	enemy_->SpotLightShadowDraw();
 	//plyerを最後にして
 	player_->Draw();
 }

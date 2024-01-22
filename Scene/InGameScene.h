@@ -17,6 +17,7 @@ public:
 	void Update();
 	void Draw();
 	void ShadowDraw();
+	void SpotLightShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
 

@@ -15,6 +15,7 @@ public:
 
 	void Draw();
 	void ShadowDraw();
+	void SpotLightShadowDraw();
 
 private:
 

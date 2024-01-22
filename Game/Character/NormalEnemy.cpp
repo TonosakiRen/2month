@@ -76,6 +76,10 @@ void NormalEnemy::Draw() {
 	BaseDraw();
 }
 
+void NormalEnemy::EnemyDraw() {
+	BaseEnemyDraw();
+}
+
 void NormalEnemy::Move(const Vector3& playerPosition) {
 
 	Vector3 vec = playerPosition - worldTransform_.translation_;

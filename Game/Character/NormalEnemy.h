@@ -7,6 +7,7 @@ public: // 仮想関数
 	void Update(const Vector3& playerPosition) override;
 	void OnCollision(Collider& collider, const PlayerDate& date) override;
 	void Draw() override;
+	void EnemyDraw() override;
 
 private:
 	void Move(const Vector3& playerPosition);
