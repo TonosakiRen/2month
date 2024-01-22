@@ -301,9 +301,6 @@
     <ClCompile Include="WoodBox.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Character\BaseCharacter.cpp">
-      <Filter>Game\Character</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">

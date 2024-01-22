@@ -132,7 +132,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="Game\Character\BaseCharacter.cpp" />
     <ClCompile Include="Game\Character\EnemyManager.cpp" />
     <ClCompile Include="Game\Character\NormalEnemy.cpp" />
     <ClCompile Include="Game\Stage\Floor.cpp" />
