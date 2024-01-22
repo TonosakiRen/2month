@@ -10,11 +10,6 @@ void main( uint3 DTid : SV_DispatchThreadID)
 		InterlockedExchange(Output[0], 0, v);
 	}
 
-	float32_t2 texSize;
-	//テクスチャーのサイズ
-	colorTex.GetDimensions(texSize.x, texSize.y);
-	float32_t2 pixelSize = 1.0f / texSize;
-
 	float32_t2 centerData = colorTex[DTid.xy].xy;
 
 	float32_t2 topData = float32_t2(0.0f, 0.0f);

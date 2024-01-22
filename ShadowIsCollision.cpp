@@ -8,6 +8,8 @@
 
 using namespace Microsoft::WRL;
 
+bool ShadowIsCollision::isShadowCollision = true;
+
 void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer, ColorBuffer* indexBuffer)
 {
 
@@ -53,7 +55,11 @@ void ShadowIsCollision::Initialize(ColorBuffer* resultBuffer, ColorBuffer* index
 	indexBuffer_ = indexBuffer;
 }
 
-void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& index){
+void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& index,const float luminance){
+
+	isShadowCollision = true;
+	uint32_t* data = static_cast<uint32_t*>(data_);
+	isShadowCollision = static_cast<bool>(data[0]);
 
 	D3D12_RESOURCE_DESC resourceDesc = copyBuffer_->GetDesc();
 	UINT bufferSizeInBytes = static_cast<UINT>(resourceDesc.Width);
@@ -64,6 +70,8 @@ void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& 
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture),resultBuffer_->GetSRV());
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kIndexTexture), indexBuffer_->GetSRV());
+	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kIndex), index.x, index.y);
+	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kLuminance), luminance);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
 	commandContext.Dispatch(resultBuffer_->GetWidth(), resultBuffer_->GetHeight(), 1);
 	
@@ -94,6 +102,8 @@ void ShadowIsCollision::CreatePipeline()
 
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
+	rootparams[(int)RootParameter::kIndex].InitAsConstants(2, 0);
+	rootparams[(int)RootParameter::kLuminance].InitAsConstants(1, 1);
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
 	rootparams[(int)RootParameter::kIndexTexture].InitAsDescriptorTable(1, &ranges[1]);
 

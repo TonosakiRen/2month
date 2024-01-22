@@ -9,6 +9,8 @@
 #include "DirectionalLights.h"
 #include "ShadowSpotLights.h"
 
+#include "GlobalVariables.h"
+
 Renderer* Renderer::GetInstance() {
     static Renderer instance;
     return &instance;
@@ -76,12 +78,37 @@ void Renderer::Initialize() {
     lightNumBuffer_ = std::make_unique<LightNumBuffer>();
     lightNumBuffer_->Create();
 
+    shadowIsCollision_ = std::make_unique<ShadowIsCollision>();
+    shadowIsCollision_->Initialize(resultBuffer_.get(), shadowTexture_.get());
+
+    globalVariables_ = GlobalVariables::GetInstance();
+    SetGlobalVariable();
+
+}
+
+void Renderer::SetGlobalVariable()
+{
+
+    std::string name = "ShadingCollisionAdjustment";
+    globalVariables_->CreateGroup(name);
+    globalVariables_->AddItem(name,"shadingValue", shading_);
+    globalVariables_->AddItem(name, "collisionLuminance", collisionLuminance_);
+    globalVariables_->LoadFile(name);
+    ApplyGlobalVariable();
+}
+
+void Renderer::ApplyGlobalVariable()
+{
+    std::string name = "ShadingCollisionAdjustment";
+    shading_ = globalVariables_->GetFloatValue(name, "shadingValue");
+    collisionLuminance_ = globalVariables_->GetFloatValue(name, "collisionLuminance");
 }
 
 void Renderer::BeginFrame()
 {
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Begin();
+    ApplyGlobalVariable();
 }
 
 void Renderer::BeginMainRender() {
@@ -106,7 +133,7 @@ void Renderer::BeginMainRender() {
 
 void Renderer::DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights)
 {
-    deferredRenderer_->Render(commandContext_, resultBuffer_.get(), viewProjection, directionalLight, pointLights, spotLights, shadowSpotLights, *lightNumBuffer_);
+    deferredRenderer_->Render(commandContext_, resultBuffer_.get(), viewProjection, directionalLight, pointLights, spotLights, shadowSpotLights, *lightNumBuffer_,shading_);
 }
 
 void Renderer::BeginShadowMapRender(DirectionalLights& directionalLights)
@@ -135,6 +162,11 @@ void Renderer::EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
 
 void Renderer::EndMainRender() {
  
+    bool isCollision = ShadowIsCollision::isShadowCollision;
+    ImGui::Text("%d", int(isCollision));
+
+    shadowIsCollision_->Dispatch(commandContext_,{0.0f,0.0f}, collisionLuminance_);
+
     edgeRenderer_->Render(commandContext_, resultBuffer_.get());
     shadowEdgeRenderer_->Render(commandContext_, resultBuffer_.get());
     //bloom_.Render(commandContext_, &resultBuffer_);
@@ -184,14 +216,16 @@ void Renderer::Shutdown() {
         colorBuffers_[i].reset();
     }
 
+    shadowIsCollision_.reset();
+
     mainDepthBuffer_.reset();
 
     resultBuffer_.reset();
 
     deferredRenderer_.reset();
-   edgeRenderer_.reset();
-   shadowEdgeRenderer_.reset();
-   shadowTexture_.reset();
+    edgeRenderer_.reset();
+    shadowEdgeRenderer_.reset();
+    shadowTexture_.reset();
 
 
     bloom_.reset();

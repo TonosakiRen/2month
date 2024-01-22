@@ -4,6 +4,11 @@ struct Param {
 };
 ConstantBuffer<Param> param_  : register(b0);
 
+struct CollisionPlayer {
+	int32_t is;
+};
+ConstantBuffer<CollisionPlayer> collisionPlayer_  : register(b1);
+
 struct VSOutput {
 	float32_t4  svpos : SV_POSITION;
 	float32_t2 texCenter : TEXCOORD0;
@@ -28,7 +33,7 @@ SamplerState smp : register(s0);
 float4 main(VSOutput input) : SV_TARGET
 {
 	PixelShaderOutput output;
-
+	output.color.w = 0.0f;
 
 	float32_t2 texSize;
 	//テクスチャーのサイズ
@@ -49,31 +54,34 @@ float4 main(VSOutput input) : SV_TARGET
 
 	//法線の計算結果、あるいは深度値の計算結果が一定以上ならエッジとみなす。
 	if (color.x >= 0.08f) {
-		output.color.xyz = param_.edgeColor;
-		output.color.w = 1.0f;
+		if (collisionPlayer_.is == 1) {
+			output.color.xyz = param_.edgeColor;
+			output.color.w = 1.0f;
+		}
+
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x - 1, input.texCenter.y * texSize.y)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f,1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x + 1, input.texCenter.y * texSize.y)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x , input.texCenter.y * texSize.y - 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x , input.texCenter.y * texSize.y + 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x + 1, input.texCenter.y * texSize.y + 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x - 1, input.texCenter.y * texSize.y - 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x + 1, input.texCenter.y * texSize.y - 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}else
 		if (shadowTex[uint32_t2(input.texCenter.x * texSize.x - 1 , input.texCenter.y * texSize.y + 1)].y == 2) {
-			output.color.xyz = float32_t3(0.5f, 0.0f, 0.5f);
+			output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);
 		}
 		
 	}

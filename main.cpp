@@ -14,6 +14,7 @@
 #include "Compute.h"
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
+#include "GlobalVariables.h"
 
 #include <d3d12.h>
 #include <dxgidebug.h>
@@ -39,6 +40,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Renderer* renderer = nullptr;
 	//汎用機能
 	GameScene* gameScene = nullptr;
+	GlobalVariables* globalVariables = nullptr;
 	Input* input = nullptr;
 	Audio* audio = nullptr;
 
@@ -57,6 +59,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	audio = Audio::GetInstance();
 	audio->Initialize();
+
+	globalVariables = GlobalVariables::GetInstance();
 
 	// テクスチャマネージャの初期化
 	TextureManager* textureManager = TextureManager::GetInstance();
@@ -92,6 +96,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		// 入力関連の毎フレーム処理
 		input->Update();
 		audio->Update();
+		globalVariables->Update();
 
 		// ゲームシーンの毎フレーム処理
 		gameScene->Update(renderer->GetCommandContext());

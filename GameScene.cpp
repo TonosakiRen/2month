@@ -129,7 +129,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -278,6 +278,7 @@ void GameScene::Update(CommandContext& commandContext){
 	ImGui::DragFloat4("particleColor", &color.x, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat3("emitterPos", &whiteParticle_->emitterWorldTransform_.translation_.x, 0.01f);
 	ImGui::End();
+	whiteParticle_->SetIsEmit(false);
 	whiteParticle_->Update();
 #endif
 }

@@ -23,7 +23,7 @@ void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* nor
 	CreateMesh();
 }
 
-void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer)
+void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* originalBuffer, const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer,float shading)
 {
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { originalBuffer->GetRTV(),shadowTexture_->GetRTV() };
@@ -61,7 +61,7 @@ void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* origin
 
 	commandContext.SetConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection), viewProjection.GetGPUVirtualAddress());
 	commandContext.SetConstantBuffer(static_cast<UINT>(RootParameter::kLightNum), lightNumBuffer.GetGPUVirtualAddress());
-	
+	commandContext.SetConstants(static_cast<UINT>(RootParameter::kShadingNum), shading);
 
 	commandContext.SetVertexBuffer(0, vbView_);
 	commandContext.SetIndexBuffer(ibView_);
@@ -114,6 +114,8 @@ void DeferredRenderer::CreatePipeline()
 
 
 		rootParameters[(int)RootParameter::kLightNum].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
+		rootParameters[(int)RootParameter::kShadingNum].InitAsConstants(1, 2, D3D12_SHADER_VISIBILITY_ALL);
+		
 		
 		
 		// スタティックサンプラー

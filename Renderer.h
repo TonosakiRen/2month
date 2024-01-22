@@ -12,10 +12,12 @@
 #include "EdgeRenderer.h"
 #include "LightNumBuffer.h"
 #include "ShadowEdgeRenderer.h"
+#include "ShadowIsCollision.h"
 
 class viewProjection;
 class DirectionalLights;
 class ShadowSpotLights;
+class GlobalVariables;
 
 class Renderer
 {
@@ -31,6 +33,8 @@ public:
 	static Renderer* GetInstance();
 
     void Initialize();
+    void SetGlobalVariable();
+    void ApplyGlobalVariable();
     void BeginFrame();
     void BeginMainRender();
     void EndMainRender();
@@ -59,6 +63,7 @@ private:
 
 
     DirectXCommon* graphics_ = nullptr;
+    GlobalVariables* globalVariables_ = nullptr;
     std::unique_ptr<SwapChain> swapChain_;
     CommandContext commandContext_;
 
@@ -72,10 +77,14 @@ private:
     std::unique_ptr<ShadowEdgeRenderer> shadowEdgeRenderer_;
     std::unique_ptr<ColorBuffer> shadowTexture_;
     
+    std::unique_ptr<ShadowIsCollision> shadowIsCollision_;
 
     std::unique_ptr<Bloom> bloom_;
     std::unique_ptr<PostEffect> postEffect_;
 
     std::unique_ptr<LightNumBuffer> lightNumBuffer_;
+
+    float shading_ = 0.3f;
+    float collisionLuminance_ = 0.8f;
 };
 

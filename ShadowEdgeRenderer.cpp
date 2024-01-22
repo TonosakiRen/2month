@@ -7,6 +7,7 @@
 #include "Renderer.h"
 #include "ViewProjection.h"
 #include "ImGuiManager.h"
+#include "ShadowIsCollision.h"
 
 using namespace Microsoft::WRL;
 
@@ -46,7 +47,7 @@ void ShadowEdgeRenderer::Render(CommandContext& commandContext, ColorBuffer* ori
 	ImGui::End();
 #endif
 	commandContext.SetConstants(static_cast<UINT>(RootParameter::kEdgeColor), edgeColor_.x, edgeColor_.y, edgeColor_.z);
-
+	commandContext.SetConstants(static_cast<UINT>(RootParameter::kIsPlayerCollision), ShadowIsCollision::isShadowCollision);
 
 	commandContext.DrawIndexedInstanced(static_cast<UINT>(indices_.size()), 1, 0, 0, 0);
 
@@ -86,6 +87,7 @@ void ShadowEdgeRenderer::CreatePipeline()
 		CD3DX12_ROOT_PARAMETER rootParameters[(int)RootParameter::ParameterNum]{};
 		rootParameters[(int)RootParameter::kShadowTexture].InitAsDescriptorTable(1, &ranges[(int)RootParameter::kShadowTexture]);
 		rootParameters[int(RootParameter::kEdgeColor)].InitAsConstants(3, 0);
+		rootParameters[int(RootParameter::kIsPlayerCollision)].InitAsConstants(1, 1);
 
 		// スタティックサンプラー
 		CD3DX12_STATIC_SAMPLER_DESC samplerDesc =

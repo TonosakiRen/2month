@@ -76,6 +76,12 @@ struct LightNum {
 
 ConstantBuffer<LightNum> lightNum : register(b1);
 
+struct Shade {
+	float value;
+};
+
+ConstantBuffer<Shade> shade : register(b2);
+
 float3 GetWorldPosition(in float2 texcoord, in float depth, in float4x4 viewProjectionInverseMatrix) {
 	// xは0~1から-1~1, yは0~1から1~-1に上下反転
 	float2 xy = texcoord * float2(2.0f, -2.0f) + float2(-1.0f, 1.0f);
@@ -164,7 +170,7 @@ PixelShaderOutput main(VSOutput input)
 							else {
 								output.shadow.x = 1.0f;
 							}
-							shading *= 0.5f;
+							shading *= shade.value;
 						}
 					}
 				}

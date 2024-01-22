@@ -11,16 +11,20 @@ class ShadowSpotLights;
 class ShadowIsCollision
 {
 public:
+
+	static bool isShadowCollision;
+
 	enum class RootParameter {
 		kRwStructure,
-		kIndexBuffer,
+		kIndex,
+		kLuminance,
 		kColorTexture,
 		kIndexTexture,
 
 		ParameterNum
 	};
 	void Initialize(ColorBuffer* resultBuffer , ColorBuffer* indexBuffer);
-	void Dispatch(CommandContext& commandContext, const Vector2& index);
+	void Dispatch(CommandContext& commandContext, const Vector2& index, const float luminance);
 	void* GetData();
 	void UnMap();
 private:
