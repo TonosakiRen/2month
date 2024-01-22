@@ -3,7 +3,11 @@
 #include "Player.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
-	GameObject::Initialize("enemy01");
+	std::vector<std::string> names = {
+		"enemy01", // 親
+	};
+
+	BaseInitialize(1, names);
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -11,16 +15,15 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	rotate = EulerAngle(worldTransform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
-	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
+	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 
 	// とりあえず一個だけ
-	auto& modelTrans = modelTransform_.emplace_back(WorldTransform());
-	modelTrans.Initialize();
+	auto& modelTrans = modelsTransform_.at(0);
 	modelTrans.SetParent(&worldTransform_);
 	modelTrans.translation_.y += modelSize.y / 2.0f;
 	modelTrans.Update();
 
-	collider_.Initialize(&worldTransform_, "Enemy", modelHandle_);
+	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
@@ -44,7 +47,8 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 	else {
 		KnockBack();
 	}
-	
+
+	collider_.AdjustmentScale();
 	UpdateTransform();
 }
 
@@ -69,7 +73,7 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 void NormalEnemy::Draw() {
 	collider_.Draw();
-	GameObject::Draw(modelTransform_.at(0));
+	BaseDraw();
 }
 
 void NormalEnemy::Move(const Vector3& playerPosition) {
@@ -87,16 +91,8 @@ void NormalEnemy::Move(const Vector3& playerPosition) {
 	worldTransform_.quaternion_ = MakeLookRotation(-vec);
 
 	worldTransform_.translation_ += vec * kSpeed;
-	UpdateMatrix();
+	UpdateTransform();
 
-}
-
-void NormalEnemy::UpdateTransform() {
-	collider_.AdjustmentScale();
-	worldTransform_.Update();
-	for (auto& model : modelTransform_) {
-		model.Update();
-	}
 }
 
 void NormalEnemy::KnockBack() {

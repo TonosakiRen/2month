@@ -3,10 +3,12 @@
 #include "Collider.h"
 #include "ImGuiManager.h"
 #include "UploadBuffer.h"
+#include <vector>
+#include <string>
 
 struct PlayerDate;
 
-class BaseCharacter : public GameObject {
+class BaseCharacter {
 public:
 	virtual void Initialize(const Vector3& scale = Vector3(1.0f, 1.0f, 1.0f), const Quaternion& quaternion = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), const Vector3& translate = Vector3(0.0f, 0.0f, 0.0f)) {};
 	virtual void Update(const Vector3& playerPosition) {};
@@ -22,5 +24,18 @@ protected:
 	void CreateInitialize();
 	// 回転用
 	Vector3 rotate;
+
+	void BaseInitialize(const uint32_t& modelNumber, std::vector<std::string> names);
+	void UpdateTransform();
+	void BaseDraw();
+
+protected:
+	WorldTransform worldTransform_;
+	std::vector<GameObject> models_; // 複数モデル用
+	std::vector<WorldTransform> modelsTransform_;
+
+public:
+	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
+
 
 };
