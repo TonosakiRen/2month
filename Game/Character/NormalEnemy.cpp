@@ -1,5 +1,6 @@
 #include "NormalEnemy.h"
 #include "ModelManager.h"
+#include "Player.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	GameObject::Initialize("enemy01");
@@ -23,6 +24,7 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
+	playerPosition_ = playerPosition;
 	float distance = Distance(playerPosition, worldTransform_.translation_);
 	ImGui::Begin("Enemy");
 	DrawImGui();
@@ -36,16 +38,31 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 		return;
 	}
 	
-	Move(playerPosition);
-
+	if (!isHit_) {
+		Move(playerPosition);
+	}
+	else {
+		KnockBack();
+	}
 	
 	UpdateTransform();
 }
 
-void NormalEnemy::OnCollision(Collider& collider) {
+void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
+	// 攻撃Idがリセットされているのであれば都度リセット
+	if (date.id == 0u) {
+		id_ = date.id;
+	}
+
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
-		worldTransform_.translation_ += pushBackVector;
+		
+		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
+			isHit_ = true;
+			id_ = date.id;
+			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
+		}
+
 		UpdateTransform();
 	}
 }
@@ -80,4 +97,18 @@ void NormalEnemy::UpdateTransform() {
 	for (auto& model : modelTransform_) {
 		model.Update();
 	}
+}
+
+void NormalEnemy::KnockBack() {
+	Vector3 vec = knockBackVector_;
+	vec = Normalize(vec);
+	vec.y = 0.0f;
+	const float speed = 1.5f;
+
+	worldTransform_.translation_ += -vec * speed;
+	if (++count >= 5) {
+		isHit_ = false;
+		count = 0;
+	}
+
 }

@@ -1,11 +1,11 @@
 {
     "test": {
-        "FloorConfirmation": 1,
+        "FloorConfirmation": 2,
         "FloorNumber : 0 : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
         ],
         "FloorNumber : 0 : Scale": [
             1.0,
@@ -15,6 +15,22 @@
         "FloorNumber : 0 : Translate": [
             0.0,
             -1.2000000476837158,
+            -3.0
+        ],
+        "FloorNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "FloorNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "FloorNumber : 1 : Translate": [
+            60.0,
+            0.0,
             -3.0
         ],
         "Player : Rotate": [
@@ -50,6 +66,22 @@
             2.0,
             2.4000000953674316
         ],
+        "TruckNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "TruckNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "TruckNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "WallConfirmation": 3,
         "WallLightConfirmation": 1,
         "WallLightNumber : 0 : Rotate": [
@@ -81,14 +113,14 @@
         ],
         "WallNumber : 0 : Translate": [
             0.0,
-            7.0,
+            8.0,
             10.0
         ],
         "WallNumber : 1 : Rotate": [
             0.0,
+            -1.0,
             0.0,
-            0.0,
-            1.0
+            -4.371138828673793e-08
         ],
         "WallNumber : 1 : Scale": [
             1.0,
@@ -96,15 +128,15 @@
             1.0
         ],
         "WallNumber : 1 : Translate": [
-            -23.5,
-            7.0,
+            -34.0,
+            8.0,
             10.0
         ],
         "WallNumber : 2 : Rotate": [
-            0.0,
-            0.7071067690849304,
-            0.0,
-            0.7071067690849304
+            -8.74227694680485e-08,
+            -1.0,
+            -8.74227694680485e-08,
+            -4.3711395392165286e-08
         ],
         "WallNumber : 2 : Scale": [
             1.0,
@@ -112,16 +144,16 @@
             1.0
         ],
         "WallNumber : 2 : Translate": [
-            18.0,
-            7.0,
-            16.0
+            34.0,
+            8.0,
+            10.0
         ],
-        "WoodBoxConfirmation": 1,
+        "WoodBoxConfirmation": 2,
         "WoodBoxNumber : 0 : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
         ],
         "WoodBoxNumber : 0 : Scale": [
             1.0,
@@ -129,6 +161,22 @@
             1.0
         ],
         "WoodBoxNumber : 0 : Translate": [
+            28.899999618530273,
+            0.800000011920929,
+            3.0999999046325684
+        ],
+        "WoodBoxNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "WoodBoxNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 1 : Translate": [
             0.0,
             0.0,
             0.0

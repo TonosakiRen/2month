@@ -3,9 +3,17 @@
 #include "Input.h"
 #include "Audio.h"
 #include "Collider.h"
-class Player :
-    public GameObject
-{
+
+
+// enemyなどに送るための情報
+struct PlayerDate {
+    Vector3 position_; // 現在地
+    uint32_t damage_ = 0u; // ダメージ量
+    bool isAttack_ = false; // 攻撃中か
+    uint32_t id = 0u; //
+};
+
+class Player : public GameObject {
 public:
 
     void Initialize(const std::string name);
@@ -18,6 +26,8 @@ private:
     void Jump();
     void Attack();
     void MoveLimit();
+    void InsertData();
+    void UpdateTrans();
 
 public:
     Collider collider_;
@@ -40,14 +50,18 @@ private:
     Vector3 rotate;
 
     struct AttackParameter {
-        int phase;
+        int phase = 0;
         bool isAttacked = false; // 攻撃中か
-        
+        uint32_t damage_ = 0u;
+        uint32_t id_; //
     };
     AttackParameter attackParam_;
 
 public:
     Collider headCollider_;
 private:
+
+public:
+    PlayerDate date_;
 
 };
