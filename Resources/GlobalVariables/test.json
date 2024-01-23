@@ -33,7 +33,7 @@
             0.0,
             -3.0
         ],
-        "NormalEnemyConfirmation": 1,
+        "NormalEnemyConfirmation": 2,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -50,7 +50,23 @@
             2.0,
             -6.367000102996826
         ],
-        "NormalLightEnemyConfirmation": 1,
+        "NormalEnemyNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "NormalLightEnemyConfirmation": 2,
         "NormalLightEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -66,6 +82,22 @@
             4.099999904632568,
             2.0,
             -6.4670000076293945
+        ],
+        "NormalLightEnemyNumber : 1 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "NormalLightEnemyNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalLightEnemyNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
         ],
         "Player : Rotate": [
             0.0,
@@ -83,7 +115,7 @@
             0.7840555906295776,
             -7.967209815979004
         ],
-        "ThornEnemyConfirmation": 1,
+        "ThornEnemyConfirmation": 2,
         "ThornEnemyEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -100,6 +132,11 @@
             2.0,
             -6.0
         ],
+        "ThornEnemyNumber : 0 : Amplitube": [
+            1.0,
+            0.0,
+            0.0
+        ],
         "ThornEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -111,10 +148,33 @@
             1.0,
             1.0
         ],
+        "ThornEnemyNumber : 0 : Time": 20,
         "ThornEnemyNumber : 0 : Translate": [
             2.9333338737487793,
             2.0,
             2.0
+        ],
+        "ThornEnemyNumber : 1 : Amplitube": [
+            0.0,
+            3.0,
+            0.0
+        ],
+        "ThornEnemyNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "ThornEnemyNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ThornEnemyNumber : 1 : Time": 20,
+        "ThornEnemyNumber : 1 : Translate": [
+            0.0,
+            0.0,
+            0.0
         ],
         "TruckConfirmation": 1,
         "TruckNumber : 0 : Rotate": [

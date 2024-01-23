@@ -21,7 +21,7 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 
 	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
-	enemy_->Save(itemName_);
+	enemy_->Load("test");
 
 	g = GlobalVariables::GetInstance();
 	g->ChackFiles(fileName_);
