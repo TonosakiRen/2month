@@ -304,6 +304,12 @@
     <ClCompile Include="Game\Character\BaseCharacter.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Character\NormalLightEnemy.cpp">
+      <Filter>Game\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\ThornEnemy.cpp">
+      <Filter>Game\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -539,6 +545,12 @@
     </ClInclude>
     <ClInclude Include="WoodBox.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\NormalLightEnemy.h">
+      <Filter>Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\ThornEnemy.h">
+      <Filter>Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

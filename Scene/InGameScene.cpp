@@ -12,7 +12,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();
-	enemy_->Initialize();
+	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
 
 }
 
@@ -26,6 +26,7 @@ void InGameScene::Update() {
 	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
 		player_->Collision(stage_->GetWallCollider(index));
 	}
+	stage_->Collision(player_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
 
 }

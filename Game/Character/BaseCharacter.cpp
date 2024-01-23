@@ -19,11 +19,11 @@ void BaseCharacter::BaseInitialize(const uint32_t& modelNumber, std::vector<std:
 	models_.resize(modelNumber);
 	modelsTransform_.resize(modelNumber);
 
+	worldTransform_.Initialize();
 	for (uint32_t index = 0u; index < modelNumber; index++) {
 		models_.at(index).Initialize(names.at(index));
 		modelsTransform_.at(index).Initialize();
 	}
-
 }
 
 void BaseCharacter::UpdateTransform() {

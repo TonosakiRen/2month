@@ -104,6 +104,15 @@ void Player::DrawImGui() {
 #endif // _DEBUG
 }
 
+void Player::CollisionProcess(const Vector3& pushBackVector) {
+	worldTransform_.translation_ += pushBackVector;
+	// 座標更新
+	worldTransform_.Update();
+	bodyWorldTransform_.Update();
+	headWorldTransform_.Update();
+	jumpParam_.isJumped_ = false;
+}
+
 void Player::Move() {
 	Vector3 move = { 0.0f,0.0f,0.0f };
 

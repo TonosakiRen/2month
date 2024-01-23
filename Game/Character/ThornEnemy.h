@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseCharacter.h"
 
-class NormalEnemy : public BaseCharacter {
+class ThornEnemy : public BaseCharacter {
 public: // 仮想関数
 	void Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) override;
 	void Update(const Vector3& playerPosition) override;
@@ -9,17 +9,15 @@ public: // 仮想関数
 	void Draw() override;
 	void EnemyDraw() override;
 
-protected:
-	void Move(const Vector3& playerPosition);
-	void KnockBack();
+	void SetState(const Vector3& amplitube, const uint32_t time);
 
-	int count = 0;
-	bool isHit_ = false;
-	uint32_t id_;
-	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+private:
+	void Move();
 
-	Vector3 playerPosition_;
-	Vector3 knockBackVector_;
+private:
+	Vector3 amplitude_; // 振れ幅
+	bool isMovingToWhich = false; // 例 false = 左 / true = 右
+	uint32_t kMaxTime_ = 0u; // 持続時間
+	uint32_t timer_ = 0u; // 持続時間
 
 };
-
