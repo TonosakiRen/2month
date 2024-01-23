@@ -84,6 +84,8 @@ void Renderer::Initialize() {
     globalVariables_ = GlobalVariables::GetInstance();
     SetGlobalVariable();
 
+    compute_ = std::make_unique<Compute>();
+    compute_->Initialize(shadowTexture_.get());
 }
 
 void Renderer::SetGlobalVariable()
@@ -165,6 +167,7 @@ void Renderer::EndMainRender() {
     bool isCollision = ShadowIsCollision::isShadowCollision;
     ImGui::Text("%d", int(isCollision));
 
+    compute_->Dispatch(commandContext_);
     shadowIsCollision_->Dispatch(commandContext_,{0.0f,0.0f}, collisionLuminance_);
 
     edgeRenderer_->Render(commandContext_, resultBuffer_.get());
@@ -215,6 +218,8 @@ void Renderer::Shutdown() {
     for (int i = 0; i < kRenderTargetNum; i++) {
         colorBuffers_[i].reset();
     }
+
+    compute_.reset();
 
     shadowIsCollision_.reset();
 

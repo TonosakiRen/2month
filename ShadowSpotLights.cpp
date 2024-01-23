@@ -32,9 +32,8 @@ void ShadowSpotLights::Update() {
     std::vector<ConstBufferData> bufferData;
     bufferData.reserve(lightNum);
 
-
     //0.8
-    const float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
+   //const float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
 
     //0.75
     //const float fov = 80.0f * std::numbers::pi_v <float> / 180.0f;

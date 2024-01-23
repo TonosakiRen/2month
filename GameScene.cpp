@@ -81,6 +81,14 @@ void GameScene::Initialize() {
 	shadowSpotLights_.lights_[0].cosAngle = 0.8f;
 	shadowSpotLights_.lights_[0].isActive = true;
 
+	shadowSpotLights_.lights_[1].worldTransform.translation_ = { 0.0f + 5.0f,1.3f,-12.0f };
+	shadowSpotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
+	shadowSpotLights_.lights_[1].intensity = 5.5f;
+	shadowSpotLights_.lights_[1].direction = { 0.0f,0.0f,1.0f };
+	shadowSpotLights_.lights_[1].distance = 20.0f;
+	shadowSpotLights_.lights_[1].cosAngle = 0.8f;
+	shadowSpotLights_.lights_[1].isActive = false;
+
 	shadowSpotLights_.Update();
 
 	// InGameSceneの生成と初期化
@@ -108,10 +116,6 @@ void GameScene::Initialize() {
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });
 	sphere_->UpdateMatrix();
 
-	Vector2 sphereCollision = {2.0f,3.0f};
-	sphereIndex_.Create(sizeof(Vector2));
-	sphereIndex_.Copy(sphereCollision);
-
 	dustParticle_ = std::make_unique<DustParticle>();
 	dustParticle_->SetIsEmit(true);
 	dustParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
@@ -120,8 +124,6 @@ void GameScene::Initialize() {
 	whiteParticle_->SetIsEmit(true);
 	whiteParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
 
-	compute_ = std::make_unique<Compute>();
-	compute_->Initialize(shadowSpotLights_);
 
 	size_t bgmHandle = audio_->SoundLoadWave("BGM.wav");
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
@@ -129,7 +131,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -236,6 +238,16 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
 		ImGui::End();
 
+		ImGui::Begin("shadowSpotLight2");
+		ImGui::DragFloat3("lightPosition", &shadowSpotLights_.lights_[1].worldTransform.translation_.x, 0.01f);
+		ImGui::DragFloat3("lightColor", &shadowSpotLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("intensity", &shadowSpotLights_.lights_[1].intensity, 0.01f, 0.0f);
+		ImGui::DragFloat3("direction", &shadowSpotLights_.lights_[1].direction.x, 0.01f, 0.0f);
+		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[1].distance, 0.01f, 0.0f);
+		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[1].decay, 0.01f, 0.0f);
+		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[1].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
+		ImGui::End();
+
 #endif
 		shadowSpotLights_.lights_[0].lockUp = { 0.0f,1.0f,0.0f };
 		shadowSpotLights_.lights_[0].direction = Normalize(shadowSpotLights_.lights_[0].direction);
@@ -251,23 +263,6 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		//SceneUpdate
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
-	}
-
-	//コンピュートシェーダテスト
-	{
-		uint32_t* date = static_cast<uint32_t*>(Compute::GetData());
-
-		int a = date[3];
-		if (a  == 1) {
-			sphereColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		}
-		else {
-			sphereColor_ = { 1.0f,1.0f,1.0f,1.0f };
-		}
-#ifdef _DEBUG
-		ImGui::Text("%d", int(a));
-#endif
-		compute_->Dispatch(commandContext);
 	}
 	
 #ifdef _DEBUG
@@ -328,7 +323,6 @@ void GameScene::ModelDraw()
 	case GameScene::Scene::InGame:
 		skydome_->Draw();
 		inGameScene_->Draw();
-		sphere_->Draw(sphereColor_);
 		break;
 	case GameScene::Scene::Editor:
 		editorScene_->Draw();
@@ -347,7 +341,9 @@ void GameScene::ShadowDraw()
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->ShadowDraw();
-		sphere_->Draw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->ShadowDraw();
 		break;
 	default:
 		break;
@@ -361,8 +357,10 @@ void GameScene::SpotLightShadowDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		sphere_->EnemyDraw({2.0f,3.0f}, *sphere_->GetWorldTransform());
 		inGameScene_->SpotLightShadowDraw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->SpotLightShadowDraw();
 		break;
 	default:
 		break;

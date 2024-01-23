@@ -17,21 +17,25 @@ void main( uint3 DTid : SV_DispatchThreadID)
 
 	float32_t2 centerData = colorTex[DTid.xy].xy;
 
-	float32_t2 topData = float32_t2(0.0f, 0.0f);
-	float32_t2 bottomData = float32_t2(0.0f, 0.0f);
-	float32_t2 leftData = float32_t2(0.0f, 0.0f);
-	float32_t2 rightData = float32_t2(0.0f, 0.0f);
+	float32_t3 topData = float32_t3(0.0f, 0.0f,0.0f);
+	float32_t3 bottomData = float32_t3(0.0f, 0.0f,0.0f);
+	float32_t3 leftData = float32_t3(0.0f, 0.0f,0.0f);
+	float32_t3 rightData = float32_t3(0.0f, 0.0f,0.0f);
 
 	uint32_t2 topIndex = uint32_t2(DTid.x, DTid.y - 1.0f);
 	uint32_t2 bottomIndex = uint32_t2(DTid.x, DTid.y + 1.0f);
 	uint32_t2 leftIndex = uint32_t2(DTid.x - 1.0f, DTid.y);
 	uint32_t2 rightIndex = uint32_t2(DTid.x + 1.0f, DTid.y);
 
+	float32_t2 texSize;
+	//テクスチャーのサイズ
+	colorTex.GetDimensions(texSize.x, texSize.y);
+
 	if (DTid.x == 0) {
 		leftIndex = DTid.xy;
 	}
 
-	if (DTid.x == 1024) {
+	if (DTid.x == texSize.x) {
 		rightIndex = DTid.xy;
 	}
 
@@ -39,31 +43,31 @@ void main( uint3 DTid : SV_DispatchThreadID)
 		topIndex = DTid.xy;
 	}
 
-	if (DTid.y == 1024) {
+	if (DTid.y == texSize.y) {
 		bottomIndex = DTid.xy;
 	}
 
-	topData = colorTex[topIndex].xy;
-	bottomData = colorTex[bottomIndex].xy;
-	leftData = colorTex[leftIndex].xy;
-	rightData = colorTex[rightIndex].xy;
+	topData = colorTex[topIndex].xyz;
+	bottomData = colorTex[bottomIndex].xyz;
+	leftData = colorTex[leftIndex].xyz;
+	rightData = colorTex[rightIndex].xyz;
 
-	if (centerData.x == 1.0f){
-		if (topData.x == 2.0f ) {
+	if (centerData.y == 1.0f){
+		if (topData.y == 2.0f ) {
 			uint v;
-			InterlockedExchange(Output[topData.y], 1, v);
+			InterlockedExchange(Output[topData.z], 1, v);
 		}
 		else if (bottomData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[bottomData.y], 1, v);
+			InterlockedExchange(Output[bottomData.z], 1, v);
 		}
 		else if (leftData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[leftData.y], 1, v);
+			InterlockedExchange(Output[leftData.z], 1, v);
 		}
 		else if (rightData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[rightData.y], 1, v);
+			InterlockedExchange(Output[rightData.z], 1, v);
 		}
 	}
 	

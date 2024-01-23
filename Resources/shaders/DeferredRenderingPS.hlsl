@@ -162,13 +162,16 @@ PixelShaderOutput main(VSOutput input)
 					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
 					if (zInShadowMap != 1.0f) {
 						if (zInLVP < 1.0f && zInLVP - /*0.000002*/0.0000025f  > zInShadowMap ) {
-							if (Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp,shadowMapUV).x == 2.0f) {
+							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, shadowMapUV);
+							if (enemyIndex.x == 2.0f) {
 								output.shadow.x = 1.0f;
 								output.shadow.y = 2.0f;
+								output.shadow.z = enemyIndex.y;
 								color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
 							}
 							else {
 								output.shadow.x = 1.0f;
+								output.shadow.y = 1.0f;
 							}
 							shading *= shade.value;
 						}
@@ -228,7 +231,7 @@ PixelShaderOutput main(VSOutput input)
 		////output.color.xyz = lerp(1.0f - fresnel, output.color.xyz, fresnelColor);
 		//output.color.xyz += fresnelColor * fresnel;
 
-	lighting *= shading;
+	color.xyz *= shading;
 
 	//pointLight
 
