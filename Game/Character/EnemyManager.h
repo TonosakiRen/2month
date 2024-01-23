@@ -20,6 +20,7 @@ public:
 	void Update(const Vector3& playerPosition);
 	void OnCollisionPlayer(Collider& collider, const PlayerDate& date); // playerとの衝突判定を取得
 
+	void DrawImGui();
 	void Draw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();

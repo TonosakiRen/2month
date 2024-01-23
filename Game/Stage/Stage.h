@@ -55,5 +55,6 @@ public:
 		Vector3 translate;
 	};
 	SRT playerRespawnPoint_;
+	std::vector<SRT> enemyRespawnPoint_;
 
 };

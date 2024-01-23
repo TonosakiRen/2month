@@ -129,7 +129,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -349,6 +349,9 @@ void GameScene::ShadowDraw()
 		inGameScene_->ShadowDraw();
 		sphere_->Draw();
 		break;
+	case GameScene::Scene::Editor:
+		editorScene_->ShadowDraw();
+		break;
 	default:
 		break;
 	}
@@ -363,6 +366,9 @@ void GameScene::SpotLightShadowDraw()
 	case GameScene::Scene::InGame:
 		sphere_->EnemyDraw({2.0f,3.0f}, *sphere_->GetWorldTransform());
 		inGameScene_->SpotLightShadowDraw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->SpotLightShadowDraw();
 		break;
 	default:
 		break;

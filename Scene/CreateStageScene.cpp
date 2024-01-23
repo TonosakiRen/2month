@@ -18,6 +18,9 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
 
+	enemy_ = std::make_unique<EnemyManager>();
+	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
+
 	g = GlobalVariables::GetInstance();
 	g->ChackFiles(fileName_);
 	for (auto& i : fileName_) {
@@ -36,18 +39,31 @@ void CreateStageScene::Update() {
 
 	// 以下通常通りの更新処理
 	stage_->Update();
+	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();
 	skydome_->Update(player_->GetWorldTransform()->translation_);
 
-	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
-		player_->Collision(stage_->GetWallCollider(index));
-	}
+	stage_->Collision(player_.get());
+	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
+
 }
 
 void CreateStageScene::Draw() {
 	stage_->Draw();
+	enemy_->Draw();
 	player_->Draw();
 	skydome_->Draw();
+}
+
+void CreateStageScene::ShadowDraw() {
+	stage_->Draw();
+	enemy_->ShadowDraw();
+	player_->Draw();
+}
+
+void CreateStageScene::SpotLightShadowDraw() {
+	enemy_->SpotLightShadowDraw();
+	player_->Draw();
 }
 
 void CreateStageScene::DrawImGui() {
@@ -99,7 +115,7 @@ void CreateStageScene::DrawImGui() {
 			player_->DrawImGui();
 			ImGui::EndMenu();
 		}
-
+		enemy_->DrawImGui();
 
 		ImGui::EndMenuBar();
 	}
