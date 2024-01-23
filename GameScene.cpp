@@ -133,9 +133,6 @@ void GameScene::Initialize() {
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
-
-	unchi_.Initialize("aa");
-	unchi2_.Initialize("aaa");
 }
 
 void GameScene::Update(CommandContext& commandContext){
@@ -282,12 +279,6 @@ void GameScene::Update(CommandContext& commandContext){
 	whiteParticle_->SetIsEmit(false);
 	whiteParticle_->Update();
 #endif
-	Vector3 push;
-	int a = unchi_.Collision(unchi2_, push,Collider::kSphere);
-	ImGui::Text("aaaaaa%d", a);
-	unchi_.worldTransform_.translation_ += push;
-	unchi_.AdjustmentScale();
-	unchi2_.AdjustmentScale();
 }
 
 void GameScene::TitleInitialize() {
@@ -338,8 +329,6 @@ void GameScene::ModelDraw()
 		skydome_->Draw();
 		inGameScene_->Draw();
 		sphere_->Draw(sphereColor_);
-		unchi_.Draw();
-		unchi2_.Draw();
 		break;
 	case GameScene::Scene::Editor:
 		editorScene_->Draw();
