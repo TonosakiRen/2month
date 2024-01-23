@@ -49,6 +49,5 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 void NormalLightEnemy::MoveLight() {
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.translation_ = offset;
-	light.worldTransform.quaternion_ = worldTransform_.quaternion_;
 	light.direction = lightDirection_;
 }

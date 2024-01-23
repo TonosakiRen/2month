@@ -23,29 +23,37 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 		Vector3 translate;
 	};
 	const uint32_t kMaxNormalEnemyCount = 1u;
-	Base respawn[kMaxNormalEnemyCount] = {
-		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(0.0f,2.0f,0.0f) },
+	Base nEnemisRespawn[] = {
+		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(10.0f,2.0f,0.0f) },
 	};
 
 	if (!nEnemis_.empty()) { nEnemis_.clear(); }
 	for (uint32_t index = 0u; index < kMaxNormalEnemyCount; index++) {
 		auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
-		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
+		enemy->Initialize(nEnemisRespawn[index].scale, nEnemisRespawn[index].rotate, nEnemisRespawn[index].translate);
 	}
 
+	const uint32_t kMaxNormalLightEnemyCount = 0u;
+	Base nlEnemisRespawn[] = {
+		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(10.0f,2.0f,1.0f) },
+	};
+
 	if (!nLightEnemis_.empty()) { nLightEnemis_.clear(); }
-	const uint32_t kMaxNormalLightEnemyCount = 1u;
 	for (uint32_t index = 0u; index < kMaxNormalLightEnemyCount; index++) {
 		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
-		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
+		enemy->Initialize(nlEnemisRespawn[index].scale, nlEnemisRespawn[index].rotate, nlEnemisRespawn[index].translate);
 		enemy->SetLight(shadowSpotLights_, index);
 	}
 
-	if (!tEnemis_.empty()) { tEnemis_.clear(); }
 	const uint32_t kMaxThornEnemyCount = 1u;
+	Base tEnemisRespawn[] = {
+		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(1.0f,2.0f,1.0f) },
+	};
+
+	if (!tEnemis_.empty()) { tEnemis_.clear(); }
 	for (uint32_t index = 0u; index < kMaxThornEnemyCount; index++) {
 		auto& enemy = tEnemis_.emplace_back(std::make_unique<ThornEnemy>());
-		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
+		enemy->Initialize(tEnemisRespawn[index].scale, tEnemisRespawn[index].rotate, tEnemisRespawn[index].translate);
 		enemy->SetState(Vector3(1.0f, 0.0f, 0.0f), 30u);
 	}
 
