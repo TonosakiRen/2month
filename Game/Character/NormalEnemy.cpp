@@ -16,13 +16,12 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	rotate = EulerAngle(worldTransform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
-	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 
+	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 	// とりあえず一個だけ
-	auto& modelTrans = modelsTransform_.at(0);
-	modelTrans.SetParent(&worldTransform_);
-	modelTrans.translation_.y += modelSize.y / 2.0f;
-	modelTrans.Update();
+	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
+	modelsTransform_.at(0).Update();
 
 	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
@@ -30,8 +29,9 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 void NormalEnemy::Update(const Vector3& playerPosition) {
 	playerPosition_ = playerPosition;
 	float distance = Distance(playerPosition, worldTransform_.translation_);
-	ImGui::Begin("Enemy");
+	ImGui::Begin("nEnemy");
 	DrawImGui();
+	ImGui::DragFloat3("modelTrans", &modelsTransform_.at(0).translation_.x, 0.1f);
 	ImGui::Text("distance : %f", distance);
 	ImGui::End();
 	
