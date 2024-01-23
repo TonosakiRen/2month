@@ -2,6 +2,8 @@
 #include "SpotLights.h"
 #include "PointLights.h"
 #include "ShadowSpotLights.h"
+#include "Game/Stage/Stage.h"
+#include "GlobalVariables.h"
 
 EnemyManager::EnemyManager() {
 
@@ -17,7 +19,7 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
 
-	struct Base {
+	/*struct Base {
 		Vector3 scale;
 		Quaternion rotate;
 		Vector3 translate;
@@ -55,7 +57,7 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 		auto& enemy = tEnemis_.emplace_back(std::make_unique<ThornEnemy>());
 		enemy->Initialize(tEnemisRespawn[index].scale, tEnemisRespawn[index].rotate, tEnemisRespawn[index].translate);
 		enemy->SetState(Vector3(1.0f, 0.0f, 0.0f), 30u);
-	}
+	}*/
 
 }
 
@@ -146,6 +148,73 @@ void EnemyManager::DrawImGui() {
 		ImGui::EndMenu();
 	}
 #endif // _DEBUG
+}
+
+void EnemyManager::Save(const char* itemName) {
+	GlobalVariables* global = GlobalVariables::GetInstance();
+
+	global->SetValue(itemName, "NormalEnemyConfirmation" + std::string(), static_cast<int>(nEnemis_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(nEnemis_.size()); index++) {
+		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), nEnemis_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), nEnemis_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), nEnemis_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "NormalLightEnemyConfirmation" + std::string(), static_cast<int>(nLightEnemis_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(nLightEnemis_.size()); index++) {
+		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), nLightEnemis_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), nLightEnemis_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), nLightEnemis_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "ThornEnemyConfirmation" + std::string(), static_cast<int>(tEnemis_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(tEnemis_.size()); index++) {
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), tEnemis_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), tEnemis_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), tEnemis_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Amplitube").c_str(), tEnemis_[index]->amplitude_);
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Time").c_str(), tEnemis_[index]->kMaxTime_);
+	}
+
+}
+
+void EnemyManager::Load(const std::filesystem::path& loadFile) {
+	GlobalVariables* global = GlobalVariables::GetInstance();
+	std::string itemName = loadFile.string();
+
+	int num = global->GetIntValue(itemName, "NormalEnemyConfirmation");
+	if (!nEnemis_.empty()) { nEnemis_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
+		enemy->Initialize(scale, rotate, trans);
+	}
+
+	num = global->GetIntValue(itemName, "NormalLightEnemyConfirmation");
+	if (!nLightEnemis_.empty()) { nLightEnemis_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
+		enemy->Initialize(scale, rotate, trans);
+		//enemy->SetLight(shadowSpotLights_, index);
+	}
+
+	num = global->GetIntValue(itemName, "ThornEnemyConfirmation");
+	if (!tEnemis_.empty()) { tEnemis_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		Vector3 amplitude = global->GetVector3Value(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Amplitube").c_str());
+		int kMaxtime = global->GetIntValue(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Time").c_str());
+		auto& enemy = tEnemis_.emplace_back(std::make_unique<ThornEnemy>());
+		enemy->Initialize(scale, rotate, trans);
+		enemy->SetState(amplitude, kMaxtime);
+	}
 }
 
 void EnemyManager::Draw() {

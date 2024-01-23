@@ -215,6 +215,38 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
 	playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
+
+	//// 敵の追加
+	//num = global->GetIntValue(selectName, "NormalEnemyConfirmation");
+	//normalEnemyRespawnPoint_.clear();
+	//for (int i = 0; i < num; i++) {
+	//	Vector3 scale = global->GetVector3Value(selectName, ("NormalEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+	//	Quaternion rotate = global->GetQuaternionValue(selectName, ("NormalEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+	//	Vector3 trans = global->GetVector3Value(selectName, ("NormalEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+	//	auto& enemy = normalEnemyRespawnPoint_.emplace_back(SRT());
+	//	enemy = { scale,rotate,	trans };
+	//}
+
+	//num = global->GetIntValue(selectName, "NormalLightEnemyConfirmation");
+	//normalLightEnemyRespawnPoint_.clear();
+	//for (int i = 0; i < num; i++) {
+	//	Vector3 scale = global->GetVector3Value(selectName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+	//	Quaternion rotate = global->GetQuaternionValue(selectName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+	//	Vector3 trans = global->GetVector3Value(selectName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+	//	auto& enemy = normalLightEnemyRespawnPoint_.emplace_back(SRT());
+	//	enemy = { scale,rotate,	trans };
+	//}
+
+	//num = global->GetIntValue(selectName, "ThornEnemyConfirmation");
+	//thornRespawnPoint_.clear();
+	//for (int i = 0; i < num; i++) {
+	//	Vector3 scale = global->GetVector3Value(selectName, ("ThornEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+	//	Quaternion rotate = global->GetQuaternionValue(selectName, ("ThornEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+	//	Vector3 trans = global->GetVector3Value(selectName, ("ThornEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+	//	auto& enemy = thornRespawnPoint_.emplace_back(SRT());
+	//	enemy = { scale,rotate,	trans };
+	//}
+
 }
 
 void Stage::Save(const char* itemName) {

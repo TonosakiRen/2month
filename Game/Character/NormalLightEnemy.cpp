@@ -12,7 +12,6 @@ void NormalLightEnemy::SetLight(ShadowSpotLights* shadowlight, const uint32_t& n
 	number_ = num;
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.SetParent(&worldTransform_);
-	//light.worldTransform.SetIsRotateParent(false);
 	offset = Vector3(0.0f, -1.1f, -1.0f);
 	light.distance = 30.0f;
 }
@@ -20,11 +19,7 @@ void NormalLightEnemy::SetLight(ShadowSpotLights* shadowlight, const uint32_t& n
 void NormalLightEnemy::Update(const Vector3& playerPosition) {
 	playerPosition_ = playerPosition;
 	float distance = Distance(playerPosition, worldTransform_.translation_);
-	ImGui::Begin("Enemy");
-	DrawImGui();
-	ImGui::DragFloat3("Offset", &offset.x, 0.1f);
-	ImGui::End();
-
+	
 	const float kMaxDistance = 50.0f;
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的

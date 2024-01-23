@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <filesystem>
 
 #include "NormalEnemy.h"
 #include "NormalLightEnemy.h"
@@ -9,6 +10,7 @@
 class SpotLights;
 class PointLights;
 class ShadowSpotLights;
+struct SRT;
 
 // InGameSceneでのみ実体化。シングルトン運用
 class EnemyManager {
@@ -21,6 +23,10 @@ public:
 	void OnCollisionPlayer(Collider& collider, const PlayerDate& date); // playerとの衝突判定を取得
 
 	void DrawImGui();
+	void Save(const char* itemName);
+	void Load(const std::filesystem::path& loadFilee);
+	
+
 	void Draw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
