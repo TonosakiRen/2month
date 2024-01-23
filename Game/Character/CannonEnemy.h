@@ -1,27 +1,22 @@
 #pragma once
 #include "BaseCharacter.h"
+#include <list>
 
-class NormalEnemy : public BaseCharacter {
+// 大砲の敵
+class CannonEnemy : public BaseCharacter {
 public: // 仮想関数
 	void Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) override;
 	void Update(const Vector3& playerPosition) override;
 	void OnCollision(Collider& collider, const PlayerDate& date) override;
 	void Draw() override;
 	void EnemyDraw() override;
+	void DrawImGui() override;
+	std::vector<Collider> colliders_;
+
+private:
+
+	uint32_t interval_ = 0u; // 弾の発射間隔
 
 
-	Collider collider_;
-protected:
-	Vector3 Move(const Vector3& playerPosition);
-	void KnockBack();
-
-	int count = 0;
-	bool isHit_ = false;
-	uint32_t id_;
-	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	Vector3 playerPosition_;
-	Vector3 knockBackVector_;
 
 };
-
