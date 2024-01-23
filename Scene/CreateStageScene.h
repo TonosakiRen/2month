@@ -2,6 +2,7 @@
 #include <memory>
 #include "Player.h"
 #include "Game/Stage/Stage.h"
+#include "Game/Character/EnemyManager.h"
 #include "Skydome.h"
 
 class GlobalVariables;
@@ -18,6 +19,8 @@ public:
 	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
+	void ShadowDraw();
+	void SpotLightShadowDraw();
 
 	/// <summary>
 	/// プレイモードかのフラグを返す
@@ -34,6 +37,7 @@ private:
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Stage> stage_;
 	std::unique_ptr<Skydome> skydome_;
+	std::unique_ptr<EnemyManager> enemy_;
 
 	GlobalVariables* g = nullptr;
 	std::vector<std::string> fileName_;

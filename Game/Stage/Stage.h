@@ -12,6 +12,12 @@ class PointLights;
 class ShadowSpotLights;
 class Player;
 
+struct SRT {
+	Vector3 scale;
+	Quaternion rotate;
+	Vector3 translate;
+};
+
 class Stage {
 public:
 	Stage() = default;
@@ -43,17 +49,11 @@ private:
 	std::vector<std::unique_ptr<Floor>> floors_;
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
-public:
+
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
 	ShadowSpotLights* shadowSpotLights_;
 
-
-	struct SRT {
-		Vector3 scale;
-		Quaternion rotate;
-		Vector3 translate;
-	};
 	SRT playerRespawnPoint_;
 
 };
