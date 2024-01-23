@@ -10,7 +10,7 @@ public: // 仮想関数
 	void EnemyDraw() override;
 
 protected:
-	void Move(const Vector3& playerPosition);
+	Vector3 Move(const Vector3& playerPosition);
 	void KnockBack();
 
 	int count = 0;
