@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "ImGuiManager.h"
 #include "ModelManager.h"
+#include "GlobalVariables.h"
 void Player::Initialize(const std::string name)
 {
 	input_ = Input::GetInstance();
@@ -26,7 +27,7 @@ void Player::Initialize(const std::string name)
 
 	worldTransform_.quaternion_ = MakeFromAngleAxis({ 0.0f,1.0f,0.0f }, -Radian(90.0f));
 
-	jumpParam_.velocisity_ = { 0.0f,0.0f,0.0f };
+	jumpParam_.velocity_ = { 0.0f,0.0f,0.0f };
 	jumpParam_.acceleration_ = { 0.0f,-0.05f,0.0f };
 	jumpParam_.isJumped_ = false;
 
@@ -41,10 +42,38 @@ void Player::Initialize(const std::string name)
 
 	headWorldTransform_.quaternion_ = worldTransform_.quaternion_;
 	headWorldTransform_.Update();
+
+	globalVariables_ = GlobalVariables::GetInstance();
+	SetGlobalVariable();
+
+}
+
+void Player::SetGlobalVariable()
+{
+	std::string name = "Player";
+	globalVariables_->CreateGroup(name);
+	globalVariables_->AddItem(name, "jumpPower_", jumpPower_);
+	globalVariables_->AddItem(name, "speed_", speed_);
+	globalVariables_->AddItem(name, "attackSpeed_", attackSpeed_);
+	globalVariables_->AddItem(name, "backHeadSpeed_", backHeadSpeed_);
+	globalVariables_->AddItem(name, "attackReadySpeed_", attackReadySpeed_);
+	globalVariables_->LoadFile(name);
+	ApplyGlobalVariable();
+}
+
+void Player::ApplyGlobalVariable()
+{
+	std::string name = "Player";
+	jumpPower_ = globalVariables_->GetFloatValue(name, "jumpPower_");
+	speed_ = globalVariables_->GetFloatValue(name, "speed_");
+	attackSpeed_ = globalVariables_->GetFloatValue(name, "attackSpeed_");
+	backHeadSpeed_ = globalVariables_->GetFloatValue(name, "backHeadSpeed_");
+	attackReadySpeed_ = globalVariables_->GetFloatValue(name, "attackReadySpeed_");
 }
 
 void Player::Update()
 {
+	ApplyGlobalVariable();
 #ifdef _DEBUG
 	ImGui::Begin("Player");
 	DrawImGui();
@@ -56,8 +85,6 @@ void Player::Update()
 	Attack();
 
 	MoveLimit();
-
-
 	
 	UpdateTrans();
 	InsertData();
@@ -110,65 +137,88 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 	worldTransform_.Update();
 	bodyWorldTransform_.Update();
 	headWorldTransform_.Update();
-	jumpParam_.isJumped_ = false;
+	if (Normalize(pushBackVector).y == 1.0f) {
+		jumpParam_.isJumped_ = false;
+	}
 }
 
 void Player::Move() {
-	Vector3 move = { 0.0f,0.0f,0.0f };
+	Vector3 direction = { 0.0f,0.0f,0.0f };
 
-	if (input_->PushKey(DIK_A)) {
-		move.x -= 0.3f;
+	if (input_->GetIsGamePadConnect()) {
+		// 移動量
+		direction = {
+			input_->GetLStick().x / SHRT_MAX, 0.0f,
+			input_->GetLStick().y / SHRT_MAX };
 	}
-	if (input_->PushKey(DIK_D)) {
-		move.x += 0.3f;
+	else {
+		if (input_->PushKey(DIK_A)) {
+			direction.x -= 1.0f;
+		}
+		if (input_->PushKey(DIK_D)) {
+			direction.x += 1.0f;
+		}
+		if (input_->PushKey(DIK_S)) {
+			direction.z -= 1.0f;
+		}
+		if (input_->PushKey(DIK_W)) {
+			direction.z += 1.0f;
+		}
 	}
-	if (input_->PushKey(DIK_S)) {
-		move.z -= 0.3f;
-	}
-	if (input_->PushKey(DIK_W)) {
-		move.z += 0.3f;
-	}
-	if (move.x != 0.0f || move.y != 0.0f || move.z != 0.0f) {
+
+	Vector3 move = Normalize(direction) * speed_;
+
+	if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
 		worldTransform_.translation_ += move;
-		worldTransform_.quaternion_ = MakeLookRotation(move);
+		worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_,MakeLookRotation(direction));
+
 	}
 	
 }
 
 void Player::Jump() {
-	if (input_->TriggerKey(DIK_SPACE) && !jumpParam_.isJumped_) {
-		jumpParam_.velocisity_.y = 0.5f;
+	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(XINPUT_GAMEPAD_A)) && !jumpParam_.isJumped_) {
+		jumpParam_.velocity_.y = jumpPower_;
 		size_t handle = audio_->SoundLoadWave("jump.wav");
 		size_t jumpHandle = audio_->SoundPlayWave(handle);
 		audio_->SetValume(jumpHandle, 0.1f);
 		jumpParam_.isJumped_ = true;
 	}
-	jumpParam_.velocisity_.y = clamp(jumpParam_.velocisity_.y, -0.5f, 200.0f);
-	jumpParam_.velocisity_ += jumpParam_.acceleration_;
-	worldTransform_.translation_ += jumpParam_.velocisity_;
+	jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
+	jumpParam_.velocity_ += jumpParam_.acceleration_;
+	worldTransform_.translation_ += jumpParam_.velocity_;
 }
 
 void Player::Attack() {
-	if (input_->TriggerKey(DIK_V) && !attackParam_.isAttacked) {
+	if ((input_->TriggerKey(DIK_V) || input_->TriggerButton(XINPUT_GAMEPAD_X)) && !attackParam_.isAttacked) {
 		attackParam_.phase = 0;
 		attackParam_.isAttacked = true;
 		attackParam_.id_++;
 	}
 	if (attackParam_.isAttacked) {
 		switch (attackParam_.phase) {
-		case 0: // 初期化
-			headRotate.x = -30.0f;
-			attackParam_.phase = 1;
+		case 0: 
+			//頭が後ろに下がる
+			headRotate.x -= attackReadySpeed_;
+			if (headRotate.x <= -30.0f) {
+				headRotate.x = -30.0f;
+				attackParam_.phase = 1;
+			}
 			break;
 		case 1:
-			headRotate.x += 2.0f;
+			//頭でattackする
+			headRotate.x += attackSpeed_;
 			if (headRotate.x >= 90.0f) {
 				attackParam_.phase = 2;
 			}
 			break;
 		case 2:
-			headRotate.x = 0.0f;
-			attackParam_.isAttacked = false;
+			//頭で元の位置に戻る
+			headRotate.x -= backHeadSpeed_;
+			if (headRotate.x <= 0.0f) {
+				headRotate.x = 0.0f;
+				attackParam_.isAttacked = false;
+			}
 			attackParam_.id_ = 0u;
 			break;
 		}
@@ -185,7 +235,6 @@ void Player::MoveLimit() {
 		jumpParam_.isJumped_ = false;
 	}
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -10.5f + bodyModelSize_.z / 2.0f, FLT_MAX);
-
 }
 
 void Player::InsertData() {

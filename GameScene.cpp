@@ -108,10 +108,6 @@ void GameScene::Initialize() {
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });
 	sphere_->UpdateMatrix();
 
-	Vector2 sphereCollision = {2.0f,3.0f};
-	sphereIndex_.Create(sizeof(Vector2));
-	sphereIndex_.Copy(sphereCollision);
-
 	dustParticle_ = std::make_unique<DustParticle>();
 	dustParticle_->SetIsEmit(true);
 	dustParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
@@ -253,22 +249,7 @@ void GameScene::Update(CommandContext& commandContext){
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
 	}
 
-	//コンピュートシェーダテスト
-	{
-		uint32_t* date = static_cast<uint32_t*>(Compute::GetData());
-
-		int a = date[3];
-		if (a  == 1) {
-			sphereColor_ = { 1.0f,0.0f,0.0f,1.0f };
-		}
-		else {
-			sphereColor_ = { 1.0f,1.0f,1.0f,1.0f };
-		}
-#ifdef _DEBUG
-		ImGui::Text("%d", int(a));
-#endif
-		compute_->Dispatch(commandContext);
-	}
+	compute_->Dispatch(commandContext);
 	
 #ifdef _DEBUG
 	//パーティクル
@@ -328,7 +309,6 @@ void GameScene::ModelDraw()
 	case GameScene::Scene::InGame:
 		skydome_->Draw();
 		inGameScene_->Draw();
-		sphere_->Draw(sphereColor_);
 		break;
 	case GameScene::Scene::Editor:
 		editorScene_->Draw();
@@ -347,7 +327,6 @@ void GameScene::ShadowDraw()
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->ShadowDraw();
-		sphere_->Draw();
 		break;
 	default:
 		break;
@@ -361,7 +340,6 @@ void GameScene::SpotLightShadowDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		sphere_->EnemyDraw({2.0f,3.0f}, *sphere_->GetWorldTransform());
 		inGameScene_->SpotLightShadowDraw();
 		break;
 	default:

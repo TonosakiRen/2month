@@ -88,8 +88,6 @@ private:
 
 	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<GameObject> sphere_;
-	Vector4 sphereColor_ = { 1.0f,1.0f,1.0f,1.0f };
-	UploadBuffer sphereIndex_;
 
 	std::unique_ptr<DustParticle> dustParticle_;
 

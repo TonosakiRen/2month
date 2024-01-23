@@ -13,10 +13,14 @@ struct PlayerDate {
     uint32_t id = 0u; //
 };
 
+class GlobalVariables;
+
 class Player : public GameObject {
 public:
 
     void Initialize(const std::string name);
+    void SetGlobalVariable();
+    void ApplyGlobalVariable();
     void Update();
     void Collision(Collider& otherCollider);
     void Draw();
@@ -39,7 +43,7 @@ private:
     Vector3 headModelSize_;
     float modelHeight_;
     struct JumpParameter {
-        Vector3 velocisity_;
+        Vector3 velocity_;
         Vector3 acceleration_;
         bool isJumped_ = false; // jump中か
     };
@@ -47,6 +51,7 @@ private:
 
     Input* input_ = nullptr;
     Audio* audio_ = nullptr;
+    GlobalVariables* globalVariables_ = nullptr;
     
     uint32_t headModelHandle_;
     WorldTransform headWorldTransform_;
@@ -60,6 +65,13 @@ private:
         uint32_t id_; //
     };
     AttackParameter attackParam_;
+
+    //調整項目
+    float jumpPower_ = 0.5f;
+    float speed_ = 0.3f;
+    float attackSpeed_ = 2.0f;
+    float backHeadSpeed_ = 0.3f;
+    float attackReadySpeed_ = 0.3f;
 
 public:
     Collider headCollider_;
