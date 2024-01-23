@@ -39,7 +39,9 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 
 	collider_.AdjustmentScale();
 	UpdateTransform();
-	MoveLight();
+	if (shadowSpotLights_) {
+		MoveLight();
+	}
 }
 
 void NormalLightEnemy::MoveLight() {

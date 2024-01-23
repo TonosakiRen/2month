@@ -1,6 +1,7 @@
 #include "NormalEnemy.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "Compute.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
@@ -57,16 +58,23 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (date.id == 0u) {
 		id_ = date.id;
 	}
-
+	bool isColl = false;
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
-		
+		isColl = true;
+	}
+
+	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
+	if (shadowDate[kNumber_] == 1) {
+		isColl = true;
+	}
+
+	if (isColl) {
 		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
 			isHit_ = true;
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
 		}
-
 		UpdateTransform();
 	}
 }
