@@ -33,7 +33,12 @@ void ShadowSpotLights::Update() {
     bufferData.reserve(lightNum);
 
 
+    //0.8
     const float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
+
+    //0.75
+    //const float fov = 80.0f * std::numbers::pi_v <float> / 180.0f;
+
     for (int i = 0; i < lightNum; i++) {
 
         lights_[i].worldTransform.Update();
@@ -54,6 +59,8 @@ void ShadowSpotLights::Update() {
         data.decay = lights_[i].decay;
         data.cosAngle = lights_[i].cosAngle;
         data.isActive = static_cast<float>(lights_[i].isActive);
+
+        float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
 
         data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance);
         data.shadowDescriptorHeapIndex = lights_[i].shadowDescriptorHeapIndex;

@@ -179,7 +179,7 @@ void GameScene::Update(CommandContext& commandContext){
 		directionalLights_.Update();
 
 #ifdef _DEBUG
-		ImGui::Begin("pointLight");
+		ImGui::Begin("pointLight1");
 		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[0].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &pointLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &pointLights_.lights_[0].intensity, 0.01f, 0.0f);
@@ -187,7 +187,7 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("decay", &pointLights_.lights_[0].decay, 0.01f, 0.0f);
 		ImGui::End();
 
-		ImGui::Begin("pointLight2");
+		ImGui::Begin("pointLight3");
 		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[1].worldTransform.translation_.x, 0.01f);
 		ImGui::DragFloat3("lightColor", &pointLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat("intensity", &pointLights_.lights_[1].intensity, 0.01f, 0.0f);
