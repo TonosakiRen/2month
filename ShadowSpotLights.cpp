@@ -60,7 +60,7 @@ void ShadowSpotLights::Update() {
         data.cosAngle = lights_[i].cosAngle;
         data.isActive = static_cast<float>(lights_[i].isActive);
 
-        float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
+        float fov = (231.0f - data.cosAngle * 100.0f * 2.0f) * std::numbers::pi_v <float> / 180.0f;
 
         data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance);
         data.shadowDescriptorHeapIndex = lights_[i].shadowDescriptorHeapIndex;

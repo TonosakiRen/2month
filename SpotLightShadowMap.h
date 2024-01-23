@@ -40,7 +40,7 @@ public:
 
 	static void PlayerDraw(uint32_t modelHandle, const WorldTransform& worldTransform);
 	static void EnemyDraw(const Vector2& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform);
-
+	static void EnemyDraw(const Vector2& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform,uint32_t unShadingLightIndex);
 private:
 	static void CreatePipeline();
 	static void CreateMesh();

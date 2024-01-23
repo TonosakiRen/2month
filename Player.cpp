@@ -184,7 +184,7 @@ void Player::MoveLimit() {
 	if (worldTransform_.translation_.y <= modelHeight_ / 2.0f - 1.0f) {
 		jumpParam_.isJumped_ = false;
 	}
-	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -8.0f + bodyModelSize_.z / 2.0f, FLT_MAX);
+	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -10.5f + bodyModelSize_.z / 2.0f, FLT_MAX);
 
 }
 

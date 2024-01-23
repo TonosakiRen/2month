@@ -267,3 +267,19 @@ void SpotLightShadowMap::EnemyDraw(const Vector2& enemyIndex, uint32_t modelHand
     }
 }
 
+void SpotLightShadowMap::EnemyDraw(const Vector2& enemyIndex, uint32_t modelHandle, const WorldTransform& worldTransform, uint32_t unShadingLightIndex)
+{
+    // CBVをセット（ワールド行列）
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kWorldTransform), worldTransform.GetGPUVirtualAddress());
+
+    commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), enemyIndex.x, enemyIndex.y);
+
+    for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
+        if (i != unShadingLightIndex) {
+            commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
+            commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
+            ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+        }
+    }
+}
+
