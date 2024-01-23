@@ -310,6 +310,7 @@
     <ClCompile Include="Game\Character\ThornEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Coin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -552,6 +553,7 @@
     <ClInclude Include="Game\Character\ThornEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
+    <ClInclude Include="Coin.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
