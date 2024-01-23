@@ -87,7 +87,7 @@ void GameScene::Initialize() {
 	shadowSpotLights_.lights_[1].direction = { 0.0f,0.0f,1.0f };
 	shadowSpotLights_.lights_[1].distance = 20.0f;
 	shadowSpotLights_.lights_[1].cosAngle = 0.8f;
-	shadowSpotLights_.lights_[1].isActive = true;
+	shadowSpotLights_.lights_[1].isActive = false;
 
 	shadowSpotLights_.Update();
 
