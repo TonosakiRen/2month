@@ -14,9 +14,14 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 
 	stage_ = std::make_unique<Stage>();
 	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);
+	stage_->SetPlayerRespawn(player_.get());
 
 	skydome_ = std::make_unique<Skydome>();
 	skydome_->Initialize("skydome");
+
+	enemy_ = std::make_unique<EnemyManager>();
+	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
+	enemy_->Load("test");
 
 	g = GlobalVariables::GetInstance();
 	g->ChackFiles(fileName_);
@@ -36,18 +41,31 @@ void CreateStageScene::Update() {
 
 	// 以下通常通りの更新処理
 	stage_->Update();
+	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();
 	skydome_->Update(player_->GetWorldTransform()->translation_);
 
-	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
-		player_->Collision(stage_->GetWallCollider(index));
-	}
+	stage_->Collision(player_.get());
+	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
+
 }
 
 void CreateStageScene::Draw() {
 	stage_->Draw();
+	enemy_->Draw();
 	player_->Draw();
 	skydome_->Draw();
+}
+
+void CreateStageScene::ShadowDraw() {
+	stage_->Draw();
+	enemy_->ShadowDraw();
+	player_->Draw();
+}
+
+void CreateStageScene::SpotLightShadowDraw() {
+	enemy_->SpotLightShadowDraw();
+	player_->Draw();
 }
 
 void CreateStageScene::DrawImGui() {
@@ -56,6 +74,9 @@ void CreateStageScene::DrawImGui() {
 	ImGui::Begin("CreateStage", nullptr, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("Initialize")) {
+			if (ImGui::Button("play")) {
+				isPlay = !isPlay;
+			}
 			if (ImGui::TreeNode("FileSave")) {
 				ImGui::InputText("FileName", itemName_, sizeof(itemName_));
 				if (ImGui::Button("Save")) {
@@ -65,6 +86,8 @@ void CreateStageScene::DrawImGui() {
 					g->SetValue(itemName_, "Player : Scale" + std::string(), player_->GetWorldTransform()->scale_);
 					g->SetValue(itemName_, "Player : Rotate" + std::string(), player_->GetWorldTransform()->quaternion_);
 					g->SetValue(itemName_, "Player : Translate" + std::string(), player_->GetWorldTransform()->translation_);
+
+					enemy_->Save(itemName_);
 
 					g->SaveFile(itemName_);
 				}
@@ -81,16 +104,12 @@ void CreateStageScene::DrawImGui() {
 					player_->GetWorldTransform()->scale_ = g->GetVector3Value(loadSelectName_, "Player : Scale");
 					player_->GetWorldTransform()->quaternion_ = g->GetQuaternionValue(loadSelectName_, "Player : Rotate");
 					player_->GetWorldTransform()->translation_ = g->GetVector3Value(loadSelectName_, "Player : Translate");
+
+					enemy_->Load(loadSelectName_);
 				}
 				ImGui::TreePop();
 			}
 			
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("isPlay")) {
-			if (ImGui::Button("play")) {
-				isPlay = !isPlay;
-			}
 			ImGui::EndMenu();
 		}
 
@@ -99,7 +118,7 @@ void CreateStageScene::DrawImGui() {
 			player_->DrawImGui();
 			ImGui::EndMenu();
 		}
-
+		enemy_->DrawImGui();
 
 		ImGui::EndMenuBar();
 	}

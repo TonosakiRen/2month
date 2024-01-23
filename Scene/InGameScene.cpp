@@ -13,6 +13,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 
 	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
+	enemy_->Load("test");
 
 }
 
@@ -38,6 +39,7 @@ void InGameScene::Draw() {
 }
 
 void InGameScene::ShadowDraw() {
+	stage_->Draw();
 	enemy_->ShadowDraw();
 	//plyerを最後にして
 	player_->Draw();

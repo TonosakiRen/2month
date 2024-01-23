@@ -131,7 +131,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -342,6 +342,9 @@ void GameScene::ShadowDraw()
 	case GameScene::Scene::InGame:
 		inGameScene_->ShadowDraw();
 		break;
+	case GameScene::Scene::Editor:
+		editorScene_->ShadowDraw();
+		break;
 	default:
 		break;
 	}
@@ -355,6 +358,9 @@ void GameScene::SpotLightShadowDraw()
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->SpotLightShadowDraw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->SpotLightShadowDraw();
 		break;
 	default:
 		break;

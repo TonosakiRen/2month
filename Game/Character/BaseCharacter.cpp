@@ -12,6 +12,7 @@ void BaseCharacter::DrawImGui() {
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
+	UpdateTransform();
 #endif // _DEBUG
 }
 
