@@ -20,7 +20,7 @@ public:
 		
 		ParameterNum
 	};
-	void Initialize(ShadowSpotLights& shadowSpotLights);
+	void Initialize(ColorBuffer* indexBuffer);
 	void Dispatch(CommandContext& commandContext);
 	static void* GetData();
 	void UnMap();
@@ -29,7 +29,7 @@ private:
 private:
 	PipelineState pipelineState_;
 	RootSignature rootSignature_;
-	ShadowSpotLights* shadowSpotLights_;
+	ColorBuffer* indexBuffer_;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
 	const uint32_t kNum = 1024;

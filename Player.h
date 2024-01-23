@@ -25,6 +25,7 @@ public:
     void Collision(Collider& otherCollider);
     void Draw();
     void DrawImGui();
+    void DrawUI();
 
     void CollisionProcess(const Vector3& pushBackVector);
 private:
@@ -72,6 +73,9 @@ private:
     float attackSpeed_ = 2.0f;
     float backHeadSpeed_ = 0.3f;
     float attackReadySpeed_ = 0.3f;
+
+    //UI
+    uint32_t hpHandle_;
 
 public:
     Collider headCollider_;

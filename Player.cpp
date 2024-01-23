@@ -2,6 +2,7 @@
 #include "ImGuiManager.h"
 #include "ModelManager.h"
 #include "GlobalVariables.h"
+#include "TextureManager.h"
 void Player::Initialize(const std::string name)
 {
 	input_ = Input::GetInstance();
@@ -46,6 +47,7 @@ void Player::Initialize(const std::string name)
 	globalVariables_ = GlobalVariables::GetInstance();
 	SetGlobalVariable();
 
+	hpHandle_ = TextureManager::Load("hp.png");
 }
 
 void Player::SetGlobalVariable()
@@ -129,6 +131,11 @@ void Player::DrawImGui() {
 	bodyWorldTransform_.Update();
 	headWorldTransform_.Update();
 #endif // _DEBUG
+}
+
+void Player::DrawUI()
+{
+
 }
 
 void Player::CollisionProcess(const Vector3& pushBackVector) {

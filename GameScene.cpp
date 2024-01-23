@@ -81,6 +81,14 @@ void GameScene::Initialize() {
 	shadowSpotLights_.lights_[0].cosAngle = 0.8f;
 	shadowSpotLights_.lights_[0].isActive = true;
 
+	shadowSpotLights_.lights_[1].worldTransform.translation_ = { 0.0f + 5.0f,1.3f,-12.0f };
+	shadowSpotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
+	shadowSpotLights_.lights_[1].intensity = 5.5f;
+	shadowSpotLights_.lights_[1].direction = { 0.0f,0.0f,1.0f };
+	shadowSpotLights_.lights_[1].distance = 20.0f;
+	shadowSpotLights_.lights_[1].cosAngle = 0.8f;
+	shadowSpotLights_.lights_[1].isActive = true;
+
 	shadowSpotLights_.Update();
 
 	// InGameSceneの生成と初期化
@@ -116,8 +124,6 @@ void GameScene::Initialize() {
 	whiteParticle_->SetIsEmit(true);
 	whiteParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
 
-	compute_ = std::make_unique<Compute>();
-	compute_->Initialize(shadowSpotLights_);
 
 	size_t bgmHandle = audio_->SoundLoadWave("BGM.wav");
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
@@ -232,6 +238,16 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
 		ImGui::End();
 
+		ImGui::Begin("shadowSpotLight2");
+		ImGui::DragFloat3("lightPosition", &shadowSpotLights_.lights_[1].worldTransform.translation_.x, 0.01f);
+		ImGui::DragFloat3("lightColor", &shadowSpotLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat("intensity", &shadowSpotLights_.lights_[1].intensity, 0.01f, 0.0f);
+		ImGui::DragFloat3("direction", &shadowSpotLights_.lights_[1].direction.x, 0.01f, 0.0f);
+		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[1].distance, 0.01f, 0.0f);
+		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[1].decay, 0.01f, 0.0f);
+		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[1].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
+		ImGui::End();
+
 #endif
 		shadowSpotLights_.lights_[0].lockUp = { 0.0f,1.0f,0.0f };
 		shadowSpotLights_.lights_[0].direction = Normalize(shadowSpotLights_.lights_[0].direction);
@@ -248,8 +264,6 @@ void GameScene::Update(CommandContext& commandContext){
 		//SceneUpdate
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
 	}
-
-	compute_->Dispatch(commandContext);
 	
 #ifdef _DEBUG
 	//パーティクル

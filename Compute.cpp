@@ -11,7 +11,7 @@ using namespace Microsoft::WRL;
 
 void* Compute::data_ = nullptr;
 
-void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
+void Compute::Initialize(ColorBuffer* indexBuffer)
 {
 
 	CreatePipeline();
@@ -54,7 +54,7 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 
 	copyBuffer_->Map(0, nullptr, &data_);
 
-	shadowSpotLights_ = &shadowSpotLights;
+	indexBuffer_ = indexBuffer;
 }
 
 void Compute::Dispatch(CommandContext& commandContext)
@@ -69,10 +69,9 @@ void Compute::Dispatch(CommandContext& commandContext)
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kEnemyNum), EnemyManager::kMaxEnemyCount);
 
-	for (int i = 0; i < ShadowSpotLights::lightNum;i++) {
-		commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), shadowSpotLights_->lights_[i].collisionData.GetSRV());
-		commandContext.Dispatch(kNum, kNum, 1);
-	}
+	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), indexBuffer_->GetSRV());
+	commandContext.Dispatch(indexBuffer_->GetWidth(), indexBuffer_->GetHeight(), 1);
+	
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 	
 }
