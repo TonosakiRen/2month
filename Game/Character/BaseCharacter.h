@@ -36,9 +36,10 @@ protected:
 	std::vector<GameObject> models_; // 複数モデル用
 	std::vector<WorldTransform> modelsTransform_;
 	const uint32_t kNumber_;
+	bool isAlive_ = true; // 生きているか
 
 public:
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
-
+	const bool& GetIsAlive() const { return isAlive_; }
 
 };

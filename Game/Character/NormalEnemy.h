@@ -9,7 +9,7 @@ public: // 仮想関数
 	void Draw() override;
 	void EnemyDraw() override;
 
-private:
+protected:
 	void Move(const Vector3& playerPosition);
 	void KnockBack();
 

@@ -12,7 +12,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();
-	enemy_->Initialize();
+	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
 
 }
 
