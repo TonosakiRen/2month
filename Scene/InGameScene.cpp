@@ -7,13 +7,15 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
+	std::string filePath = "test";
+
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);
+	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights);
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
-	enemy_->Load("test");
+	enemy_->Load(filePath);
 
 }
 

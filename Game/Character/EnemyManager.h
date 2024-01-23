@@ -6,6 +6,7 @@
 #include "NormalEnemy.h"
 #include "NormalLightEnemy.h"
 #include "ThornEnemy.h"
+#include "StandLightEnemy.h"
 
 class SpotLights;
 class PointLights;
@@ -41,5 +42,6 @@ public:
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 	std::vector<std::unique_ptr<NormalLightEnemy>> nLightEnemis_;
 	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;
+	std::vector<std::unique_ptr<StandLightEnemy>> sLightEnemis_;
 
 };

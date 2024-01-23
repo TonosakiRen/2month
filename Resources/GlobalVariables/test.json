@@ -1,5 +1,6 @@
 {
     "test": {
+        "CoinConfirmation": 0,
         "FloorConfirmation": 2,
         "FloorNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -114,6 +115,26 @@
             -8.10000228881836,
             0.7840555906295776,
             -7.967209815979004
+        ],
+        "StandLightEnemyConfirmation": 1,
+        "StandLightEnemyNumber : 0 : FlashCount": 3,
+        "StandLightEnemyNumber : 0 : Interval": 6,
+        "StandLightEnemyNumber : 0 : MaxTime": 60,
+        "StandLightEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "StandLightEnemyNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StandLightEnemyNumber : 0 : Translate": [
+            -2.5999999046325684,
+            2.4000000953674316,
+            0.0
         ],
         "ThornEnemyConfirmation": 2,
         "ThornEnemyEnemyNumber : 0 : Rotate": [

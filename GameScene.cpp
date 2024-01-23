@@ -175,7 +175,6 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
 		ImGui::End();
 
-		
 #endif
 		directionalLights_.lights_[0].direction = Normalize(directionalLights_.lights_[0].direction);
 		directionalLights_.Update();
