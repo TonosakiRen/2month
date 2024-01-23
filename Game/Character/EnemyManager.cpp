@@ -33,12 +33,12 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
 	}
 
-	/*if (!nLightEnemis_.empty()) { nLightEnemis_.clear(); }
+	if (!nLightEnemis_.empty()) { nLightEnemis_.clear(); }
 	const uint32_t kMaxNormalLightEnemyCount = 1u;
 	for (uint32_t index = 0u; index < kMaxNormalLightEnemyCount; index++) {
 		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
 		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
-		enemy->SetLight(shadowSpotLights_->lights_[index]);*/
+		enemy->SetLight(shadowSpotLights_, index);
 	}
 
 	if (!tEnemis_.empty()) { tEnemis_.clear(); }
@@ -56,6 +56,10 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Update(playerPosition);
 	}
+	for (auto& enemy : nLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Update(playerPosition);
+	}
 	for (auto& enemy : tEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Update(playerPosition);
@@ -64,6 +68,10 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 
 void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
 	for (auto& enemy : nEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->OnCollision(collider, date);
+	}
+	for (auto& enemy : nLightEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->OnCollision(collider, date);
 	}
@@ -78,6 +86,10 @@ void EnemyManager::Draw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : nLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 	for (auto& enemy : tEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
@@ -89,6 +101,10 @@ void EnemyManager::ShadowDraw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : nLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 	for (auto& enemy : tEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
@@ -97,6 +113,10 @@ void EnemyManager::ShadowDraw() {
 
 void EnemyManager::SpotLightShadowDraw() {
 	for (auto& enemy : nEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->EnemyDraw();
+	}
+	for (auto& enemy : nLightEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->EnemyDraw();
 	}
