@@ -171,7 +171,6 @@ void Player::Move() {
 	if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
 		worldTransform_.translation_ += move;
 		worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_,MakeLookRotation(direction));
-
 	}
 	
 }
