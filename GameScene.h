@@ -103,6 +103,9 @@ private:
 	std::unique_ptr<InGameScene> inGameScene_;
 	std::unique_ptr<CreateStageScene> editorScene_;
 
+	Collider unchi_;
+	Collider unchi2_;
+
 	//Scene
 	enum class Scene {
 		Title,

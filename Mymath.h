@@ -621,6 +621,18 @@ inline Matrix4x4& operator*=(Matrix4x4& m1, const Matrix4x4& m2) {
 
 #pragma endregion
 #pragma region Vector3算出
+
+inline float GetMostValue(Vector3 v) {
+	float result = v.x;
+	if (result < v.y) {
+		result = v.y;
+	}
+	if (result < v.z) {
+		result = v.z;
+	}
+	return result;
+}
+
 inline Vector3 GetXAxis(Matrix4x4 m) {
 
 	return { m.m[0][0],m.m[0][1],m.m[0][2] };

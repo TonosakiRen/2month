@@ -20,7 +20,7 @@ public:
 private:
 
 public:
-	const uint32_t kMaxEnemyCount = 10u;
+	static const uint32_t kMaxEnemyCount = 10u;
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 
 };

@@ -108,7 +108,7 @@ void GameScene::Initialize() {
 	sphere_->SetPosition({ 0.0f,8.0f,0.0f });
 	sphere_->UpdateMatrix();
 
-	Vector2 sphereCollision = {2.0f,1.0f};
+	Vector2 sphereCollision = {2.0f,3.0f};
 	sphereIndex_.Create(sizeof(Vector2));
 	sphereIndex_.Copy(sphereCollision);
 
@@ -134,6 +134,8 @@ void GameScene::Initialize() {
 		ViewProjection::isUseDebugCamera = true;
 	}
 
+	unchi_.Initialize("aa");
+	unchi2_.Initialize("aaa");
 }
 
 void GameScene::Update(CommandContext& commandContext){
@@ -256,11 +258,10 @@ void GameScene::Update(CommandContext& commandContext){
 
 	//コンピュートシェーダテスト
 	{
-		uint32_t* date = static_cast<uint32_t*>(compute_->GetData());
+		uint32_t* date = static_cast<uint32_t*>(Compute::GetData());
 
-		int a = date[0];
-		int b = date[1];
-		if (a && b == 1) {
+		int a = date[3];
+		if (a  == 1) {
 			sphereColor_ = { 1.0f,0.0f,0.0f,1.0f };
 		}
 		else {
@@ -281,6 +282,12 @@ void GameScene::Update(CommandContext& commandContext){
 	whiteParticle_->SetIsEmit(false);
 	whiteParticle_->Update();
 #endif
+	Vector3 push;
+	int a = unchi_.Collision(unchi2_, push,Collider::kSphere);
+	ImGui::Text("aaaaaa%d", a);
+	unchi_.worldTransform_.translation_ += push;
+	unchi_.AdjustmentScale();
+	unchi2_.AdjustmentScale();
 }
 
 void GameScene::TitleInitialize() {
@@ -331,6 +338,8 @@ void GameScene::ModelDraw()
 		skydome_->Draw();
 		inGameScene_->Draw();
 		sphere_->Draw(sphereColor_);
+		unchi_.Draw();
+		unchi2_.Draw();
 		break;
 	case GameScene::Scene::Editor:
 		editorScene_->Draw();
@@ -363,7 +372,7 @@ void GameScene::SpotLightShadowDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		sphere_->EnemyDraw({2.0f,1.0f}, *sphere_->GetWorldTransform());
+		sphere_->EnemyDraw({2.0f,3.0f}, *sphere_->GetWorldTransform());
 		inGameScene_->SpotLightShadowDraw();
 		break;
 	default:

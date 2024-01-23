@@ -1,13 +1,18 @@
-RWStructuredBuffer<uint> Output : register(u0);
+RWStructuredBuffer<uint32_t> Output : register(u0);
 Texture2D<float4> colorTex : register(t0);
 SamplerState smp : register(s0);
-
+struct Enemy {
+	uint32_t num;
+};
+ConstantBuffer<Enemy> enemy : register(b0);
 [numthreads(1, 1, 1)]
 void main( uint3 DTid : SV_DispatchThreadID)
 {
 	if (DTid.x == 0 && DTid.y == 0) {
 		uint v;
-		InterlockedExchange(Output[0], 0, v);
+		for (int i = 0; i < enemy.num;i++) {
+			InterlockedExchange(Output[i], 0, v);
+		}
 	}
 
 	float32_t2 centerData = colorTex[DTid.xy].xy;
@@ -46,23 +51,19 @@ void main( uint3 DTid : SV_DispatchThreadID)
 	if (centerData.x == 1.0f){
 		if (topData.x == 2.0f ) {
 			uint v;
-			InterlockedExchange(Output[0], 1, v);
-			InterlockedExchange(Output[1], topData.y,v );
+			InterlockedExchange(Output[topData.y], 1, v);
 		}
 		else if (bottomData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[0], 1, v);
-			InterlockedExchange(Output[1], bottomData.y, v);
+			InterlockedExchange(Output[bottomData.y], 1, v);
 		}
 		else if (leftData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[0], 1, v);
-			InterlockedExchange(Output[1], rightData.y, v);
+			InterlockedExchange(Output[leftData.y], 1, v);
 		}
 		else if (rightData.y == 2.0f) {
 			uint v;
-			InterlockedExchange(Output[0], 1, v);
-			InterlockedExchange(Output[1], leftData.y, v);
+			InterlockedExchange(Output[rightData.y], 1, v);
 		}
 	}
 	

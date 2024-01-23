@@ -10,15 +10,19 @@ class ShadowSpotLights;
 class Compute
 {
 public:
+
+	static void* data_;
+
 	enum class RootParameter {
 		kRwStructure,
 		kColorTexture,
+		kEnemyNum,
 		
 		ParameterNum
 	};
 	void Initialize(ShadowSpotLights& shadowSpotLights);
 	void Dispatch(CommandContext& commandContext);
-	void* GetData();
+	static void* GetData();
 	void UnMap();
 private:
 	void CreatePipeline();
@@ -28,7 +32,6 @@ private:
 	ShadowSpotLights* shadowSpotLights_;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
-	void* data_;
 	const uint32_t kNum = 1024;
 	DescriptorHandle uavHandle_;
 };

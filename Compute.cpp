@@ -5,8 +5,11 @@
 #include "Helper.h"
 #include <assert.h>
 #include "ShadowSpotLights.h"
+#include "Game/Character/EnemyManager.h"
 
 using namespace Microsoft::WRL;
+
+void* Compute::data_ = nullptr;
 
 void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 {
@@ -14,8 +17,8 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 	CreatePipeline();
 
 	auto device = DirectXCommon::GetInstance()->GetDevice();
-	uint32_t bufferSize[2];
-	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+	uint32_t bufferSize;
+	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
 	D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
 	device->CreateCommittedResource(
 		&heapProps,
@@ -30,7 +33,7 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 	D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
 	viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 	viewDesc.Buffer.NumElements = 1;
-	viewDesc.Buffer.StructureByteStride = sizeof(bufferSize);
+	viewDesc.Buffer.StructureByteStride = sizeof(bufferSize) * EnemyManager::kMaxEnemyCount;
 	device->CreateUnorderedAccessView(
 		rwStructureBuffer_,
 		nullptr,
@@ -38,7 +41,7 @@ void Compute::Initialize(ShadowSpotLights& shadowSpotLights)
 		uavHandle_
 	);
 
-	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)));
+	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount));
 	D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
 	device->CreateCommittedResource(
 		&copyHeapProps,
@@ -64,6 +67,8 @@ void Compute::Dispatch(CommandContext& commandContext)
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
+	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kEnemyNum), EnemyManager::kMaxEnemyCount);
+
 	for (int i = 0; i < ShadowSpotLights::lightNum;i++) {
 		commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), shadowSpotLights_->lights_[i].collisionData.GetSRV());
 		commandContext.Dispatch(kNum, kNum, 1);
@@ -96,6 +101,7 @@ void Compute::CreatePipeline()
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
+	rootparams[(int)RootParameter::kEnemyNum].InitAsConstants(1, 0);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =
