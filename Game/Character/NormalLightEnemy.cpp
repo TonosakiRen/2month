@@ -12,7 +12,9 @@ void NormalLightEnemy::SetLight(ShadowSpotLights* shadowlight, const uint32_t& n
 	number_ = num;
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.SetParent(&worldTransform_);
-	light.worldTransform.SetIsRotateParent(false);
+	//light.worldTransform.SetIsRotateParent(false);
+	offset = Vector3(0.0f, -1.1f, -1.0f);
+	light.distance = 30.0f;
 }
 
 void NormalLightEnemy::Update(const Vector3& playerPosition) {
@@ -20,6 +22,7 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 	float distance = Distance(playerPosition, worldTransform_.translation_);
 	ImGui::Begin("Enemy");
 	DrawImGui();
+	ImGui::DragFloat3("Offset", &offset.x, 0.1f);
 	ImGui::End();
 
 	const float kMaxDistance = 50.0f;
@@ -30,7 +33,7 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 	}
 
 	if (!isHit_) {
-		Move(playerPosition);
+		lightDirection_ = Move(playerPosition);
 	}
 	else {
 		KnockBack();
@@ -45,7 +48,7 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 
 void NormalLightEnemy::MoveLight() {
 	auto& light = shadowSpotLights_->lights_.at(number_);
-	light.worldTransform.translation_ = Vector3(0.0f, 0.0f, 1.5f);
+	light.worldTransform.translation_ = offset;
 	light.worldTransform.quaternion_ = worldTransform_.quaternion_;
-	light.direction;
+	light.direction = lightDirection_;
 }

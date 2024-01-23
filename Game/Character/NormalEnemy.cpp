@@ -88,7 +88,7 @@ void NormalEnemy::EnemyDraw() {
 	BaseEnemyDraw();
 }
 
-void NormalEnemy::Move(const Vector3& playerPosition) {
+Vector3 NormalEnemy::Move(const Vector3& playerPosition) {
 
 	Vector3 vec = playerPosition - worldTransform_.translation_;
 	vec = Normalize(vec);
@@ -105,6 +105,7 @@ void NormalEnemy::Move(const Vector3& playerPosition) {
 	worldTransform_.translation_ += vec * kSpeed;
 	UpdateTransform();
 
+	return vec;
 }
 
 void NormalEnemy::KnockBack() {
