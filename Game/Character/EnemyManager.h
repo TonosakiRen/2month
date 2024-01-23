@@ -1,8 +1,10 @@
 #pragma once
-#include "NormalEnemy.h"
-#include "NormalLightEnemy.h"
 #include <vector>
 #include <memory>
+
+#include "NormalEnemy.h"
+#include "NormalLightEnemy.h"
+#include "ThornEnemy.h"
 
 class SpotLights;
 class PointLights;
@@ -31,5 +33,6 @@ public:
 	static const uint32_t kMaxEnemyCount = 10u;
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 	std::vector<std::unique_ptr<NormalLightEnemy>> nLightEnemis_;
+	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;
 
 };

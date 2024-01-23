@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Collider.h"
 #include "ImGuiManager.h"
-#include "UploadBuffer.h"
+#include "WorldTransform.h"
 #include <vector>
 #include <string>
 
