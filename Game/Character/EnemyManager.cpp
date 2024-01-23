@@ -38,7 +38,7 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	for (uint32_t index = 0u; index < kMaxNormalLightEnemyCount; index++) {
 		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
 		enemy->Initialize(respawn[index].scale, respawn[index].rotate, respawn[index].translate);
-		//enemy->SetLight(shadowSpotLights_, index);
+		enemy->SetLight(shadowSpotLights_, index);
 	}
 
 	if (!tEnemis_.empty()) { tEnemis_.clear(); }

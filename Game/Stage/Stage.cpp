@@ -257,6 +257,35 @@ void Stage::Save(const char* itemName) {
 
 }
 
+void Stage::Collision(Player* player) {
+	Vector3 pushBackVector;
+	for (auto& wall : walls_) {
+		if(wall->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	for (auto& floor : floors_) {
+		if(floor->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	for (auto& truck : trucks_) {
+		if(truck->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	for (auto& woodbox : woodboxs_) {
+		if(woodbox->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	//player->worldTransform_.Update();
+}
+
 void Stage::SetPlayerRespawn(Player* const player) const {
 	player->GetWorldTransform()->scale_ = playerRespawnPoint_.scale;
 	player->GetWorldTransform()->quaternion_ = playerRespawnPoint_.rotate;

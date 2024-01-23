@@ -21,6 +21,8 @@ public:
     void Collision(Collider& otherCollider);
     void Draw();
     void DrawImGui();
+
+    void CollisionProcess(const Vector3& pushBackVector);
 private:
     void Move();
     void Jump();

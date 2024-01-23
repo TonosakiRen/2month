@@ -10,7 +10,6 @@ NormalLightEnemy::~NormalLightEnemy() {
 void NormalLightEnemy::SetLight(ShadowSpotLights* shadowlight, const uint32_t& num) {
 	shadowSpotLights_ = shadowlight;
 	number_ = num;
-	//MoveLight();
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.SetParent(&worldTransform_);
 	light.worldTransform.SetIsRotateParent(false);
@@ -48,5 +47,5 @@ void NormalLightEnemy::MoveLight() {
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.translation_ = Vector3(0.0f, 0.0f, 1.5f);
 	light.worldTransform.quaternion_ = worldTransform_.quaternion_;
-	//light.direction = 
+	light.direction;
 }
