@@ -38,5 +38,5 @@ public:
 private:
 	uint32_t timer_ = 0u;
 	std::list<std::unique_ptr<Bullet>> bullets_;
-	bool isActive_ = false;
+	bool isActive_ = false; // 起動しているか
 };

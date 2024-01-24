@@ -41,7 +41,7 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 		Move(playerPosition);
 	}
 	else {
-		KnockBack();
+		CollisionProcess();
 	}
 
 	collider_.AdjustmentScale();
@@ -66,9 +66,11 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 	if (isColl) {
 		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
+			// 当たった瞬間
 			isHit_ = true;
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
+			hp_ -= date.damage_;
 		}
 		UpdateTransform();
 	}
@@ -114,5 +116,28 @@ void NormalEnemy::KnockBack() {
 		isHit_ = false;
 		count = 0;
 	}
+
+}
+
+void NormalEnemy::DownAnimation() {
+	worldTransform_.translation_.y += 0.5f;
+	rotate.y += 2.0f;
+	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
+	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
+	if (60.0f < count++) {
+		isAlive_ = false;
+	}
+}
+
+void NormalEnemy::CollisionProcess() {
+
+	// 死亡した時
+	if (hp_ <= 0) {
+		DownAnimation();
+		return;
+	}
+
+	// 衝突時にノックバックとアニメーション
+	KnockBack();
 
 }
