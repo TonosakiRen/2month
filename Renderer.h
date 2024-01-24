@@ -14,6 +14,7 @@
 #include "LightNumBuffer.h"
 #include "ShadowEdgeRenderer.h"
 #include "ShadowIsCollision.h"
+#include "DepthRenderer.h"
 
 class viewProjection;
 class DirectionalLights;
@@ -70,6 +71,7 @@ private:
 
     std::unique_ptr<ColorBuffer> colorBuffers_[kRenderTargetNum];
     std::unique_ptr<DepthBuffer> mainDepthBuffer_;
+    std::unique_ptr<DepthBuffer> nonCharacterDepthBuffer_;
 
     std::unique_ptr<ColorBuffer> resultBuffer_;
 

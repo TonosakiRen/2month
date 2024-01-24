@@ -33,41 +33,25 @@ void main( uint3 DTid : SV_DispatchThreadID)
 	    //テクスチャーのサイズ
 	    colorTex.GetDimensions(texSize.x, texSize.y);
 	    
-	    if (DTid.x == 0) {
-	    	leftIndex = DTid.xy;
-	    }
-	    
-	    if (DTid.x == texSize.x) {
-	    	rightIndex = DTid.xy;
-	    }
-	    
-	    if (DTid.y == 0) {
-	    	topIndex = DTid.xy;
-	    }
-	    
-	    if (DTid.y == texSize.y) {
-	    	bottomIndex = DTid.xy;
-	    }
-	    
 	    topData = colorTex[topIndex].xyz;
 	    bottomData = colorTex[bottomIndex].xyz;
 	    leftData = colorTex[leftIndex].xyz;
 	    rightData = colorTex[rightIndex].xyz;
 	    
 	    
-	    if (topData.y == 2.0f ) {
+	    if (topData.y == 2.0f && DTid.y != 0.0f) {
 	    	uint v;
 	    	InterlockedExchange(Output[topData.z], 1, v);
 	    }
-	    else if (bottomData.y == 2.0f) {
+	    else if (bottomData.y == 2.0f && DTid.y != 720) {
 	    	uint v;
 	    	InterlockedExchange(Output[bottomData.z], 1, v);
 	    }
-	    else if (leftData.y == 2.0f) {
+	    else if (leftData.y == 2.0f && DTid.x != 0.0f) {
 	    	uint v;
 	    	InterlockedExchange(Output[leftData.z], 1, v);
 	    }
-	    else if (rightData.y == 2.0f) {
+	    else if (rightData.y == 2.0f && DTid.x != 1280) {
 	    	uint v;
 	    	InterlockedExchange(Output[rightData.z], 1, v);
 	    }

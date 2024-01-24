@@ -35,6 +35,7 @@ public:
 	void Initialize();
 	void Update(CommandContext& commandContext);
 	void ModelDraw();
+	void DepthDraw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
 	void ParticleDraw();

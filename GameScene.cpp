@@ -339,6 +339,22 @@ void GameScene::ModelDraw()
 	
 }
 
+void GameScene::DepthDraw()
+{
+	switch (scene_)
+	{
+	case GameScene::Scene::Title:
+		break;
+	case GameScene::Scene::InGame:
+		inGameScene_->StageDepthDraw();;
+		break;
+	case GameScene::Scene::Editor:
+		break;
+	default:
+		break;
+	}
+}
+
 void GameScene::ShadowDraw()
 {
 	switch (scene_)
@@ -422,6 +438,7 @@ void GameScene::PostSpriteDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
+		inGameScene_->DrawUI();
 		ui_->Draw();
 		break;
 	default:
@@ -453,6 +470,11 @@ void GameScene::Draw(CommandContext& commandContext) {
 	ParticleBox::PreDraw(&commandContext, *currentViewProjection_);
 	ParticleBoxDraw();
 	ParticleBox::PostDraw();
+
+	//3Dオブジェクト描画
+	DepthRenderer::PreDraw(&commandContext, *currentViewProjection_);
+	DepthDraw();
+	DepthRenderer::PostDraw();
 
 }
 

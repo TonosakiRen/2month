@@ -47,7 +47,7 @@ void ThornEnemy::Draw() {
 }
 
 void ThornEnemy::EnemyDraw() {
-	BaseEnemyDraw();
+	//BaseEnemyDraw();
 }
 
 void ThornEnemy::DrawImGui() {

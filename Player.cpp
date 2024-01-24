@@ -3,6 +3,12 @@
 #include "ModelManager.h"
 #include "GlobalVariables.h"
 #include "TextureManager.h"
+#include "./Game/Character/EnemyManager.h"
+
+int32_t Player::hitShadowEnemyIndex_ = -1;
+Vector3 Player::hitShadowEnemyPos_ = {0.0f,0.0f,0.0f};
+Collider* Player::hitCollider_ = nullptr;
+
 void Player::Initialize(const std::string name)
 {
 	input_ = Input::GetInstance();
@@ -47,7 +53,9 @@ void Player::Initialize(const std::string name)
 	globalVariables_ = GlobalVariables::GetInstance();
 	SetGlobalVariable();
 
-	hpHandle_ = TextureManager::Load("hp.png");
+	uint32_t hpHandle = TextureManager::Load("hp.png");
+	hpSprite_.Initialize(hpHandle, { 180.0f,680.0f });
+	hpSprite_.size_ = {285.0f,32.0f};
 }
 
 void Player::SetGlobalVariable()
@@ -59,6 +67,9 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "attackSpeed_", attackSpeed_);
 	globalVariables_->AddItem(name, "backHeadSpeed_", backHeadSpeed_);
 	globalVariables_->AddItem(name, "attackReadySpeed_", attackReadySpeed_);
+	globalVariables_->AddItem(name, "knockBackPowerX_", knockBackPowerX_);
+	globalVariables_->AddItem(name, "knockBackPowerY_", knockBackPowerY_);
+	globalVariables_->AddItem(name, "damage_", damage_);
 	globalVariables_->LoadFile(name);
 	ApplyGlobalVariable();
 }
@@ -71,6 +82,9 @@ void Player::ApplyGlobalVariable()
 	attackSpeed_ = globalVariables_->GetFloatValue(name, "attackSpeed_");
 	backHeadSpeed_ = globalVariables_->GetFloatValue(name, "backHeadSpeed_");
 	attackReadySpeed_ = globalVariables_->GetFloatValue(name, "attackReadySpeed_");
+	knockBackPowerX_ = globalVariables_->GetFloatValue(name, "knockBackPowerX_");
+	knockBackPowerY_ = globalVariables_->GetFloatValue(name, "knockBackPowerY_");
+	damage_ = globalVariables_->GetIntValue(name, "damage_");
 }
 
 void Player::Update()
@@ -79,35 +93,34 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("Player");
 	DrawImGui();
+	ImGui::DragFloat2("hpBar", &hpSprite_.position_.x);
+	ImGui::DragFloat2("hpBarSize", &hpSprite_.size_.x);
 	ImGui::End();
 #endif
 
-	Move();
-	Jump();
+	if (!isKnockBack_) {
+		Move();
+		Jump();
+	}
 	Attack();
+
+	jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
+	jumpParam_.velocity_ += jumpParam_.acceleration_;
+	worldTransform_.translation_ += jumpParam_.velocity_;
 
 	MoveLimit();
 	
 	UpdateTrans();
 	InsertData();
+	UIUpdate();
 }
 
-void Player::Collision(Collider& otherCollider)
+void Player::UIUpdate()
 {
-	Vector3 pushBackVector;
- 	if (bodyCollider_.Collision(otherCollider, pushBackVector)) {
-		worldTransform_.translation_ += pushBackVector;
-		worldTransform_.Update();
-		bodyWorldTransform_.Update();
-		headWorldTransform_.Update();
-	}
-	if (headCollider_.Collision(otherCollider, pushBackVector)) {
-		worldTransform_.translation_ += pushBackVector;
-		worldTransform_.Update();
-		bodyWorldTransform_.Update();
-		headWorldTransform_.Update();
-	}
-
+	hp_;
+	hp_ = clamp(hp_, 0, maxHp_);
+	//285
+	hpSprite_.size_.x = 285.0f * (hp_ / float(maxHp_));
 }
 
 void Player::Draw() {
@@ -116,6 +129,36 @@ void Player::Draw() {
 	
 	headCollider_.Draw();
 	GameObject::PlayerDraw(headWorldTransform_, headModelHandle_);
+}
+
+void Player::EnemyShadowCollision()
+{
+	if (hitShadowEnemyIndex_ != -1) {
+		if (attackParam_.id_ != 1) {
+			if (isKnockBack_ == false) {
+				isKnockBack_ = true;
+				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
+				knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
+				jumpParam_.velocity_ += {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
+				hp_ -= damage_;
+			}
+		}
+	}
+}
+
+void Player::EnemyCollision()
+{
+	if (hitCollider_) {
+		if (attackParam_.id_ != 1) {
+			if (isKnockBack_ == false) {
+				isKnockBack_ = true;
+				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+				knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,vec.z });
+				jumpParam_.velocity_ += {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
+				hp_ -= damage_;
+			}
+		}
+	}
 }
 
 void Player::DrawImGui() {
@@ -135,10 +178,11 @@ void Player::DrawImGui() {
 
 void Player::DrawUI()
 {
-
+	hpSprite_.Draw();
 }
 
 void Player::CollisionProcess(const Vector3& pushBackVector) {
+	pushBackVector_ = pushBackVector;
 	worldTransform_.translation_ += pushBackVector;
 	// 座標更新
 	worldTransform_.Update();
@@ -146,6 +190,9 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 	headWorldTransform_.Update();
 	if (Normalize(pushBackVector).y == 1.0f) {
 		jumpParam_.isJumped_ = false;
+		isKnockBack_ = false;
+		jumpParam_.velocity_.x = 0.0f;
+		jumpParam_.velocity_.z = 0.0f;
 	}
 }
 
@@ -190,22 +237,22 @@ void Player::Jump() {
 		audio_->SetValume(jumpHandle, 0.1f);
 		jumpParam_.isJumped_ = true;
 	}
-	jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
-	jumpParam_.velocity_ += jumpParam_.acceleration_;
-	worldTransform_.translation_ += jumpParam_.velocity_;
+
 }
 
 void Player::Attack() {
-	if ((input_->TriggerKey(DIK_V) || input_->TriggerButton(XINPUT_GAMEPAD_X)) && !attackParam_.isAttacked) {
+	if ((input_->TriggerKey(DIK_V) || input_->TriggerButton(XINPUT_GAMEPAD_X)) && !attackParam_.isAttacked && !isKnockBack_) {
 		attackParam_.phase = 0;
 		attackParam_.isAttacked = true;
-		attackParam_.id_++;
 	}
 	if (attackParam_.isAttacked) {
 		switch (attackParam_.phase) {
 		case 0: 
 			//頭が後ろに下がる
 			headRotate.x -= attackReadySpeed_;
+			if (isKnockBack_) {
+				attackParam_.phase = 3;
+			}
 			if (headRotate.x <= -30.0f) {
 				headRotate.x = -30.0f;
 				attackParam_.phase = 1;
@@ -214,6 +261,7 @@ void Player::Attack() {
 		case 1:
 			//頭でattackする
 			headRotate.x += attackSpeed_;
+			attackParam_.id_ = 1;
 			if (headRotate.x >= 90.0f) {
 				attackParam_.phase = 2;
 			}
@@ -221,11 +269,19 @@ void Player::Attack() {
 		case 2:
 			//頭で元の位置に戻る
 			headRotate.x -= backHeadSpeed_;
+			attackParam_.id_ = 0u;
 			if (headRotate.x <= 0.0f) {
 				headRotate.x = 0.0f;
 				attackParam_.isAttacked = false;
 			}
+		case 3:
+			//攻撃準備中にノックバックしてしまって頭で元の位置に戻る
+			headRotate.x += backHeadSpeed_;
 			attackParam_.id_ = 0u;
+			if (headRotate.x >= 0.0f) {
+				headRotate.x = 0.0f;
+				attackParam_.isAttacked = false;
+			}
 			break;
 		}
 	}

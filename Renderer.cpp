@@ -46,6 +46,11 @@ void Renderer::Initialize() {
     mainDepthBuffer_ = std::make_unique<DepthBuffer>();
     mainDepthBuffer_->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_D32_FLOAT);
 
+
+    nonCharacterDepthBuffer_ = std::make_unique<DepthBuffer>();
+    nonCharacterDepthBuffer_->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_D32_FLOAT);
+    DepthRenderer::SetDepthBuffer(nonCharacterDepthBuffer_.get());
+
     float clearNormal[4] = { 0.0f,0.0f,0.0f,1.0f };
     colorBuffers_[kNormal] = std::make_unique<ColorBuffer>();
     colorBuffers_[kNormal]->SetClearColor(clearNormal);
@@ -63,7 +68,7 @@ void Renderer::Initialize() {
     shadowTexture_->Create(colorBuffers_[kColor]->GetWidth(), colorBuffers_[kColor]->GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
     deferredRenderer_ = std::make_unique<DeferredRenderer>();
-    deferredRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), shadowTexture_.get(), mainDepthBuffer_.get());
+    deferredRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), shadowTexture_.get(), mainDepthBuffer_.get(), nonCharacterDepthBuffer_.get());
 
     edgeRenderer_ = std::make_unique<EdgeRenderer>();
     edgeRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), mainDepthBuffer_.get());
@@ -120,6 +125,8 @@ void Renderer::BeginMainRender() {
     commandContext_.TransitionResource(*colorBuffers_[kNormal], D3D12_RESOURCE_STATE_RENDER_TARGET);
     commandContext_.TransitionResource(*mainDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
+    commandContext_.TransitionResource(*nonCharacterDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+
     D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { colorBuffers_[kColor]->GetRTV(),colorBuffers_[kNormal]->GetRTV() };
     commandContext_.SetRenderTargets(kRenderTargetNum, rtvHandle, mainDepthBuffer_->GetDSV());
    
@@ -130,6 +137,7 @@ void Renderer::BeginMainRender() {
     commandContext_.ClearColor(*resultBuffer_);
 
     commandContext_.ClearDepth(*mainDepthBuffer_);
+    commandContext_.ClearDepth(*nonCharacterDepthBuffer_);
     commandContext_.SetViewportAndScissorRect(0, 0, colorBuffers_[kColor]->GetWidth(), colorBuffers_[kColor]->GetHeight());
 }
 
@@ -231,7 +239,7 @@ void Renderer::Shutdown() {
     edgeRenderer_.reset();
     shadowEdgeRenderer_.reset();
     shadowTexture_.reset();
-
+    nonCharacterDepthBuffer_.reset();
 
     bloom_.reset();
     postEffect_.reset();

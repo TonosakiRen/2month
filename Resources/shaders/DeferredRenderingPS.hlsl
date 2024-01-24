@@ -25,7 +25,7 @@ struct DirectionLight {
 	float32_t4x4 viewProjection;
 	uint32_t shadowDescriptorIndex;
 };
-StructuredBuffer<DirectionLight> gDirectionLights  : register(t3);
+StructuredBuffer<DirectionLight> gDirectionLights  : register(t4);
 
 struct PointLight {
 	float32_t4 color;
@@ -35,7 +35,7 @@ struct PointLight {
 	float32_t decay;
 	float32_t isActive;
 };
-StructuredBuffer<PointLight> gPointLights  : register(t4);
+StructuredBuffer<PointLight> gPointLights  : register(t5);
 
 struct SpotLight {
 	float32_t4 color;
@@ -47,7 +47,7 @@ struct SpotLight {
 	float32_t cosAngle;
 	float32_t isActive;
 };
-StructuredBuffer<SpotLight> gSpotLights  : register(t5);
+StructuredBuffer<SpotLight> gSpotLights  : register(t6);
 
 struct ShadowSpotLight {
 	float32_t4 color;
@@ -65,7 +65,7 @@ struct ShadowSpotLight {
 	uint32_t padding2;
 	float32_t4x4 viewProjection;
 };
-StructuredBuffer<ShadowSpotLight> gShadowSpotLights  : register(t6);
+StructuredBuffer<ShadowSpotLight> gShadowSpotLights  : register(t7);
 
 struct LightNum {
 	int32_t directionalLight;
@@ -94,6 +94,7 @@ float3 GetWorldPosition(in float2 texcoord, in float depth, in float4x4 viewProj
 Texture2D<float4> colorTex : register(t0);
 Texture2D<float4> normalTex : register(t1);
 Texture2D<float4> depthTex : register(t2);
+Texture2D<float4> nonCharacterDepthTex : register(t3);
 
 Texture2D<float4> Texture2DTable[]  : register(t0, MY_TEXTURE2D_SPACE);
 
@@ -111,8 +112,10 @@ PixelShaderOutput main(VSOutput input)
 	float32_t3 normal = normalTex.Sample(smp, input.uv).xyz;
 	normal = normal * 2.0f - 1.0f;
 	float32_t depth = depthTex.Sample(smp, input.uv).x;
+	float32_t nonCharacterDepth = nonCharacterDepthTex.Sample(smp, input.uv).x;
 
 	float32_t3 worldPos = GetWorldPosition(input.uv, depth, gViewProjection.inverseViewProjection);
+	float32_t3 nonCharacterWorldPos = GetWorldPosition(input.uv, nonCharacterDepth, gViewProjection.inverseViewProjection);
 
 	float32_t3 lighting = {0.0f,0.0f,0.0f};
 
@@ -153,27 +156,58 @@ PixelShaderOutput main(VSOutput input)
 			shadowMapUV *= float32_t2(0.5f, -0.5f);
 			shadowMapUV += 0.5f;
 
-			if (lightViewPosition.z > 0.0f ) {
-				float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
+			float32_t4 nonWp = float4(nonCharacterWorldPos.xyz, 1.0f);
+			float32_t4 nonLightViewPosition = mul(nonWp, gShadowSpotLights[l].viewProjection);
+			float32_t2 nonShadowMapUV = nonLightViewPosition.xy / nonLightViewPosition.w;
+			nonShadowMapUV *= float32_t2(0.5f, -0.5f);
+			nonShadowMapUV += 0.5f;
 
-				if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-					&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+			if (nonLightViewPosition.z > 0.0f ) {
+				float32_t nonZInLVP = nonLightViewPosition.z / nonLightViewPosition.w;
+
+				if (nonShadowMapUV.x > 0.0f && nonShadowMapUV.x < 1.0f
+					&& nonShadowMapUV.y > 0.0f && nonShadowMapUV.y < 1.0f
 					) {
-					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
-					if (zInShadowMap != 1.0f) {
-						if (zInLVP < 1.0f && zInLVP - 0.0000025f  > zInShadowMap ) {
-							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, shadowMapUV);
+					float32_t nonZInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, nonShadowMapUV).r;
+					if (nonZInShadowMap != 1.0f) {
+						if (nonZInLVP < 1.0f && nonZInLVP - 0.0000025f  > nonZInShadowMap) {
+							//キャラクターに影を落とさない処理
+							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, nonShadowMapUV);
 							if (enemyIndex.x == 2.0f) {
-								output.shadow.x = 1.0f;
 								output.shadow.y = 2.0f;
 								output.shadow.z = enemyIndex.y;
-								color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
 							}
 							else {
-								output.shadow.x = 1.0f;
 								output.shadow.y = 1.0f;
 							}
-							shading *= shade.value;
+
+							//if (lightViewPosition.z > 0.0f) {
+								//float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
+							
+								//if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
+									//&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
+									//) {
+									float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
+									float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
+									if (zInShadowMap != 1.0f) {
+										if (zInLVP < 1.0f && zInLVP - 0.0000025f  > zInShadowMap) {
+											//キャラクターに影を落とさない処理
+											float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, shadowMapUV);
+											if (enemyIndex.x == 2.0f) {
+												color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
+												shading *= shade.value;
+												output.shadow.x = 1.0f;
+											}
+											else {
+												shading *= shade.value;
+												output.shadow.x = 1.0f;
+											}
+
+										}
+									}
+								//}
+							//}
+							
 						}
 					}
 				}

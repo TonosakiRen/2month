@@ -317,6 +317,9 @@
     <ClCompile Include="Game\Character\CannonEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="DepthRenderer.cpp">
+      <Filter>Engine\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -566,6 +569,9 @@
     <ClInclude Include="Game\Character\CannonEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
+    <ClInclude Include="DepthRenderer.h">
+      <Filter>Engine\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
@@ -647,6 +653,9 @@
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\ShadowIsCollisionCS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\DepthVS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

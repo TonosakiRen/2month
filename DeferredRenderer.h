@@ -23,6 +23,7 @@ public:
 		kColorTexture,
 		kNormalTexture,
 		kDepthTexture,
+		kNonCharacterDepthTexture,
 		
 		kViewProjection,
 		kDirectionalLights,
@@ -42,7 +43,7 @@ public:
 		Vector4 pos;
 		Vector2 uv;
 	};
-	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture,ColorBuffer* shadowTexture ,DepthBuffer* depthTexture);
+	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture,ColorBuffer* shadowTexture ,DepthBuffer* depthTexture, DepthBuffer* nonCharacterDepthTexture);
 	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, DirectionalLights& directionalLight,const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer, float shading);
 
 private:
@@ -54,6 +55,7 @@ private:
 	ColorBuffer* colorTexture_;
 	ColorBuffer* normalTexture_;
 	DepthBuffer* depthTexture_;
+	DepthBuffer* nonCharacterDepthTexture_;
 
 	ColorBuffer* shadowTexture_;
 

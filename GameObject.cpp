@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
+#include "DepthRenderer.h"
 
 void GameObject::Initialize(const std::string name)
 {
@@ -24,6 +25,9 @@ void GameObject::Draw(uint32_t textureHandle, Vector4 color)
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
 		SpotLightShadowMap::Draw(modelHandle_, worldTransform_);
 	}
+	else if (DepthRenderer::isDrawDepth) {
+		DepthRenderer::Draw(modelHandle_, worldTransform_);
+	}
 	else {
 		material_.color_ = color;
 		material_.Update();
@@ -39,6 +43,9 @@ void GameObject::Draw(Vector4 color)
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
 		SpotLightShadowMap::Draw(modelHandle_, worldTransform_);
 	}
+	else if (DepthRenderer::isDrawDepth) {
+		DepthRenderer::Draw(modelHandle_, worldTransform_);
+	}
 	else {
 		material_.color_ = color;
 		material_.Update();
@@ -49,10 +56,13 @@ void GameObject::Draw(Vector4 color)
 void GameObject::Draw(const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {
-		ShadowMap::Draw(modelHandle_, worldTransform_);
+		ShadowMap::Draw(modelHandle_, worldTransform);
 	}
 	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
-		SpotLightShadowMap::Draw(modelHandle_, worldTransform_);
+		SpotLightShadowMap::Draw(modelHandle_, worldTransform);
+	}
+	else if (DepthRenderer::isDrawDepth) {
+		DepthRenderer::Draw(modelHandle_, worldTransform);
 	}
 	else {
 		material_.color_ = color;

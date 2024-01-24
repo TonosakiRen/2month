@@ -16,6 +16,8 @@ public:
 	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
+	void StageDepthDraw();
+	void DrawUI();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
 

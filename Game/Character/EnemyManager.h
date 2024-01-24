@@ -26,7 +26,6 @@ public:
 	void DrawImGui();
 	void Save(const char* itemName);
 	void Load(const std::filesystem::path& loadFilee);
-	
 
 	void Draw();
 	void ShadowDraw();

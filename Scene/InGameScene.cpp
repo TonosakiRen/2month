@@ -20,24 +20,35 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 }
 
 void InGameScene::Update() {
+
+	Player::hitShadowEnemyIndex_ = -1;
+	Player::hitCollider_ = nullptr;
+
 	stage_->Update();
 
 	enemy_->Update(player_->GetWorldTransform()->translation_);
-	
 	player_->Update();
 
-	for (uint32_t index = 0; index < stage_->GetWalls().size(); index++) {
-		player_->Collision(stage_->GetWallCollider(index));
-	}
 	stage_->Collision(player_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
-
+	player_->EnemyShadowCollision();
+	player_->EnemyCollision();
 }
 
 void InGameScene::Draw() {
 	stage_->Draw();
 	enemy_->Draw();
 	player_->Draw();
+}
+
+void InGameScene::StageDepthDraw()
+{
+	stage_->Draw();
+}
+
+void InGameScene::DrawUI()
+{
+	player_->DrawUI();
 }
 
 void InGameScene::ShadowDraw() {

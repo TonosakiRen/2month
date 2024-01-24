@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Audio.h"
 #include "Collider.h"
+#include "Sprite.h"
 
 
 // enemyなどに送るための情報
@@ -17,12 +18,19 @@ class GlobalVariables;
 
 class Player : public GameObject {
 public:
+    //そのフレームの当たった敵のインデックス　-1は当たっていない
+    static int32_t hitShadowEnemyIndex_ ;
+    static Vector3 hitShadowEnemyPos_;
+    static Collider* hitCollider_;
+
 
     void Initialize(const std::string name);
     void SetGlobalVariable();
     void ApplyGlobalVariable();
     void Update();
-    void Collision(Collider& otherCollider);
+    void UIUpdate();
+    void EnemyShadowCollision();
+    void EnemyCollision();
     void Draw();
     void DrawImGui();
     void DrawUI();
@@ -49,6 +57,7 @@ private:
         bool isJumped_ = false; // jump中か
     };
     JumpParameter jumpParam_;
+    Vector3 pushBackVector_;
 
     Input* input_ = nullptr;
     Audio* audio_ = nullptr;
@@ -58,6 +67,7 @@ private:
     WorldTransform headWorldTransform_;
     Vector3 headRotate;
     Vector3 rotate;
+    bool isKnockBack_ = false;
 
     struct AttackParameter {
         int phase = 0;
@@ -73,9 +83,16 @@ private:
     float attackSpeed_ = 2.0f;
     float backHeadSpeed_ = 0.3f;
     float attackReadySpeed_ = 0.3f;
+    int maxHp_ = 100;
+    int hp_ = 100;
+    int damage_ = 5;
+
+    float knockBackPowerX_ = 0.5f;
+    float knockBackPowerY_ = 0.8f;
+    Vector3 knockBackDirection_ = { 0.0f,0.0f,0.0f };
 
     //UI
-    uint32_t hpHandle_;
+    Sprite hpSprite_;
 
 public:
     Collider headCollider_;

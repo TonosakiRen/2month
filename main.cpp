@@ -15,6 +15,7 @@
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
 #include "GlobalVariables.h"
+#include "./DepthRenderer.h"
 
 #include <d3d12.h>
 #include <dxgidebug.h>
@@ -71,12 +72,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// 3Dオブジェクト静的初期化
 	Model::StaticInitialize();
+	
 	ShadowMap::StaticInitialize();
 	SpotLightShadowMap::StaticInitialize();
 	Particle::StaticInitialize();
 	ParticleBox::StaticInitialize();
 	Sprite::StaticInitialize();
-
+	DepthRenderer::StaticInitialize();
 
 #pragma endregion 変数
 
@@ -140,6 +142,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	Particle::Finalize();
 	ParticleBox::Finalize();
 	Sprite::Finalize();
+	DepthRenderer::Finalize();
 
 	delete gameScene;
 	// ImGui解放

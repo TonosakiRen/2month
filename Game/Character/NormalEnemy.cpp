@@ -61,6 +61,8 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
+		Player::hitShadowEnemyIndex_ = kNumber_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 		isColl = true;
 	}
 
@@ -69,6 +71,9 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 			isHit_ = true;
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
+		}
+		else {
+			Player::hitCollider_ = &collider_;
 		}
 		UpdateTransform();
 	}
