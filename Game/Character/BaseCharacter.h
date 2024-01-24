@@ -42,3 +42,5 @@ public:
 	const bool& GetIsAlive() const { return isAlive_; }
 
 };
+
+const float kMaxDistance = 50.0f; // playerとの距離が一定以上なら処理されない

@@ -29,6 +29,15 @@ void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, 
 }
 
 void ThornEnemy::Update(const Vector3& playerPosition) {
+	float distance = Distance(playerPosition, worldTransform_.translation_);
+	// Playerとの距離が一定数以下なら早期リターン
+	// 後で調整。画面外で処理を走らせないのが目的
+	if (distance > kMaxDistance) {
+		isActive_ = false;
+		return;
+	}
+	isActive_ = true;
+
 	Move();
 
 	collider_.AdjustmentScale();
