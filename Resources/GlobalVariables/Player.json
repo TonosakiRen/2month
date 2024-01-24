@@ -3,7 +3,10 @@
         "attackReadySpeed_": 14.079999923706055,
         "attackSpeed_": 15.800000190734863,
         "backHeadSpeed_": 12.920000076293945,
+        "damage_": 5,
         "jumpPower_": 0.5,
+        "knockBackPowerX_": 0.3100000023841858,
+        "knockBackPowerY_": 0.41999998688697815,
         "speed_": 0.2199999988079071
     }
 }

@@ -22,6 +22,7 @@ public:
     static int32_t hitShadowEnemyIndex_ ;
     static Vector3 hitShadowEnemyPos_;
     static Collider* hitCollider_;
+    static Vector3 playerPos_;
 
 
     void Initialize(const std::string name);

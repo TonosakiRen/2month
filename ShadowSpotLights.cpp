@@ -1,5 +1,7 @@
 #include "ShadowSpotLights.h"
 #include "DirectXCommon.h"
+#include "Player.h"
+#include "ImGuiManager.h"
 void ShadowSpotLights::Initialize() {
     lights_.resize(lightNum);
 
@@ -9,6 +11,8 @@ void ShadowSpotLights::Initialize() {
         lights_[i].collisionData.Create(shadowWidth, shadowHeight, DXGI_FORMAT_R32G32_FLOAT);
         lights_[i].shadowDescriptorHeapIndex = lights_[i].shadowMap_.GetSRV().GetIndex();
         lights_[i].collisionDescriptorHeapIndex = lights_[i].collisionData.GetSRV().GetIndex();
+        //とりあえず
+        lights_[i].worldTransform.translation_ = { 0.0f,1.3f,-12.0f };
     }
     // インスタンシングデータのサイズ
     UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
@@ -23,20 +27,53 @@ void ShadowSpotLights::Initialize() {
     srvDesc.Buffer.StructureByteStride = sizeof(ConstBufferData);
 
     srvHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+    globalVariables_ = GlobalVariables::GetInstance();
+    SetGlobalVariable();
+
     DirectXCommon::GetInstance()->GetDevice()->CreateShaderResourceView(structureBuffer_, &srvDesc, srvHandle_);
-    Update();
+}
+
+void ShadowSpotLights::SetGlobalVariable()
+{
+    for (int i = 0; auto & light : lights_) {
+        std::string name = "ShadowSpotLight" +  std::to_string(i);
+        globalVariables_->CreateGroup(name);
+        globalVariables_->AddItem(name, "translation", light.worldTransform.translation_);
+        globalVariables_->AddItem(name, "direction", light.direction);
+        globalVariables_->LoadFile(name);
+        i++;
+    }
+
+    ApplyGlobalVariable();
+}
+
+void ShadowSpotLights::ApplyGlobalVariable()
+{
+    for (int i = 0; auto & light : lights_) {
+        std::string name = "ShadowSpotLight" + std::to_string(i);
+        light.worldTransform.translation_ = globalVariables_->GetVector3Value(name, "translation");
+        light.direction = Normalize(globalVariables_->GetVector3Value(name, "direction"));
+        i++;
+    }
 }
 
 void ShadowSpotLights::Update() {
 
+    ApplyGlobalVariable();
+    for (int i = 0; i < lightNum; i++) {
+        lights_[i].playerDistance = Length(Player::playerPos_ - lights_[i].worldTransform.translation_);
+        if (lights_[i].playerDistance >= 40.0f) {
+            lights_[i].isActive = false;
+        }
+        else {
+            lights_[i].isActive = true;
+        }
+       
+    }
+
     std::vector<ConstBufferData> bufferData;
     bufferData.reserve(lightNum);
-
-    //0.8
-   //const float fov = 70.0f * std::numbers::pi_v <float> / 180.0f;
-
-    //0.75
-    //const float fov = 80.0f * std::numbers::pi_v <float> / 180.0f;
 
     for (int i = 0; i < lightNum; i++) {
 

@@ -1,6 +1,7 @@
 #include "ThornEnemy.h"
 #include "ModelManager.h"
 #include "Compute.h"
+#include "Player.h"
 
 void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
@@ -55,11 +56,15 @@ void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
+		Player::hitShadowEnemyIndex_ = kNumber_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 		isColl = true;
 	}
 
 	if (isColl) {
-
+		Player::hitCollider_ = &collider_;
+		
+		UpdateTransform();
 	}
 
 }
@@ -70,7 +75,8 @@ void ThornEnemy::Draw() {
 }
 
 void ThornEnemy::EnemyDraw() {
-	//BaseEnemyDraw();
+	if (!isActive_) { return; }
+	BaseEnemyDraw();
 }
 
 void ThornEnemy::DrawImGui() {

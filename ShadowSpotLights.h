@@ -6,24 +6,26 @@
 #include "DepthBuffer.h"
 #include <vector>
 #include "WorldTransform.h"
+#include "GlobalVariables.h"
 
 class ShadowSpotLights
 {
 public:
 
-	static const uint32_t  lightNum = 2;
+	static const uint32_t  lightNum = 5;
 	static const uint32_t shadowWidth = 1024;
 	static const uint32_t shadowHeight = 1024;
 
 	struct SpotLight {
-		Vector4 color = { 1.0f, 1.0f, 1.0f,1.0f };
+		Vector4 color = { 1.0f,1.0f,0.58f };
 		WorldTransform worldTransform;
-		float intensity = 1.0f;
-		Vector3 direction = { 0.0f,-1.0f,0.0f };
-		float distance = 1.0f;
+		float intensity = 5.5f;
+		Vector3 direction = { 0.0f,0.0f,1.0f };
+		float distance = 20.0f;
 		float decay = 1.0f;
-		float cosAngle = Radian(45.0f);
-		bool isActive = false;
+		float cosAngle = 0.8f;
+		bool isActive = true;
+		float playerDistance = 0.0f;
 		Vector3 lockUp = { 1.0f,0.0f,0.0f };
 		DepthBuffer shadowMap_;
 		UploadBuffer constBuffer_;
@@ -50,12 +52,15 @@ public:
 	};
 
 	void Initialize();
+	void SetGlobalVariable();
+	void ApplyGlobalVariable();
 	void Update();
 
 public:
 	std::vector<SpotLight> lights_;
 	UploadBuffer structureBuffer_;
 	DescriptorHandle srvHandle_;
+	GlobalVariables* globalVariables_ = nullptr;
 private:
 	//影用viewProjection
 	float fovAngleY_ = 45.0f * std::numbers::pi_v <float> / 180.0f;

@@ -98,7 +98,7 @@ void NormalEnemy::EnemyDraw() {
 
 Vector3 NormalEnemy::Move(const Vector3& playerPosition) {
 
-	Vector3 vec = playerPosition - worldTransform_.translation_;
+	Vector3 vec = playerPosition - MakeTranslation(worldTransform_.matWorld_);
 	vec = Normalize(vec);
 	if (isnan(vec.x) || isnan(vec.y) || isnan(vec.z)) {
 		vec = Vector3(0.0f, 0.0f, 0.0f);

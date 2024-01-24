@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "LightNumBuffer.h"
 #include "ShadowSpotLights.h"
+#include "Player.h"
 
 using namespace Microsoft::WRL;
 
@@ -233,9 +234,14 @@ void SpotLightShadowMap::Draw(uint32_t modelHandle, const WorldTransform& worldT
     commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), 0.0f, 0.0f);
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
-        commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
-        commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
-        ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+        if (shadowSpotLights_->lights_[i].isActive == true) {
+            float distance = Length(MakeTranslation(shadowSpotLights_->lights_[i].worldTransform.matWorld_) - MakeTranslation(worldTransform.matWorld_));
+            if (distance <= shadowSpotLights_->lights_[i].distance) {
+                commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
+                commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
+                ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+            }
+        }
     }
 }
 
@@ -246,10 +252,16 @@ void SpotLightShadowMap::PlayerDraw(uint32_t modelHandle, const WorldTransform& 
 
     commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), 1.0f, 0.0f);
 
+
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
-        commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
-        commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
-        ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+        if (shadowSpotLights_->lights_[i].isActive == true) {
+            float distance = Length(MakeTranslation(shadowSpotLights_->lights_[i].worldTransform.matWorld_) - MakeTranslation(worldTransform.matWorld_));
+            if (distance <= shadowSpotLights_->lights_[i].distance) {
+                commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
+                commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
+                ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+            }
+        }
     }
 }
 
@@ -260,10 +272,16 @@ void SpotLightShadowMap::EnemyDraw(const Vector2& enemyIndex, uint32_t modelHand
 
     commandContext_->SetConstants(static_cast<UINT>(RootParameter::kCollisionData), enemyIndex.x, enemyIndex.y);
 
+
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
-        commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
-        commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
-        ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+        if (shadowSpotLights_->lights_[i].isActive == true) {
+            float distance = Length(MakeTranslation(shadowSpotLights_->lights_[i].worldTransform.matWorld_) - MakeTranslation(worldTransform.matWorld_));
+            if (distance <= shadowSpotLights_->lights_[i].distance) {
+                commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
+                commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
+                ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+            }
+        }
     }
 }
 
@@ -276,9 +294,16 @@ void SpotLightShadowMap::EnemyDraw(const Vector2& enemyIndex, uint32_t modelHand
 
     for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
         if (i != unShadingLightIndex) {
-            commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
-            commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
-            ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+            for (int i = 0; i < ShadowSpotLights::lightNum; i++) {
+                if (shadowSpotLights_->lights_[i].isActive == true) {
+                    float distance = Length(MakeTranslation(shadowSpotLights_->lights_[i].worldTransform.matWorld_) - MakeTranslation(worldTransform.matWorld_));
+                    if (distance <= shadowSpotLights_->lights_[i].distance) {
+                        commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kShadowSpotLight), shadowSpotLights_->lights_[i].constBuffer_.GetGPUVirtualAddress());
+                        commandContext_->SetRenderTarget(shadowSpotLights_->lights_[i].collisionData.GetRTV(), shadowSpotLights_->lights_[i].shadowMap_.GetDSV());
+                        ModelManager::GetInstance()->DrawInstanced(commandContext_, modelHandle);
+                    }
+                }
+            }
         }
     }
 }
