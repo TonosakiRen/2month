@@ -21,8 +21,9 @@
 #include "WhiteParticle.h"
 
 #include "Game/Stage/Stage.h"
-#include "Scene/InGameScene.h"
-#include "Scene/CreateStageScene.h"
+#include "Game/Scene/InGameScene.h"
+#include "Game/Scene/CreateStageScene.h"
+#include "Game/Scene/TitleScene.h"
 
 #include <optional>
 class GameScene 
@@ -98,6 +99,7 @@ private:
 	// Scene用クラス
 	std::unique_ptr<InGameScene> inGameScene_;
 	std::unique_ptr<CreateStageScene> editorScene_;
+	std::unique_ptr<TitleScene> titleScene_;
 
 	//Scene
 	enum class Scene {

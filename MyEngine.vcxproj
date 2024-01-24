@@ -140,6 +140,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Character\NormalLightEnemy.cpp" />
     <ClCompile Include="Game\Character\StandLightEnemy.cpp" />
     <ClCompile Include="Game\Character\ThornEnemy.cpp" />
+    <ClCompile Include="Game\Scene\CreateStageScene.cpp" />
+    <ClCompile Include="Game\Scene\InGameScene.cpp" />
+    <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\Stage\Floor.cpp" />
     <ClCompile Include="Game\Stage\Stage.cpp" />
     <ClCompile Include="Game\Stage\Truck.cpp" />
@@ -165,8 +168,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RootSignature.cpp" />
-    <ClCompile Include="Scene\CreateStageScene.cpp" />
-    <ClCompile Include="Scene\InGameScene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShadowEdgeRenderer.cpp" />
     <ClCompile Include="ShadowIsCollision.cpp" />
@@ -224,6 +225,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Character\NormalLightEnemy.h" />
     <ClInclude Include="Game\Character\StandLightEnemy.h" />
     <ClInclude Include="Game\Character\ThornEnemy.h" />
+    <ClInclude Include="Game\Scene\CreateStageScene.h" />
+    <ClInclude Include="Game\Scene\InGameScene.h" />
+    <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\Stage\Floor.h" />
     <ClInclude Include="Game\Stage\Stage.h" />
     <ClInclude Include="Game\Stage\Truck.h" />
@@ -250,8 +254,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RootSignature.h" />
-    <ClInclude Include="Scene\CreateStageScene.h" />
-    <ClInclude Include="Scene\InGameScene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShadowEdgeRenderer.h" />
     <ClInclude Include="ShadowIsCollision.h" />
