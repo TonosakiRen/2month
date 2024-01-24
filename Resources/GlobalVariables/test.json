@@ -1,5 +1,24 @@
 {
     "test": {
+        "CannonEnemyConfirmation": 1,
+        "CannonEnemyNumber : 0 : BulletSpeed": 0.4000000059604645,
+        "CannonEnemyNumber : 0 : Interval": 60,
+        "CannonEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CannonEnemyNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CannonEnemyNumber : 0 : Translate": [
+            7.0,
+            2.0,
+            -6.5
+        ],
         "CoinConfirmation": 0,
         "FloorConfirmation": 2,
         "FloorNumber : 0 : Rotate": [
@@ -117,7 +136,7 @@
             -7.967209815979004
         ],
         "StandLightEnemyConfirmation": 1,
-        "StandLightEnemyNumber : 0 : FlashCount": 3,
+        "StandLightEnemyNumber : 0 : FlashCount": 4,
         "StandLightEnemyNumber : 0 : Interval": 6,
         "StandLightEnemyNumber : 0 : MaxTime": 60,
         "StandLightEnemyNumber : 0 : Rotate": [
@@ -132,9 +151,9 @@
             1.0
         ],
         "StandLightEnemyNumber : 0 : Translate": [
-            -2.5999999046325684,
-            2.4000000953674316,
-            0.0
+            -6.0,
+            1.0,
+            -13.899999618530273
         ],
         "ThornEnemyConfirmation": 2,
         "ThornEnemyEnemyNumber : 0 : Rotate": [
