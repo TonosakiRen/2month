@@ -20,8 +20,6 @@ public:
 	virtual void EnemyDraw() {};
 	virtual void DrawImGui();
 
-	Collider collider_;
-
 protected:
 	// 回転用
 	Vector3 rotate;

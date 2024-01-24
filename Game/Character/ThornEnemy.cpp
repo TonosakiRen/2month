@@ -72,7 +72,7 @@ void ThornEnemy::SetState(const Vector3& amplitube, const uint32_t time) {
 void ThornEnemy::Move() {
 	Vector3 moveVec;
 
-	if (timer_++ > static_cast<int>(kMaxTime_)) {
+	if (timer_++ > static_cast<uint32_t>(kMaxTime_)) {
 		isMovingToWhich = !isMovingToWhich;
 		timer_ = 0u;
 	}

@@ -1,4 +1,5 @@
 #pragma once
+#include "Coin.h"
 #include "Wall.h"
 #include "WallLight.h"
 #include "Floor.h"
@@ -49,6 +50,7 @@ private:
 	std::vector<std::unique_ptr<Floor>> floors_;
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
+	std::vector<std::unique_ptr<Coin>> coins_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

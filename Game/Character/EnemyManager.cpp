@@ -19,46 +19,6 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
 
-	/*struct Base {
-		Vector3 scale;
-		Quaternion rotate;
-		Vector3 translate;
-	};
-	const uint32_t kMaxNormalEnemyCount = 1u;
-	Base nEnemisRespawn[] = {
-		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(10.0f,2.0f,0.0f) },
-	};
-
-	if (!nEnemis_.empty()) { nEnemis_.clear(); }
-	for (uint32_t index = 0u; index < kMaxNormalEnemyCount; index++) {
-		auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
-		enemy->Initialize(nEnemisRespawn[index].scale, nEnemisRespawn[index].rotate, nEnemisRespawn[index].translate);
-	}
-
-	const uint32_t kMaxNormalLightEnemyCount = 0u;
-	Base nlEnemisRespawn[] = {
-		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(10.0f,2.0f,1.0f) },
-	};
-
-	if (!nLightEnemis_.empty()) { nLightEnemis_.clear(); }
-	for (uint32_t index = 0u; index < kMaxNormalLightEnemyCount; index++) {
-		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
-		enemy->Initialize(nlEnemisRespawn[index].scale, nlEnemisRespawn[index].rotate, nlEnemisRespawn[index].translate);
-		enemy->SetLight(shadowSpotLights_, index);
-	}
-
-	const uint32_t kMaxThornEnemyCount = 1u;
-	Base tEnemisRespawn[] = {
-		{ Vector3(1.0f,1.0f,1.0f),Quaternion(0.0f,0.0f,0.0f,1.0f),Vector3(1.0f,2.0f,1.0f) },
-	};
-
-	if (!tEnemis_.empty()) { tEnemis_.clear(); }
-	for (uint32_t index = 0u; index < kMaxThornEnemyCount; index++) {
-		auto& enemy = tEnemis_.emplace_back(std::make_unique<ThornEnemy>());
-		enemy->Initialize(tEnemisRespawn[index].scale, tEnemisRespawn[index].rotate, tEnemisRespawn[index].translate);
-		enemy->SetState(Vector3(1.0f, 0.0f, 0.0f), 30u);
-	}*/
-
 }
 
 void EnemyManager::Update(const Vector3& playerPosition) {
@@ -71,6 +31,10 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 		enemy->Update(playerPosition);
 	}
 	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Update(playerPosition);
+	}
+	for (auto& enemy : sLightEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Update(playerPosition);
 	}
@@ -145,6 +109,23 @@ void EnemyManager::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("StandLightEnemy")) {
+			if (ImGui::Button("Create")) {
+				sLightEnemis_.emplace_back(std::make_unique<StandLightEnemy>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", sLightEnemis_.size());
+			for (int i = 0; i < sLightEnemis_.size(); i++) {
+				if (ImGui::TreeNode(("sLightEnemyNumber : " + std::to_string(i)).c_str())) {
+					sLightEnemis_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						sLightEnemis_.erase(sLightEnemis_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenu();
 	}
 #endif // _DEBUG
@@ -174,6 +155,17 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), tEnemis_[index]->GetWorldTransform()->translation_);
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Amplitube").c_str(), tEnemis_[index]->amplitude_);
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Time").c_str(), tEnemis_[index]->kMaxTime_);
+	}
+
+	global->SetValue(itemName, "StandLightEnemyConfirmation" + std::string(), static_cast<int>(sLightEnemis_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(sLightEnemis_.size()); index++) {
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), sLightEnemis_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), sLightEnemis_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), sLightEnemis_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : MaxTime").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxTime_));
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : FlashCount").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxFlashCount_));
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Interval").c_str(), static_cast<int>(sLightEnemis_[index]->kInterval_));
+
 	}
 
 }
@@ -215,6 +207,20 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		enemy->Initialize(scale, rotate, trans);
 		enemy->SetState(amplitude, kMaxtime);
 	}
+
+	num = global->GetIntValue(itemName, "StandLightEnemyConfirmation");
+	if (!sLightEnemis_.empty()) { sLightEnemis_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		int maxtime = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : MaxTime").c_str());
+		int flashCount = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : FlashCount").c_str());
+		int interval = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Interval").c_str());
+		auto& enemy = sLightEnemis_.emplace_back(std::make_unique<StandLightEnemy>());
+		enemy->Initialize(scale, rotate, trans);
+		enemy->SetParameters(static_cast<uint32_t>(maxtime),static_cast<uint32_t>(flashCount),static_cast<uint32_t>(interval));
+	}
 }
 
 void EnemyManager::Draw() {
@@ -230,6 +236,10 @@ void EnemyManager::Draw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : sLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 }
 
 void EnemyManager::ShadowDraw() {
@@ -242,6 +252,10 @@ void EnemyManager::ShadowDraw() {
 		enemy->Draw();
 	}
 	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
+	for (auto& enemy : sLightEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
