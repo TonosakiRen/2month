@@ -287,7 +287,7 @@ void GameScene::TitleInitialize() {
 }
 void GameScene::TitleUpdate() {
 
-	if (input_->TriggerKey(DIK_P)) {
+	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
 		sceneRequest_ = Scene::InGame;
 	}
 
@@ -302,7 +302,7 @@ void GameScene::InGameInitialize() {
 }
 void GameScene::InGameUpdate() {
 
-	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
+	if (input_->TriggerKey(DIK_P)) {
 		sceneRequest_ = Scene::Title;
 	}
 
