@@ -40,13 +40,18 @@ void CreateStageScene::Update() {
 	}
 
 	// 以下通常通りの更新処理
+	Player::hitShadowEnemyIndex_ = -1;
+	Player::hitCollider_ = nullptr;
+
 	stage_->Update();
+
 	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();
-	skydome_->Update(player_->GetWorldTransform()->translation_);
 
 	stage_->Collision(player_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
+	player_->EnemyShadowCollision();
+	player_->EnemyCollision();
 
 }
 

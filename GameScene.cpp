@@ -130,7 +130,6 @@ void GameScene::Initialize() {
 	whiteParticle_->SetIsEmit(true);
 	whiteParticle_->Initialize(Vector3{ -1.0f,-1.0f,-1.0f }, Vector3{ 1.0f,1.0f,1.0f });
 
-
 	size_t bgmHandle = audio_->SoundLoadWave("BGM.wav");
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
 	audio_->SetValume(bgmPlayHandle, 0.1f);
@@ -204,7 +203,6 @@ void GameScene::Update(CommandContext& commandContext){
 #endif
 		pointLights_.lights_[0].isActive = true;
 		pointLights_.lights_[1].isActive = true;
-
 		pointLights_.Update();
 
 #ifdef _DEBUG
@@ -269,13 +267,6 @@ void GameScene::Update(CommandContext& commandContext){
 		//SceneUpdate
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
 	}
-
-	uint32_t* a = static_cast<uint32_t*>(Compute::data_);
-	if (a[1]) {
-		int a = 0;
-		a++;
-	}
-	
 	
 #ifdef _DEBUG
 	//パーティクル
@@ -311,7 +302,7 @@ void GameScene::InGameInitialize() {
 }
 void GameScene::InGameUpdate() {
 
-	if (input_->TriggerKey(DIK_P)) {
+	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
 		sceneRequest_ = Scene::Title;
 	}
 
@@ -360,6 +351,7 @@ void GameScene::DepthDraw()
 		inGameScene_->StageDepthDraw();;
 		break;
 	case GameScene::Scene::Editor:
+		inGameScene_->StageDepthDraw();;
 		break;
 	default:
 		break;
