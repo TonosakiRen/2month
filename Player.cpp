@@ -7,6 +7,7 @@
 
 int32_t Player::hitShadowEnemyIndex_ = -1;
 Vector3 Player::hitShadowEnemyPos_ = {0.0f,0.0f,0.0f};
+Vector3 Player::playerPos_ = { 0.0f,0.0f,0.0f };
 Collider* Player::hitCollider_ = nullptr;
 
 void Player::Initialize(const std::string name)
@@ -113,6 +114,7 @@ void Player::Update()
 	UpdateTrans();
 	InsertData();
 	UIUpdate();
+	playerPos_ = MakeTranslation(worldTransform_.matWorld_);
 }
 
 void Player::UIUpdate()
@@ -139,7 +141,7 @@ void Player::EnemyShadowCollision()
 				isKnockBack_ = true;
 				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
 				knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
-				jumpParam_.velocity_ += {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
+				jumpParam_.velocity_ = {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
 				hp_ -= damage_;
 			}
 		}
@@ -153,8 +155,8 @@ void Player::EnemyCollision()
 			if (isKnockBack_ == false) {
 				isKnockBack_ = true;
 				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-				knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,vec.z });
-				jumpParam_.velocity_ += {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
+				knockBackDirection_ = Normalize(vec);
+				jumpParam_.velocity_ = {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
 				hp_ -= damage_;
 			}
 		}
@@ -163,11 +165,11 @@ void Player::EnemyCollision()
 
 void Player::DrawImGui() {
 #ifdef _DEBUG
-	ImGui::DragFloat3("scale", &headWorldTransform_.scale_.x, 0.1f);
+	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
-	headWorldTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	ImGui::DragFloat3("translate", &headWorldTransform_.translation_.x, 0.1f);
+	//worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
+	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	
 	// 座標更新
 	worldTransform_.Update();

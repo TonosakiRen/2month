@@ -45,7 +45,7 @@ void CreateStageScene::Update() {
 
 	stage_->Update();
 
-	enemy_->Update(player_->GetWorldTransform()->translation_);
+	enemy_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 	player_->Update();
 
 	stage_->Collision(player_.get());
@@ -117,7 +117,7 @@ void CreateStageScene::DrawImGui() {
 			
 			ImGui::EndMenu();
 		}
-
+		
 		stage_->DrawImGui();
 		if (ImGui::BeginMenu("Player")) {
 			player_->DrawImGui();

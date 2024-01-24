@@ -50,26 +50,6 @@ void GameScene::Initialize() {
 	pointLights_.Update();
 
 	spotLights_.Initialize();
-	spotLights_.lights_[0].worldTransform.translation_ = { -5.43f,6.71f,4.02f };
-	spotLights_.lights_[0].color = {1.0f,1.0f,0.58f };
-	spotLights_.lights_[0].intensity = 5.85f;
-	spotLights_.lights_[0].direction = { 0.0f,-1.0f,0.0f };
-	spotLights_.lights_[0].distance = 10.460f ;
-	spotLights_.lights_[0].isActive = false;
-
-	spotLights_.lights_[1].worldTransform.translation_ = { 5.85f,6.71f,4.02f };
-	spotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
-	spotLights_.lights_[1].intensity = 5.85f;
-	spotLights_.lights_[1].direction = { 0.0f,-1.0f,0.0f };
-	spotLights_.lights_[1].distance = 10.460f;
-	spotLights_.lights_[1].isActive = false;
-
-	spotLights_.lights_[2].worldTransform.translation_ = {0.03f,6.71f,-5.36f };
-	spotLights_.lights_[2].color = { 1.0f,1.0f,0.58f };
-	spotLights_.lights_[2].intensity = 5.85f;
-	spotLights_.lights_[2].direction = { 0.0f,-1.0f,0.0f };
-	spotLights_.lights_[2].distance = 10.460f;
-	spotLights_.lights_[2].isActive = false;
 	spotLights_.Update();
 
 	shadowSpotLights_.Initialize();
@@ -80,14 +60,6 @@ void GameScene::Initialize() {
 	shadowSpotLights_.lights_[0].distance = 20.0f;
 	shadowSpotLights_.lights_[0].cosAngle = 0.8f;
 	shadowSpotLights_.lights_[0].isActive = true;
-
-	shadowSpotLights_.lights_[1].worldTransform.translation_ = { 0.0f + 5.0f,1.3f,-12.0f };
-	shadowSpotLights_.lights_[1].color = { 1.0f,1.0f,0.58f };
-	shadowSpotLights_.lights_[1].intensity = 5.5f;
-	shadowSpotLights_.lights_[1].direction = { 0.0f,0.0f,1.0f };
-	shadowSpotLights_.lights_[1].distance = 20.0f;
-	shadowSpotLights_.lights_[1].cosAngle = 0.8f;
-	shadowSpotLights_.lights_[1].isActive = false;
 
 	shadowSpotLights_.Update();
 
@@ -136,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -201,33 +173,10 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("decay", &pointLights_.lights_[1].decay, 0.01f, 0.0f);
 		ImGui::End();
 #endif
-		pointLights_.lights_[0].isActive = true;
-		pointLights_.lights_[1].isActive = true;
+		pointLights_.lights_[0].isActive = false;
+		pointLights_.lights_[1].isActive = false;
 		pointLights_.Update();
 
-#ifdef _DEBUG
-		ImGui::Begin("spotLight");
-		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[0].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &spotLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &spotLights_.lights_[0].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat3("direction", &spotLights_.lights_[0].direction.x, 0.01f, 0.0f);
-		ImGui::DragFloat("distance", &spotLights_.lights_[0].distance, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &spotLights_.lights_[0].decay, 0.01f, 0.0f);
-		ImGui::DragFloat("cosAngle", &spotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
-		ImGui::End();
-
-		ImGui::Begin("spotLight2");
-		ImGui::DragFloat3("lightPosition", &spotLights_.lights_[1].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &spotLights_.lights_[1].color.x, 1.0f, 0.0f, 255.0f);
-		ImGui::DragFloat("intensity", &spotLights_.lights_[1].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat3("direction", &spotLights_.lights_[1].direction.x, 0.01f, 0.0f);
-		ImGui::DragFloat("distance", &spotLights_.lights_[1].distance, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &spotLights_.lights_[1].decay, 0.01f, 0.0f);
-		ImGui::DragFloat("cosAngle", &spotLights_.lights_[1].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
-		ImGui::End();
-#endif
-		spotLights_.lights_[0].direction = Normalize(spotLights_.lights_[0].direction);
-		spotLights_.lights_[1].direction = Normalize(spotLights_.lights_[1].direction);
 		spotLights_.Update();
 
 #ifdef _DEBUG
@@ -239,6 +188,7 @@ void GameScene::Update(CommandContext& commandContext){
 		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[0].distance, 0.01f, 0.0f);
 		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[0].decay, 0.01f, 0.0f);
 		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
+		ImGui::Text("%f", shadowSpotLights_.lights_[0].playerDistance);
 		ImGui::End();
 
 		ImGui::Begin("shadowSpotLight2");
@@ -329,7 +279,7 @@ void GameScene::ModelDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		skydome_->Draw();
+		//skydome_->Draw();
 		inGameScene_->Draw();
 		break;
 	case GameScene::Scene::Editor:

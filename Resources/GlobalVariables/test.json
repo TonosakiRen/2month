@@ -1,6 +1,6 @@
 {
     "test": {
-        "CannonEnemyConfirmation": 1,
+        "CannonEnemyConfirmation": 0,
         "CannonEnemyNumber : 0 : BulletSpeed": 0.4000000059604645,
         "CannonEnemyNumber : 0 : Interval": 60,
         "CannonEnemyNumber : 0 : Rotate": [
@@ -55,10 +55,10 @@
         ],
         "NormalEnemyConfirmation": 2,
         "NormalEnemyNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
+            0.0,
+            0.0,
+            0.0,
+            1.0
         ],
         "NormalEnemyNumber : 0 : Scale": [
             1.0,
@@ -66,9 +66,9 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            -10.899999618530273,
+            -37.785579681396484,
             2.0,
-            -6.367000102996826
+            -4.043455600738525
         ],
         "NormalEnemyNumber : 1 : Rotate": [
             0.0,
@@ -82,16 +82,16 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
+            -38.270103454589844,
             0.0,
-            0.0,
-            0.0
+            -4.038426876068115
         ],
         "NormalLightEnemyConfirmation": 2,
         "NormalLightEnemyNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
+            0.0,
+            0.0,
+            0.0,
+            1.0
         ],
         "NormalLightEnemyNumber : 0 : Scale": [
             1.0,
@@ -99,9 +99,9 @@
             1.0
         ],
         "NormalLightEnemyNumber : 0 : Translate": [
-            4.099999904632568,
+            -37.7833137512207,
             2.0,
-            -6.4670000076293945
+            -4.04348087310791
         ],
         "NormalLightEnemyNumber : 1 : Rotate": [
             0.0,
@@ -115,9 +115,9 @@
             1.0
         ],
         "NormalLightEnemyNumber : 1 : Translate": [
+            -38.270103454589844,
             0.0,
-            0.0,
-            0.0
+            -4.038426876068115
         ],
         "Player : Rotate": [
             0.0,
@@ -131,11 +131,11 @@
             1.0
         ],
         "Player : Translate": [
-            -8.10000228881836,
-            0.7840555906295776,
-            -7.967209815979004
+            -12.006999969482422,
+            0.7757819890975952,
+            -7.478395938873291
         ],
-        "StandLightEnemyConfirmation": 1,
+        "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
         "StandLightEnemyNumber : 0 : Interval": 6,
         "StandLightEnemyNumber : 0 : MaxTime": 60,
@@ -190,7 +190,7 @@
         ],
         "ThornEnemyNumber : 0 : Time": 20,
         "ThornEnemyNumber : 0 : Translate": [
-            2.9333338737487793,
+            2.9833338260650635,
             2.0,
             2.0
         ],
@@ -213,7 +213,7 @@
         "ThornEnemyNumber : 1 : Time": 20,
         "ThornEnemyNumber : 1 : Translate": [
             0.0,
-            0.0,
+            -0.45000001788139343,
             0.0
         ],
         "TruckConfirmation": 0,
