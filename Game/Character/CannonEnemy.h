@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseCharacter.h"
 #include <list>
+#include <memory>
 
 // 大砲の敵
 class CannonEnemy : public BaseCharacter {
@@ -11,12 +12,31 @@ public: // 仮想関数
 	void Draw() override;
 	void EnemyDraw() override;
 	void DrawImGui() override;
-	std::vector<Collider> colliders_;
+	Collider collider_;
 
 private:
+	void Attack(const Vector3& playerPosition);
 
-	uint32_t interval_ = 0u; // 弾の発射間隔
+private:
+	class Bullet : public BaseCharacter {
+	public:
+		Bullet();
+		void Initialize(const Vector3& translate, const Vector3& shotVec, const float& speed);
+		void Update(const Vector3& playerPosition) override;
+		void OnCollision(Collider& collider, const PlayerDate& date) override;
+		void Draw() override;
+		void EnemyDraw() override;
+		Collider collider_;
+		bool isDead_ = false;
+		Vector3 shotVec_;
+		float speed_ = 1.0f;
+	};
 
-
-
+public:
+	uint32_t kInterval_ = 60u; // 弾の発射間隔
+	float bulletSpeed_ = 1.0f;
+private:
+	uint32_t timer_ = 0u;
+	std::list<std::unique_ptr<Bullet>> bullets_;
+	bool isActive_ = false;
 };
