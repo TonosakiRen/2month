@@ -1,6 +1,6 @@
 {
     "test": {
-        "CannonEnemyConfirmation": 2,
+        "CannonEnemyConfirmation": 0,
         "CannonEnemyNumber : 0 : BulletSpeed": 0.5,
         "CannonEnemyNumber : 0 : Interval": 120,
         "CannonEnemyNumber : 0 : Rotate": [
@@ -199,7 +199,7 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "NormalEnemyConfirmation": 2,
+        "NormalEnemyConfirmation": 6,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -212,15 +212,15 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            27.296594619750977,
+            25.254562377929688,
             2.4000000953674316,
-            -0.5359176993370056
+            -0.69959557056427
         ],
         "NormalEnemyNumber : 1 : Rotate": [
             0.0,
-            0.6652342677116394,
+            0.18541273474693298,
             0.0,
-            0.7466346621513367
+            0.982660710811615
         ],
         "NormalEnemyNumber : 1 : Scale": [
             1.0,
@@ -228,16 +228,80 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
-            113.6540756225586,
-            2.5999999046325684,
-            -1.9172745943069458
+            109.4185562133789,
+            5.800000190734863,
+            0.5020819306373596
         ],
-        "NormalLightEnemyConfirmation": 2,
-        "NormalLightEnemyNumber : 0 : Rotate": [
+        "NormalEnemyNumber : 2 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
             4.371138473402425e-08,
             -1.0
+        ],
+        "NormalEnemyNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 2 : Translate": [
+            122.78827667236328,
+            1.2999999523162842,
+            -6.772935390472412
+        ],
+        "NormalEnemyNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalEnemyNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 3 : Translate": [
+            87.83000183105469,
+            4.400000095367432,
+            2.2950000762939453
+        ],
+        "NormalEnemyNumber : 4 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalEnemyNumber : 4 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 4 : Translate": [
+            115.4749984741211,
+            2.799999952316284,
+            -0.47417089343070984
+        ],
+        "NormalEnemyNumber : 5 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalEnemyNumber : 5 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 5 : Translate": [
+            83.47100067138672,
+            1.2000000476837158,
+            -0.4614175260066986
+        ],
+        "NormalLightEnemyConfirmation": 2,
+        "NormalLightEnemyNumber : 0 : Rotate": [
+            4.873898618029671e-09,
+            -0.6491546630859375,
+            4.873898618029671e-09,
+            -0.760656476020813
         ],
         "NormalLightEnemyNumber : 0 : Scale": [
             1.0,
@@ -245,15 +309,15 @@
             1.0
         ],
         "NormalLightEnemyNumber : 0 : Translate": [
-            97.92559814453125,
+            102.81317138671875,
             1.7000000476837158,
-            -3.804039716720581
+            -4.582026481628418
         ],
         "NormalLightEnemyNumber : 1 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
+            3.086761424242468e-08,
+            -0.25955867767333984,
+            3.086761424242468e-08,
+            -0.9657273292541504
         ],
         "NormalLightEnemyNumber : 1 : Scale": [
             1.0,
@@ -261,9 +325,9 @@
             1.0
         ],
         "NormalLightEnemyNumber : 1 : Translate": [
-            107.16484832763672,
-            9.800000190734863,
-            -1.5326296091079712
+            105.76876831054688,
+            5.0,
+            -2.875110149383545
         ],
         "Player : Rotate": [
             0.0,
@@ -278,8 +342,8 @@
         ],
         "Player : Translate": [
             -17.0,
-            0.7840255498886108,
-            -4.086483478546143
+            1.4140238761901855,
+            -5.314733982086182
         ],
         "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
