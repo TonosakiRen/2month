@@ -8,6 +8,8 @@ void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, 
 	};
 
 	BaseInitialize(1, names);
+	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
+
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -25,7 +27,6 @@ void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, 
 
 	amplitude_ = Vector3(1.0f, 0.0f, 0.0f);
 
-	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
 
 void ThornEnemy::Update(const Vector3& playerPosition) {

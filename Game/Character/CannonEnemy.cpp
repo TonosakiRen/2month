@@ -5,6 +5,9 @@ void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 		"enemy01", // 親
 	};
 	BaseInitialize(static_cast<uint32_t>(names.size()), names);
+	// 大砲の衝突判定
+	collider_.Initialize(&worldTransform_, "Cannon", models_.at(0).modelHandle_);
+
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -17,8 +20,6 @@ void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 
-	// 大砲の衝突判定
-	collider_.Initialize(&worldTransform_, "Cannon", models_.at(0).modelHandle_);
 
 	UpdateTransform();
 }

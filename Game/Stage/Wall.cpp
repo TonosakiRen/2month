@@ -4,6 +4,8 @@
 void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "tatemono";
 	GameObject::Initialize(name);
+	collider_.Initialize(&worldTransform_, name, modelHandle_);
+
 	worldTransform_.scale_ = scale; 
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -11,8 +13,7 @@ void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	rotate = EulerAngle(worldTransform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
-	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	collider_.Initialize(&worldTransform_, name, modelHandle_);
+	//Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
 	
 }
 

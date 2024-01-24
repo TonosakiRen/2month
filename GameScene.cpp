@@ -131,7 +131,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -140,12 +140,12 @@ void GameScene::Initialize() {
 void GameScene::Update(CommandContext& commandContext){
 	Collider::SwitchIsDrawCollider();
 	ViewProjection::SwitchIsUseDebugCamera();
+#ifdef _DEBUG
 	//fps表示
 	ImGui::Begin("fps");
 	auto& io = ImGui::GetIO();
 	ImGui::Text("%f", io.Framerate);
 	ImGui::End();
-#ifdef _DEBUG
 #endif
 	//camera light
 	{

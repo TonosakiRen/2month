@@ -9,6 +9,9 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	};
 
 	BaseInitialize(1, names);
+
+	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
+
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -22,8 +25,6 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	modelsTransform_.at(0).SetParent(&worldTransform_);
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
-
-	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
