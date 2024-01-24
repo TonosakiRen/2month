@@ -37,7 +37,7 @@ private:
 	ShadowSpotLights* shadowSpotLights_ = nullptr;
 
 public:
-	static const uint32_t kMaxEnemyCount = 10u;
+	static const uint32_t kMaxEnemyCount = 100u;
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 	std::vector<std::unique_ptr<NormalLightEnemy>> nLightEnemis_;
 	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;

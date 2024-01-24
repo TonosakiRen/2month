@@ -71,9 +71,9 @@ void Compute::Dispatch(CommandContext& commandContext)
 
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), indexBuffer_->GetSRV());
 	commandContext.Dispatch(indexBuffer_->GetWidth(), indexBuffer_->GetHeight(), 1);
-	
+
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
-	
+
 }
 
 void* Compute::GetData()

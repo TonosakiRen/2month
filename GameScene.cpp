@@ -131,7 +131,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -264,6 +264,13 @@ void GameScene::Update(CommandContext& commandContext){
 		//SceneUpdate
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
 	}
+
+	uint32_t* a = static_cast<uint32_t*>(Compute::data_);
+	if (a[1]) {
+		int a = 0;
+		a++;
+	}
+	
 	
 #ifdef _DEBUG
 	//パーティクル

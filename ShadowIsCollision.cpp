@@ -68,6 +68,8 @@ void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& 
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
+	commandContext.TransitionResource(*resultBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+	commandContext.TransitionResource(*indexBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture),resultBuffer_->GetSRV());
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kIndexTexture), indexBuffer_->GetSRV());
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kIndex), index.x, index.y);

@@ -161,7 +161,7 @@ PixelShaderOutput main(VSOutput input)
 					) {
 					float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
 					if (zInShadowMap != 1.0f) {
-						if (zInLVP < 1.0f && zInLVP - /*0.000002*/0.0000025f  > zInShadowMap ) {
+						if (zInLVP < 1.0f && zInLVP - 0.0000025f  > zInShadowMap ) {
 							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, shadowMapUV);
 							if (enemyIndex.x == 2.0f) {
 								output.shadow.x = 1.0f;
