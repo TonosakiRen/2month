@@ -20,18 +20,19 @@ void NormalLightEnemy::Update(const Vector3& playerPosition) {
 	playerPosition_ = playerPosition;
 	float distance = Distance(playerPosition, worldTransform_.translation_);
 	
-	const float kMaxDistance = 50.0f;
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
 	if (distance > kMaxDistance) {
+		isActive_ = false;
 		return;
 	}
+	isActive_ = true;
 
 	if (!isHit_) {
 		lightDirection_ = Move(playerPosition);
 	}
 	else {
-		KnockBack();
+		CollisionProcess();
 	}
 
 	collider_.AdjustmentScale();
@@ -45,4 +46,15 @@ void NormalLightEnemy::MoveLight() {
 	auto& light = shadowSpotLights_->lights_.at(number_);
 	light.worldTransform.translation_ = offset;
 	light.direction = lightDirection_;
+}
+
+void NormalLightEnemy::CollisionProcess() {
+	// 死亡した時
+	if (hp_ <= 0) {
+		DownAnimation();
+		return;
+	}
+
+	// 衝突時にノックバックとアニメーション
+	KnockBack();
 }

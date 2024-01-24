@@ -350,12 +350,19 @@ float GlobalVariables::GetFloatValue(const std::string& groupName, const std::st
 	// グループを検索 
 	const auto& groupIt = datas_.find(groupName);
 	// 未登録チェック
-	assert(groupIt != datas_.end());
+	//assert(groupIt != datas_.end());
+	// itemがなければ0を返す
+	if (groupIt == datas_.end()) {
+		return 0.0f;
+	}
 #endif // _DEBUG
 	// グループの参照を取得
 	const Group& group = datas_.at(groupName);
 
-	assert(group.contains(key));
+	//assert(group.contains(key));
+	if (!group.contains(key)) {
+		return 0.0f;
+	}
 
 	const Item& item = group.at(key);
 	return std::get<float>(item);

@@ -35,9 +35,12 @@ protected:
 	std::vector<WorldTransform> modelsTransform_;
 	const uint32_t kNumber_;
 	bool isAlive_ = true; // 生きているか
+	bool isActive_ = false; // 起動しているか
 
 public:
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
 	const bool& GetIsAlive() const { return isAlive_; }
 
 };
+
+const float kMaxDistance = 50.0f; // playerとの距離が一定以上なら処理されない

@@ -38,6 +38,10 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Update(playerPosition);
 	}
+	for (auto& enemy : cEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Update(playerPosition);
+	}
 }
 
 void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
@@ -50,6 +54,10 @@ void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date)
 		enemy->OnCollision(collider, date);
 	}
 	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->OnCollision(collider, date);
+	}
+	for (auto& enemy : cEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->OnCollision(collider, date);
 	}
@@ -126,6 +134,23 @@ void EnemyManager::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("CannonEnemy")) {
+			if (ImGui::Button("Create")) {
+				cEnemis_.emplace_back(std::make_unique<CannonEnemy>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", cEnemis_.size());
+			for (int i = 0; i < cEnemis_.size(); i++) {
+				if (ImGui::TreeNode(("cEnemyNumber : " + std::to_string(i)).c_str())) {
+					cEnemis_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						cEnemis_.erase(cEnemis_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenu();
 	}
 #endif // _DEBUG
@@ -165,7 +190,15 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : MaxTime").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxTime_));
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : FlashCount").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxFlashCount_));
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Interval").c_str(), static_cast<int>(sLightEnemis_[index]->kInterval_));
+	}
 
+	global->SetValue(itemName, "CannonEnemyConfirmation" + std::string(), static_cast<int>(cEnemis_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(cEnemis_.size()); index++) {
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), cEnemis_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), cEnemis_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), cEnemis_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Interval").c_str(), static_cast<int>(cEnemis_[index]->kInterval_));
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : BulletSpeed").c_str(), cEnemis_[index]->bulletSpeed_);
 	}
 
 }
@@ -221,6 +254,21 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		enemy->Initialize(scale, rotate, trans);
 		enemy->SetParameters(static_cast<uint32_t>(maxtime),static_cast<uint32_t>(flashCount),static_cast<uint32_t>(interval));
 	}
+
+	num = global->GetIntValue(itemName, "CannonEnemyConfirmation");
+	if (!cEnemis_.empty()) { cEnemis_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		int interval = global->GetIntValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Interval").c_str());
+		float speed = global->GetFloatValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : BulletSpeed").c_str());
+		auto& enemy = cEnemis_.emplace_back(std::make_unique<CannonEnemy>());
+		enemy->Initialize(scale, rotate, trans);
+		enemy->kInterval_ = static_cast<uint32_t>(interval);
+		enemy->bulletSpeed_ = speed;
+	}
+
 }
 
 void EnemyManager::Draw() {
@@ -237,6 +285,10 @@ void EnemyManager::Draw() {
 		enemy->Draw();
 	}
 	for (auto& enemy : sLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
+	for (auto& enemy : cEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
@@ -259,6 +311,10 @@ void EnemyManager::ShadowDraw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : cEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 }
 
 void EnemyManager::SpotLightShadowDraw() {
@@ -271,6 +327,10 @@ void EnemyManager::SpotLightShadowDraw() {
 		enemy->EnemyDraw();
 	}
 	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->EnemyDraw();
+	}
+	for (auto& enemy : cEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->EnemyDraw();
 	}

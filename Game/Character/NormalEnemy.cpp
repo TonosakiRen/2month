@@ -9,6 +9,9 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	};
 
 	BaseInitialize(1, names);
+
+	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
+
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -22,26 +25,25 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	modelsTransform_.at(0).SetParent(&worldTransform_);
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
-
-	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
 	playerPosition_ = playerPosition;
 	float distance = Distance(playerPosition, worldTransform_.translation_);
 
-	const float kMaxDistance = 50.0f;
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
 	if (distance > kMaxDistance) {
+		isActive_ = false;
 		return;
 	}
+	isActive_ = true;
 	
 	if (!isHit_) {
 		Move(playerPosition);
 	}
 	else {
-		KnockBack();
+		CollisionProcess();
 	}
 
 	collider_.AdjustmentScale();
@@ -53,6 +55,8 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (date.id == 0u) {
 		id_ = date.id;
 	}
+	if (!isActive_) { return; }
+
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
@@ -68,9 +72,11 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 	if (isColl) {
 		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
+			// 当たった瞬間
 			isHit_ = true;
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
+			hp_ -= date.damage_;
 		}
 		else {
 			Player::hitCollider_ = &collider_;
@@ -80,11 +86,13 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 }
 
 void NormalEnemy::Draw() {
+	if (!isActive_) { return; }
 	collider_.Draw();
 	BaseDraw();
 }
 
 void NormalEnemy::EnemyDraw() {
+	if (!isActive_) { return; }
 	BaseEnemyDraw();
 }
 
@@ -119,5 +127,28 @@ void NormalEnemy::KnockBack() {
 		isHit_ = false;
 		count = 0;
 	}
+
+}
+
+void NormalEnemy::DownAnimation() {
+	worldTransform_.translation_.y += 0.5f;
+	rotate.y += 2.0f;
+	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
+	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
+	if (60.0f < count++) {
+		isAlive_ = false;
+	}
+}
+
+void NormalEnemy::CollisionProcess() {
+
+	// 死亡した時
+	if (hp_ <= 0) {
+		DownAnimation();
+		return;
+	}
+
+	// 衝突時にノックバックとアニメーション
+	KnockBack();
 
 }

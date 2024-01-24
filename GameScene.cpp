@@ -91,6 +91,11 @@ void GameScene::Initialize() {
 
 	shadowSpotLights_.Update();
 
+#pragma region Scene関係
+
+	titleScene_ = std::make_unique<TitleScene>();
+	titleScene_->Initialize();
+
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
 	inGameScene_->Initialize(&pointLights_,&spotLights_,&shadowSpotLights_);
@@ -98,6 +103,7 @@ void GameScene::Initialize() {
 	// 
 	editorScene_ = std::make_unique<CreateStageScene>();
 	editorScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
+#pragma endregion
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 
@@ -131,7 +137,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -140,8 +146,8 @@ void GameScene::Initialize() {
 void GameScene::Update(CommandContext& commandContext){
 	Collider::SwitchIsDrawCollider();
 	ViewProjection::SwitchIsUseDebugCamera();
-	//fps表示
 #ifdef _DEBUG
+	//fps表示
 	ImGui::Begin("fps");
 	auto& io = ImGui::GetIO();
 	ImGui::Text("%f", io.Framerate);
@@ -283,13 +289,18 @@ void GameScene::Update(CommandContext& commandContext){
 }
 
 void GameScene::TitleInitialize() {
-
+	if (titleScene_) {
+		titleScene_.reset(new TitleScene());
+		titleScene_->Initialize();
+	}
 }
 void GameScene::TitleUpdate() {
 
 	if (input_->TriggerKey(DIK_P)) {
 		sceneRequest_ = Scene::InGame;
 	}
+
+	titleScene_->Update();
 
 }
 void GameScene::InGameInitialize() {
@@ -436,6 +447,7 @@ void GameScene::PostSpriteDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
+		titleScene_->Draw();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();

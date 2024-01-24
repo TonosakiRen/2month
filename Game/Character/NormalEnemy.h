@@ -14,6 +14,9 @@ public: // 仮想関数
 protected:
 	Vector3 Move(const Vector3& playerPosition);
 	void KnockBack();
+	void DownAnimation();
+
+	void CollisionProcess(); // 衝突時の処理
 
 	int count = 0;
 	bool isHit_ = false;
@@ -22,6 +25,8 @@ protected:
 
 	Vector3 playerPosition_;
 	Vector3 knockBackVector_;
+
+	int hp_ = 0;
 
 };
 

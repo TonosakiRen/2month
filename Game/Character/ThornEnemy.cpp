@@ -1,5 +1,6 @@
 #include "ThornEnemy.h"
 #include "ModelManager.h"
+#include "Compute.h"
 
 void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
@@ -7,6 +8,8 @@ void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, 
 	};
 
 	BaseInitialize(1, names);
+	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
+
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -24,10 +27,18 @@ void ThornEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, 
 
 	amplitude_ = Vector3(1.0f, 0.0f, 0.0f);
 
-	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
 }
 
 void ThornEnemy::Update(const Vector3& playerPosition) {
+	float distance = Distance(playerPosition, worldTransform_.translation_);
+	// Playerとの距離が一定数以下なら早期リターン
+	// 後で調整。画面外で処理を走らせないのが目的
+	if (distance > kMaxDistance) {
+		isActive_ = false;
+		return;
+	}
+	isActive_ = true;
+
 	Move();
 
 	collider_.AdjustmentScale();
@@ -35,10 +46,22 @@ void ThornEnemy::Update(const Vector3& playerPosition) {
 }
 
 void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
+	
+	bool isColl = false;
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
-		date;
+		isColl = true;
 	}
+
+	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
+	if (shadowDate[kNumber_] == 1) {
+		isColl = true;
+	}
+
+	if (isColl) {
+
+	}
+
 }
 
 void ThornEnemy::Draw() {
