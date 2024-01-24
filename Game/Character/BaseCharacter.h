@@ -35,6 +35,7 @@ protected:
 	std::vector<WorldTransform> modelsTransform_;
 	const uint32_t kNumber_;
 	bool isAlive_ = true; // 生きているか
+	bool isActive_ = false; // 起動しているか
 
 public:
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }

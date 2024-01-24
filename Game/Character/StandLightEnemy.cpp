@@ -34,8 +34,13 @@ void StandLightEnemy::Update(const Vector3& playerPosition) {
 }
 
 void StandLightEnemy::Draw() {
+	// ライトが点滅しているなら描画
 	if (isLightActive_) {
 		BaseDraw();
+	}
+	// 起動しているなら描画
+	if (isActive_) {
+		//BaseDraw();
 	}
 }
 

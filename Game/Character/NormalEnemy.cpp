@@ -34,8 +34,10 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
 	if (distance > kMaxDistance) {
+		isActive_ = false;
 		return;
 	}
+	isActive_ = true;
 	
 	if (!isHit_) {
 		Move(playerPosition);
@@ -53,6 +55,8 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (date.id == 0u) {
 		id_ = date.id;
 	}
+	if (!isActive_) { return; }
+
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
@@ -77,11 +81,13 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 }
 
 void NormalEnemy::Draw() {
+	if (!isActive_) { return; }
 	collider_.Draw();
 	BaseDraw();
 }
 
 void NormalEnemy::EnemyDraw() {
+	if (!isActive_) { return; }
 	BaseEnemyDraw();
 }
 

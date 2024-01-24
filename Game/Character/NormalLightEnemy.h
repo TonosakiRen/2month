@@ -13,6 +13,7 @@ public:
 private:
 	ShadowSpotLights* shadowSpotLights_ = nullptr;
 	void MoveLight();
+	void CollisionProcess();
 
 	uint32_t number_ = 0u; // ライト所持number
 	Vector3 offset;

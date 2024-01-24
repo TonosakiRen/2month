@@ -43,21 +43,29 @@ void CannonEnemy::Update(const Vector3& playerPosition) {
 }
 
 void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
+	// 本体
+	if (isActive_) {
+
+	}
+	// 弾
 
 }
 
 void CannonEnemy::Draw() {
-	collider_.Draw();
-	BaseDraw();
+	if (isActive_) {
+		collider_.Draw();
+		BaseDraw();
+	}
 	for (auto& bullet : bullets_) {
 		bullet->collider_.Draw();
 		bullet->Draw();
 	}
-
 }
 
 void CannonEnemy::EnemyDraw() {
-	BaseEnemyDraw();
+	if (isActive_) {
+		BaseEnemyDraw();
+	}
 	for (auto& bullet : bullets_) {
 		bullet->EnemyDraw();
 	}
