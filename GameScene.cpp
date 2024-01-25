@@ -108,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -143,67 +143,11 @@ void GameScene::Update(CommandContext& commandContext){
 			camera_->Update(float_x);
 		}
 		
-		// light
-#ifdef _DEBUG
-		ImGui::Begin("DirectionalLight");
-		ImGui::DragFloat3("lightDirection", &directionalLights_.lights_[0].direction.x, 0.01f);
-		ImGui::DragFloat3("lightPosition", &directionalLights_.lights_[0].position.x, 1.0f);
-		ImGui::DragFloat4("lightColor", &directionalLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
-		ImGui::End();
-
-#endif
-		directionalLights_.lights_[0].direction = Normalize(directionalLights_.lights_[0].direction);
 		directionalLights_.Update();
 
-#ifdef _DEBUG
-		ImGui::Begin("pointLight1");
-		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[0].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &pointLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &pointLights_.lights_[0].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat("radius", &pointLights_.lights_[0].radius, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &pointLights_.lights_[0].decay, 0.01f, 0.0f);
-		ImGui::End();
 
-		ImGui::Begin("pointLight3");
-		ImGui::DragFloat3("lightPosition", &pointLights_.lights_[1].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &pointLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &pointLights_.lights_[1].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat("radius", &pointLights_.lights_[1].radius, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &pointLights_.lights_[1].decay, 0.01f, 0.0f);
-		ImGui::End();
-#endif
-		pointLights_.lights_[0].isActive = false;
-		pointLights_.lights_[1].isActive = false;
 		pointLights_.Update();
-
 		spotLights_.Update();
-
-#ifdef _DEBUG
-		ImGui::Begin("shadowSpotLight");
-		ImGui::DragFloat3("lightPosition", &shadowSpotLights_.lights_[0].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &shadowSpotLights_.lights_[0].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &shadowSpotLights_.lights_[0].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat3("direction", &shadowSpotLights_.lights_[0].direction.x, 0.01f, 0.0f);
-		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[0].distance, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[0].decay, 0.01f, 0.0f);
-		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[0].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
-		ImGui::Text("%f", shadowSpotLights_.lights_[0].playerDistance);
-		ImGui::End();
-
-		ImGui::Begin("shadowSpotLight2");
-		ImGui::DragFloat3("lightPosition", &shadowSpotLights_.lights_[1].worldTransform.translation_.x, 0.01f);
-		ImGui::DragFloat3("lightColor", &shadowSpotLights_.lights_[1].color.x, 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat("intensity", &shadowSpotLights_.lights_[1].intensity, 0.01f, 0.0f);
-		ImGui::DragFloat3("direction", &shadowSpotLights_.lights_[1].direction.x, 0.01f, 0.0f);
-		ImGui::DragFloat("distance", &shadowSpotLights_.lights_[1].distance, 0.01f, 0.0f);
-		ImGui::DragFloat("decay", &shadowSpotLights_.lights_[1].decay, 0.01f, 0.0f);
-		ImGui::DragFloat("cosAngle", &shadowSpotLights_.lights_[1].cosAngle, Radian(1.0f), 0.0f, Radian(179.0f));
-		ImGui::End();
-
-#endif
-		shadowSpotLights_.lights_[0].lockUp = { 0.0f,1.0f,0.0f };
-		shadowSpotLights_.lights_[0].direction = Normalize(shadowSpotLights_.lights_[0].direction);
 		shadowSpotLights_.Update();
 	}
 	//Scene

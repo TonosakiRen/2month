@@ -5,7 +5,7 @@ struct Enemy {
 	uint32_t num;
 };
 ConstantBuffer<Enemy> enemy : register(b0);
-[numthreads(1, 1, 1)]
+[numthreads(30, 30, 1)]
 void main( uint3 DTid : SV_DispatchThreadID)
 {
 	if (DTid.x == 0 && DTid.y == 0) {

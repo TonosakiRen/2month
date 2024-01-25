@@ -70,7 +70,7 @@ void Compute::Dispatch(CommandContext& commandContext)
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kEnemyNum), EnemyManager::kMaxEnemyCount);
 
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), indexBuffer_->GetSRV());
-	commandContext.Dispatch(indexBuffer_->GetWidth(), indexBuffer_->GetHeight(), 1);
+	commandContext.Dispatch(1920 / 30, 1080 / 30, 1);
 
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 
