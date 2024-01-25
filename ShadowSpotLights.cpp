@@ -98,7 +98,7 @@ void ShadowSpotLights::Update() {
 
         float fov = (231.0f - data.cosAngle * 100.0f * 2.0f) * std::numbers::pi_v <float> / 180.0f;
 
-        data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance);
+        data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance + 5.0f);
         data.shadowDescriptorHeapIndex = lights_[i].shadowDescriptorHeapIndex;
         data.collisionDescriptorHeapIndex = lights_[i].collisionDescriptorHeapIndex;
 

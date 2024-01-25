@@ -151,10 +151,7 @@ PixelShaderOutput main(VSOutput input)
 
 			//影
 			float32_t4 wp = float4(worldPos.xyz, 1.0f);
-			float32_t4 lightViewPosition = mul(wp, gShadowSpotLights[l].viewProjection);
-			float32_t2 shadowMapUV = lightViewPosition.xy / lightViewPosition.w;
-			shadowMapUV *= float32_t2(0.5f, -0.5f);
-			shadowMapUV += 0.5f;
+			
 
 			float32_t4 nonWp = float4(nonCharacterWorldPos.xyz, 1.0f);
 			float32_t4 nonLightViewPosition = mul(nonWp, gShadowSpotLights[l].viewProjection);
@@ -170,7 +167,7 @@ PixelShaderOutput main(VSOutput input)
 					) {
 					float32_t nonZInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, nonShadowMapUV).r;
 					if (nonZInShadowMap != 1.0f) {
-						if (nonZInLVP < 1.0f && nonZInLVP - 0.0000025f  > nonZInShadowMap) {
+						if ( nonZInLVP  > nonZInShadowMap) {
 							//キャラクターに影を落とさない処理
 							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, nonShadowMapUV);
 							if (enemyIndex.x == 2.0f) {
@@ -181,32 +178,19 @@ PixelShaderOutput main(VSOutput input)
 								output.shadow.y = 1.0f;
 							}
 
-							//if (lightViewPosition.z > 0.0f) {
-								//float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
-							
-								//if (shadowMapUV.x > 0.0f && shadowMapUV.x < 1.0f
-									//&& shadowMapUV.y > 0.0f && shadowMapUV.y < 1.0f
-									//) {
-									float32_t zInLVP = lightViewPosition.z / lightViewPosition.w;
-									float32_t zInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, shadowMapUV).r;
-									if (zInShadowMap != 1.0f) {
-										if (zInLVP < 1.0f && zInLVP - 0.0000025f  > zInShadowMap) {
-											//キャラクターに影を落とさない処理
-											float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, shadowMapUV);
-											if (enemyIndex.x == 2.0f) {
-												color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
-												shading *= shade.value;
-												output.shadow.x = 1.0f;
-											}
-											else {
-												shading *= shade.value;
-												output.shadow.x = 1.0f;
-											}
+							if (nonWp.z <= wp.z) {
 
-										}
-									}
-								//}
-							//}
+								if (enemyIndex.x == 2.0f) {
+									color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
+									shading *= shade.value;
+									output.shadow.x = 1.0f;
+								}
+								else {
+									shading *= shade.value;
+									output.shadow.x = 1.0f;
+								}
+							}
+						
 							
 						}
 					}

@@ -53,7 +53,7 @@ float4 main(VSOutput input) : SV_TARGET
 
 
 	//法線の計算結果、あるいは深度値の計算結果が一定以上ならエッジとみなす。
-	if (color.x >= 0.08f) {
+	if (color.x >= 1.0f) {
 		if (collisionPlayer_.is == 1) {
 			output.color.xyz = param_.edgeColor;
 			output.color.w = 1.0f;
