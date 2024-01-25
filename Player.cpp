@@ -71,6 +71,7 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "knockBackPowerX_", knockBackPowerX_);
 	globalVariables_->AddItem(name, "knockBackPowerY_", knockBackPowerY_);
 	globalVariables_->AddItem(name, "damage_", damage_);
+	globalVariables_->AddItem(name, "MUTEKITIme_", MUTEKITIme_);
 	globalVariables_->LoadFile(name);
 	ApplyGlobalVariable();
 }
@@ -85,7 +86,7 @@ void Player::ApplyGlobalVariable()
 	attackReadySpeed_ = globalVariables_->GetFloatValue(name, "attackReadySpeed_");
 	knockBackPowerX_ = globalVariables_->GetFloatValue(name, "knockBackPowerX_");
 	knockBackPowerY_ = globalVariables_->GetFloatValue(name, "knockBackPowerY_");
-	damage_ = globalVariables_->GetIntValue(name, "damage_");
+	MUTEKITIme_ = globalVariables_->GetIntValue(name, "MUTEKITIme_");
 }
 
 void Player::Update()

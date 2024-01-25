@@ -87,6 +87,7 @@ private:
     int maxHp_ = 100;
     int hp_ = 100;
     int damage_ = 5;
+    int MUTEKITIme_ = 120;
 
     float knockBackPowerX_ = 0.5f;
     float knockBackPowerY_ = 0.8f;
