@@ -1,42 +1,6 @@
 {
-    "test": {
+    "wtoe": {
         "CannonEnemyConfirmation": 0,
-        "CannonEnemyNumber : 0 : BulletSpeed": 0.5,
-        "CannonEnemyNumber : 0 : Interval": 120,
-        "CannonEnemyNumber : 0 : Rotate": [
-            8.4429974123168e-09,
-            -0.6039038896560669,
-            8.4429974123168e-09,
-            -0.7970571517944336
-        ],
-        "CannonEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "CannonEnemyNumber : 0 : Translate": [
-            126.19999694824219,
-            3.0,
-            0.0
-        ],
-        "CannonEnemyNumber : 1 : BulletSpeed": 0.5,
-        "CannonEnemyNumber : 1 : Interval": 180,
-        "CannonEnemyNumber : 1 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "CannonEnemyNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "CannonEnemyNumber : 1 : Translate": [
-            90.0999984741211,
-            10.800000190734863,
-            0.0
-        ],
         "CoinConfirmation": 0,
         "FloorConfirmation": 10,
         "FloorNumber : 0 : Rotate": [
@@ -217,10 +181,10 @@
             -0.69959557056427
         ],
         "NormalEnemyNumber : 1 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
+            0.0,
+            0.18541273474693298,
+            0.0,
+            0.982660710811615
         ],
         "NormalEnemyNumber : 1 : Scale": [
             1.0,
@@ -346,44 +310,9 @@
             -5.314733982086182
         ],
         "StandLightEnemyConfirmation": 0,
-        "StandLightEnemyNumber : 0 : FlashCount": 4,
-        "StandLightEnemyNumber : 0 : Interval": 6,
-        "StandLightEnemyNumber : 0 : MaxTime": 60,
-        "StandLightEnemyNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "StandLightEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "StandLightEnemyNumber : 0 : Translate": [
-            -6.0,
-            1.0,
-            -13.899999618530273
-        ],
-        "ThornEnemyConfirmation": 0,
-        "ThornEnemyEnemyNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "ThornEnemyEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "ThornEnemyEnemyNumber : 0 : Translate": [
-            -3.0,
-            2.0,
-            -6.0
-        ],
+        "ThornEnemyConfirmation": 1,
         "ThornEnemyNumber : 0 : Amplitube": [
-            1.0,
+            0.0,
             0.0,
             0.0
         ],
@@ -398,67 +327,13 @@
             1.0,
             1.0
         ],
-        "ThornEnemyNumber : 0 : Time": 20,
+        "ThornEnemyNumber : 0 : Time": 259,
         "ThornEnemyNumber : 0 : Translate": [
-            2.9833338260650635,
-            2.0,
-            2.0
-        ],
-        "ThornEnemyNumber : 1 : Amplitube": [
-            0.0,
-            3.0,
-            0.0
-        ],
-        "ThornEnemyNumber : 1 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "ThornEnemyNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "ThornEnemyNumber : 1 : Time": 20,
-        "ThornEnemyNumber : 1 : Translate": [
-            0.0,
-            -0.45000001788139343,
-            0.0
+            1.2999999523162842,
+            3.700000047683716,
+            -5.400000095367432
         ],
         "TruckConfirmation": 0,
-        "TruckNumber : 0 : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-        ],
-        "TruckNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "TruckNumber : 0 : Translate": [
-            9.0,
-            2.0,
-            2.4000000953674316
-        ],
-        "TruckNumber : 1 : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
-        ],
-        "TruckNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "TruckNumber : 1 : Translate": [
-            0.0,
-            0.0,
-            0.0
-        ],
         "WallConfirmation": 6,
         "WallLightConfirmation": 2,
         "WallLightNumber : 0 : Rotate": [
