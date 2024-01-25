@@ -24,6 +24,8 @@ public:
 
 	void Draw(Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 
+	std::string GetName() const { return name_; }
+
 	void AdjustmentScale();
 	void MatrixUpdate();
 
