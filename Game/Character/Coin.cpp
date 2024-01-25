@@ -89,6 +89,9 @@ void Coin::CollisionProcess() {
 
 void Coin::WaitProcess() {
 	rotate.y += 2.0f;
+	if (rotate.y >= 360.0f) {
+		rotate.y -= 360.0f;
+	}
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
 }
