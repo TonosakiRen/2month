@@ -70,7 +70,7 @@ void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 }
 
 void ThornEnemy::Draw() {
-#ifdef _RELEASE
+#ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // _RELEASE
 	collider_.Draw();
@@ -78,7 +78,7 @@ void ThornEnemy::Draw() {
 }
 
 void ThornEnemy::EnemyDraw() {
-#ifdef _RELEASE
+#ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // _RELEASE
 	BaseEnemyDraw();

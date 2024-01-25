@@ -92,7 +92,7 @@ void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 void CannonEnemy::Draw() {
 	bool flag = false;
-#ifdef _RELEASE
+#ifndef _DEBUG
 	flag = true;
 #endif // RELEASE
 	if (isActive_) {
@@ -111,7 +111,7 @@ void CannonEnemy::Draw() {
 
 void CannonEnemy::EnemyDraw() {
 	bool flag = false;
-#ifdef _RELEASE
+#ifndef _DEBUG
 	flag = true;
 #endif // RELEASE
 	if (isActive_) {
