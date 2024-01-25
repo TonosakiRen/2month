@@ -54,6 +54,30 @@ void Stage::Draw() {
 	}
 }
 
+void Stage::ShadowDraw() {
+	for (auto& light : wallLights_) {
+		light->Draw();
+	}
+	for (auto& truck : trucks_) {
+		truck->Draw();
+	}
+	for (auto& woodbox : woodboxs_) {
+		woodbox->Draw();
+	}
+}
+
+void Stage::SpotLightShadowDraw() {
+	for (auto& light : wallLights_) {
+		light->Draw();
+	}
+	for (auto& truck : trucks_) {
+		truck->Draw();
+	}
+	for (auto& woodbox : woodboxs_) {
+		woodbox->Draw();
+	}
+}
+
 void Stage::DrawImGui() {
 #ifdef _DEBUG
 	if (ImGui::BeginMenu("Object")) {
