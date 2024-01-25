@@ -68,6 +68,7 @@ void CreateStageScene::ShadowDraw() {
 void CreateStageScene::SpotLightShadowDraw() {
 	enemy_->SpotLightShadowDraw();
 	player_->Draw();
+	stage_->Draw();
 }
 
 void CreateStageScene::DrawImGui() {
