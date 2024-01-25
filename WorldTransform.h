@@ -58,6 +58,9 @@ public:
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVirtualAddress() const {
 		return constBuffer_.GetGPUVirtualAddress();
 	}
+
+	Vector3 GetWorldTranslate() const { return Vector3(matWorld_.m[3][0], matWorld_.m[3][1], matWorld_.m[3][2]); }
+
 public:
 	Vector3 scale_ = { 1.0f,1.0f,1.0f };
 	Quaternion quaternion_ = IdentityQuaternion();
