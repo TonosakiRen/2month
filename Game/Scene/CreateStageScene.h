@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "Game/Stage/Stage.h"
 #include "Game/Character/EnemyManager.h"
-#include "Skydome.h"
 
 class GlobalVariables;
 class PointLights;
@@ -36,7 +35,6 @@ private:
 
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Stage> stage_;
-	std::unique_ptr<Skydome> skydome_;
 	std::unique_ptr<EnemyManager> enemy_;
 
 	GlobalVariables* g = nullptr;

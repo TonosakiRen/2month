@@ -86,8 +86,8 @@ void GameScene::Initialize() {
 	uint32_t uiHandle = TextureManager::Load("sousa.png");
 	ui_->Initialize(uiHandle, { 1140.0f,90.0f });
 
-	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize("skydome");
+	//skydome_ = std::make_unique<Skydome>();
+	//skydome_->Initialize("skydome");
 
 	sphere_ = std::make_unique<GameObject>();
 	sphere_->Initialize("sphere");
@@ -108,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -258,7 +258,7 @@ void GameScene::InGameUpdate() {
 
 	inGameScene_->Update();
 
-	skydome_->Update(inGameScene_->GetPlayerTrans()->translation_);
+	//skydome_->Update(inGameScene_->GetPlayerTrans()->translation_);
 }
 
 void GameScene::EditorInitialize() {
