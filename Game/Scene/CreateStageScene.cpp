@@ -16,9 +16,6 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);
 	stage_->SetPlayerRespawn(player_.get());
 
-	skydome_ = std::make_unique<Skydome>();
-	skydome_->Initialize("skydome");
-
 	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
 	enemy_->Load("test");
@@ -59,7 +56,6 @@ void CreateStageScene::Draw() {
 	stage_->Draw();
 	enemy_->Draw();
 	player_->Draw();
-	skydome_->Draw();
 }
 
 void CreateStageScene::ShadowDraw() {
