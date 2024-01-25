@@ -91,7 +91,15 @@ void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 }
 
 void CannonEnemy::Draw() {
+	bool flag = false;
+#ifdef _RELEASE
+	flag = true;
+#endif // RELEASE
 	if (isActive_) {
+		collider_.Draw();
+		BaseDraw();
+	}
+	else if (!flag){
 		collider_.Draw();
 		BaseDraw();
 	}
@@ -102,9 +110,17 @@ void CannonEnemy::Draw() {
 }
 
 void CannonEnemy::EnemyDraw() {
+	bool flag = false;
+#ifdef _RELEASE
+	flag = true;
+#endif // RELEASE
 	if (isActive_) {
 		BaseEnemyDraw();
 	}
+	else if (!flag) {
+		BaseEnemyDraw();
+	}
+
 	for (auto& bullet : bullets_) {
 		bullet->EnemyDraw();
 	}

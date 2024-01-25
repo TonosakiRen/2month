@@ -86,13 +86,17 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 }
 
 void NormalEnemy::Draw() {
+#ifdef _RELEASE
 	if (!isActive_) { return; }
+#endif // RELEASE
 	collider_.Draw();
 	BaseDraw();
 }
 
 void NormalEnemy::EnemyDraw() {
+#ifdef _RELEASE
 	if (!isActive_) { return; }
+#endif // RELEASE
 	BaseEnemyDraw();
 }
 
