@@ -304,7 +304,6 @@
     <ClCompile Include="Game\Character\ThornEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Game\Character\StandLightEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
@@ -322,6 +321,9 @@
     </ClCompile>
     <ClCompile Include="DepthRenderer.cpp">
       <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\Coin.cpp">
+      <Filter>Game\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,7 +561,6 @@
     <ClInclude Include="Game\Character\ThornEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="Game\Character\StandLightEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
@@ -577,6 +578,9 @@
     </ClInclude>
     <ClInclude Include="DepthRenderer.h">
       <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\Coin.h">
+      <Filter>Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

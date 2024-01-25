@@ -34,10 +34,6 @@ void Stage::Update() {
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Update();
 	}
-	for (auto& coin : coins_) {
-		coin->Update();
-	}
-
 }
 
 void Stage::Draw() {
@@ -55,9 +51,6 @@ void Stage::Draw() {
 	}
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
-	}
-	for (auto& coin : coins_) {
-		coin->Draw();
 	}
 }
 
@@ -154,28 +147,8 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("Coin")) {
-			if (ImGui::Button("Create")) {
-				coins_.emplace_back(std::make_unique<Coin>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
-			}
-			// 要素数確認
-			ImGui::Text("ElementCount = %d", coins_.size());
-			for (int i = 0; i < coins_.size(); i++) {
-				if (ImGui::TreeNode(("CoinNumber : " + std::to_string(i)).c_str())) {
-					coins_.at(i)->DrawImGui();
-					if (ImGui::Button("Delete")) {
-						coins_.erase(coins_.begin() + i);
-					}
-					ImGui::TreePop();
-				}
-			}
-			ImGui::EndMenu();
-		}
-
-
 		ImGui::EndMenu();
 	}
-
 	
 #endif // _DEBUG
 }
@@ -280,12 +253,6 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Translate").c_str(), woodboxs_[index]->GetWorldTransform()->translation_);
 	}
 
-	global->SetValue(itemName, "CoinConfirmation" + std::string(), static_cast<int>(coins_.size()));
-	for (uint32_t index = 0u; index < static_cast<uint32_t>(coins_.size()); index++) {
-		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Scale").c_str(), coins_[index]->GetWorldTransform()->scale_);
-		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Rotate").c_str(), coins_[index]->GetWorldTransform()->quaternion_);
-		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Translate").c_str(), coins_[index]->GetWorldTransform()->translation_);
-	}
 
 }
 
@@ -311,12 +278,6 @@ void Stage::Collision(Player* player) {
 	}
 	for (auto& woodbox : woodboxs_) {
 		if(woodbox->collider_.Collision(player->bodyCollider_, pushBackVector)) {
-			//player->worldTransform_.translation_ -= pushBackVector;
-			player->CollisionProcess(-pushBackVector);
-		}
-	}
-	for (auto& coin : coins_) {
-		if (coin->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
 			player->CollisionProcess(-pushBackVector);
 		}
