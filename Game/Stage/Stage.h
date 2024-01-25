@@ -27,6 +27,7 @@ public:
 	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
 	void Update();
 	void Draw();
+	void DepthDraw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
 	void DrawImGui();

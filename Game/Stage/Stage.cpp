@@ -54,6 +54,22 @@ void Stage::Draw() {
 	}
 }
 
+void Stage::DepthDraw()
+{
+	for (auto& wall : walls_) {
+		wall->Draw();
+	}
+	for (auto& light : wallLights_) {
+		light->Draw();
+	}
+	for (auto& floor : floors_) {
+		floor->Draw();
+	}
+	for (auto& truck : trucks_) {
+		truck->Draw();
+	}
+}
+
 void Stage::ShadowDraw() {
 	for (auto& light : wallLights_) {
 		light->Draw();
