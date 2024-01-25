@@ -4,6 +4,9 @@ decltype(BaseCharacter::masterCount) BaseCharacter::masterCount = 0u;
 BaseCharacter::BaseCharacter() : kNumber_(masterCount) {
 	masterCount++;
 }
+BaseCharacter::~BaseCharacter(){
+	masterCount--;
+}
 
 void BaseCharacter::DrawImGui() {
 #ifdef _DEBUG
@@ -14,6 +17,14 @@ void BaseCharacter::DrawImGui() {
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	UpdateTransform();
 #endif // _DEBUG
+}
+
+void BaseCharacter::PushBackCollision(Collider& collider) {
+	Vector3 pushBackVector;
+	if (this->collider_.Collision(collider, pushBackVector)) {
+		worldTransform_.translation_ += pushBackVector;
+		UpdateTransform();
+	}
 }
 
 void BaseCharacter::BaseInitialize(const uint32_t& modelNumber, std::vector<std::string> names) {

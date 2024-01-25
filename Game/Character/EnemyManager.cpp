@@ -42,6 +42,10 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Update(playerPosition);
 	}
+	for (auto& coin : coins_) {
+		if (!coin->GetIsAlive()) { continue; }
+		coin->Update(playerPosition);
+	}
 }
 
 void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
@@ -60,6 +64,30 @@ void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date)
 	for (auto& enemy : cEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->OnCollision(collider, date);
+	}
+	for (auto& coin : coins_) {
+		if (!coin->GetIsAlive()) { continue; }
+		coin->OnCollision(collider, date);
+	}
+
+}
+
+void EnemyManager::OnCollisionStage(Collider& collider) {
+	for (auto& enemy : nEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : nLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : cEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
 	}
 }
 
@@ -151,6 +179,23 @@ void EnemyManager::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Coin")) {
+			if (ImGui::Button("Create")) {
+				coins_.emplace_back(std::make_unique<Coin>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", coins_.size());
+			for (int i = 0; i < coins_.size(); i++) {
+				if (ImGui::TreeNode(("coinNumber : " + std::to_string(i)).c_str())) {
+					coins_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						coins_.erase(coins_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenu();
 	}
 #endif // _DEBUG
@@ -201,6 +246,12 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : BulletSpeed").c_str(), cEnemis_[index]->bulletSpeed_);
 	}
 
+	global->SetValue(itemName, "CoinConfirmation" + std::string(), static_cast<int>(coins_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(coins_.size()); index++) {
+		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Scale").c_str(), coins_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Rotate").c_str(), coins_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Translate").c_str(), coins_[index]->GetWorldTransform()->translation_);
+	}
 }
 
 void EnemyManager::Load(const std::filesystem::path& loadFile) {
@@ -269,6 +320,17 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		enemy->bulletSpeed_ = speed;
 	}
 
+	num = global->GetIntValue(itemName, "CoinConfirmation");
+	if (!coins_.empty()) { coins_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("CoinNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("CoinNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("CoinNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& enemy = coins_.emplace_back(std::make_unique<Coin>());
+		enemy->Initialize(scale, rotate, trans);
+		//enemy->SetLight(shadowSpotLights_, index);
+	}
+
 }
 
 void EnemyManager::Draw() {
@@ -292,6 +354,11 @@ void EnemyManager::Draw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : coins_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
+
 }
 
 void EnemyManager::ShadowDraw() {
@@ -315,6 +382,10 @@ void EnemyManager::ShadowDraw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : coins_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 }
 
 void EnemyManager::SpotLightShadowDraw() {
@@ -331,6 +402,10 @@ void EnemyManager::SpotLightShadowDraw() {
 		enemy->EnemyDraw();
 	}
 	for (auto& enemy : cEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->EnemyDraw();
+	}
+	for (auto& enemy : coins_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->EnemyDraw();
 	}

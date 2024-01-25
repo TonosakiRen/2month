@@ -8,6 +8,7 @@
 #include "ThornEnemy.h"
 #include "StandLightEnemy.h"
 #include "CannonEnemy.h"
+#include "Coin.h"
 
 class SpotLights;
 class PointLights;
@@ -23,6 +24,7 @@ public:
 	void Initialize(PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight); // 将来的にリスポーン構造体ptrを渡す
 	void Update(const Vector3& playerPosition);
 	void OnCollisionPlayer(Collider& collider, const PlayerDate& date); // playerとの衝突判定を取得
+	void OnCollisionStage(Collider& collider);
 
 	void DrawImGui();
 	void Save(const char* itemName);
@@ -44,5 +46,6 @@ public:
 	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;
 	std::vector<std::unique_ptr<StandLightEnemy>> sLightEnemis_;
 	std::vector<std::unique_ptr<CannonEnemy>> cEnemis_;
+	std::vector<std::unique_ptr<Coin>> coins_;
 
 };

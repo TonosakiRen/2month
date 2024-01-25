@@ -12,6 +12,7 @@ class BaseCharacter {
 public:
 	static uint32_t masterCount;
 	BaseCharacter();
+	~BaseCharacter();
 public:
 	virtual void Initialize(const Vector3& scale = Vector3(1.0f, 1.0f, 1.0f), const Quaternion& quaternion = Quaternion(0.0f, 0.0f, 0.0f, 1.0f), const Vector3& translate = Vector3(0.0f, 0.0f, 0.0f)) {};
 	virtual void Update(const Vector3& playerPosition) {};
@@ -19,6 +20,8 @@ public:
 	virtual void Draw() {};
 	virtual void EnemyDraw() {};
 	virtual void DrawImGui();
+
+	void PushBackCollision(Collider& collider); // 押し戻し処理
 
 protected:
 	// 回転用
@@ -38,9 +41,10 @@ protected:
 	bool isActive_ = true; // 起動しているか
 
 public:
+	Collider collider_;
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
 	const bool& GetIsAlive() const { return isAlive_; }
 
 };
 
-const float kMaxDistance = 100000.0f; // playerとの距離が一定以上なら処理されない
+const float kMaxDistance = 50.0f; // playerとの距離が一定以上なら処理されない

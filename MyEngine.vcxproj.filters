@@ -74,7 +74,7 @@
     <Filter Include="Game\Character">
       <UniqueIdentifier>{ad0acef1-320e-495e-854d-242f1018fb82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene">
+    <Filter Include="Game\Scene">
       <UniqueIdentifier>{fce6313e-9184-4fe0-a6a6-73d39ea7edf5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -304,7 +304,6 @@
     <ClCompile Include="Game\Character\ThornEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Game\Character\StandLightEnemy.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
@@ -312,16 +311,19 @@
       <Filter>Game\Character</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\CreateStageScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\InGameScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scene\TitleScene.cpp">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="DepthRenderer.cpp">
       <Filter>Engine\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Character\Coin.cpp">
+      <Filter>Game\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,7 +561,6 @@
     <ClInclude Include="Game\Character\ThornEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="Game\Character\StandLightEnemy.h">
       <Filter>Game\Character</Filter>
     </ClInclude>
@@ -567,16 +568,19 @@
       <Filter>Game\Character</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\CreateStageScene.h">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\InGameScene.h">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scene\TitleScene.h">
-      <Filter>Scene</Filter>
+      <Filter>Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="DepthRenderer.h">
       <Filter>Engine\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Character\Coin.h">
+      <Filter>Game\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

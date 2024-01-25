@@ -107,7 +107,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="ColorBuffer.cpp" />
     <ClCompile Include="CommandContext.cpp" />
@@ -136,6 +135,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game\Character\BaseCharacter.cpp" />
     <ClCompile Include="Game\Character\CannonEnemy.cpp" />
+    <ClCompile Include="Game\Character\Coin.cpp" />
     <ClCompile Include="Game\Character\EnemyManager.cpp" />
     <ClCompile Include="Game\Character\NormalEnemy.cpp" />
     <ClCompile Include="Game\Character\NormalLightEnemy.cpp" />
@@ -191,7 +191,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="ColorBuffer.h" />
     <ClInclude Include="CommandContext.h" />
@@ -222,6 +221,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Game\Character\BaseCharacter.h" />
     <ClInclude Include="Game\Character\CannonEnemy.h" />
+    <ClInclude Include="Game\Character\Coin.h" />
     <ClInclude Include="Game\Character\EnemyManager.h" />
     <ClInclude Include="Game\Character\NormalEnemy.h" />
     <ClInclude Include="Game\Character\NormalLightEnemy.h" />
