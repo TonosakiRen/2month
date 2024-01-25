@@ -19,6 +19,14 @@ void BaseCharacter::DrawImGui() {
 #endif // _DEBUG
 }
 
+void BaseCharacter::PushBackCollision(Collider& collider) {
+	Vector3 pushBackVector;
+	if (this->collider_.Collision(collider, pushBackVector)) {
+		worldTransform_.translation_ += pushBackVector;
+		UpdateTransform();
+	}
+}
+
 void BaseCharacter::BaseInitialize(const uint32_t& modelNumber, std::vector<std::string> names) {
 	models_.resize(modelNumber);
 	modelsTransform_.resize(modelNumber);

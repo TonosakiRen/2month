@@ -12,6 +12,7 @@ class SpotLights;
 class PointLights;
 class ShadowSpotLights;
 class Player;
+class EnemyManager;
 
 struct SRT {
 	Vector3 scale;
@@ -32,6 +33,7 @@ public:
 	void Save(const char* itemName);
 
 	void Collision(Player* player);
+	void Collision(EnemyManager* enemis);
 	Collider& GetWallCollider(uint32_t number) const { return walls_.at(number)->collider_; }
 	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
 	

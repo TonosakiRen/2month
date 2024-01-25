@@ -7,6 +7,7 @@
 #include "SpotLights.h"
 #include "PointLights.h"
 #include "ShadowSpotLights.h"
+#include "Game/Character/EnemyManager.h"
 
 void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
 	Load(loadFile);
@@ -321,6 +322,23 @@ void Stage::Collision(Player* player) {
 		}
 	}
 	//player->worldTransform_.Update();
+}
+
+void Stage::Collision(EnemyManager* enemis) {
+	Vector3 pushBackVector;
+	for (auto& wall : walls_) {
+		enemis->OnCollisionStage(wall->collider_);
+	}
+	for (auto& floor : floors_) {
+		enemis->OnCollisionStage(floor->collider_);
+	}
+	for (auto& truck : trucks_) {
+		enemis->OnCollisionStage(truck->collider_);
+	}
+	for (auto& woodbox : woodboxs_) {
+		enemis->OnCollisionStage(woodbox->collider_);
+	}
+
 }
 
 void Stage::SetPlayerRespawn(Player* const player) const {

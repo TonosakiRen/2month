@@ -23,6 +23,7 @@ public:
 	void Initialize(PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight); // 将来的にリスポーン構造体ptrを渡す
 	void Update(const Vector3& playerPosition);
 	void OnCollisionPlayer(Collider& collider, const PlayerDate& date); // playerとの衝突判定を取得
+	void OnCollisionStage(Collider& collider);
 
 	void DrawImGui();
 	void Save(const char* itemName);

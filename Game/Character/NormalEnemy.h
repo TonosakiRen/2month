@@ -9,8 +9,6 @@ public: // 仮想関数
 	void Draw() override;
 	void EnemyDraw() override;
 
-
-	Collider collider_;
 protected:
 	Vector3 Move(const Vector3& playerPosition);
 	void KnockBack();

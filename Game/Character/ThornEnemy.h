@@ -12,9 +12,6 @@ public: // 仮想関数
 
 	void SetState(const Vector3& amplitube, const uint32_t time);
 
-
-	Collider collider_;
-
 private:
 	void Move();
 public:

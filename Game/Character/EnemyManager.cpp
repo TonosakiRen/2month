@@ -63,6 +63,25 @@ void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date)
 	}
 }
 
+void EnemyManager::OnCollisionStage(Collider& collider) {
+	for (auto& enemy : nEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : nLightEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : tEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+	for (auto& enemy : cEnemis_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->PushBackCollision(collider);
+	}
+}
+
 void EnemyManager::DrawImGui() {
 #ifdef _DEBUG
 	if (ImGui::BeginMenu("Enemis")) {

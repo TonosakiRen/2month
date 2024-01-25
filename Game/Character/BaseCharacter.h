@@ -21,6 +21,8 @@ public:
 	virtual void EnemyDraw() {};
 	virtual void DrawImGui();
 
+	void PushBackCollision(Collider& collider); // 押し戻し処理
+
 protected:
 	// 回転用
 	Vector3 rotate;
@@ -39,6 +41,7 @@ protected:
 	bool isActive_ = true; // 起動しているか
 
 public:
+	Collider collider_;
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
 	const bool& GetIsAlive() const { return isAlive_; }
 

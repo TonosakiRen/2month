@@ -12,7 +12,6 @@ public: // 仮想関数
 	void Draw() override;
 	void EnemyDraw() override;
 	void DrawImGui() override;
-	Collider collider_;
 
 private:
 	void Attack(const Vector3& playerPosition);
@@ -27,7 +26,6 @@ private:
 		void OnCollision(Collider& collider, const PlayerDate& date) override;
 		void Draw() override;
 		void EnemyDraw() override;
-		Collider collider_;
 		bool isDead_ = false;
 		Vector3 shotVec_;
 		float speed_ = 1.0f;
@@ -41,7 +39,7 @@ private:
 	std::list<std::unique_ptr<Bullet>> bullets_;
 
 	bool isHit_ = false;
-	uint32_t hp_;
-	uint32_t id_;
+	uint32_t hp_ = 0u;
+	uint32_t id_ = 0u;
 
 };

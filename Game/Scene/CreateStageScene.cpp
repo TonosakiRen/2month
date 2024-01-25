@@ -46,6 +46,7 @@ void CreateStageScene::Update() {
 	player_->Update();
 
 	stage_->Collision(player_.get());
+	stage_->Collision(enemy_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
 	player_->EnemyShadowCollision();
 	player_->EnemyCollision();
