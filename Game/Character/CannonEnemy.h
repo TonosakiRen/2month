@@ -16,6 +16,7 @@ public: // 仮想関数
 
 private:
 	void Attack(const Vector3& playerPosition);
+	void CollisionProcess(); // 衝突時の処理
 
 private:
 	class Bullet : public BaseCharacter {
@@ -38,4 +39,9 @@ public:
 private:
 	uint32_t timer_ = 0u;
 	std::list<std::unique_ptr<Bullet>> bullets_;
+
+	bool isHit_ = false;
+	uint32_t hp_;
+	uint32_t id_;
+
 };

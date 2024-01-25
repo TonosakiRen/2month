@@ -145,6 +145,21 @@ void Player::EnemyShadowCollision()
 				hp_ -= damage_;
 			}
 		}
+		else if (hitCollider_->GetName() == "CannonBullet") {
+			if (isKnockBack_ == false) {
+				isKnockBack_ = true;
+				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+				knockBackDirection_ = Normalize(vec);
+				jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+				hp_ -= damage_;
+				if (headRotate.x < 0.0f) {
+					attackParam_.phase = 3;
+				}
+				else {
+					attackParam_.phase = 2;
+				}
+			}
+		}
 	}
 }
 
@@ -156,8 +171,23 @@ void Player::EnemyCollision()
 				isKnockBack_ = true;
 				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 				knockBackDirection_ = Normalize(vec);
-				jumpParam_.velocity_ = {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
+				jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 				hp_ -= damage_;
+			}
+		}
+		else if (hitCollider_->GetName() == "CannonBullet") {
+			if (isKnockBack_ == false) {
+				isKnockBack_ = true;
+				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+				knockBackDirection_ = Normalize(vec);
+				jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+				hp_ -= damage_;
+				if (headRotate.x < 0.0f) {
+					attackParam_.phase = 3;
+				}
+				else {
+					attackParam_.phase = 2;
+				}
 			}
 		}
 	}
@@ -276,6 +306,7 @@ void Player::Attack() {
 				headRotate.x = 0.0f;
 				attackParam_.isAttacked = false;
 			}
+			break;
 		case 3:
 			//攻撃準備中にノックバックしてしまって頭で元の位置に戻る
 			headRotate.x += backHeadSpeed_;
