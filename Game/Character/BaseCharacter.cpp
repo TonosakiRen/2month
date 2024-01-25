@@ -4,6 +4,9 @@ decltype(BaseCharacter::masterCount) BaseCharacter::masterCount = 0u;
 BaseCharacter::BaseCharacter() : kNumber_(masterCount) {
 	masterCount++;
 }
+BaseCharacter::~BaseCharacter(){
+	masterCount--;
+}
 
 void BaseCharacter::DrawImGui() {
 #ifdef _DEBUG
