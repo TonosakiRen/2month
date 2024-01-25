@@ -8,10 +8,12 @@ public:
 
     void Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate);
     void Update();
+    void OnCollision();
     void Draw();
     void DrawImGui();
 
 public:
     Collider collider_;
     Vector3 rotate;
+    bool isActive_ = true;
 };

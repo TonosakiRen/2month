@@ -317,7 +317,7 @@ void Stage::Collision(Player* player) {
 	for (auto& coin : coins_) {
 		if (coin->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
-			player->CollisionProcess(-pushBackVector);
+			coin->OnCollision();
 		}
 	}
 	//player->worldTransform_.Update();

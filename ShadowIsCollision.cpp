@@ -75,7 +75,7 @@ void ShadowIsCollision::Dispatch(CommandContext& commandContext, const Vector2& 
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kIndex), index.x, index.y);
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kLuminance), luminance);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
-	commandContext.Dispatch(resultBuffer_->GetWidth(), resultBuffer_->GetHeight(), 1);
+	commandContext.Dispatch(1920 / 30, 1080 / 30, 1);
 	
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
 }

@@ -13,12 +13,17 @@ void Coin::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
 	collider_.Initialize(&worldTransform_, name, modelHandle_);
-
+	isActive_ = true;
 }
 
 void Coin::Update() {
 	collider_.AdjustmentScale();
 	UpdateMatrix();
+}
+
+void Coin::OnCollision()
+{
+
 }
 
 void Coin::Draw() {

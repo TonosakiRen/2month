@@ -125,77 +125,89 @@ PixelShaderOutput main(VSOutput input)
 	//shadowSpotLight
 	for (int l = 0; l < lightNum.shadowSpotLight; l++) {
 		if (gShadowSpotLights[l].isActive) {
-			float32_t3 spotLightDirectionOnSurface = normalize(worldPos - gShadowSpotLights[l].position);
-			float32_t distance = length(gShadowSpotLights[l].position - worldPos);
-			float32_t factor = pow(saturate(-distance / gShadowSpotLights[l].distance + 1.0), gShadowSpotLights[l].decay);
-			float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowSpotLights[l].direction);
-			float32_t falloffFactor = saturate((cosAngle - gShadowSpotLights[l].cosAngle) / (1.0f - gShadowSpotLights[l].cosAngle));
-
-
-			//spotLightDiffuse
-			float32_t NdotL = dot(normal, -spotLightDirectionOnSurface);
-			float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-			float32_t3 spotLightdiffuse = gShadowSpotLights[l].color.xyz * cos * gShadowSpotLights[l].intensity * factor * falloffFactor;
-
-
-			//spotLightSpecular
-			float32_t3 viewDirection = normalize(gShadowSpotLights[l].position - worldPos.xyz);
-
-			float32_t3 reflectVec = reflect(spotLightDirectionOnSurface, normal);
-			float32_t specluerPower = 10.0f;
-			float32_t RdotE = dot(reflectVec, viewDirection);
-			float32_t specularPow = pow(saturate(RdotE), specluerPower);
-			float32_t3 spotLightSpecluer = gShadowSpotLights[l].color.xyz * gShadowSpotLights[l].intensity * specularPow * factor * falloffFactor;
-
-			lighting += (spotLightdiffuse + spotLightSpecluer);
-
-			//影
-			float32_t4 wp = float4(worldPos.xyz, 1.0f);
 			
+				float32_t3 spotLightDirectionOnSurface = normalize(worldPos - gShadowSpotLights[l].position);
+				float32_t distance = length(gShadowSpotLights[l].position - worldPos);
+				float32_t factor = pow(saturate(-distance / gShadowSpotLights[l].distance + 1.0), gShadowSpotLights[l].decay);
+				float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowSpotLights[l].direction);
+				float32_t falloffFactor = saturate((cosAngle - gShadowSpotLights[l].cosAngle) / (1.0f - gShadowSpotLights[l].cosAngle));
 
-			float32_t4 nonWp = float4(nonCharacterWorldPos.xyz, 1.0f);
-			float32_t4 nonLightViewPosition = mul(nonWp, gShadowSpotLights[l].viewProjection);
-			float32_t2 nonShadowMapUV = nonLightViewPosition.xy / nonLightViewPosition.w;
-			nonShadowMapUV *= float32_t2(0.5f, -0.5f);
-			nonShadowMapUV += 0.5f;
 
-			if (nonLightViewPosition.z > 0.0f ) {
-				float32_t nonZInLVP = nonLightViewPosition.z / nonLightViewPosition.w;
+				//spotLightDiffuse
+				float32_t NdotL = dot(normal, -spotLightDirectionOnSurface);
+				float32_t cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+				float32_t3 spotLightdiffuse = gShadowSpotLights[l].color.xyz * cos * gShadowSpotLights[l].intensity * factor * falloffFactor;
 
-				if (nonShadowMapUV.x > 0.0f && nonShadowMapUV.x < 1.0f
-					&& nonShadowMapUV.y > 0.0f && nonShadowMapUV.y < 1.0f
-					) {
-					float32_t nonZInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, nonShadowMapUV).r;
-					if (nonZInShadowMap != 1.0f) {
-						if ( nonZInLVP  > nonZInShadowMap) {
-							//キャラクターに影を落とさない処理
-							float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, nonShadowMapUV);
-							if (enemyIndex.x == 2.0f) {
-								output.shadow.y = 2.0f;
-								output.shadow.z = enemyIndex.y;
-							}
-							else {
-								output.shadow.y = 1.0f;
-							}
 
-							if (nonWp.z <= wp.z) {
+				//spotLightSpecular
+				float32_t3 viewDirection = normalize(gShadowSpotLights[l].position - worldPos.xyz);
 
+				float32_t3 reflectVec = reflect(spotLightDirectionOnSurface, normal);
+				float32_t specluerPower = 10.0f;
+				float32_t RdotE = dot(reflectVec, viewDirection);
+				float32_t specularPow = pow(saturate(RdotE), specluerPower);
+				float32_t3 spotLightSpecluer = gShadowSpotLights[l].color.xyz * gShadowSpotLights[l].intensity * specularPow * factor * falloffFactor;
+
+				lighting += (spotLightdiffuse + spotLightSpecluer);
+
+				//影
+				float32_t4 wp = float4(worldPos.xyz, 1.0f);
+
+
+				float32_t4 nonWp = float4(nonCharacterWorldPos.xyz, 1.0f);
+				float32_t4 nonLightViewPosition = mul(nonWp, gShadowSpotLights[l].viewProjection);
+
+				if (nonLightViewPosition.z > 0.0f) {
+
+					float32_t2 nonShadowMapUV = nonLightViewPosition.xy / nonLightViewPosition.w;
+					nonShadowMapUV *= float32_t2(0.5f, -0.5f);
+					nonShadowMapUV += 0.5f;
+
+					if (nonShadowMapUV.x > 0.0f && nonShadowMapUV.x < 1.0f
+						&& nonShadowMapUV.y > 0.0f && nonShadowMapUV.y < 1.0f
+						) {
+
+						float32_t nonZInShadowMap = Texture2DTable[gShadowSpotLights[l].shadowDescriptorIndex].Sample(pointSmp, nonShadowMapUV).r;
+
+						if (nonZInShadowMap != 1.0f) {
+
+							float32_t nonZInLVP = nonLightViewPosition.z / nonLightViewPosition.w;
+
+							if (nonZInLVP > nonZInShadowMap) {
+								//キャラクターに影を落とさない処理
+								float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, nonShadowMapUV);
 								if (enemyIndex.x == 2.0f) {
-									color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
-									shading *= shade.value;
-									output.shadow.x = 1.0f;
+									output.shadow.y = 2.0f;
+									output.shadow.z = enemyIndex.y;
 								}
-								else {
-									shading *= shade.value;
-									output.shadow.x = 1.0f;
+								else if (enemyIndex.x == 1.0f) {
+									output.shadow.y = 1.0f;
 								}
+
+								if (nonWp.z <= wp.z) {
+
+									if (enemyIndex.x == 2.0f) {
+										color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
+										shading *= shade.value;
+
+									}
+									else if (enemyIndex.x == 1.0f) {
+										color.xyz = float32_t3(1.0f, 0.0f, 0.0f);
+
+									}
+									else {
+										shading *= shade.value;
+									}
+									output.shadow.x = 1.0f;
+
+								}
+
+
 							}
-						
-							
 						}
 					}
 				}
-			}
+			
 		}
 	}
 

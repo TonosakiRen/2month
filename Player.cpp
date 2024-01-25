@@ -55,7 +55,7 @@ void Player::Initialize(const std::string name)
 	SetGlobalVariable();
 
 	uint32_t hpHandle = TextureManager::Load("hp.png");
-	hpSprite_.Initialize(hpHandle, { 180.0f,680.0f });
+	hpSprite_.Initialize(hpHandle, { 190.0f,1000.0f });
 	hpSprite_.size_ = {285.0f,32.0f};
 }
 
@@ -123,6 +123,8 @@ void Player::UIUpdate()
 	hp_ = clamp(hp_, 0, maxHp_);
 	//285
 	hpSprite_.size_.x = 285.0f * (hp_ / float(maxHp_));
+	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0, 285.0f);
+	hpSprite_.position_.x = 190.0f - (maxHp_ - hp_) * 1.5f;
 }
 
 void Player::Draw() {
@@ -194,6 +196,7 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 		jumpParam_.isJumped_ = false;
 		isKnockBack_ = false;
 		jumpParam_.velocity_.x = 0.0f;
+		jumpParam_.velocity_.y = 0.0f;
 		jumpParam_.velocity_.z = 0.0f;
 	}
 }
@@ -294,10 +297,6 @@ void Player::Attack() {
 }
 
 void Player::MoveLimit() {
-	worldTransform_.translation_.y = clamp(worldTransform_.translation_.y, modelHeight_ / 2.0f - 1.0f, FLT_MAX);
-	if (worldTransform_.translation_.y <= modelHeight_ / 2.0f - 1.0f) {
-		jumpParam_.isJumped_ = false;
-	}
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -10.5f + bodyModelSize_.z / 2.0f, FLT_MAX);
 }
 

@@ -11,7 +11,7 @@ struct Luminance {
 ConstantBuffer<Luminance> collisionLuminance : register(b1);
 SamplerState smp : register(s0);
 
-[numthreads(1, 1, 1)]
+[numthreads(30, 30, 1)]
 void main( uint3 DTid : SV_DispatchThreadID)
 {
 	if (DTid.x == 0 && DTid.y == 0) {
