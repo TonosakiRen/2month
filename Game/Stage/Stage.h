@@ -27,7 +27,7 @@ public:
 	~Stage() = default;
 
 	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
-	void Update();
+	void Update(const Vector3& playerWorldPosition);
 	void Draw();
 	void DepthDraw();
 	void ShadowDraw();

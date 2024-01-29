@@ -17,7 +17,9 @@ void Wall::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	
 }
 
-void Wall::Update() {
+void Wall::Update(const Vector3& playerWorldPosition) {
+
+
 	collider_.AdjustmentScale();
 	UpdateMatrix();
 }

@@ -18,9 +18,9 @@ void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* point
 
 }
 
-void Stage::Update() {
+void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& wall : walls_) {
-		wall->Update();
+		wall->Update(playerWorldPosition);
 	}
 	for (auto& light : wallLights_) {
 		light->Update();

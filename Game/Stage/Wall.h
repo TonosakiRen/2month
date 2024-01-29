@@ -7,7 +7,7 @@ class Wall :
 public:
 
     void Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate);
-    void Update();
+    void Update(const Vector3& playerWorldPosition);
     void Draw();
     void DrawImGui();
 
