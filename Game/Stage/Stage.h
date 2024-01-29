@@ -4,6 +4,8 @@
 #include "Floor.h"
 #include "Truck.h"
 #include "WoodBox.h"
+#include "MoveFloor.h"
+
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -54,6 +56,7 @@ private:
 	std::vector<std::unique_ptr<Floor>> floors_;
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
+	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

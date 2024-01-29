@@ -34,6 +34,9 @@ void Stage::Update() {
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Update();
 	}
+	for (auto& floor : moveFloors_) {
+		floor->Update();
+	}
 }
 
 void Stage::Draw() {
@@ -51,6 +54,9 @@ void Stage::Draw() {
 	}
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
+	}
+	for (auto& floor : moveFloors_) {
+		floor->Draw();
 	}
 }
 
@@ -140,6 +146,24 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("MoveFloors")) {
+			if (ImGui::Button("Create")) {
+				moveFloors_.emplace_back(std::make_unique<MoveFloor>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", moveFloors_.size());
+			for (int i = 0; i < moveFloors_.size(); i++) {
+				if (ImGui::TreeNode(("FloorNumber : " + std::to_string(i)).c_str())) {
+					moveFloors_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						moveFloors_.erase(moveFloors_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("Trucks")) {
 			if (ImGui::Button("Create")) {
 				trucks_.emplace_back(std::make_unique<Truck>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
@@ -217,6 +241,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		floors->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "MoveFloorConfirmation");
+	moveFloors_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& floors = moveFloors_.emplace_back(std::make_unique<MoveFloor>());
+		floors->Initialize(scale, rotate, trans);
+	}
+
 	num = global->GetIntValue(selectName, "TruckConfirmation");
 	trucks_.clear(); // 要素の全削除
 	for (int i = 0; i < num; i++) {
@@ -266,6 +300,13 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("FloorNumber : " + std::to_string(index) + " : Scale").c_str(), floors_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("FloorNumber : " + std::to_string(index) + " : Rotate").c_str(), floors_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("FloorNumber : " + std::to_string(index) + " : Translate").c_str(), floors_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "MoveFloorConfirmation" + std::string(), static_cast<int>(moveFloors_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(moveFloors_.size()); index++) {
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Scale").c_str(), moveFloors_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Rotate").c_str(), moveFloors_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Translate").c_str(), moveFloors_[index]->GetWorldTransform()->translation_);
 	}
 
 	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
