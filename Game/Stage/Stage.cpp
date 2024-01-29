@@ -246,9 +246,11 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	for (int i = 0; i < num; i++) {
 		Vector3 scale = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Rotate").c_str());
-		Vector3 trans = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Translate").c_str());
+		Vector3 start = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : StartPosition").c_str());
+		Vector3 end = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : EndPosition").c_str());
+		float speed = global->GetFloatValue(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Speed").c_str());
 		auto& floors = moveFloors_.emplace_back(std::make_unique<MoveFloor>());
-		floors->Initialize(scale, rotate, trans);
+		floors->Initialize(start, end, rotate, scale, speed);
 	}
 
 	num = global->GetIntValue(selectName, "TruckConfirmation");
@@ -306,7 +308,11 @@ void Stage::Save(const char* itemName) {
 	for (uint32_t index = 0u; index < static_cast<uint32_t>(moveFloors_.size()); index++) {
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Scale").c_str(), moveFloors_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Rotate").c_str(), moveFloors_[index]->GetWorldTransform()->quaternion_);
-		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Translate").c_str(), moveFloors_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : StartPosition").c_str(), moveFloors_[index]->GetParam().startPos_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : EndPosition").c_str(), moveFloors_[index]->GetParam().endPos_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Speed").c_str(), moveFloors_[index]->GetParam().speed_);
+
+
 	}
 
 	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
@@ -328,6 +334,7 @@ void Stage::Save(const char* itemName) {
 
 void Stage::Collision(Player* player) {
 	Vector3 pushBackVector;
+	player->SetParent(nullptr);
 	for (auto& wall : walls_) {
 		if(wall->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
@@ -338,6 +345,19 @@ void Stage::Collision(Player* player) {
 		if(floor->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
 			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	for (auto& floor : moveFloors_) {
+		if(floor->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+			float y = Normalize(-pushBackVector).y;
+			if (y == 1.0f) {
+				player->SetParent(floor->GetWorldTransform());
+				player->GetWorldTransform()->SetIsRotateParent(false);
+				player->GetWorldTransform()->SetIsScaleParent(false);
+				
+			}
 		}
 	}
 	for (auto& truck : trucks_) {

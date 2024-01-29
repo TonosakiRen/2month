@@ -136,9 +136,9 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		else {
 			currentViewProjection_ = camera_.get();
-			float float_x = inGameScene_->GetPlayerTrans()->translation_.x;
+			float float_x = inGameScene_->GetPlayerTrans()->GetWorldTranslate().x;
 			if (scene_ == Scene::Editor) {
-				float_x = editorScene_->GetPlayerTrans()->translation_.x;
+				float_x = editorScene_->GetPlayerTrans()->GetWorldTranslate().x;
 			}
 			camera_->Update(float_x);
 		}
