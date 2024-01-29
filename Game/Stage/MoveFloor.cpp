@@ -3,9 +3,9 @@
 #include "ImGuiManager.h"
 
 void MoveFloor::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
-	std::string name = "movefloor";
+	std::string name = "stagefloor";
 	GameObject::Initialize(name);
-	collider_.Initialize(&worldTransform_, name, modelHandle_);
+	collider_.Initialize(&worldTransform_, "movefloor", modelHandle_);
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
 	worldTransform_.translation_ = translate;
@@ -23,8 +23,8 @@ void MoveFloor::Update() {
 }
 
 void MoveFloor::Draw() {
-	//collider_.Draw();
-	//GameObject::Draw();
+	collider_.Draw();
+	GameObject::Draw();
 }
 
 void MoveFloor::DrawImGui() {
