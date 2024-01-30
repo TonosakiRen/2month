@@ -42,11 +42,12 @@ void CreateStageScene::Update() {
 
 	stage_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 
-	enemy_->Update(player_->GetWorldTransform()->translation_);
+	enemy_->Update(player_->GetWorldTransform()->GetWorldTranslate());
 	player_->Update();
 
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
 	stage_->Collision(player_.get());
+	stage_->Collision(enemy_.get());
 	player_->EnemyCollision();
 	player_->EnemyShadowCollision();
 }

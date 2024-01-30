@@ -48,11 +48,11 @@ void MoveFloor::DrawImGui() {
 	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("start", &moveParam_.startPos_.x, 0.1f);
 	ImGui::DragFloat3("end", &moveParam_.endPos_.x, 0.1f);
 	ImGui::DragFloat("speed", &moveParam_.speed_, 0.1f);
 	
+	worldTransform_.translation_ = moveParam_.startPos_;
 
 	UpdateMatrix();
 #endif // _DEBUG
