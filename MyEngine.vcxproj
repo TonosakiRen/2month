@@ -136,6 +136,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Game\Character\BaseCharacter.cpp" />
+    <ClCompile Include="Game\Character\BaseSpawner.cpp" />
     <ClCompile Include="Game\Character\CannonEnemy.cpp" />
     <ClCompile Include="Game\Character\Coin.cpp" />
     <ClCompile Include="Game\Character\EnemyManager.cpp" />
@@ -223,6 +224,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Game\Character\BaseCharacter.h" />
+    <ClInclude Include="Game\Character\BaseSpawner.h" />
     <ClInclude Include="Game\Character\CannonEnemy.h" />
     <ClInclude Include="Game\Character\Coin.h" />
     <ClInclude Include="Game\Character\EnemyManager.h" />

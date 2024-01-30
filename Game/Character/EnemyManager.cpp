@@ -21,31 +21,28 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 
 }
 
+template<typename Container>
+void TempEnemyUpdate(Container& container,const Vector3& playerPosition) {
+	for (uint32_t index = 0u; index < container.size(); index++) {
+		if (!container.at(index)->GetIsAlive()) {
+			// 要素を削除したため、indexを進めない
+			container.erase(container.begin() + index);
+			index--;
+			continue;
+		}
+		container.at(index)->Update(playerPosition);
+	}
+}
+
 void EnemyManager::Update(const Vector3& playerPosition) {
-	for (auto& enemy : nEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : nLightEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : tEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : sLightEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : cEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& coin : coins_) {
-		if (!coin->GetIsAlive()) { continue; }
-		coin->Update(playerPosition);
-	}
+	
+	TempEnemyUpdate(nEnemis_,playerPosition);
+	TempEnemyUpdate(nLightEnemis_,playerPosition);
+	TempEnemyUpdate(tEnemis_,playerPosition);
+	TempEnemyUpdate(sLightEnemis_,playerPosition);
+	TempEnemyUpdate(cEnemis_,playerPosition);
+	TempEnemyUpdate(coins_,playerPosition);
+	
 }
 
 void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
