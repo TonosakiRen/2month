@@ -245,12 +245,13 @@ void GameScene::DepthDraw()
 		inGameScene_->StageDepthDraw();;
 		break;
 	case GameScene::Scene::Editor:
-		inGameScene_->StageDepthDraw();;
+		editorScene_->StageDepthDraw();;
 		break;
 	default:
 		break;
 	}
 }
+
 
 void GameScene::ShadowDraw()
 {
@@ -338,6 +339,8 @@ void GameScene::PostSpriteDraw()
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();
 		ui_->Draw();
+	case GameScene::Scene::Editor:
+		editorScene_->DrawUI();
 		break;
 	default:
 		break;

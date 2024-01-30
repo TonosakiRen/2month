@@ -60,10 +60,6 @@ void Stage::Draw() {
 	}
 }
 
-void Stage::DepthDraw()
-{
-	
-}
 
 void Stage::ShadowDraw() {
 	for (auto& light : wallLights_) {

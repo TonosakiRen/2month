@@ -18,8 +18,10 @@ public:
 	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
+	void DrawUI();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
+	void StageDepthDraw();
 
 	/// <summary>
 	/// プレイモードかのフラグを返す

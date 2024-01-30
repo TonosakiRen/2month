@@ -49,16 +49,20 @@ void ThornEnemy::Update(const Vector3& playerPosition) {
 void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	
 	bool isColl = false;
-	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
-		isColl = true;
-	}
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
 		Player::hitShadowEnemyIndex_ = kNumber_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::damage;
 		isColl = true;
+	}
+
+	Vector3 pushBackVector;
+	if (collider_.Collision(collider, pushBackVector)) {
+		isColl = true;
+		Player::hitReaction_ = Player::knockBack;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 	}
 
 	if (isColl) {

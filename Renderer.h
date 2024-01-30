@@ -49,6 +49,9 @@ public:
     void EndUIRender();
     void Shutdown();
 
+    void SetDepthRendererMainDepth();
+    void SetDepthRendererNonCharaDepth();
+
     SwapChain& GetSwapChain() { return *swapChain_; }
     CommandContext& GetCommandContext() { return commandContext_; }
     Bloom& GetBloom() { return *bloom_; }

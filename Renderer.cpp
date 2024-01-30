@@ -49,7 +49,7 @@ void Renderer::Initialize() {
 
     nonCharacterDepthBuffer_ = std::make_unique<DepthBuffer>();
     nonCharacterDepthBuffer_->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_D32_FLOAT);
-    DepthRenderer::SetDepthBuffer(nonCharacterDepthBuffer_.get());
+    SetDepthRendererNonCharaDepth();
 
     float clearNormal[4] = { 0.0f,0.0f,0.0f,1.0f };
     colorBuffers_[kNormal] = std::make_unique<ColorBuffer>();
@@ -252,6 +252,16 @@ void Renderer::Shutdown() {
     graphics_->Shutdown();
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Finalize();
+}
+
+void Renderer::SetDepthRendererMainDepth()
+{
+    DepthRenderer::SetDepthBuffer(mainDepthBuffer_.get());
+}
+
+void Renderer::SetDepthRendererNonCharaDepth()
+{
+    DepthRenderer::SetDepthBuffer(nonCharacterDepthBuffer_.get());
 }
 
 

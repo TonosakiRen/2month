@@ -119,6 +119,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		renderer->BeginMainRender();
 
 		// ゲームシーンの描画
+
 		gameScene->Draw(renderer->GetCommandContext());
 		
 		renderer->DeferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights(),gameScene->GetPointLights(), gameScene->GetSpotLights(), gameScene->GetShadowSpotLights());

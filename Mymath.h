@@ -17,6 +17,16 @@ inline float clamp(float num, float min, float max) {
 	return num;
 }
 
+inline int clamp(int num, int min, int max) {
+	if (num < min) {
+		return min;
+	}
+	if (num > max) {
+		return max;
+	}
+	return num;
+}
+
 inline bool closeValue(float& num, float goal, float speed) {
 	if (std::fabs(num - goal) < std::fabs(speed)) {
 		num = goal;
@@ -1269,68 +1279,7 @@ inline Quaternion MakeFromTwoVector(const Vector3& from, const Vector3& to) {
 }
 
 inline Quaternion RotateMatrixToQuaternion(Matrix4x4 m) {
-	float px = m.m[0][0] - m.m[1][1] - m.m[2][2] + 1.0f;
-	float py = -m.m[0][0] + m.m[1][1] - m.m[2][2] + 1.0f;
-	float pz = -m.m[0][0] - m.m[1][1] + m.m[2][2] + 1.0f;
-	float pw = m.m[0][0] + m.m[1][1] + m.m[2][2] + 1.0f;
-
-	int selected = 0;
-	float max = px;
-	if (max < py) {
-		selected = 1;
-		max = py;
-	}
-	if (max < pz) {
-		selected = 2;
-		max = pz;
-	}
-	if (max < pw) {
-		selected = 3;
-		max = pw;
-	}
-
-	if (selected == 0) {
-		float x = std::sqrt(px) * 0.5f;
-		float d = 1.0f / (4.0f * x);
-		return Quaternion(
-			x,
-			(m.m[1][0] + m.m[0][1]) * d,
-			(m.m[0][2] + m.m[2][0]) * d,
-			(m.m[2][1] - m.m[1][2]) * d
-		);
-	}
-	else if (selected == 1) {
-		float y = std::sqrt(py) * 0.5f;
-		float d = 1.0f / (4.0f * y);
-		return Quaternion(
-			(m.m[1][0] + m.m[0][1]) * d,
-			y,
-			(m.m[2][1] + m.m[1][2]) * d,
-			(m.m[0][2] - m.m[2][0]) * d
-		);
-	}
-	else if (selected == 2) {
-		float z = std::sqrt(pz) * 0.5f;
-		float d = 1.0f / (4.0f * z);
-		return Quaternion(
-			(m.m[0][2] + m.m[2][0]) * d,
-			(m.m[2][1] + m.m[1][2]) * d,
-			z,
-			(m.m[1][0] - m.m[0][1]) * d
-		);
-	}
-	else if (selected == 3) {
-		float w = std::sqrtf(pw) * 0.5f;
-		float d = 1.0f / (4.0f * w);
-		return Quaternion(
-			(m.m[2][1] - m.m[1][2]) * d,
-			(m.m[0][2] - m.m[2][0]) * d,
-			(m.m[1][0] - m.m[0][1]) * d,
-			w
-		);
-	}
-	assert(false);
-	return Quaternion{};
+	return MakeFromOrthonormal(Normalize(GetXAxis(m)), Normalize(GetYAxis(m)), Normalize(GetZAxis(m)));
 }
 
 inline Quaternion MakeFromEulerAngle(const Vector3& euler) {

@@ -9,6 +9,7 @@ int32_t Player::hitShadowEnemyIndex_ = -1;
 Vector3 Player::hitShadowEnemyPos_ = {0.0f,0.0f,0.0f};
 Vector3 Player::playerPos_ = { 0.0f,0.0f,0.0f };
 Collider* Player::hitCollider_ = nullptr;
+Player::HitReaction Player::hitReaction_ = Player::knockBack;
 
 void Player::Initialize(const std::string name)
 {
@@ -53,10 +54,14 @@ void Player::Initialize(const std::string name)
 
 	globalVariables_ = GlobalVariables::GetInstance();
 	SetGlobalVariable();
+	MUTEKITime_ = -1;
 
 	uint32_t hpHandle = TextureManager::Load("hp.png");
 	hpSprite_.Initialize(hpHandle, { 190.0f,1000.0f });
 	hpSprite_.size_ = {285.0f,32.0f};
+
+	isBlink_ = false;
+	
 }
 
 void Player::SetGlobalVariable()
@@ -71,7 +76,9 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "knockBackPowerX_", knockBackPowerX_);
 	globalVariables_->AddItem(name, "knockBackPowerY_", knockBackPowerY_);
 	globalVariables_->AddItem(name, "damage_", damage_);
-	globalVariables_->AddItem(name, "MUTEKITIme_", MUTEKITIme_);
+	globalVariables_->AddItem(name, "maxMUTEKITime_", maxMUTEKITime_);
+	globalVariables_->AddItem(name, "heal_", heal_);
+	globalVariables_->AddItem(name, "blinkingTime_", blinkingTime_);
 	globalVariables_->LoadFile(name);
 	ApplyGlobalVariable();
 }
@@ -86,7 +93,9 @@ void Player::ApplyGlobalVariable()
 	attackReadySpeed_ = globalVariables_->GetFloatValue(name, "attackReadySpeed_");
 	knockBackPowerX_ = globalVariables_->GetFloatValue(name, "knockBackPowerX_");
 	knockBackPowerY_ = globalVariables_->GetFloatValue(name, "knockBackPowerY_");
-	MUTEKITIme_ = globalVariables_->GetIntValue(name, "MUTEKITIme_");
+	maxMUTEKITime_ = globalVariables_->GetIntValue(name, "maxMUTEKITime_");
+	heal_ = globalVariables_->GetIntValue(name, "heal_");
+	blinkingTime_ = globalVariables_->GetIntValue(name, "blinkingTime_");
 }
 
 void Player::Update()
@@ -99,6 +108,9 @@ void Player::Update()
 	ImGui::DragFloat2("hpBarSize", &hpSprite_.size_.x);
 	ImGui::End();
 #endif
+	if (MUTEKITime_ > -1) {
+		MUTEKITime_--;
+	}
 
 	if (!isKnockBack_) {
 		Move();
@@ -124,38 +136,113 @@ void Player::UIUpdate()
 	hp_ = clamp(hp_, 0, maxHp_);
 	//285
 	hpSprite_.size_.x = 285.0f * (hp_ / float(maxHp_));
-	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0, 285.0f);
+	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0.0f, 285.0f);
 	hpSprite_.position_.x = 190.0f - (maxHp_ - hp_) * 1.5f;
 }
 
 void Player::Draw() {
-	bodyCollider_.Draw();
-	GameObject::PlayerDraw(bodyWorldTransform_,{1.0f,1.0f,1.0f,1.0f});
-	
-	headCollider_.Draw();
-	GameObject::PlayerDraw(headWorldTransform_, headModelHandle_);
+	if (MUTEKITime_ > -1) {
+		if (MUTEKITime_ % blinkingTime_ == 0) {
+			if (isBlink_ == true) {
+				isBlink_ = false;
+			}
+			else {
+				isBlink_ = true;
+			}
+		}
+	}
+	else {
+		isBlink_ = false;
+	}
+
+	if (isBlink_ == false) {
+		bodyCollider_.Draw();
+		GameObject::PlayerDraw(bodyWorldTransform_, { 1.0f,1.0f,1.0f,1.0f });
+
+		headCollider_.Draw();
+		GameObject::PlayerDraw(headWorldTransform_, headModelHandle_);
+	}
+	else {
+		bodyCollider_.Draw();
+		GameObject::PlayerDraw(bodyWorldTransform_, { 1.0f,0.0f,0.0f,1.0f });
+
+		headCollider_.Draw();
+		GameObject::PlayerDraw(headWorldTransform_, headModelHandle_, { 0.2f,0.0f,0.0f,1.0f });
+	}
 }
 
 void Player::EnemyShadowCollision()
 {
-	if (hitShadowEnemyIndex_ != -1) {
-		if (attackParam_.id_ != 1) {
-			if (isKnockBack_ == false) {
-				isKnockBack_ = true;
-				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
-				knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
-				jumpParam_.velocity_ = {knockBackDirection_.x* knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z* knockBackPowerX_ };
-				hp_ -= damage_;
-			}
-		}
-		else if (hitCollider_) {
-			if (hitCollider_->GetName() == "CannonBullet") {
+	if (hitShadowEnemyIndex_ != -1 && MUTEKITime_ <= -1) {
+		//もしhitReactionがhealじゃなかったら
+		if (hitReaction_ != heal) {
+			if (attackParam_.id_ != 1) {
 				if (isKnockBack_ == false) {
-					isKnockBack_ = true;
-					Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-					knockBackDirection_ = Normalize(vec);
-					jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					if (hitReaction_ == knockBack) {
+						isKnockBack_ = true;
+						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
+						knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
+						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					}
 					hp_ -= damage_;
+					MUTEKITime_ = maxMUTEKITime_;
+				}
+			}
+			else if (hitCollider_) {
+				if (hitCollider_->GetName() == "CannonBullet") {
+					if (hitReaction_ == knockBack) {
+						isKnockBack_ = true;
+						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+						knockBackDirection_ = Normalize(vec);
+						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					}
+					if (isKnockBack_ == false) {
+						hp_ -= damage_;
+						MUTEKITime_ = maxMUTEKITime_;
+						if (headRotate.x < 0.0f) {
+							attackParam_.phase = 3;
+						}
+						else {
+							attackParam_.phase = 2;
+						}
+					}
+				}
+			}
+		}//healだったら
+		else {
+			hp_ += heal_;
+			hp_ = clamp(hp_, -100, maxHp_);
+		}
+		
+	}
+}
+
+void Player::EnemyCollision()
+{
+	if (hitCollider_ && MUTEKITime_ <= -1) {
+		if (hitReaction_ != heal) {
+			if (attackParam_.id_ != 1) {
+				if (isKnockBack_ == false) {
+					if (hitReaction_ == knockBack) {
+						isKnockBack_ = true;
+						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+						knockBackDirection_ = Normalize(vec);
+						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					}
+					hp_ -= damage_;
+					MUTEKITime_ = maxMUTEKITime_;
+				}
+			}
+			else if (hitCollider_->GetName() == "CannonBullet") {
+				if (isKnockBack_ == false) {
+					if (hitReaction_ == knockBack) {
+						isKnockBack_ = true;
+						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+						knockBackDirection_ = Normalize(vec);
+						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					}
+					hp_ -= damage_;
+					MUTEKITime_ = maxMUTEKITime_;
 					if (headRotate.x < 0.0f) {
 						attackParam_.phase = 3;
 					}
@@ -165,35 +252,9 @@ void Player::EnemyShadowCollision()
 				}
 			}
 		}
-	}
-}
-
-void Player::EnemyCollision()
-{
-	if (hitCollider_) {
-		if (attackParam_.id_ != 1) {
-			if (isKnockBack_ == false) {
-				isKnockBack_ = true;
-				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-				knockBackDirection_ = Normalize(vec);
-				jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
-				hp_ -= damage_;
-			}
-		}
-		else if (hitCollider_->GetName() == "CannonBullet") {
-			if (isKnockBack_ == false) {
-				isKnockBack_ = true;
-				Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-				knockBackDirection_ = Normalize(vec);
-				jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
-				hp_ -= damage_;
-				if (headRotate.x < 0.0f) {
-					attackParam_.phase = 3;
-				}
-				else {
-					attackParam_.phase = 2;
-				}
-			}
+		else {
+			hp_ += heal_;
+			hp_ = clamp(hp_, -100, maxHp_);
 		}
 	}
 }
@@ -275,7 +336,6 @@ void Player::Jump() {
 		audio_->SetValume(jumpHandle, 0.1f);
 		jumpParam_.isJumped_ = true;
 	}
-
 }
 
 void Player::Attack() {
