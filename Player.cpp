@@ -79,6 +79,7 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "maxMUTEKITime_", maxMUTEKITime_);
 	globalVariables_->AddItem(name, "heal_", heal_);
 	globalVariables_->AddItem(name, "blinkingTime_", blinkingTime_);
+	globalVariables_->AddItem(name, "attackDamage", static_cast<int>(attackParam_.damage_));
 	globalVariables_->LoadFile(name);
 	ApplyGlobalVariable();
 }
@@ -96,6 +97,7 @@ void Player::ApplyGlobalVariable()
 	maxMUTEKITime_ = globalVariables_->GetIntValue(name, "maxMUTEKITime_");
 	heal_ = globalVariables_->GetIntValue(name, "heal_");
 	blinkingTime_ = globalVariables_->GetIntValue(name, "blinkingTime_");
+	attackParam_.damage_ = globalVariables_->GetIntValue(name, "attackDamage");
 }
 
 void Player::Update()
@@ -274,8 +276,7 @@ void Player::DrawImGui() {
 #endif // _DEBUG
 }
 
-void Player::DrawUI()
-{
+void Player::DrawUI() {
 	hpSprite_.Draw();
 }
 
