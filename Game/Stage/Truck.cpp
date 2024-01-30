@@ -1,6 +1,8 @@
 #include "Truck.h"
 #include "ModelManager.h"
 #include "ImGuiManager.h"
+#include "Game/Character/BaseCharacter.h"
+#undef min
 
 void Truck::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "truck";
@@ -15,12 +17,21 @@ void Truck::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) 
 
 }
 
-void Truck::Update() {
+void Truck::Update(const Vector3& playerWorldPosition) {
+	if (!ActiveChack(playerWorldPosition)) {
+		isActive_ = false;
+		return;
+	}
+	isActive_ = true;
+
 	collider_.AdjustmentScale();
 	UpdateMatrix();
 }
 
 void Truck::Draw() {
+#ifndef _DEBUG
+	if (!isActive_) { return; }
+#endif // RELEASE
 	collider_.Draw();
 	GameObject::Draw();
 }
@@ -35,4 +46,22 @@ void Truck::DrawImGui() {
 
 	UpdateMatrix();
 #endif // _DEBUG
+}
+
+bool Truck::ActiveChack(const Vector3& playerWorldPosition) const {
+	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
+	Vector3 minSize = worldTransform_.GetWorldTranslate() - modelSize;
+	Vector3 maxSize = worldTransform_.GetWorldTranslate() + modelSize;
+
+	if ((minSize.x <= playerWorldPosition.x) && (playerWorldPosition.x <= maxSize.x)) {
+		// モデルのx軸の間にいるので何もせず終わり
+	}
+	else {
+		float distance = std::min(Distance(playerWorldPosition, minSize), Distance(playerWorldPosition, maxSize));
+		// Playerとの距離が一定数以下なら早期リターン
+		if (distance > kMaxDistance) {
+			return false;
+		}
+	}
+	return true;
 }

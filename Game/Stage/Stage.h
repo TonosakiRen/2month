@@ -4,6 +4,8 @@
 #include "Floor.h"
 #include "Truck.h"
 #include "WoodBox.h"
+#include "MoveFloor.h"
+
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -25,7 +27,7 @@ public:
 	~Stage() = default;
 
 	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
-	void Update();
+	void Update(const Vector3& playerWorldPosition);
 	void Draw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
@@ -53,6 +55,7 @@ private:
 	std::vector<std::unique_ptr<Floor>> floors_;
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
+	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

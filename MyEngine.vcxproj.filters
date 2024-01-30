@@ -325,6 +325,9 @@
     <ClCompile Include="Game\Character\Coin.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\MoveFloor.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -581,6 +584,9 @@
     </ClInclude>
     <ClInclude Include="Game\Character\Coin.h">
       <Filter>Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\MoveFloor.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -24,9 +24,9 @@ void InGameScene::Update() {
 	Player::hitShadowEnemyIndex_ = -1;
 	Player::hitCollider_ = nullptr;
 
-	stage_->Update();
+	stage_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 
-	enemy_->Update(player_->GetWorldTransform()->translation_);
+	enemy_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 	player_->Update();
 
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);

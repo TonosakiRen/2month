@@ -40,7 +40,7 @@ void CreateStageScene::Update() {
 	Player::hitShadowEnemyIndex_ = -1;
 	Player::hitCollider_ = nullptr;
 
-	stage_->Update();
+	stage_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 
 	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();

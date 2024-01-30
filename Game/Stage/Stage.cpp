@@ -18,21 +18,24 @@ void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* point
 
 }
 
-void Stage::Update() {
+void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& wall : walls_) {
-		wall->Update();
+		wall->Update(playerWorldPosition);
 	}
 	for (auto& light : wallLights_) {
-		light->Update();
+		light->Update(playerWorldPosition);
 	}
 	for (auto& floor : floors_) {
-		floor->Update();
+		floor->Update(playerWorldPosition);
 	}
 	for (auto& truck : trucks_) {
-		truck->Update();
+		truck->Update(playerWorldPosition);
 	}
 	for (auto& woodbox : woodboxs_) {
-		woodbox->Update();
+		woodbox->Update(playerWorldPosition);
+	}
+	for (auto& floor : moveFloors_) {
+		floor->Update(playerWorldPosition);
 	}
 }
 
@@ -49,10 +52,14 @@ void Stage::Draw() {
 	for (auto& truck : trucks_) {
 		truck->Draw();
 	}
-	/*for (auto& woodbox : woodboxs_) {
+	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
-	}*/
+	}
+	for (auto& floor : moveFloors_) {
+		floor->Draw();
+	}
 }
+
 
 void Stage::ShadowDraw() {
 	for (auto& light : wallLights_) {
@@ -128,6 +135,24 @@ void Stage::DrawImGui() {
 					floors_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
 						floors_.erase(floors_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("MoveFloors")) {
+			if (ImGui::Button("Create")) {
+				moveFloors_.emplace_back(std::make_unique<MoveFloor>())->Initialize(Vector3(-10.0f, 0.0f, 0.0f), Vector3(10.0f, 0.0f, 0.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), 120.0f);
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", moveFloors_.size());
+			for (int i = 0; i < moveFloors_.size(); i++) {
+				if (ImGui::TreeNode(("FloorNumber : " + std::to_string(i)).c_str())) {
+					moveFloors_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						moveFloors_.erase(moveFloors_.begin() + i);
 					}
 					ImGui::TreePop();
 				}
@@ -212,6 +237,18 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		floors->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "MoveFloorConfirmation");
+	moveFloors_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 start = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : StartPosition").c_str());
+		Vector3 end = global->GetVector3Value(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : EndPosition").c_str());
+		float speed = global->GetFloatValue(selectName, ("MoveFloorNumber : " + std::to_string(i) + " : Speed").c_str());
+		auto& floors = moveFloors_.emplace_back(std::make_unique<MoveFloor>());
+		floors->Initialize(start, end, rotate, scale, speed);
+	}
+
 	num = global->GetIntValue(selectName, "TruckConfirmation");
 	trucks_.clear(); // 要素の全削除
 	for (int i = 0; i < num; i++) {
@@ -263,6 +300,17 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("FloorNumber : " + std::to_string(index) + " : Translate").c_str(), floors_[index]->GetWorldTransform()->translation_);
 	}
 
+	global->SetValue(itemName, "MoveFloorConfirmation" + std::string(), static_cast<int>(moveFloors_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(moveFloors_.size()); index++) {
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Scale").c_str(), moveFloors_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Rotate").c_str(), moveFloors_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : StartPosition").c_str(), moveFloors_[index]->GetParam().startPos_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : EndPosition").c_str(), moveFloors_[index]->GetParam().endPos_);
+		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Speed").c_str(), moveFloors_[index]->GetParam().speed_);
+
+
+	}
+
 	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
 	for (uint32_t index = 0u; index < static_cast<uint32_t>(trucks_.size()); index++) {
 		global->SetValue(itemName, ("TruckNumber : " + std::to_string(index) + " : Scale").c_str(), trucks_[index]->GetWorldTransform()->scale_);
@@ -282,6 +330,7 @@ void Stage::Save(const char* itemName) {
 
 void Stage::Collision(Player* player) {
 	Vector3 pushBackVector;
+	player->SetParent(nullptr);
 	for (auto& wall : walls_) {
 		if(wall->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
@@ -292,6 +341,18 @@ void Stage::Collision(Player* player) {
 		if(floor->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			//player->worldTransform_.translation_ -= pushBackVector;
 			player->CollisionProcess(-pushBackVector);
+		}
+	}
+	for (auto& floor : moveFloors_) {
+		if(floor->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			player->CollisionProcess(-pushBackVector);
+			float y = Normalize(-pushBackVector).y;
+			if (y == 1.0f) {
+				player->GetWorldTransform()->SetIsRotateParent(false);
+				player->GetWorldTransform()->SetIsScaleParent(false);
+				player->SetParent(floor->GetWorldTransform());
+			}
 		}
 	}
 	for (auto& truck : trucks_) {
