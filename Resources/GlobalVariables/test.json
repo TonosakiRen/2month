@@ -37,7 +37,7 @@
             10.800000190734863,
             0.0
         ],
-        "CoinConfirmation": 11,
+        "CoinConfirmation": 7,
         "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -163,8 +163,8 @@
         ],
         "CoinNumber : 6 : Translate": [
             0.0,
-            0.0,
-            0.0
+            2.4000000953674316,
+            -3.4000000953674316
         ],
         "CoinNumber : 7 : Rotate": [
             0.0,

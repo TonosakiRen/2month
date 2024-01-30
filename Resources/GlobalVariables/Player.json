@@ -1,12 +1,12 @@
 {
     "Player": {
         "attackDamage": 1,
-        "attackReadySpeed_": 14.079999923706055,
-        "attackSpeed_": 15.800000190734863,
-        "backHeadSpeed_": 12.920000076293945,
+        "attackReadySpeed_": 10.390000343322754,
+        "attackSpeed_": 10.619999885559082,
+        "backHeadSpeed_": 13.65999984741211,
         "blinkingTime_": 2,
         "damage_": 5,
-        "dashSpeed_": 0.4000000059604645,
+        "dashSpeed_": 0.4320000112056732,
         "heal_": 30,
         "jumpPower_": 0.5,
         "knockBackPowerX_": 0.3100000023841858,
