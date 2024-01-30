@@ -199,7 +199,29 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "MoveFloorConfirmation": 0,
+        "MoveFloorConfirmation": 1,
+        "MoveFloorNumber : 0 : EndPosition": [
+            10.0,
+            0.0,
+            0.0
+        ],
+        "MoveFloorNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "MoveFloorNumber : 0 : Scale": [
+            0.10000000149011612,
+            1.0,
+            0.5
+        ],
+        "MoveFloorNumber : 0 : Speed": 120.0,
+        "MoveFloorNumber : 0 : StartPosition": [
+            -10.0,
+            0.0,
+            0.0
+        ],
         "NormalEnemyConfirmation": 6,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -366,7 +388,7 @@
             1.0,
             -13.899999618530273
         ],
-        "ThornEnemyConfirmation": 0,
+        "ThornEnemyConfirmation": 2,
         "ThornEnemyEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -384,7 +406,7 @@
             -6.0
         ],
         "ThornEnemyNumber : 0 : Amplitube": [
-            1.0,
+            0.0,
             0.0,
             0.0
         ],
@@ -395,19 +417,19 @@
             -1.0
         ],
         "ThornEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
+            0.5,
+            0.5,
+            0.5
         ],
-        "ThornEnemyNumber : 0 : Time": 20,
+        "ThornEnemyNumber : 0 : Time": 19,
         "ThornEnemyNumber : 0 : Translate": [
-            2.9833338260650635,
-            2.0,
-            2.0
+            38.79999923706055,
+            0.6000000238418579,
+            2.0999999046325684
         ],
         "ThornEnemyNumber : 1 : Amplitube": [
             0.0,
-            3.0,
+            0.0,
             0.0
         ],
         "ThornEnemyNumber : 1 : Rotate": [
@@ -417,15 +439,15 @@
             -1.0
         ],
         "ThornEnemyNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
+            0.5,
+            0.5,
+            0.5
         ],
-        "ThornEnemyNumber : 1 : Time": 20,
+        "ThornEnemyNumber : 1 : Time": 6,
         "ThornEnemyNumber : 1 : Translate": [
-            0.0,
-            -0.45000001788139343,
-            0.0
+            40.400001525878906,
+            0.800000011920929,
+            2.200000047683716
         ],
         "TruckConfirmation": 0,
         "TruckNumber : 0 : Rotate": [
@@ -590,7 +612,7 @@
             22.0,
             9.0
         ],
-        "WoodBoxConfirmation": 15,
+        "WoodBoxConfirmation": 17,
         "WoodBoxNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -702,6 +724,38 @@
             132.5,
             8.600000381469727,
             -3.4000000953674316
+        ],
+        "WoodBoxNumber : 15 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 15 : Scale": [
+            1.2999999523162842,
+            1.2999999523162842,
+            1.2999999523162842
+        ],
+        "WoodBoxNumber : 15 : Translate": [
+            -2.0,
+            1.100000023841858,
+            -7.199999809265137
+        ],
+        "WoodBoxNumber : 16 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 16 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 16 : Translate": [
+            38.0,
+            0.800000011920929,
+            -2.4000000953674316
         ],
         "WoodBoxNumber : 2 : Rotate": [
             4.371138473402425e-08,
