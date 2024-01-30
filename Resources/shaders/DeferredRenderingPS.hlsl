@@ -190,8 +190,8 @@ PixelShaderOutput main(VSOutput input)
 									else if (enemyIndex.x == 1.0f) {
 										output.shadow.y = 1.0f;
 
-										color.xyz = float32_t3(1.0f, 0.0f, 0.0f);
-
+										//color.xyz = float32_t3(1.0f, 0.0f, 0.0f);
+										shading *= shade.value;
 									}
 									else {
 										shading *= shade.value;

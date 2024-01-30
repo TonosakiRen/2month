@@ -61,7 +61,7 @@ void Player::Initialize(const std::string name)
 	hpSprite_.size_ = {285.0f,32.0f};
 
 	isBlink_ = false;
-	
+	isDash_ = false;
 }
 
 void Player::SetGlobalVariable()
@@ -80,6 +80,7 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "heal_", heal_);
 	globalVariables_->AddItem(name, "blinkingTime_", blinkingTime_);
 	globalVariables_->AddItem(name, "attackDamage", static_cast<int>(attackParam_.damage_));
+	globalVariables_->AddItem(name, "dashSpeed_", dashSpeed_);
 	globalVariables_->LoadFile(name);
 	ApplyGlobalVariable();
 }
@@ -97,6 +98,7 @@ void Player::ApplyGlobalVariable()
 	maxMUTEKITime_ = globalVariables_->GetIntValue(name, "maxMUTEKITime_");
 	heal_ = globalVariables_->GetIntValue(name, "heal_");
 	blinkingTime_ = globalVariables_->GetIntValue(name, "blinkingTime_");
+	dashSpeed_ = globalVariables_->GetFloatValue(name, "dashSpeed_");
 	attackParam_.damage_ = globalVariables_->GetIntValue(name, "attackDamage");
 }
 
@@ -115,14 +117,23 @@ void Player::Update()
 	}
 
 	if (!isKnockBack_) {
-		Move();
-		Jump();
+		if (!isDash_) {
+			Move();
+			Jump();
+		}	
 	}
 	Attack();
-
+	
 	jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
 	jumpParam_.velocity_ += jumpParam_.acceleration_;
-	worldTransform_.translation_ += jumpParam_.velocity_;
+	
+	if (!isDash_) {
+		worldTransform_.translation_ += jumpParam_.velocity_;
+	}
+	else {
+		worldTransform_.translation_.x += jumpParam_.velocity_.x;
+	}
+	
 
 	MoveLimit();
 	
@@ -297,34 +308,36 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 }
 
 void Player::Move() {
-	Vector3 direction = { 0.0f,0.0f,0.0f };
+	if (!isDash_) {
+		Vector3 direction = { 0.0f,0.0f,0.0f };
 
-	if (input_->GetIsGamePadConnect()) {
-		// 移動量
-		direction = {
-			input_->GetLStick().x / SHRT_MAX, 0.0f,
-			input_->GetLStick().y / SHRT_MAX };
-	}
-	else {
-		if (input_->PushKey(DIK_A)) {
-			direction.x -= 1.0f;
+		if (input_->GetIsGamePadConnect()) {
+			// 移動量
+			direction = {
+				input_->GetLStick().x / SHRT_MAX, 0.0f,
+				input_->GetLStick().y / SHRT_MAX };
 		}
-		if (input_->PushKey(DIK_D)) {
-			direction.x += 1.0f;
+		else {
+			if (input_->PushKey(DIK_A)) {
+				direction.x -= 1.0f;
+			}
+			if (input_->PushKey(DIK_D)) {
+				direction.x += 1.0f;
+			}
+			if (input_->PushKey(DIK_S)) {
+				direction.z -= 1.0f;
+			}
+			if (input_->PushKey(DIK_W)) {
+				direction.z += 1.0f;
+			}
 		}
-		if (input_->PushKey(DIK_S)) {
-			direction.z -= 1.0f;
-		}
-		if (input_->PushKey(DIK_W)) {
-			direction.z += 1.0f;
-		}
-	}
 
-	Vector3 move = Normalize(direction) * speed_;
+		Vector3 move = Normalize(direction) * speed_;
 
-	if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
-		worldTransform_.translation_ += move;
-		worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_,MakeLookRotation(direction));
+		if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
+			worldTransform_.translation_ += move;
+			worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, MakeLookRotation(direction));
+		}
 	}
 	
 }
@@ -356,6 +369,11 @@ void Player::Attack() {
 				headRotate.x = -30.0f;
 				attackParam_.phase = 1;
 			}
+			isKnockBack_ = false;
+			isDash_ = true;
+
+			worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *worldTransform_.quaternion_) * dashSpeed_;
+
 			break;
 		case 1:
 			//頭でattackする
@@ -364,6 +382,8 @@ void Player::Attack() {
 			if (headRotate.x >= 90.0f) {
 				attackParam_.phase = 2;
 			}
+			isDash_ = true;
+			worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *worldTransform_.quaternion_) * dashSpeed_;
 			break;
 		case 2:
 			//頭で元の位置に戻る
@@ -373,6 +393,7 @@ void Player::Attack() {
 				headRotate.x = 0.0f;
 				attackParam_.isAttacked = false;
 			}
+			isDash_ = false;
 			break;
 		case 3:
 			//攻撃準備中にノックバックしてしまって頭で元の位置に戻る
@@ -382,6 +403,7 @@ void Player::Attack() {
 				headRotate.x = 0.0f;
 				attackParam_.isAttacked = false;
 			}
+			isDash_ = false;
 			break;
 		}
 	}

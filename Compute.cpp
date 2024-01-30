@@ -100,22 +100,27 @@ void Compute::Initialize(ColorBuffer* indexBuffer)
 	indexBuffer_ = indexBuffer;
 }
 
-void Compute::Dispatch(CommandContext& commandContext)
+void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer)
 {
 	D3D12_RESOURCE_DESC resourceDesc = copyBuffer_->GetDesc();
 	UINT bufferSizeInBytes = static_cast<UINT>(resourceDesc.Width);
 	memset(data_, 0, bufferSizeInBytes);
 
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	commandContext.TransitionResource(hitPosBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
+	commandContext.TransitionResource(depthBuffer, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
+	commandContext.SetComputeUAVBuffer(1, hitPosBuffer_->GetGPUVirtualAddress());
 	commandContext.SetComputeConstants(static_cast<UINT>(RootParameter::kEnemyNum), EnemyManager::kMaxEnemyCount);
 
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), indexBuffer_->GetSRV());
+	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kDepthTexture), depthBuffer.GetSRV());
 	commandContext.Dispatch(1920 / 30, 1080 / 30, 1);
 
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
+	commandContext.CopyBuffer(hitPosCopyBuffer_, hitPosBuffer_);
 
 }
 
@@ -137,12 +142,15 @@ void Compute::CreatePipeline()
 	uavBlob = shaderManager->Compile(L"CS.hlsl", ShaderManager::kCompute);
 	assert(uavBlob != nullptr);
 
-	CD3DX12_DESCRIPTOR_RANGE ranges[1]{};
+	CD3DX12_DESCRIPTOR_RANGE ranges[2]{};
 	ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
+	ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
 	CD3DX12_ROOT_PARAMETER rootparams[int(RootParameter::ParameterNum)]{};
 	rootparams[(int)RootParameter::kRwStructure].InitAsUnorderedAccessView(0);
+	rootparams[(int)RootParameter::kHitPos].InitAsUnorderedAccessView(1);
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
+	rootparams[(int)RootParameter::kDepthTexture].InitAsDescriptorTable(1, &ranges[1]);
 	rootparams[(int)RootParameter::kEnemyNum].InitAsConstants(1, 0);
 
 	// スタティックサンプラー

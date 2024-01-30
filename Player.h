@@ -99,8 +99,10 @@ private:
     int maxMUTEKITime_ = 120;
     int heal_ = 30;
     int blinkingTime_ = 6;
+    float dashSpeed_ = 0.6f;
 
     bool isBlink_ = false;
+    bool isDash_ = false;
 
     float knockBackPowerX_ = 0.5f;
     float knockBackPowerY_ = 0.8f;

@@ -15,13 +15,15 @@ public:
 
 	enum class RootParameter {
 		kRwStructure,
+		kHitPos,
 		kColorTexture,
+		kDepthTexture,
 		kEnemyNum,
 		
 		ParameterNum
 	};
 	void Initialize(ColorBuffer* indexBuffer);
-	void Dispatch(CommandContext& commandContext);
+	void Dispatch(CommandContext& commandContext, DepthBuffer& depthBuffer);
 	static void* GetData();
 	void UnMap();
 private:
