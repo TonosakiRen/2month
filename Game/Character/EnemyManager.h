@@ -10,6 +10,8 @@
 #include "CannonEnemy.h"
 #include "Coin.h"
 
+#include "NormalSpawner.h"
+
 class SpotLights;
 class PointLights;
 class ShadowSpotLights;
@@ -47,5 +49,7 @@ public:
 	std::vector<std::unique_ptr<StandLightEnemy>> sLightEnemis_;
 	std::vector<std::unique_ptr<CannonEnemy>> cEnemis_;
 	std::vector<std::unique_ptr<Coin>> coins_;
+
+	std::vector<std::unique_ptr<NormalSpawner>> nSpawners_;
 
 };

@@ -142,6 +142,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Character\EnemyManager.cpp" />
     <ClCompile Include="Game\Character\NormalEnemy.cpp" />
     <ClCompile Include="Game\Character\NormalLightEnemy.cpp" />
+    <ClCompile Include="Game\Character\NormalSpawner.cpp" />
     <ClCompile Include="Game\Character\StandLightEnemy.cpp" />
     <ClCompile Include="Game\Character\ThornEnemy.cpp" />
     <ClCompile Include="Game\Scene\CreateStageScene.cpp" />
@@ -230,6 +231,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Character\EnemyManager.h" />
     <ClInclude Include="Game\Character\NormalEnemy.h" />
     <ClInclude Include="Game\Character\NormalLightEnemy.h" />
+    <ClInclude Include="Game\Character\NormalSpawner.h" />
     <ClInclude Include="Game\Character\StandLightEnemy.h" />
     <ClInclude Include="Game\Character\ThornEnemy.h" />
     <ClInclude Include="Game\Scene\CreateStageScene.h" />

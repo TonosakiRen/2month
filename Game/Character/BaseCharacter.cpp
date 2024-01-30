@@ -7,6 +7,7 @@ BaseCharacter::BaseCharacter() : kNumber_(masterCount) {
 		masterCount = 0u;
 	}
 }
+
 BaseCharacter::~BaseCharacter(){
 	
 }
