@@ -175,7 +175,7 @@ void Renderer::EndMainRender() {
     bool isCollision = ShadowIsCollision::isShadowCollision;
     ImGui::Text("%d", int(isCollision));
 
-    compute_->Dispatch(commandContext_);
+    compute_->Dispatch(commandContext_,*mainDepthBuffer_);
     shadowIsCollision_->Dispatch(commandContext_,{0.0f,0.0f}, collisionLuminance_);
 
     edgeRenderer_->Render(commandContext_, resultBuffer_.get());
