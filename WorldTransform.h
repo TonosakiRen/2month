@@ -23,7 +23,9 @@ public:
 		if (parent != parent_) {
 			if (parent) {
 				Matrix4x4 localMatrix = matWorld_ * Inverse(parent->matWorld_);
-				translation_ = MakeTranslation(localMatrix);
+				Vector3 localVec = GetWorldTranslate() - parent->GetWorldTranslate();
+				//translation_ = MakeTranslation(localMatrix);
+				translation_ = localVec;
 				if (isRotateParent_ == true) {
 					quaternion_ = RotateMatrixToQuaternion((NormalizeMakeRotateMatrix(localMatrix)));
 				}

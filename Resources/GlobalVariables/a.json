@@ -176,11 +176,11 @@
             -1.0
         ],
         "MoveFloorNumber : 0 : Scale": [
-            0.20000000298023224,
-            0.8999999761581421,
-            0.4000000059604645
+            0.10000000149011612,
+            1.0,
+            1.0
         ],
-        "MoveFloorNumber : 0 : Speed": 120.0,
+        "MoveFloorNumber : 0 : Speed": 107.30000305175781,
         "MoveFloorNumber : 0 : StartPosition": [
             -10.0,
             0.0,

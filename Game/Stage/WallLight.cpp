@@ -1,6 +1,8 @@
 #include "WallLight.h"
 #include "ModelManager.h"
 #include "ImGuiManager.h"
+#include "Game/Character/BaseCharacter.h"
+#undef min
 
 void WallLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "wallLight";
@@ -16,11 +18,20 @@ void WallLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transla
 
 }
 
-void WallLight::Update() {
+void WallLight::Update(const Vector3& playerWorldPosition) {
+	if (!ActiveChack(playerWorldPosition)) {
+		isActive_ = false;
+		return;
+	}
+	isActive_ = true;
+
 	UpdateMatrix();
 }
 
 void WallLight::Draw() {
+#ifndef _DEBUG
+	if (!isActive_) { return; }
+#endif // RELEASE
 	GameObject::Draw();
 }
 
@@ -40,4 +51,22 @@ Vector3& WallLight::GetLightPos() const {
 	Vector3 result = worldTransform_.translation_;
 	result += Vector3(0.0f, 1.0f, -0.4f);
 	return result;
+}
+
+bool WallLight::ActiveChack(const Vector3& playerWorldPosition) const {
+	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
+	Vector3 minSize = worldTransform_.GetWorldTranslate() - modelSize;
+	Vector3 maxSize = worldTransform_.GetWorldTranslate() + modelSize;
+
+	if ((minSize.x <= playerWorldPosition.x) && (playerWorldPosition.x <= maxSize.x)) {
+		// モデルのx軸の間にいるので何もせず終わり
+	}
+	else {
+		float distance = std::min(Distance(playerWorldPosition, minSize), Distance(playerWorldPosition, maxSize));
+		// Playerとの距離が一定数以下なら早期リターン
+		if (distance > kMaxDistance) {
+			return false;
+		}
+	}
+	return true;
 }

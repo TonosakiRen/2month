@@ -23,19 +23,19 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 		wall->Update(playerWorldPosition);
 	}
 	for (auto& light : wallLights_) {
-		light->Update();
+		light->Update(playerWorldPosition);
 	}
 	for (auto& floor : floors_) {
-		floor->Update();
+		floor->Update(playerWorldPosition);
 	}
 	for (auto& truck : trucks_) {
-		truck->Update();
+		truck->Update(playerWorldPosition);
 	}
 	for (auto& woodbox : woodboxs_) {
-		woodbox->Update();
+		woodbox->Update(playerWorldPosition);
 	}
 	for (auto& floor : moveFloors_) {
-		floor->Update();
+		floor->Update(playerWorldPosition);
 	}
 }
 
@@ -148,7 +148,7 @@ void Stage::DrawImGui() {
 
 		if (ImGui::BeginMenu("MoveFloors")) {
 			if (ImGui::Button("Create")) {
-				moveFloors_.emplace_back(std::make_unique<MoveFloor>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+				moveFloors_.emplace_back(std::make_unique<MoveFloor>())->Initialize(Vector3(-10.0f, 0.0f, 0.0f), Vector3(10.0f, 0.0f, 0.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), 120.0f);
 			}
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", moveFloors_.size());
@@ -353,10 +353,9 @@ void Stage::Collision(Player* player) {
 			player->CollisionProcess(-pushBackVector);
 			float y = Normalize(-pushBackVector).y;
 			if (y == 1.0f) {
-				player->SetParent(floor->GetWorldTransform());
 				player->GetWorldTransform()->SetIsRotateParent(false);
 				player->GetWorldTransform()->SetIsScaleParent(false);
-				
+				player->SetParent(floor->GetWorldTransform());
 			}
 		}
 	}

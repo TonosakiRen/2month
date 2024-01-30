@@ -14,4 +14,9 @@ public:
 public:
     Collider collider_;
     Vector3 rotate;
+
+private:
+    bool ActiveChack(const Vector3& playerWorldPosition) const;
+    bool isActive_ = true;
+
 };

@@ -3,9 +3,8 @@
 #include "Collider.h"
 class MoveFloor : public GameObject {
 public:
-    void Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate);
     void Initialize(const Vector3& startPos, const Vector3& endPos, const Quaternion& quaternion, const Vector3& scale, const float& speed);
-    void Update();
+    void Update(const Vector3& playerWorldPosition);
     void Draw();
     void DrawImGui();
 
@@ -26,5 +25,8 @@ private:
     MoveParameter moveParam_;
 public:
     MoveParameter GetParam() const { return moveParam_; }
+private:
+    bool ActiveChack(const Vector3& playerWorldPosition) const;
+    bool isActive_ = true;
 
 };
