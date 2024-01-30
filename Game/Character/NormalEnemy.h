@@ -24,7 +24,7 @@ protected:
 	Vector3 playerPosition_;
 	Vector3 knockBackVector_;
 
-	int hp_ = 0;
+	int hp_ = 1;
 
 };
 
