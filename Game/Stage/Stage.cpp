@@ -49,14 +49,9 @@ void Stage::Draw() {
 	for (auto& truck : trucks_) {
 		truck->Draw();
 	}
-	for (auto& woodbox : woodboxs_) {
+	/*for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
-	}
-}
-
-void Stage::DepthDraw()
-{
-	
+	}*/
 }
 
 void Stage::ShadowDraw() {

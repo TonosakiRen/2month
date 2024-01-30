@@ -58,16 +58,20 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (!isActive_) { return; }
 
 	bool isColl = false;
-	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
-		isColl = true;
-	}
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
 		Player::hitShadowEnemyIndex_ = kNumber_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::damage;
 		isColl = true;
+	}
+
+	Vector3 pushBackVector;
+	if (collider_.Collision(collider, pushBackVector)) {
+		isColl = true;
+		Player::hitCollider_ = &collider_;
+		Player::hitReaction_ = Player::knockBack;
 	}
 
 	if (isColl) {
@@ -77,9 +81,6 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
 			hp_ -= date.damage_;
-		}
-		else {
-			Player::hitCollider_ = &collider_;
 		}
 		UpdateTransform();
 	}

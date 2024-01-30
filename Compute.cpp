@@ -17,42 +17,85 @@ void Compute::Initialize(ColorBuffer* indexBuffer)
 	CreatePipeline();
 
 	auto device = DirectXCommon::GetInstance()->GetDevice();
-	uint32_t bufferSize;
-	CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-	D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
-	device->CreateCommittedResource(
-		&heapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&desc,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
-		IID_PPV_ARGS(rwStructureBuffer_.GetAddressOf())
-	);
 
-	uavHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
-	viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-	viewDesc.Buffer.NumElements = 1;
-	viewDesc.Buffer.StructureByteStride = sizeof(bufferSize) * EnemyManager::kMaxEnemyCount;
-	device->CreateUnorderedAccessView(
-		rwStructureBuffer_,
-		nullptr,
-		&viewDesc,
-		uavHandle_
-	);
+	{
 
-	CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount));
-	D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
-	device->CreateCommittedResource(
-		&copyHeapProps,
-		D3D12_HEAP_FLAG_NONE,
-		&copyDesc,
-		D3D12_RESOURCE_STATE_COMMON,
-		nullptr,
-		IID_PPV_ARGS(copyBuffer_.GetAddressOf())
-	);
+		uint32_t bufferSize;
+		CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
+		device->CreateCommittedResource(
+			&heapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&desc,
+			D3D12_RESOURCE_STATE_COMMON,
+			nullptr,
+			IID_PPV_ARGS(rwStructureBuffer_.GetAddressOf())
+		);
 
-	copyBuffer_->Map(0, nullptr, &data_);
+		uavHandle_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
+		viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+		viewDesc.Buffer.NumElements = 1;
+		viewDesc.Buffer.StructureByteStride = sizeof(bufferSize) * EnemyManager::kMaxEnemyCount;
+		device->CreateUnorderedAccessView(
+			rwStructureBuffer_,
+			nullptr,
+			&viewDesc,
+			uavHandle_
+		);
+
+		CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize) * EnemyManager::kMaxEnemyCount));
+		D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
+		device->CreateCommittedResource(
+			&copyHeapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&copyDesc,
+			D3D12_RESOURCE_STATE_COMMON,
+			nullptr,
+			IID_PPV_ARGS(copyBuffer_.GetAddressOf())
+		);
+
+		copyBuffer_->Map(0, nullptr, &data_);
+
+	}
+
+	{
+		Vector3 bufferSize;
+		CD3DX12_RESOURCE_DESC desc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)), D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
+		D3D12_HEAP_PROPERTIES heapProps(D3D12_HEAP_TYPE_DEFAULT);
+		device->CreateCommittedResource(
+			&heapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&desc,
+			D3D12_RESOURCE_STATE_COMMON,
+			nullptr,
+			IID_PPV_ARGS(hitPosBuffer_.GetAddressOf())
+		);
+
+		uavHandle2_ = DirectXCommon::GetInstance()->AllocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+		D3D12_UNORDERED_ACCESS_VIEW_DESC viewDesc{};
+		viewDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+		viewDesc.Buffer.NumElements = 1;
+		viewDesc.Buffer.StructureByteStride = sizeof(bufferSize);
+		device->CreateUnorderedAccessView(
+			hitPosBuffer_,
+			nullptr,
+			&viewDesc,
+			uavHandle2_
+		);
+
+		CD3DX12_RESOURCE_DESC copyDesc = CD3DX12_RESOURCE_DESC::Buffer(UINT64(sizeof(bufferSize)));
+		D3D12_HEAP_PROPERTIES copyHeapProps(D3D12_HEAP_TYPE_READBACK);
+		device->CreateCommittedResource(
+			&copyHeapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&copyDesc,
+			D3D12_RESOURCE_STATE_COMMON,
+			nullptr,
+			IID_PPV_ARGS(hitPosCopyBuffer_.GetAddressOf())
+		);
+
+	}
 
 	indexBuffer_ = indexBuffer;
 }

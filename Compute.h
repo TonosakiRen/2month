@@ -32,7 +32,12 @@ private:
 	ColorBuffer* indexBuffer_;
 	GPUResource rwStructureBuffer_;
 	GPUResource copyBuffer_;
+
+	GPUResource hitPosBuffer_;
+	GPUResource hitPosCopyBuffer_;
+
 	const uint32_t kNum = 1024;
 	DescriptorHandle uavHandle_;
+	DescriptorHandle uavHandle2_;
 };
 

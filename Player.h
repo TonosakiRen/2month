@@ -18,11 +18,19 @@ class GlobalVariables;
 
 class Player : public GameObject {
 public:
+
+    enum HitReaction {
+        knockBack,
+        damage,
+        heal
+    };
+
     //そのフレームの当たった敵のインデックス　-1は当たっていない
     static int32_t hitShadowEnemyIndex_ ;
     static Vector3 hitShadowEnemyPos_;
     static Collider* hitCollider_;
     static Vector3 playerPos_;
+    static HitReaction hitReaction_;
 
 
     void Initialize(const std::string name);
@@ -47,6 +55,7 @@ private:
 
 public:
     Collider bodyCollider_;
+    int MUTEKITime_ = 120;
 private:
     WorldTransform bodyWorldTransform_;
     Vector3 bodyModelSize_;
@@ -87,7 +96,11 @@ private:
     int maxHp_ = 100;
     int hp_ = 100;
     int damage_ = 5;
-    int MUTEKITIme_ = 120;
+    int maxMUTEKITime_ = 120;
+    int heal_ = 30;
+    int blinkingTime_ = 6;
+
+    bool isBlink_ = false;
 
     float knockBackPowerX_ = 0.5f;
     float knockBackPowerY_ = 0.8f;

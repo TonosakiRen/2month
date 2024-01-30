@@ -42,15 +42,13 @@ void CreateStageScene::Update() {
 
 	stage_->Update();
 
-	enemy_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
+	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();
 
-	stage_->Collision(player_.get());
-	stage_->Collision(enemy_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
-	player_->EnemyShadowCollision();
+	stage_->Collision(player_.get());
 	player_->EnemyCollision();
-
+	player_->EnemyShadowCollision();
 }
 
 void CreateStageScene::Draw() {
@@ -68,7 +66,17 @@ void CreateStageScene::ShadowDraw() {
 void CreateStageScene::SpotLightShadowDraw() {
 	enemy_->SpotLightShadowDraw();
 	player_->Draw();
+	stage_->SpotLightShadowDraw();
+}
+
+void CreateStageScene::StageDepthDraw()
+{
 	stage_->Draw();
+}
+
+void CreateStageScene::DrawUI()
+{
+	player_->DrawUI();
 }
 
 void CreateStageScene::DrawImGui() {

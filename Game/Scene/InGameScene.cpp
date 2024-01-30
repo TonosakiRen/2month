@@ -29,10 +29,10 @@ void InGameScene::Update() {
 	enemy_->Update(player_->GetWorldTransform()->translation_);
 	player_->Update();
 
-	stage_->Collision(player_.get());
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
-	player_->EnemyShadowCollision();
+	stage_->Collision(player_.get());
 	player_->EnemyCollision();
+	player_->EnemyShadowCollision();
 }
 
 void InGameScene::Draw() {
@@ -58,8 +58,9 @@ void InGameScene::ShadowDraw() {
 	player_->Draw();
 }
 
+
 void InGameScene::SpotLightShadowDraw() {
 	enemy_->SpotLightShadowDraw();
-	//plyerを最後にして
 	player_->Draw();
+	stage_->SpotLightShadowDraw();
 }

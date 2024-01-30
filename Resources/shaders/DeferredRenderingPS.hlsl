@@ -176,22 +176,20 @@ PixelShaderOutput main(VSOutput input)
 							if (nonZInLVP > nonZInShadowMap) {
 								//キャラクターに影を落とさない処理
 								float32_t4 enemyIndex = Texture2DTable[gShadowSpotLights[l].collisionDescriptorIndex].Sample(pointSmp, nonShadowMapUV);
-								if (enemyIndex.x == 2.0f) {
-									output.shadow.y = 2.0f;
-									output.shadow.z = enemyIndex.y;
-								}
-								else if (enemyIndex.x == 1.0f) {
-									output.shadow.y = 1.0f;
-								}
 
 								if (nonWp.z <= wp.z) {
 
 									if (enemyIndex.x == 2.0f) {
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+
 										color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
 										shading *= shade.value;
 
 									}
 									else if (enemyIndex.x == 1.0f) {
+										output.shadow.y = 1.0f;
+
 										color.xyz = float32_t3(1.0f, 0.0f, 0.0f);
 
 									}
@@ -200,6 +198,16 @@ PixelShaderOutput main(VSOutput input)
 									}
 									output.shadow.x = 1.0f;
 
+								}
+								else {
+
+									if (enemyIndex.x == 2.0f) {
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+									}
+									else if (enemyIndex.x == 1.0f) {
+										output.shadow.y = 1.0f;
+									}
 								}
 
 
