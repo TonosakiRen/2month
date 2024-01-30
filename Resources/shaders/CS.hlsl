@@ -1,5 +1,7 @@
 RWStructuredBuffer<uint32_t> Output : register(u0);
+RWStructuredBuffer<float32_t3> HitPos : register(u1);
 Texture2D<float4> colorTex : register(t0);
+Texture2D<float4> depthTex : register(t1);
 SamplerState smp : register(s0);
 struct Enemy {
 	uint32_t num;
@@ -17,7 +19,7 @@ void main( uint3 DTid : SV_DispatchThreadID)
 
 	float32_t2 centerData = colorTex[DTid.xy].xy;
 
-	if (centerData.y == 1.0f) {
+	if (centerData.y == 1.0f ) {
 	    
 	    float32_t3 topData = float32_t3(0.0f, 0.0f,0.0f);
 	    float32_t3 bottomData = float32_t3(0.0f, 0.0f,0.0f);
