@@ -56,6 +56,7 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 		id_ = date.id;
 	}
 	if (!isActive_) { return; }
+	else if (hp_ <= 0) { return; }
 
 	bool isColl = false;
 

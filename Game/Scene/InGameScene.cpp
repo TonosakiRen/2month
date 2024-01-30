@@ -31,6 +31,7 @@ void InGameScene::Update() {
 
 	enemy_->OnCollisionPlayer(player_->headCollider_, player_->date_);
 	stage_->Collision(player_.get());
+	stage_->Collision(enemy_.get());
 	player_->EnemyCollision();
 	player_->EnemyShadowCollision();
 }
