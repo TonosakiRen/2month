@@ -1,11 +1,15 @@
 #include "BaseCharacter.h"
+#include "EnemyManager.h"
 
 decltype(BaseCharacter::masterCount) BaseCharacter::masterCount = 0u;
 BaseCharacter::BaseCharacter() : kNumber_(masterCount) {
-	masterCount++;
+	if (++masterCount >= EnemyManager::kMaxEnemyCount) {
+		masterCount = 0u;
+	}
 }
+
 BaseCharacter::~BaseCharacter(){
-	masterCount--;
+	
 }
 
 void BaseCharacter::DrawImGui() {

@@ -172,7 +172,7 @@ void CannonEnemy::Attack(const Vector3& playerPosition) {
 
 void CannonEnemy::CollisionProcess() {
 	// 当たった時の処理。体力が0になったらisActiv_をfalseにする
-	if (hp_ <= 0) {
+	if (hp_ <= 0u) {
 		// 死亡アニメーション
 		isAlive_ = false;
 		return;

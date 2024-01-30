@@ -10,6 +10,8 @@
 #include "CannonEnemy.h"
 #include "Coin.h"
 
+#include "NormalSpawner.h"
+
 class SpotLights;
 class PointLights;
 class ShadowSpotLights;
@@ -40,12 +42,14 @@ private:
 	ShadowSpotLights* shadowSpotLights_ = nullptr;
 
 public:
-	static const uint32_t kMaxEnemyCount = 100u;
+	static const uint32_t kMaxEnemyCount = 500u;
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 	std::vector<std::unique_ptr<NormalLightEnemy>> nLightEnemis_;
 	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;
 	std::vector<std::unique_ptr<StandLightEnemy>> sLightEnemis_;
 	std::vector<std::unique_ptr<CannonEnemy>> cEnemis_;
 	std::vector<std::unique_ptr<Coin>> coins_;
+
+	std::vector<std::unique_ptr<NormalSpawner>> nSpawners_;
 
 };

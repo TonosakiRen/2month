@@ -19,33 +19,47 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
 
+	auto& ne = nSpawners_.emplace_back(std::make_unique<NormalSpawner>());
+	ne->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 2.0f, 0.0f));
+}
+
+template<typename Container>
+void TempEnemyUpdate(Container& container,const Vector3& playerPosition) {
+	for (uint32_t index = 0u; index < container.size(); index++) {
+		if (!container.at(index)->GetIsAlive()) {
+			// 要素を削除したため、indexを進めない
+			container.erase(container.begin() + index);
+			index--;
+			continue;
+		}
+		container.at(index)->Update(playerPosition);
+	}
 }
 
 void EnemyManager::Update(const Vector3& playerPosition) {
-	for (auto& enemy : nEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
+	
+	TempEnemyUpdate(nEnemis_,playerPosition);
+	TempEnemyUpdate(nLightEnemis_,playerPosition);
+	TempEnemyUpdate(tEnemis_,playerPosition);
+	TempEnemyUpdate(sLightEnemis_,playerPosition);
+	TempEnemyUpdate(cEnemis_,playerPosition);
+	TempEnemyUpdate(coins_,playerPosition);
+	
+	for (uint32_t index = 0u; index < nSpawners_.size(); index++) {
+		if (!nSpawners_.at(index)->GetIsAlive()) {
+			// 要素を削除したため、indexを進めない
+			nSpawners_.erase(nSpawners_.begin() + index);
+			index--;
+			continue;
+		}
+		nSpawners_.at(index)->Update(playerPosition);
+		if (nSpawners_.at(index)->EnemySpawn()) {
+			auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
+			auto& spawn = nSpawners_.at(index)->GetSRT();
+			enemy->Initialize(spawn.scale, spawn.rotate, spawn.translate);
+		}
 	}
-	for (auto& enemy : nLightEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : tEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : sLightEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& enemy : cEnemis_) {
-		if (!enemy->GetIsAlive()) { continue; }
-		enemy->Update(playerPosition);
-	}
-	for (auto& coin : coins_) {
-		if (!coin->GetIsAlive()) { continue; }
-		coin->Update(playerPosition);
-	}
+
 }
 
 void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date) {
@@ -69,6 +83,10 @@ void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date)
 		if (!coin->GetIsAlive()) { continue; }
 		coin->OnCollision(collider, date);
 	}
+	for (auto& spawn : nSpawners_) {
+		if (!spawn->GetIsAlive()) { continue; }
+		spawn->OnCollision(collider, date);
+	}
 
 }
 
@@ -89,6 +107,11 @@ void EnemyManager::OnCollisionStage(Collider& collider) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->PushBackCollision(collider);
 	}
+	for (auto& spawn : nSpawners_) {
+		if (!spawn->GetIsAlive()) { continue; }
+		spawn->PushBackCollision(collider);
+	}
+
 }
 
 void EnemyManager::DrawImGui() {
@@ -190,6 +213,23 @@ void EnemyManager::DrawImGui() {
 					coins_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
 						coins_.erase(coins_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("NormalSpawner")) {
+			if (ImGui::Button("Create")) {
+				nSpawners_.emplace_back(std::make_unique<NormalSpawner>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", nSpawners_.size());
+			for (int i = 0; i < nSpawners_.size(); i++) {
+				if (ImGui::TreeNode(("nSpawnerNumber : " + std::to_string(i)).c_str())) {
+					nSpawners_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						nSpawners_.erase(nSpawners_.begin() + i);
 					}
 					ImGui::TreePop();
 				}
@@ -358,6 +398,10 @@ void EnemyManager::Draw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& spawn : nSpawners_) {
+		if (!spawn->GetIsAlive()) { continue; }
+		spawn->Draw();
+	}
 
 }
 
@@ -386,6 +430,10 @@ void EnemyManager::ShadowDraw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& spawn : nSpawners_) {
+		if (!spawn->GetIsAlive()) { continue; }
+		spawn->Draw();
+	}
 }
 
 void EnemyManager::SpotLightShadowDraw() {
@@ -408,5 +456,9 @@ void EnemyManager::SpotLightShadowDraw() {
 	for (auto& enemy : coins_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->EnemyDraw();
+	}
+	for (auto& spawn : nSpawners_) {
+		if (!spawn->GetIsAlive()) { continue; }
+		spawn->EnemyDraw();
 	}
 }
