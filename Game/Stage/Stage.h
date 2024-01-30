@@ -5,7 +5,7 @@
 #include "Truck.h"
 #include "WoodBox.h"
 #include "MoveFloor.h"
-
+#include "StageLight.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -56,6 +56,7 @@ private:
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
 	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
+	std::vector<std::unique_ptr<StageLight>> stagelights_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

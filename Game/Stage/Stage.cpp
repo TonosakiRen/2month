@@ -37,6 +37,9 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& floor : moveFloors_) {
 		floor->Update(playerWorldPosition);
 	}
+	for (auto& spotlight : stagelights_) {
+		spotlight->Update(playerWorldPosition);
+	}
 }
 
 void Stage::Draw() {
@@ -57,6 +60,9 @@ void Stage::Draw() {
 	}
 	for (auto& floor : moveFloors_) {
 		floor->Draw();
+	}
+	for (auto& spotlight : stagelights_) {
+		spotlight->Draw();
 	}
 }
 
@@ -196,6 +202,24 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("StageLight")) {
+			if (ImGui::Button("Create")) {
+				stagelights_.emplace_back(std::make_unique<StageLight>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", stagelights_.size());
+			for (int i = 0; i < stagelights_.size(); i++) {
+				if (ImGui::TreeNode(("StageLightNumber : " + std::to_string(i)).c_str())) {
+					stagelights_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						stagelights_.erase(stagelights_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenu();
 	}
 	
@@ -270,6 +294,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		woodbox->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "StageLightConfirmation");
+	stagelights_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("StageLightNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& stagelight = stagelights_.emplace_back(std::make_unique<StageLight>());
+		stagelight->Initialize(scale, rotate, trans);
+	}
+
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
@@ -323,6 +357,13 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Scale").c_str(), woodboxs_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Rotate").c_str(), woodboxs_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Translate").c_str(), woodboxs_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "StageLightConfirmation" + std::string(), static_cast<int>(stagelights_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(stagelights_.size()); index++) {
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Scale").c_str(), stagelights_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Rotate").c_str(), stagelights_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Translate").c_str(), stagelights_[index]->GetWorldTransform()->translation_);
 	}
 
 

@@ -37,7 +37,183 @@
             10.800000190734863,
             0.0
         ],
-        "CoinConfirmation": 0,
+        "CoinConfirmation": 11,
+        "CoinNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 0 : Translate": [
+            0.0,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 1 : Translate": [
+            2.0,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 10 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "CoinNumber : 10 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 10 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "CoinNumber : 2 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 2 : Translate": [
+            -2.0999999046325684,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 3 : Translate": [
+            -4.300000190734863,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 4 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 4 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 4 : Translate": [
+            4.099999904632568,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 5 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 5 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 5 : Translate": [
+            -22.0,
+            1.5,
+            0.0
+        ],
+        "CoinNumber : 6 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 6 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 6 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "CoinNumber : 7 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "CoinNumber : 7 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 7 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "CoinNumber : 8 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "CoinNumber : 8 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 8 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "CoinNumber : 9 : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
+        "CoinNumber : 9 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 9 : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
         "FloorConfirmation": 10,
         "FloorNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -368,6 +544,7 @@
             1.4140238761901855,
             -5.314733982086182
         ],
+        "StageLightConfirmation": 0,
         "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
         "StandLightEnemyNumber : 0 : Interval": 6,

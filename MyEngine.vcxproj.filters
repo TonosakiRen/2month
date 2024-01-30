@@ -328,6 +328,7 @@
     <ClCompile Include="Game\Stage\MoveFloor.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="StageLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -588,6 +589,7 @@
     <ClInclude Include="Game\Stage\MoveFloor.h">
       <Filter>Game\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="StageLight.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">

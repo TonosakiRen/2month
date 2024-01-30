@@ -181,6 +181,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="SpotLights.cpp" />
     <ClCompile Include="SpotLightShadowMap.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="StageLight.cpp" />
     <ClCompile Include="SwapChain.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="UploadBuffer.cpp" />
@@ -269,6 +270,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="SpotLights.h" />
     <ClInclude Include="SpotLightShadowMap.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="StageLight.h" />
     <ClInclude Include="SwapChain.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UploadBuffer.h" />
