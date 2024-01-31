@@ -43,6 +43,15 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& trap : trapButtons_) {
 		trap->Update(playerWorldPosition);
 	}
+
+
+	if (mHouse_.isFalled_) {
+		Confine();
+	}
+	else if (mHouse_.isBreaked_) {
+		ConfineBreak();
+	}
+
 }
 
 void Stage::Draw() {
@@ -430,12 +439,20 @@ void Stage::Collision(Player* player) {
 			player->CollisionProcess(-pushBackVector);
 		}
 	}
-	for (auto& trap : trapButtons_) {
-		if(trap->collider_.Collision(player->bodyCollider_, pushBackVector)) {
-			//player->worldTransform_.translation_ -= pushBackVector;
-			//player->CollisionProcess(-pushBackVector);
-			ConfineInitialize(trap->GetWorldTransform()->GetWorldTranslate());
+	//for (auto& trap : trapButtons_) {
+	//	if(trap->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+	//		//player->worldTransform_.translation_ -= pushBackVector;
+	//		//player->CollisionProcess(-pushBackVector);
+	//		ConfineInitialize(trap->GetWorldTransform()->GetWorldTranslate());
+	//		// ボタンの削除
+	//	}
+	//}
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
+		if (trapButtons_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			ConfineInitialize(trapButtons_.at(index)->GetWorldTransform()->GetWorldTranslate());
 			// ボタンの削除
+			trapButtons_.erase(trapButtons_.begin() + index);
+			index--;
 		}
 	}
 
@@ -472,20 +489,94 @@ void Stage::SetSpotLight() {
 }
 
 void Stage::ConfineInitialize(const Vector3& position) {
-	int num = woodboxs_.size();
-	uint32_t y = 0;
-	for (uint32_t index = 0u; index < 9u; index++) {
+	mHouse_.boxNumber = static_cast<uint32_t>(woodboxs_.size());
+	mHouse_.kBoxCount = 24u; // 3の倍数のみかつ2で割れるもの
+	mHouse_.isFalled_ = true;
+
+	int y = 0;
+	int x = 0;
+	int z = 0;
+	Vector3 space(8.0f,1.0f,1.0f);
+	Vector3 scale(2.0f, 2.0f, 2.0f);
+	Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
+	float initY = 5.0f;
+
+	for (uint32_t index = 0u; index < mHouse_.kBoxCount; index++) {
 		auto& woodbox = woodboxs_.emplace_back(std::make_unique<WoodBox>());
-		Vector3 scale(1.0f, 1.0f, 1.0f);
-		Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
+		
 		Vector3 trans;
-		trans.x = position.x + 5.0f + (static_cast<float>(y++) * 2.0f);
-		if (y >= 3u) { y = 0u; }
-		trans.y = position.y + 2.0f + (static_cast<float>(index) * 2.0f);
+		if (index >= mHouse_.kBoxCount / 2u) {
+			trans.x = position.x - (scale.x * space.x);
+		}
+		else {
+			trans.x = position.x + (scale.x * space.x);
+		}
+
+		z++;
+		if (index % 3u == 0u) {
+			y++;
+			if (index == mHouse_.kBoxCount / 2u || index == 0u) {
+				y = 0u;
+			}
+			z = 0u;
+		}
+		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y));
+		
+		trans.z = (-3.0f) + (static_cast<float>(z - 1) * (scale.z * 2.0f + space.z));
+		
 		woodbox->Initialize(scale, rotate, trans);
 	}
 }
 
 void Stage::Confine() {
 	
+	const float speed = 0.1f;
+	int y = 0;
+	uint32_t count = 0u;
+	uint32_t integral = 0u;
+	uint32_t kMaxCount = mHouse_.boxNumber + mHouse_.kBoxCount;
+	for (uint32_t index = mHouse_.boxNumber; index < kMaxCount; index++) {
+		auto& woodbox = woodboxs_.at(index);
+
+		woodbox->GetWorldTransform()->translation_.y -= speed;
+
+		if (integral % 3u == 0u) {
+			y++;
+			if (integral == mHouse_.kBoxCount / 2u || integral == 0u) {
+				y = 0u;
+			}
+		}
+		float incY = woodbox->GetWorldTransform()->scale_.y + (static_cast<float>(y) * (woodbox->GetWorldTransform()->scale_.y * 2.0f));
+
+		if (woodbox->GetWorldTransform()->translation_.y <= incY) {
+			woodbox->GetWorldTransform()->translation_.y = incY;
+			count++;
+			if (count >= mHouse_.kBoxCount) {
+				mHouse_.isFalled_ = false;
+				mHouse_.isBreaked_ = true; // とりあえず仮置き
+			}
+		}
+		integral++;
+	}
+}
+
+void Stage::ConfineBreak() {
+	const float speed = 0.1f;
+	int y = 0;
+	uint32_t count = 0u;
+	float kMinY = -10.0f;
+	for (uint32_t index = mHouse_.boxNumber; index < mHouse_.boxNumber + mHouse_.kBoxCount; index++) {
+		auto& woodbox = woodboxs_.at(index);
+
+		woodbox->GetWorldTransform()->translation_.y -= speed;
+
+		// 一定以下になったら削除
+		if (woodbox->GetWorldTransform()->translation_.y <= kMinY) {
+			woodboxs_.erase(woodboxs_.begin() + index);
+			index--;
+			if (--mHouse_.kBoxCount == 0u) {
+				mHouse_.isBreaked_ = false;
+			}
+		}
+	}
 }
