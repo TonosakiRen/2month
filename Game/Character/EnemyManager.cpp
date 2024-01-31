@@ -52,8 +52,7 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 			index--;
 			continue;
 		}
-		nSpawners_.at(index)->Update(playerPosition);
-		if (nSpawners_.at(index)->EnemySpawn()) {
+		if (nSpawners_.at(index)->UpdateSpawn(playerPosition)) {
 			auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
 			auto& spawn = nSpawners_.at(index)->GetSRT();
 			enemy->Initialize(spawn.scale, spawn.rotate, spawn.translate);
@@ -292,6 +291,18 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Rotate").c_str(), coins_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Translate").c_str(), coins_[index]->GetWorldTransform()->translation_);
 	}
+	
+	global->SetValue(itemName, "SpawnerConfirmation" + std::string(), static_cast<int>(nSpawners_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(nSpawners_.size()); index++) {
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Scale").c_str(), nSpawners_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Rotate").c_str(), nSpawners_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Translate").c_str(), nSpawners_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Interval").c_str(), nSpawners_[index]->GetSRT().interval);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : MaxPop").c_str(), nSpawners_[index]->GetSRT().MaxPopEnemy);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : hp").c_str(), nSpawners_[index]->GetSRT().hp);
+	}
+
+
 }
 
 void EnemyManager::Load(const std::filesystem::path& loadFile) {
@@ -371,6 +382,18 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		//enemy->SetLight(shadowSpotLights_, index);
 	}
 
+	num = global->GetIntValue(itemName, "SpawnerConfirmation");
+	if (!nSpawners_.empty()) { nSpawners_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("SpawnerEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Translate").c_str());
+		int interval = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Interval").c_str());
+		int maxpop = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : MaxPop").c_str());
+		int hp = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : hp").c_str());
+		auto& enemy = nSpawners_.emplace_back(std::make_unique<NormalSpawner>());
+		enemy->Initialize(scale, rotate, trans, static_cast<uint32_t>(interval), static_cast<uint32_t>(maxpop), hp);
+	}
 }
 
 void EnemyManager::Draw() {
