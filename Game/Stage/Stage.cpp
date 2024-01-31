@@ -40,6 +40,9 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& spotlight : stagelights_) {
 		spotlight->Update(playerWorldPosition);
 	}
+	for (auto& trap : trapButtons_) {
+		trap->Update(playerWorldPosition);
+	}
 }
 
 void Stage::Draw() {
@@ -63,6 +66,9 @@ void Stage::Draw() {
 	}
 	for (auto& spotlight : stagelights_) {
 		spotlight->Draw();
+	}
+	for (auto& trap : trapButtons_) {
+		trap->Draw();
 	}
 }
 
@@ -219,6 +225,24 @@ void Stage::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+		
+		if (ImGui::BeginMenu("TrapButton")) {
+			if (ImGui::Button("Create")) {
+				trapButtons_.emplace_back(std::make_unique<TrapButton>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", trapButtons_.size());
+			for (int i = 0; i < trapButtons_.size(); i++) {
+				if (ImGui::TreeNode(("TrapButtonNumber : " + std::to_string(i)).c_str())) {
+					trapButtons_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						trapButtons_.erase(trapButtons_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
 
 		ImGui::EndMenu();
 	}
@@ -341,8 +365,6 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : StartPosition").c_str(), moveFloors_[index]->GetParam().startPos_);
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : EndPosition").c_str(), moveFloors_[index]->GetParam().endPos_);
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Speed").c_str(), moveFloors_[index]->GetParam().speed_);
-
-
 	}
 
 	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
@@ -408,6 +430,15 @@ void Stage::Collision(Player* player) {
 			player->CollisionProcess(-pushBackVector);
 		}
 	}
+	for (auto& trap : trapButtons_) {
+		if(trap->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//player->worldTransform_.translation_ -= pushBackVector;
+			//player->CollisionProcess(-pushBackVector);
+			ConfineInitialize(trap->GetWorldTransform()->GetWorldTranslate());
+			// ボタンの削除
+		}
+	}
+
 	//player->worldTransform_.Update();
 }
 
@@ -438,4 +469,23 @@ void Stage::SetPlayerRespawn(Player* const player) const {
 void Stage::SetSpotLight() {
 	spotLights_->lights_.at(0).worldTransform.translation_ = wallLights_.at(0)->GetLightPos();
 	spotLights_->lights_.at(0).worldTransform.Update();
+}
+
+void Stage::ConfineInitialize(const Vector3& position) {
+	int num = woodboxs_.size();
+	uint32_t y = 0;
+	for (uint32_t index = 0u; index < 9u; index++) {
+		auto& woodbox = woodboxs_.emplace_back(std::make_unique<WoodBox>());
+		Vector3 scale(1.0f, 1.0f, 1.0f);
+		Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
+		Vector3 trans;
+		trans.x = position.x + 5.0f + (static_cast<float>(y++) * 2.0f);
+		if (y >= 3u) { y = 0u; }
+		trans.y = position.y + 2.0f + (static_cast<float>(index) * 2.0f);
+		woodbox->Initialize(scale, rotate, trans);
+	}
+}
+
+void Stage::Confine() {
+	
 }

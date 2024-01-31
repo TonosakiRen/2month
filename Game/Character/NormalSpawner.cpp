@@ -10,7 +10,7 @@ void NormalSpawner::Initialize(const Vector3& scale, const Quaternion& quaternio
 		"woodbox", // 親
 	};
 
-	BaseInitialize(names.size(), names);
+	BaseInitialize(static_cast<uint32_t>(names.size()), names);
 
 	collider_.Initialize(&worldTransform_, "Spawner", models_.at(0).modelHandle_);
 
