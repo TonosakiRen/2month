@@ -3,6 +3,7 @@
 #include <memory>
 #include "ModelManager.h"
 #include "Compute.h"
+#include "Player.h"
 
 
 void NormalSpawner::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate, const uint32_t& interval, const uint32_t& MaxPop, const int& hp) {
@@ -46,6 +47,7 @@ bool NormalSpawner::UpdateSpawn(const Vector3& playerPosition) {
 	if (isHit_) {
 		// 当たった時の処理
 		isHit_ = false;
+		CollisionProcess();
 	}
 
 	collider_.AdjustmentScale();
@@ -57,22 +59,38 @@ bool NormalSpawner::UpdateSpawn(const Vector3& playerPosition) {
 void NormalSpawner::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (!isActive_) { return; }
 
+	// 攻撃Idがリセットされているのであれば都度リセット
+	if (date.id == 0u) {
+		id_ = date.id;
+	}
+	if (!isActive_) { return; }
+	else if (hp_ <= 0) { return; }
+
 	bool isColl = false;
-	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
-		isColl = true;
-}
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
+		Player::hitShadowEnemyIndex_ = kNumber_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::damage;
 		isColl = true;
 	}
 
+	Vector3 pushBackVector;
+	if (collider_.Collision(collider, pushBackVector)) {
+		isColl = true;
+		Player::hitCollider_ = &collider_;
+		Player::hitReaction_ = Player::knockBack;
+	}
+
 	if (isColl) {
-		if (!isHit_) {
+		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
+			// 当たった瞬間
 			isHit_ = true;
-			UpdateTransform();
+			id_ = date.id;
+			hp_ -= date.damage_;
 		}
+		UpdateTransform();
 	}
 }
 
@@ -129,5 +147,12 @@ void NormalSpawner::InsertData() {
 	respawnPoint_.interval = static_cast<int>(popInterval_);
 	respawnPoint_.MaxPopEnemy = static_cast<int>(kMaxPopEnemy_);
 	respawnPoint_.hp = hp_;
+}
+
+void NormalSpawner::CollisionProcess() {
+	if (hp_ <= 0u) {
+		isAlive_ = false;
+	}
+	isHit_ = false;
 }
 

@@ -16,6 +16,7 @@ public: // 仮想関数
 private:
 	bool EnemySpawn();
 	void InsertData();
+	void CollisionProcess();
 
 private:
 	struct SRT {
@@ -37,7 +38,7 @@ private:
 	uint32_t kMaxPopEnemy_ = 10u; // 敵が最大何体まで沸けるか
 	uint32_t popCount_ = 0u; // 敵が何体出たかのカウント
 	Vector4 color_;
-
+	uint32_t id_ = 0u;
 
 public:
 	const SRT& GetSRT() const { return respawnPoint_; }

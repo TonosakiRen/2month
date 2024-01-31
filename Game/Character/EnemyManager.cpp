@@ -385,7 +385,7 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 	num = global->GetIntValue(itemName, "SpawnerConfirmation");
 	if (!nSpawners_.empty()) { nSpawners_.clear(); }
 	for (int i = 0; i < num; i++) {
-		Vector3 scale = global->GetVector3Value(itemName, ("SpawnerEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
+		Vector3 scale = global->GetVector3Value(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Translate").c_str());
 		int interval = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Interval").c_str());
