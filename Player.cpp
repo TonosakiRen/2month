@@ -259,6 +259,8 @@ void Player::EnemyShadowCollision()
 
 void Player::EnemyCollision()
 {
+	const int hitStopFrame = 2;
+
 	if (hitCollider_ ) {
 		if (hitReaction_ != heal) {
 			Vector3 hitPos = MakeTranslation(hitCollider_->worldTransform_.matWorld_);
@@ -272,7 +274,7 @@ void Player::EnemyCollision()
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
 					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					GameScene::SetHitStop(3);
+					GameScene::SetHitStop(hitStopFrame);
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
@@ -280,7 +282,7 @@ void Player::EnemyCollision()
 			}
 			else if (hitCollider_->GetName() == "CannonBullet") {
 				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-				GameScene::SetHitStop(3);
+				GameScene::SetHitStop(hitStopFrame);
 				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
 						isKnockBack_ = true;
@@ -289,7 +291,7 @@ void Player::EnemyCollision()
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
 					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					GameScene::SetHitStop(3);
+					GameScene::SetHitStop(hitStopFrame);
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
@@ -305,7 +307,7 @@ void Player::EnemyCollision()
 
 				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.7f, 0.1f, 1.0f };
 				hitParticle_.SetIsEmit(true);
-				GameScene::SetHitStop(3);
+				GameScene::SetHitStop(hitStopFrame);
 			}
 		}
 		else {

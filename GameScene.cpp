@@ -148,7 +148,7 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		else {
 			hitStopFrame_--;
-			currentViewProjection_->Shake({ 0.5f,0.5f,0.5f }, hitStopFrame_);
+			currentViewProjection_->Shake({ 0.3f,0.3f,0.3f }, hitStopFrame_);
 		}
 		
 	}
