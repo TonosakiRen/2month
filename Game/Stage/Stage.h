@@ -7,6 +7,7 @@
 #include "MoveFloor.h"
 #include "StageLight.h"
 #include "TrapButton.h"
+#include "Goal.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -54,6 +55,7 @@ private:
 	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
 	std::vector<std::unique_ptr<StageLight>> stagelights_;
 	std::vector<std::unique_ptr<TrapButton>> trapButtons_;
+	std::unique_ptr<Goal> goal_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

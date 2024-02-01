@@ -353,6 +353,9 @@
     <ClCompile Include="Game\Camera\FixedCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\Goal.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -628,6 +631,9 @@
     </ClInclude>
     <ClInclude Include="Game\Camera\FixedCamera.h">
       <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\Goal.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

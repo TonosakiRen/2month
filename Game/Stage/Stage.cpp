@@ -43,7 +43,7 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& trap : trapButtons_) {
 		trap->Update(playerWorldPosition);
 	}
-
+	goal_->Update(playerWorldPosition);
 
 	if (mHouse_.isFalled_) {
 		Confine();
@@ -85,6 +85,7 @@ void Stage::Draw() {
 	for (auto& trap : trapButtons_) {
 		trap->Draw();
 	}
+	goal_->Draw();
 }
 
 
@@ -98,6 +99,7 @@ void Stage::ShadowDraw() {
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
 	}
+	goal_->Draw();
 }
 
 void Stage::SpotLightShadowDraw() {
@@ -259,6 +261,14 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Goal")) {
+			if (ImGui::TreeNode("goal")) {
+				goal_->DrawImGui();
+				ImGui::TreePop();
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenu();
 	}
 	
@@ -353,6 +363,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		trap->Initialize(scale, rotate, trans);
 	}
 
+	if (goal_) { goal_.reset();	}
+	if (!goal_) {
+		goal_ = std::make_unique<Goal>();
+		Vector3 scale = global->GetVector3Value(selectName, ("Goal : Scale"));
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("Goal : Rotate"));
+		Vector3 trans = global->GetVector3Value(selectName, ("Goal : Translate"));
+		goal_->Initialize(scale, rotate, trans);
+	}
+
+
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
@@ -420,6 +440,11 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Translate").c_str(), trapButtons_[index]->GetWorldTransform()->translation_);
 	}
 
+	if (goal_) {
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->translation_);
+	}
 
 }
 
@@ -462,20 +487,17 @@ void Stage::Collision(Player* player) {
 			player->CollisionProcess(-pushBackVector);
 		}
 	}
-	//for (auto& trap : trapButtons_) {
-	//	if(trap->collider_.Collision(player->bodyCollider_, pushBackVector)) {
-	//		//player->worldTransform_.translation_ -= pushBackVector;
-	//		//player->CollisionProcess(-pushBackVector);
-	//		ConfineInitialize(trap->GetWorldTransform()->GetWorldTranslate());
-	//		// ボタンの削除
-	//	}
-	//}
 	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
 		if (trapButtons_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			ConfineInitialize(trapButtons_.at(index)->GetWorldTransform()->GetWorldTranslate());
 			// ボタンの削除
 			trapButtons_.erase(trapButtons_.begin() + index);
 			index--;
+		}
+	}
+	if (goal_) {
+		if (goal_->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			// playerにクリア用の処理を持たせる予定
 		}
 	}
 
@@ -496,7 +518,7 @@ void Stage::Collision(EnemyManager* enemis) {
 	for (auto& woodbox : woodboxs_) {
 		enemis->OnCollisionStage(woodbox->collider_);
 	}
-
+	enemis->OnCollisionStage(goal_->collider_);
 }
 
 void Stage::SetPlayerRespawn(Player* const player) const {

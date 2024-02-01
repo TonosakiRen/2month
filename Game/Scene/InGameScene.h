@@ -11,7 +11,7 @@ class ShadowSpotLights;
 class InGameScene {
 public:
 	InGameScene() = default;
-	~InGameScene() = default;
+	~InGameScene() = default; 
 
 	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
