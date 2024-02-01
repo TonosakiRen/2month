@@ -1,7 +1,119 @@
 {
     "a": {
         "CannonEnemyConfirmation": 0,
-        "CoinConfirmation": 0,
+        "CoinConfirmation": 7,
+        "CoinNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 0 : Translate": [
+            0.0,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 1 : Translate": [
+            2.0,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 2 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 2 : Translate": [
+            -2.0999999046325684,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 3 : Translate": [
+            -4.300000190734863,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 4 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 4 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 4 : Translate": [
+            4.099999904632568,
+            6.199999809265137,
+            0.0
+        ],
+        "CoinNumber : 5 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 5 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 5 : Translate": [
+            -22.0,
+            1.5,
+            0.0
+        ],
+        "CoinNumber : 6 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 6 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 6 : Translate": [
+            0.0,
+            2.4000000953674316,
+            -3.4000000953674316
+        ],
         "FloorConfirmation": 10,
         "FloorNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -332,7 +444,7 @@
             1.4140238761901855,
             -5.314733982086182
         ],
-        "SpawnerConfirmation": 1,
+        "SpawnerConfirmation": 0,
         "SpawnerNumber : 0 : Interval": 60,
         "SpawnerNumber : 0 : MaxPop": 2,
         "SpawnerNumber : 0 : Rotate": [
@@ -398,6 +510,23 @@
             40.400001525878906,
             0.800000011920929,
             2.200000047683716
+        ],
+        "TrapConfirmation": 1,
+        "TrapNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TrapNumber : 0 : Scale": [
+            1.0,
+            5.0,
+            15.100000381469727
+        ],
+        "TrapNumber : 0 : Translate": [
+            3.5,
+            3.5,
+            -3.0
         ],
         "TruckConfirmation": 0,
         "WallConfirmation": 6,

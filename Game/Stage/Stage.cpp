@@ -336,6 +336,16 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		auto& stagelight = stagelights_.emplace_back(std::make_unique<StageLight>());
 		stagelight->Initialize(scale, rotate, trans);
 	}
+	
+	num = global->GetIntValue(selectName, "TrapConfirmation");
+	trapButtons_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("TrapNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& trap = trapButtons_.emplace_back(std::make_unique<TrapButton>());
+		trap->Initialize(scale, rotate, trans);
+	}
 
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
@@ -395,6 +405,13 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Scale").c_str(), stagelights_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Rotate").c_str(), stagelights_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Translate").c_str(), stagelights_[index]->GetWorldTransform()->translation_);
+	}
+	
+	global->SetValue(itemName, "TrapConfirmation" + std::string(), static_cast<int>(trapButtons_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Scale").c_str(), trapButtons_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Rotate").c_str(), trapButtons_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Translate").c_str(), trapButtons_[index]->GetWorldTransform()->translation_);
 	}
 
 
@@ -520,7 +537,7 @@ void Stage::ConfineInitialize(const Vector3& position) {
 			}
 			z = 0u;
 		}
-		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y));
+		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y) + (static_cast<float>(z) * initY));
 		
 		trans.z = (-3.0f) + (static_cast<float>(z - 1) * (scale.z * 2.0f + space.z));
 		
@@ -530,7 +547,7 @@ void Stage::ConfineInitialize(const Vector3& position) {
 
 void Stage::Confine() {
 	
-	const float speed = 0.1f;
+	const float speed = 0.25f;
 	int y = 0;
 	uint32_t count = 0u;
 	uint32_t integral = 0u;
@@ -561,7 +578,7 @@ void Stage::Confine() {
 }
 
 void Stage::ConfineBreak() {
-	const float speed = 0.1f;
+	const float speed = 0.4f;
 	int y = 0;
 	uint32_t count = 0u;
 	float kMinY = -10.0f;
