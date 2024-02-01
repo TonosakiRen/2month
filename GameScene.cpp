@@ -339,6 +339,7 @@ void GameScene::PostSpriteDraw()
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();
 		ui_->Draw();
+		break;
 	case GameScene::Scene::Editor:
 		editorScene_->DrawUI();
 		break;

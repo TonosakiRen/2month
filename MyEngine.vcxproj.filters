@@ -341,6 +341,9 @@
       <Filter>Game\Character\Spawner</Filter>
     </ClCompile>
     <ClCompile Include="StageLight.cpp" />
+    <ClCompile Include="Game\Stage\TrapButton.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -608,6 +611,9 @@
       <Filter>Game\Character\Spawner</Filter>
     </ClInclude>
     <ClInclude Include="StageLight.h" />
+    <ClInclude Include="Game\Stage\TrapButton.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">

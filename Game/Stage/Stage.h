@@ -6,6 +6,7 @@
 #include "WoodBox.h"
 #include "MoveFloor.h"
 #include "StageLight.h"
+#include "TrapButton.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -14,12 +15,6 @@ class PointLights;
 class ShadowSpotLights;
 class Player;
 class EnemyManager;
-
-struct SRT {
-	Vector3 scale;
-	Quaternion rotate;
-	Vector3 translate;
-};
 
 class Stage {
 public:
@@ -57,11 +52,24 @@ private:
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
 	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
 	std::vector<std::unique_ptr<StageLight>> stagelights_;
+	std::vector<std::unique_ptr<TrapButton>> trapButtons_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
 	ShadowSpotLights* shadowSpotLights_;
 
+	struct SRT {
+		Vector3 scale;
+		Quaternion rotate;
+		Vector3 translate;
+	};
 	SRT playerRespawnPoint_;
+
+private: // モンスターハウス用
+	struct MonstarHouseParam {
+
+	};
+	void ConfineInitialize(const Vector3& position); // 閉じ込めるための初期化
+	void Confine(); // 閉じ込める処理
 
 };

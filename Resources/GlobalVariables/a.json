@@ -352,6 +352,7 @@
             0.0
         ],
         "SpawnerNumber : 0 : hp": 1,
+        "StageLightConfirmation": 0,
         "StandLightEnemyConfirmation": 0,
         "ThornEnemyConfirmation": 2,
         "ThornEnemyNumber : 0 : Amplitube": [
