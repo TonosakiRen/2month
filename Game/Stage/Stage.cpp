@@ -37,6 +37,27 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& floor : moveFloors_) {
 		floor->Update(playerWorldPosition);
 	}
+	for (auto& spotlight : stagelights_) {
+		spotlight->Update(playerWorldPosition);
+	}
+	for (auto& trap : trapButtons_) {
+		trap->Update(playerWorldPosition);
+	}
+	goal_->Update(playerWorldPosition);
+
+	if (mHouse_.isFalled_) {
+		Confine();
+	}
+	else if (mHouse_.isBreaked_) {
+		ConfineBreak();
+	}
+
+}
+
+void Stage::PostUpdate() {
+	if (mHouse_.isMomentActivation_) {
+		mHouse_.isMomentActivation_ = false;
+	}
 }
 
 void Stage::Draw() {
@@ -58,6 +79,13 @@ void Stage::Draw() {
 	for (auto& floor : moveFloors_) {
 		floor->Draw();
 	}
+	for (auto& spotlight : stagelights_) {
+		spotlight->Draw();
+	}
+	for (auto& trap : trapButtons_) {
+		trap->Draw();
+	}
+	goal_->Draw();
 }
 
 
@@ -71,6 +99,7 @@ void Stage::ShadowDraw() {
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
 	}
+	goal_->Draw();
 }
 
 void Stage::SpotLightShadowDraw() {
@@ -196,6 +225,50 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("StageLight")) {
+			if (ImGui::Button("Create")) {
+				stagelights_.emplace_back(std::make_unique<StageLight>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", stagelights_.size());
+			for (int i = 0; i < stagelights_.size(); i++) {
+				if (ImGui::TreeNode(("StageLightNumber : " + std::to_string(i)).c_str())) {
+					stagelights_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						stagelights_.erase(stagelights_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+		
+		if (ImGui::BeginMenu("TrapButton")) {
+			if (ImGui::Button("Create")) {
+				trapButtons_.emplace_back(std::make_unique<TrapButton>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", trapButtons_.size());
+			for (int i = 0; i < trapButtons_.size(); i++) {
+				if (ImGui::TreeNode(("TrapButtonNumber : " + std::to_string(i)).c_str())) {
+					trapButtons_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						trapButtons_.erase(trapButtons_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Goal")) {
+			if (ImGui::TreeNode("goal")) {
+				goal_->DrawImGui();
+				ImGui::TreePop();
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenu();
 	}
 	
@@ -270,6 +343,36 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		woodbox->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "StageLightConfirmation");
+	stagelights_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("StageLightNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& stagelight = stagelights_.emplace_back(std::make_unique<StageLight>());
+		stagelight->Initialize(scale, rotate, trans);
+	}
+	
+	num = global->GetIntValue(selectName, "TrapConfirmation");
+	trapButtons_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("TrapNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& trap = trapButtons_.emplace_back(std::make_unique<TrapButton>());
+		trap->Initialize(scale, rotate, trans);
+	}
+
+	if (goal_) { goal_.reset();	}
+	if (!goal_) {
+		goal_ = std::make_unique<Goal>();
+		Vector3 scale = global->GetVector3Value(selectName, ("Goal : Scale"));
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("Goal : Rotate"));
+		Vector3 trans = global->GetVector3Value(selectName, ("Goal : Translate"));
+		goal_->Initialize(scale, rotate, trans);
+	}
+
+
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
@@ -307,8 +410,6 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : StartPosition").c_str(), moveFloors_[index]->GetParam().startPos_);
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : EndPosition").c_str(), moveFloors_[index]->GetParam().endPos_);
 		global->SetValue(itemName, ("MoveFloorNumber : " + std::to_string(index) + " : Speed").c_str(), moveFloors_[index]->GetParam().speed_);
-
-
 	}
 
 	global->SetValue(itemName, "TruckConfirmation" + std::string(), static_cast<int>(trucks_.size()));
@@ -325,6 +426,25 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("WoodBoxNumber : " + std::to_string(index) + " : Translate").c_str(), woodboxs_[index]->GetWorldTransform()->translation_);
 	}
 
+	global->SetValue(itemName, "StageLightConfirmation" + std::string(), static_cast<int>(stagelights_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(stagelights_.size()); index++) {
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Scale").c_str(), stagelights_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Rotate").c_str(), stagelights_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Translate").c_str(), stagelights_[index]->GetWorldTransform()->translation_);
+	}
+	
+	global->SetValue(itemName, "TrapConfirmation" + std::string(), static_cast<int>(trapButtons_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Scale").c_str(), trapButtons_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Rotate").c_str(), trapButtons_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Translate").c_str(), trapButtons_[index]->GetWorldTransform()->translation_);
+	}
+
+	if (goal_) {
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->translation_);
+	}
 
 }
 
@@ -367,6 +487,21 @@ void Stage::Collision(Player* player) {
 			player->CollisionProcess(-pushBackVector);
 		}
 	}
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
+		if (trapButtons_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			ConfineInitialize(trapButtons_.at(index)->GetWorldTransform()->GetWorldTranslate());
+			mHouse_.trapNumber_ = trapButtons_.at(index)->GetNumber();
+			// ボタンの削除
+			trapButtons_.erase(trapButtons_.begin() + index);
+			index--;
+		}
+	}
+	if (goal_) {
+		if (goal_->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			// playerにクリア用の処理を持たせる予定
+		}
+	}
+
 	//player->worldTransform_.Update();
 }
 
@@ -384,7 +519,7 @@ void Stage::Collision(EnemyManager* enemis) {
 	for (auto& woodbox : woodboxs_) {
 		enemis->OnCollisionStage(woodbox->collider_);
 	}
-
+	enemis->OnCollisionStage(goal_->collider_);
 }
 
 void Stage::SetPlayerRespawn(Player* const player) const {
@@ -398,3 +533,100 @@ void Stage::SetSpotLight() {
 	spotLights_->lights_.at(0).worldTransform.translation_ = wallLights_.at(0)->GetLightPos();
 	spotLights_->lights_.at(0).worldTransform.Update();
 }
+
+void Stage::ConfineInitialize(const Vector3& position) {
+	mHouse_.boxNumber = static_cast<uint32_t>(woodboxs_.size());
+	mHouse_.kBoxCount = 24u; // 3の倍数のみかつ2で割れるもの
+	mHouse_.isFalled_ = true;
+	mHouse_.centerPosX_ = position.x;
+	mHouse_.isMomentActivation_ = true;
+
+	int y = 0;
+	int x = 0;
+	int z = 0;
+	Vector3 space(9.0f,1.0f,1.0f);
+	Vector3 scale(2.0f, 2.0f, 2.0f);
+	Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
+	float initY = 5.0f;
+
+	for (uint32_t index = 0u; index < mHouse_.kBoxCount; index++) {
+		auto& woodbox = woodboxs_.emplace_back(std::make_unique<WoodBox>());
+		
+		Vector3 trans;
+		if (index >= mHouse_.kBoxCount / 2u) {
+			trans.x = position.x - (scale.x * space.x);
+		}
+		else {
+			trans.x = position.x + (scale.x * space.x);
+		}
+
+		z++;
+		if (index % 3u == 0u) {
+			y++;
+			if (index == mHouse_.kBoxCount / 2u || index == 0u) {
+				y = 0u;
+			}
+			z = 0u;
+		}
+		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y) + (static_cast<float>(z) * initY));
+		
+		trans.z = (-3.0f) + (static_cast<float>(z - 1) * (scale.z * 2.0f + space.z));
+		
+		woodbox->Initialize(scale, rotate, trans);
+	}
+}
+
+void Stage::Confine() {
+	
+	const float speed = 0.25f;
+	int y = 0;
+	uint32_t count = 0u;
+	uint32_t integral = 0u;
+	uint32_t kMaxCount = mHouse_.boxNumber + mHouse_.kBoxCount;
+	for (uint32_t index = mHouse_.boxNumber; index < kMaxCount; index++) {
+		auto& woodbox = woodboxs_.at(index);
+
+		woodbox->GetWorldTransform()->translation_.y -= speed;
+
+		if (integral % 3u == 0u) {
+			y++;
+			if (integral == mHouse_.kBoxCount / 2u || integral == 0u) {
+				y = 0u;
+			}
+		}
+		float incY = woodbox->GetWorldTransform()->scale_.y + (static_cast<float>(y) * (woodbox->GetWorldTransform()->scale_.y * 2.0f));
+
+		if (woodbox->GetWorldTransform()->translation_.y <= incY) {
+			woodbox->GetWorldTransform()->translation_.y = incY;
+			count++;
+			if (count >= mHouse_.kBoxCount) {
+				mHouse_.isFalled_ = false;
+				//mHouse_.isBreaked_ = true; // とりあえず仮置き
+				//mHouse_.isMomentActivation_ = true;
+			}
+		}
+		integral++;
+	}
+}
+
+void Stage::ConfineBreak() {
+	const float speed = 0.4f;
+	int y = 0;
+	uint32_t count = 0u;
+	float kMinY = -10.0f;
+	for (uint32_t index = mHouse_.boxNumber; index < mHouse_.boxNumber + mHouse_.kBoxCount; index++) {
+		auto& woodbox = woodboxs_.at(index);
+
+		woodbox->GetWorldTransform()->translation_.y -= speed;
+
+		// 一定以下になったら削除
+		if (woodbox->GetWorldTransform()->translation_.y <= kMinY) {
+			woodboxs_.erase(woodboxs_.begin() + index);
+			index--;
+			if (--mHouse_.kBoxCount == 0u) {
+				mHouse_.isBreaked_ = false;
+			}
+		}
+	}
+}
+

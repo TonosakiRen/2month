@@ -5,7 +5,9 @@
 #include "Truck.h"
 #include "WoodBox.h"
 #include "MoveFloor.h"
-
+#include "StageLight.h"
+#include "TrapButton.h"
+#include "Goal.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -15,12 +17,6 @@ class ShadowSpotLights;
 class Player;
 class EnemyManager;
 
-struct SRT {
-	Vector3 scale;
-	Quaternion rotate;
-	Vector3 translate;
-};
-
 class Stage {
 public:
 	Stage() = default;
@@ -28,6 +24,7 @@ public:
 
 	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
 	void Update(const Vector3& playerWorldPosition);
+	void PostUpdate();
 	void Draw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
@@ -56,11 +53,38 @@ private:
 	std::vector<std::unique_ptr<Truck>> trucks_;
 	std::vector<std::unique_ptr<WoodBox>> woodboxs_;
 	std::vector<std::unique_ptr<MoveFloor>> moveFloors_;
+	std::vector<std::unique_ptr<StageLight>> stagelights_;
+	std::vector<std::unique_ptr<TrapButton>> trapButtons_;
+	std::unique_ptr<Goal> goal_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
 	ShadowSpotLights* shadowSpotLights_;
 
+	struct SRT {
+		Vector3 scale;
+		Quaternion rotate;
+		Vector3 translate;
+	};
 	SRT playerRespawnPoint_;
+
+private: // モンスターハウス用
+	struct MonstarHouseParam {
+		uint32_t boxNumber; // 生成した木箱のindex
+		uint32_t kBoxCount; // 木箱の数
+		bool isFalled_ = false; // 落ちてくるフラグ
+		bool isBreaked_ = false; // 壊れるフラグ
+		bool isMomentActivation_ = false; // 起動した瞬間
+		float centerPosX_ = 0.0f;
+		uint32_t trapNumber_ = 0u; // trapに当たった番号
+	};
+	MonstarHouseParam mHouse_;
+	void ConfineInitialize(const Vector3& position); // 閉じ込めるための初期化
+	void Confine(); // 閉じ込める処理
+	void ConfineBreak(); // 閉じ込める処理
+
+public:
+	const MonstarHouseParam& GetParam() const { return mHouse_; }
+	void SetTrapFinish() { mHouse_.isBreaked_ = true, mHouse_.isMomentActivation_ = true; }
 
 };

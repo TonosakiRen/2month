@@ -4,7 +4,7 @@
 
 void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
-		"enemy01", // 親
+		"gomibako_body", // 親
 	};
 	BaseInitialize(static_cast<uint32_t>(names.size()), names);
 	// 大砲の衝突判定
@@ -172,7 +172,7 @@ void CannonEnemy::Attack(const Vector3& playerPosition) {
 
 void CannonEnemy::CollisionProcess() {
 	// 当たった時の処理。体力が0になったらisActiv_をfalseにする
-	if (hp_ <= 0) {
+	if (hp_ <= 0u) {
 		// 死亡アニメーション
 		isAlive_ = false;
 		return;
@@ -185,7 +185,7 @@ void CannonEnemy::CollisionProcess() {
 
 CannonEnemy::Bullet::Bullet() {
 	std::vector<std::string> names = {
-		"toge", // 親
+		"can", // 親
 	};
 	BaseInitialize(static_cast<uint32_t>(names.size()), names);
 	rotate = EulerAngle(worldTransform_.quaternion_);

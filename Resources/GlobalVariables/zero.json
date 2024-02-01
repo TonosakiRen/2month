@@ -1,7 +1,7 @@
 {
-    "a": {
+    "zero": {
         "CannonEnemyConfirmation": 0,
-        "CoinConfirmation": 7,
+        "CoinConfirmation": 6,
         "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -275,7 +275,7 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "MoveFloorConfirmation": 1,
+        "MoveFloorConfirmation": 0,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
             0.0,
@@ -298,7 +298,7 @@
             0.0,
             0.0
         ],
-        "NormalEnemyConfirmation": 6,
+        "NormalEnemyConfirmation": 3,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -311,9 +311,9 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            25.254562377929688,
+            11.300000190734863,
             2.4000000953674316,
-            -0.69959557056427
+            0.0
         ],
         "NormalEnemyNumber : 1 : Rotate": [
             4.371138473402425e-08,
@@ -327,9 +327,9 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
-            109.4185562133789,
-            5.800000190734863,
-            0.5020819306373596
+            19.600000381469727,
+            1.2000000476837158,
+            0.0
         ],
         "NormalEnemyNumber : 2 : Rotate": [
             4.371138473402425e-08,
@@ -343,9 +343,9 @@
             1.0
         ],
         "NormalEnemyNumber : 2 : Translate": [
-            122.78827667236328,
+            12.800000190734863,
             1.2999999523162842,
-            -6.772935390472412
+            -8.300000190734863
         ],
         "NormalEnemyNumber : 3 : Rotate": [
             4.371138473402425e-08,
@@ -395,7 +395,7 @@
             1.2000000476837158,
             -0.4614175260066986
         ],
-        "NormalLightEnemyConfirmation": 2,
+        "NormalLightEnemyConfirmation": 0,
         "NormalLightEnemyNumber : 0 : Rotate": [
             4.873898618029671e-09,
             -0.6491546630859375,
@@ -445,28 +445,9 @@
             -5.314733982086182
         ],
         "SpawnerConfirmation": 0,
-        "SpawnerNumber : 0 : Interval": 60,
-        "SpawnerNumber : 0 : MaxPop": 2,
-        "SpawnerNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "SpawnerNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "SpawnerNumber : 0 : Translate": [
-            1.0,
-            2.0,
-            0.0
-        ],
-        "SpawnerNumber : 0 : hp": 1,
         "StageLightConfirmation": 0,
         "StandLightEnemyConfirmation": 0,
-        "ThornEnemyConfirmation": 2,
+        "ThornEnemyConfirmation": 0,
         "ThornEnemyNumber : 0 : Amplitube": [
             0.0,
             0.0,
@@ -511,24 +492,23 @@
             0.800000011920929,
             2.200000047683716
         ],
-        "TrapConfirmation": 1,
-        "TrapNumber : 0 : Rotate": [
+        "TruckConfirmation": 1,
+        "TruckNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
             4.371138473402425e-08,
             -1.0
         ],
-        "TrapNumber : 0 : Scale": [
+        "TruckNumber : 0 : Scale": [
             1.0,
-            5.0,
-            15.100000381469727
+            1.0,
+            1.0
         ],
-        "TrapNumber : 0 : Translate": [
-            3.5,
-            3.5,
-            -3.0
+        "TruckNumber : 0 : Translate": [
+            -16.700000762939453,
+            0.0,
+            2.5999999046325684
         ],
-        "TruckConfirmation": 0,
         "WallConfirmation": 6,
         "WallLightConfirmation": 2,
         "WallLightNumber : 0 : Rotate": [
@@ -659,7 +639,7 @@
             22.0,
             9.0
         ],
-        "WoodBoxConfirmation": 17,
+        "WoodBoxConfirmation": 15,
         "WoodBoxNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
