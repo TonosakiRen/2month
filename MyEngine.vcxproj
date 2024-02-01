@@ -135,6 +135,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Game\Camera\FixedCamera.cpp" />
+    <ClCompile Include="Game\Camera\FollowCamera.cpp" />
     <ClCompile Include="Game\Character\BaseCharacter.cpp" />
     <ClCompile Include="Game\Character\BaseSpawner.cpp" />
     <ClCompile Include="Game\Character\CannonEnemy.cpp" />
@@ -149,6 +151,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Scene\InGameScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\Stage\Floor.cpp" />
+    <ClCompile Include="Game\Stage\Goal.cpp" />
     <ClCompile Include="Game\Stage\MoveFloor.cpp" />
     <ClCompile Include="Game\Stage\Stage.cpp" />
     <ClCompile Include="Game\Stage\TrapButton.cpp" />
@@ -226,6 +229,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Game\Camera\FixedCamera.h" />
+    <ClInclude Include="Game\Camera\FollowCamera.h" />
     <ClInclude Include="Game\Character\BaseCharacter.h" />
     <ClInclude Include="Game\Character\BaseSpawner.h" />
     <ClInclude Include="Game\Character\CannonEnemy.h" />
@@ -240,6 +245,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Scene\InGameScene.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\Stage\Floor.h" />
+    <ClInclude Include="Game\Stage\Goal.h" />
     <ClInclude Include="Game\Stage\MoveFloor.h" />
     <ClInclude Include="Game\Stage\Stage.h" />
     <ClInclude Include="Game\Stage\TrapButton.h" />

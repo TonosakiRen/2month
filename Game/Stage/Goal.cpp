@@ -1,16 +1,10 @@
-#include "TrapButton.h"
+#include "Goal.h"
 #include "ModelManager.h"
 #include "ImGuiManager.h"
 #include "Game/Character/BaseCharacter.h"
 #undef min
 
-decltype(TrapButton::masterNumber_) TrapButton::masterNumber_ = 0u;
-
-TrapButton::TrapButton() : kNumber_(masterNumber_) {
-	masterNumber_++;
-}
-
-void TrapButton::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
+void Goal::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "box1x1";
 	GameObject::Initialize(name);
 	collider_.Initialize(&worldTransform_, name, modelHandle_);
@@ -20,20 +14,20 @@ void TrapButton::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transl
 	UpdateMatrix();
 	rotate = EulerAngle(worldTransform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
+
 }
 
-void TrapButton::Update(const Vector3& playerWorldPosition) {
+void Goal::Update(const Vector3& playerWorldPosition) {
 	if (!ActiveChack(playerWorldPosition)) {
 		isActive_ = false;
 		return;
 	}
 	isActive_ = true;
-
 	collider_.AdjustmentScale();
 	UpdateMatrix();
 }
 
-void TrapButton::Draw() {
+void Goal::Draw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
@@ -41,7 +35,7 @@ void TrapButton::Draw() {
 	GameObject::Draw();
 }
 
-void TrapButton::DrawImGui() {
+void Goal::DrawImGui() {
 #ifdef _DEBUG
 	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
@@ -53,7 +47,7 @@ void TrapButton::DrawImGui() {
 #endif // _DEBUG
 }
 
-bool TrapButton::ActiveChack(const Vector3& playerWorldPosition) const {
+bool Goal::ActiveChack(const Vector3& playerWorldPosition) const {
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
 	Vector3 minSize = worldTransform_.GetWorldTranslate() - modelSize;
 	Vector3 maxSize = worldTransform_.GetWorldTranslate() + modelSize;

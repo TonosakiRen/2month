@@ -22,3 +22,9 @@ void Camera::Update(float playerX)
     translation_.x = savePlayerX + offset;
     ViewProjection::Update();
 }
+
+void Camera::Update(const Vector3& position, const Quaternion& rotation) {
+    translation_ = position;
+    quaternion_ = rotation;
+    ViewProjection::Update();
+}

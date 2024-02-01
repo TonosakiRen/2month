@@ -31,7 +31,7 @@ void DebugCamera::DebugMode()
 #ifdef _DEBUG
     ImGui::Begin("DebugCamera");
     ImGui::DragFloat3("translation", &translation_.x, 0.01f);
-    ImGui::DragFloat3("rotation", &debugRotation_.x, 0.01f);
+    ImGui::DragFloat3("rotation", &debugRotation_.x, Radian(1.0f));
     ImGui::DragFloat("orthographicValue_", &orthographicValue_, 0.01f);
     orthographicValue_ = clamp(orthographicValue_, 0.01f, FLT_MAX);
     ImGui::End();

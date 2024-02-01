@@ -11,7 +11,7 @@ class ShadowSpotLights;
 class InGameScene {
 public:
 	InGameScene() = default;
-	~InGameScene() = default;
+	~InGameScene() = default; 
 
 	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
@@ -22,6 +22,15 @@ public:
 	void SpotLightShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
+private:
+	struct RT {
+		Quaternion rotate;
+		Vector3 position;
+	};
+	RT cameraState_;
+
+public:
+	const RT& GetCameraState() const { return cameraState_; }
 
 private:
 	std::unique_ptr<Player> player_;
