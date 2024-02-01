@@ -76,6 +76,7 @@ private: // モンスターハウス用
 		bool isBreaked_ = false; // 壊れるフラグ
 		bool isMomentActivation_ = false; // 起動した瞬間
 		float centerPosX_ = 0.0f;
+		uint32_t trapNumber_ = 0u; // trapに当たった番号
 	};
 	MonstarHouseParam mHouse_;
 	void ConfineInitialize(const Vector3& position); // 閉じ込めるための初期化

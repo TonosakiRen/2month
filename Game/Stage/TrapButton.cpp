@@ -4,6 +4,12 @@
 #include "Game/Character/BaseCharacter.h"
 #undef min
 
+decltype(TrapButton::masterNumber_) TrapButton::masterNumber_ = 0u;
+
+TrapButton::TrapButton() : kNumber_(masterNumber_) {
+	masterNumber_++;
+}
+
 void TrapButton::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "box1x1";
 	GameObject::Initialize(name);

@@ -490,6 +490,7 @@ void Stage::Collision(Player* player) {
 	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
 		if (trapButtons_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			ConfineInitialize(trapButtons_.at(index)->GetWorldTransform()->GetWorldTranslate());
+			mHouse_.trapNumber_ = trapButtons_.at(index)->GetNumber();
 			// ボタンの削除
 			trapButtons_.erase(trapButtons_.begin() + index);
 			index--;

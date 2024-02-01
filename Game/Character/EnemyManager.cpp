@@ -488,8 +488,7 @@ void EnemyManager::SpotLightShadowDraw() {
 	}
 }
 
-void EnemyManager::HousePopInitialize() {
-	float centerPosX = 0.0f;
+void EnemyManager::HousePopInitialize(const float& centerPosX) {
 	for (auto& enemy : nEnemis_) {
 		Vector3 pos = enemy->GetWorldTransform()->translation_;
 		pos.x += centerPosX;

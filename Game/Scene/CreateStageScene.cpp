@@ -52,8 +52,8 @@ void CreateStageScene::Update() {
 		// 敵を生成する
 		if (isTrappedInitialize) {
 			houseEnemy_ = std::make_unique<EnemyManager>();
-			houseEnemy_->Load("house0");
-			houseEnemy_->HousePopInitialize();
+			houseEnemy_->Load("house" + std::to_string(stage_->GetParam().trapNumber_));
+			houseEnemy_->HousePopInitialize(stage_->GetParam().centerPosX_);
 			isTrappedInitialize = false;
 		}
 		
