@@ -126,25 +126,7 @@ void GameScene::Update(CommandContext& commandContext){
 #endif
 	//camera light
 	{
-		if (scene_ == Scene::Editor) {
-			ViewProjection::isUseDebugCamera = editorScene_->GetPlay();
-		}
-
-		if (ViewProjection::isUseDebugCamera) {
-			currentViewProjection_ = debugCamera_.get();
-			debugCamera_->Update();
-		}
-		else {
-			currentViewProjection_ = camera_.get();
-			float float_x = inGameScene_->GetPlayerTrans()->GetWorldTranslate().x;
-			if (scene_ == Scene::Editor) {
-				float_x = editorScene_->GetPlayerTrans()->GetWorldTranslate().x;
-			}
-			camera_->Update(float_x);
-		}
-		
 		directionalLights_.Update();
-
 
 		pointLights_.Update();
 		spotLights_.Update();
@@ -161,7 +143,30 @@ void GameScene::Update(CommandContext& commandContext){
 		//SceneUpdate
 		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
 	}
-	
+	// カメラ更新処理
+	{
+		if (scene_ == Scene::Editor) {
+			ViewProjection::isUseDebugCamera = editorScene_->GetPlay();
+		}
+
+		if (ViewProjection::isUseDebugCamera) {
+			currentViewProjection_ = debugCamera_.get();
+			debugCamera_->Update();
+		}
+		else {
+			currentViewProjection_ = camera_.get();
+			//float float_x = inGameScene_->GetPlayerTrans()->GetWorldTranslate().x;
+			if (scene_ == Scene::Editor) {
+				//float_x = editorScene_->GetPlayerTrans()->GetWorldTranslate().x;
+				camera_->Update(editorScene_->GetCameraState().position, editorScene_->GetCameraState().rotate);
+			}
+			else if (scene_ == Scene::InGame) {
+				camera_->Update(inGameScene_->GetCameraState().position, inGameScene_->GetCameraState().rotate);
+			}
+			//camera_->Update(float_x);
+		}
+	}
+
 #ifdef _DEBUG
 	//パーティクル
 	ImGui::Begin("particle");

@@ -23,6 +23,7 @@ public:
 
 	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
 	void Update(const Vector3& playerWorldPosition);
+	void PostUpdate();
 	void Draw();
 	void ShadowDraw();
 	void SpotLightShadowDraw();
@@ -71,10 +72,16 @@ private: // モンスターハウス用
 		uint32_t kBoxCount; // 木箱の数
 		bool isFalled_ = false; // 落ちてくるフラグ
 		bool isBreaked_ = false; // 壊れるフラグ
+		bool isMomentActivation_ = false; // 起動した瞬間
+		float centerPosX_ = 0.0f;
 	};
 	MonstarHouseParam mHouse_;
 	void ConfineInitialize(const Vector3& position); // 閉じ込めるための初期化
 	void Confine(); // 閉じ込める処理
 	void ConfineBreak(); // 閉じ込める処理
+
+public:
+	const MonstarHouseParam& GetParam() const { return mHouse_; }
+	void SetTrapFinish() { mHouse_.isBreaked_ = true, mHouse_.isMomentActivation_ = true; }
 
 };

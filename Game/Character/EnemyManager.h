@@ -23,7 +23,7 @@ public:
 	EnemyManager();
 	~EnemyManager();
 
-	void Initialize(PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight); // 将来的にリスポーン構造体ptrを渡す
+	void Initialize(PointLights* pointLight = nullptr, SpotLights* spotLight = nullptr, ShadowSpotLights* shadowSpotLight = nullptr); // 将来的にリスポーン構造体ptrを渡す
 	void Update(const Vector3& playerPosition);
 	void OnCollisionPlayer(Collider& collider, const PlayerDate& date); // playerとの衝突判定を取得
 	void OnCollisionStage(Collider& collider);
@@ -36,6 +36,9 @@ public:
 	void ShadowDraw();
 	void SpotLightShadowDraw();
 
+	void HousePopInitialize();
+	bool Exists() const; // 敵が存在するか true:する/false:しない
+
 private:
 	SpotLights* spotLights_ = nullptr;
 	PointLights* pointLights_ = nullptr;
@@ -43,6 +46,7 @@ private:
 
 public:
 	static const uint32_t kMaxEnemyCount = 500u;
+private:
 	std::vector<std::unique_ptr<NormalEnemy>> nEnemis_;
 	std::vector<std::unique_ptr<NormalLightEnemy>> nLightEnemis_;
 	std::vector<std::unique_ptr<ThornEnemy>> tEnemis_;
@@ -51,5 +55,7 @@ public:
 	std::vector<std::unique_ptr<Coin>> coins_;
 
 	std::vector<std::unique_ptr<NormalSpawner>> nSpawners_;
+
+	uint32_t remainderNumber_ = 0u; // 敵の残りの数
 
 };

@@ -22,6 +22,15 @@ public:
 	void SpotLightShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
+private:
+	struct RT {
+		Quaternion rotate;
+		Vector3 position;
+	};
+	RT cameraState_;
+
+public:
+	const RT& GetCameraState() const { return cameraState_; }
 
 private:
 	std::unique_ptr<Player> player_;

@@ -19,12 +19,10 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
 
-	auto& ne = nSpawners_.emplace_back(std::make_unique<NormalSpawner>());
-	ne->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 2.0f, 0.0f));
 }
 
 template<typename Container>
-void TempEnemyUpdate(Container& container,const Vector3& playerPosition) {
+void TempEnemyUpdate(Container& container,const Vector3& playerPosition, uint32_t& num) {
 	for (uint32_t index = 0u; index < container.size(); index++) {
 		if (!container.at(index)->GetIsAlive()) {
 			// 要素を削除したため、indexを進めない
@@ -33,17 +31,19 @@ void TempEnemyUpdate(Container& container,const Vector3& playerPosition) {
 			continue;
 		}
 		container.at(index)->Update(playerPosition);
+		num++;
 	}
 }
 
 void EnemyManager::Update(const Vector3& playerPosition) {
-	
-	TempEnemyUpdate(nEnemis_,playerPosition);
-	TempEnemyUpdate(nLightEnemis_,playerPosition);
-	TempEnemyUpdate(tEnemis_,playerPosition);
-	TempEnemyUpdate(sLightEnemis_,playerPosition);
-	TempEnemyUpdate(cEnemis_,playerPosition);
-	TempEnemyUpdate(coins_,playerPosition);
+	remainderNumber_ = 0u;
+	uint32_t gomi = 0u;
+	TempEnemyUpdate(nEnemis_,playerPosition, remainderNumber_);
+	TempEnemyUpdate(nLightEnemis_,playerPosition, remainderNumber_);
+	TempEnemyUpdate(tEnemis_,playerPosition, gomi);
+	TempEnemyUpdate(sLightEnemis_,playerPosition, gomi);
+	TempEnemyUpdate(cEnemis_,playerPosition, remainderNumber_);
+	TempEnemyUpdate(coins_,playerPosition, gomi);
 	
 	for (uint32_t index = 0u; index < nSpawners_.size(); index++) {
 		if (!nSpawners_.at(index)->GetIsAlive()) {
@@ -57,6 +57,7 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 			auto& spawn = nSpawners_.at(index)->GetSRT();
 			enemy->Initialize(spawn.scale, spawn.rotate, spawn.translate);
 		}
+		remainderNumber_++;
 	}
 
 }
@@ -308,6 +309,7 @@ void EnemyManager::Save(const char* itemName) {
 void EnemyManager::Load(const std::filesystem::path& loadFile) {
 	GlobalVariables* global = GlobalVariables::GetInstance();
 	std::string itemName = loadFile.string();
+	global->LoadFile(itemName);
 
 	int num = global->GetIntValue(itemName, "NormalEnemyConfirmation");
 	if (!nEnemis_.empty()) { nEnemis_.clear(); }
@@ -484,4 +486,33 @@ void EnemyManager::SpotLightShadowDraw() {
 		if (!spawn->GetIsAlive()) { continue; }
 		spawn->EnemyDraw();
 	}
+}
+
+void EnemyManager::HousePopInitialize() {
+	float centerPosX = 0.0f;
+	for (auto& enemy : nEnemis_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPosX;
+		enemy->SetPosition(pos);
+	}
+	for (auto& enemy : tEnemis_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPosX;
+		enemy->SetPosition(pos);
+	}
+	for (auto& enemy : cEnemis_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPosX;
+		enemy->SetPosition(pos);
+	}
+	for (auto& enemy : nSpawners_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPosX;
+		enemy->SetPosition(pos);
+	}
+}
+
+bool EnemyManager::Exists() const {
+	if (remainderNumber_ <= 0u) { return false; }
+	return true;
 }

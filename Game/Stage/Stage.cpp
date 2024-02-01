@@ -54,6 +54,12 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 
 }
 
+void Stage::PostUpdate() {
+	if (mHouse_.isMomentActivation_) {
+		mHouse_.isMomentActivation_ = false;
+	}
+}
+
 void Stage::Draw() {
 	for (auto& wall : walls_) {
 		wall->Draw();
@@ -509,11 +515,13 @@ void Stage::ConfineInitialize(const Vector3& position) {
 	mHouse_.boxNumber = static_cast<uint32_t>(woodboxs_.size());
 	mHouse_.kBoxCount = 24u; // 3の倍数のみかつ2で割れるもの
 	mHouse_.isFalled_ = true;
+	mHouse_.centerPosX_ = position.x;
+	mHouse_.isMomentActivation_ = true;
 
 	int y = 0;
 	int x = 0;
 	int z = 0;
-	Vector3 space(8.0f,1.0f,1.0f);
+	Vector3 space(9.0f,1.0f,1.0f);
 	Vector3 scale(2.0f, 2.0f, 2.0f);
 	Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
 	float initY = 5.0f;
@@ -570,7 +578,8 @@ void Stage::Confine() {
 			count++;
 			if (count >= mHouse_.kBoxCount) {
 				mHouse_.isFalled_ = false;
-				mHouse_.isBreaked_ = true; // とりあえず仮置き
+				//mHouse_.isBreaked_ = true; // とりあえず仮置き
+				//mHouse_.isMomentActivation_ = true;
 			}
 		}
 		integral++;
@@ -597,3 +606,4 @@ void Stage::ConfineBreak() {
 		}
 	}
 }
+

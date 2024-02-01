@@ -83,6 +83,9 @@
     <Filter Include="Game\Character\Spawner">
       <UniqueIdentifier>{6e42b9fc-ff1e-498c-a606-c0f84af34308}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Camera">
+      <UniqueIdentifier>{246ecb17-fb16-4ddc-a040-106376c47a0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -343,6 +346,12 @@
     <ClCompile Include="StageLight.cpp" />
     <ClCompile Include="Game\Stage\TrapButton.cpp">
       <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\FollowCamera.cpp">
+      <Filter>Game\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Camera\FixedCamera.cpp">
+      <Filter>Game\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -613,6 +622,12 @@
     <ClInclude Include="StageLight.h" />
     <ClInclude Include="Game\Stage\TrapButton.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\FollowCamera.h">
+      <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\FixedCamera.h">
+      <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
