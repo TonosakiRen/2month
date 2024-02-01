@@ -87,7 +87,16 @@ void CreateStageScene::DrawImGui() {
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::BeginMenu("Initialize")) {
 			if (ImGui::Button("play")) {
-				isPlay = !isPlay;
+				if (!isPlay) {
+					isPlay = true;
+					stage_->Save("temporary");
+					enemy_->Save("temporary");
+				}
+				else {
+					isPlay = false;
+					stage_->Load("temporary");
+					enemy_->Load("temporary");
+				}
 			}
 			if (ImGui::TreeNode("FileSave")) {
 				ImGui::InputText("FileName", itemName_, sizeof(itemName_));
