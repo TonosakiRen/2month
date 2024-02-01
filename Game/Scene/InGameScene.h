@@ -19,6 +19,8 @@ public:
 	void StageDepthDraw();
 	void DrawUI();
 	void ShadowDraw();
+	void ParticleDraw();
+	void ParticleBoxDraw();
 	void SpotLightShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }

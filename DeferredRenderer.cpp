@@ -13,13 +13,14 @@
 #include "ShadowSpotLights.h"
 
 using namespace Microsoft::WRL;
-void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, ColorBuffer* shadowTexture, DepthBuffer* depthTexture, DepthBuffer* nonCharacterDepthTexture)
+void DeferredRenderer::Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, ColorBuffer* materialTexture, ColorBuffer* shadowTexture, DepthBuffer* depthTexture, DepthBuffer* nonCharacterDepthTexture)
 {
 	normalTexture_ = normalTexture;
 	depthTexture_ = depthTexture;
 	colorTexture_ = originalTexture;
 	shadowTexture_ = shadowTexture;
 	nonCharacterDepthTexture_ = nonCharacterDepthTexture;
+	materialTexture_ = materialTexture;
 	CreatePipeline();
 	CreateMesh();
 }
@@ -39,6 +40,7 @@ void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* origin
 
 	commandContext.TransitionResource(*colorTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	commandContext.TransitionResource(*normalTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+	commandContext.TransitionResource(*materialTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	commandContext.TransitionResource(*depthTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	commandContext.TransitionResource(*nonCharacterDepthTexture_, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
@@ -48,6 +50,7 @@ void DeferredRenderer::Render(CommandContext& commandContext,ColorBuffer* origin
 
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), colorTexture_->GetSRV());
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kNormalTexture), normalTexture_->GetSRV());
+	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kMaterialTexture), materialTexture_->GetSRV());
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kDepthTexture), depthTexture_->GetSRV());
 	commandContext.SetDescriptorTable(static_cast<UINT>(RootParameter::kNonCharacterDepthTexture), nonCharacterDepthTexture_->GetSRV());
 	
@@ -89,7 +92,7 @@ void DeferredRenderer::CreatePipeline()
 
 	{
 
-		CD3DX12_DESCRIPTOR_RANGE ranges[9]{};
+		CD3DX12_DESCRIPTOR_RANGE ranges[10]{};
 		ranges[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 		ranges[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 		ranges[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2);
@@ -101,6 +104,8 @@ void DeferredRenderer::CreatePipeline()
 		ranges[7].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 7);
 
 		ranges[8].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, DirectXCommon::GetInstance()->DirectXCommon::kSrvHeapDescriptorNum, 0, 1);
+
+		ranges[9].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 8);
 
 
 		CD3DX12_ROOT_PARAMETER rootParameters[(int)RootParameter::ParameterNum]{};
@@ -120,6 +125,8 @@ void DeferredRenderer::CreatePipeline()
 
 		rootParameters[(int)RootParameter::kLightNum].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 		rootParameters[(int)RootParameter::kShadingNum].InitAsConstants(1, 2, D3D12_SHADER_VISIBILITY_ALL);
+
+		rootParameters[(int)RootParameter::kMaterialTexture].InitAsDescriptorTable(1, &ranges[9]);
 		
 		
 		

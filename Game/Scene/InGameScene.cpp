@@ -59,6 +59,16 @@ void InGameScene::ShadowDraw() {
 	player_->Draw();
 }
 
+void InGameScene::ParticleDraw()
+{
+	player_->DrawParticle();
+}
+
+void InGameScene::ParticleBoxDraw()
+{
+	player_->DrawParticleBox();
+}
+
 
 void InGameScene::SpotLightShadowDraw() {
 	enemy_->SpotLightShadowDraw();

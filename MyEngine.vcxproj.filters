@@ -328,6 +328,12 @@
     <ClCompile Include="Game\Stage\MoveFloor.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowHitParticle.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="HitParticle.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -587,6 +593,12 @@
     </ClInclude>
     <ClInclude Include="Game\Stage\MoveFloor.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowHitParticle.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="HitParticle.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

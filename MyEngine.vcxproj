@@ -155,6 +155,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="GlobalVariables.cpp" />
     <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="HitParticle.cpp" />
     <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="LightNumBuffer.cpp" />
@@ -174,6 +175,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="RootSignature.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="ShadowEdgeRenderer.cpp" />
+    <ClCompile Include="ShadowHitParticle.cpp" />
     <ClCompile Include="ShadowIsCollision.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="ShadowSpotLights.cpp" />
@@ -243,6 +245,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="GPUResource.h" />
     <ClInclude Include="Helper.h" />
+    <ClInclude Include="HitParticle.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LightNumBuffer.h" />
@@ -262,6 +265,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="RootSignature.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="ShadowEdgeRenderer.h" />
+    <ClInclude Include="ShadowHitParticle.h" />
     <ClInclude Include="ShadowIsCollision.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="ShadowSpotLights.h" />

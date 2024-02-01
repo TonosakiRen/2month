@@ -16,7 +16,7 @@
 #include "ShadowIsCollision.h"
 #include "DepthRenderer.h"
 
-class viewProjection;
+class ViewProjection;
 class DirectionalLights;
 class ShadowSpotLights;
 class GlobalVariables;
@@ -28,6 +28,7 @@ public:
     enum RenderTargetType {
         kColor,
         kNormal,
+        kMaterial,
 
         kRenderTargetNum
     };
@@ -39,7 +40,7 @@ public:
     void ApplyGlobalVariable();
     void BeginFrame();
     void BeginMainRender();
-    void EndMainRender();
+    void EndMainRender(const ViewProjection& viewProjection);
     void DeferredRender(const ViewProjection& viewProjection, DirectionalLights& directionalLight, const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights);
     void BeginShadowMapRender(DirectionalLights& directionalLights);
     void EndShadowMapRender(DirectionalLights& directionalLights);

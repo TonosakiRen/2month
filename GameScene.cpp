@@ -7,6 +7,8 @@
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
 
+int GameScene::hitStopFrame_ = 0;
+
 void (GameScene::* GameScene::SceneUpdateTable[])() = {
 	&GameScene::TitleUpdate,
 	&GameScene::InGameUpdate,
@@ -158,8 +160,15 @@ void GameScene::Update(CommandContext& commandContext){
 			(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 			sceneRequest_ = std::nullopt;
 		}
-		//SceneUpdate
-		(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
+		if (hitStopFrame_ <= 0.0f) {
+			//SceneUpdate
+			(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
+		}
+		else {
+			hitStopFrame_--;
+			currentViewProjection_->Shake({ 0.5f,0.5f,0.5f }, hitStopFrame_);
+		}
+		
 	}
 	
 #ifdef _DEBUG
@@ -168,8 +177,6 @@ void GameScene::Update(CommandContext& commandContext){
 	ImGui::DragFloat4("particleColor", &color.x, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat3("emitterPos", &whiteParticle_->emitterWorldTransform_.translation_.x, 0.01f);
 	ImGui::End();
-	whiteParticle_->SetIsEmit(false);
-	whiteParticle_->Update();
 #endif
 }
 
@@ -295,7 +302,10 @@ void GameScene::ParticleDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		whiteParticle_->Draw(color);
+		inGameScene_->ParticleDraw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->ParticleDraw();
 		break;
 	default:
 		break;
@@ -309,7 +319,10 @@ void GameScene::ParticleBoxDraw()
 	case GameScene::Scene::Title:
 		break;
 	case GameScene::Scene::InGame:
-		dustParticle_->Draw();
+		inGameScene_->ParticleBoxDraw();
+		break;
+	case GameScene::Scene::Editor:
+		editorScene_->ParticleBoxDraw();
 		break;
 	default:
 		break;

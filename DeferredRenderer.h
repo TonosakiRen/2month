@@ -35,6 +35,8 @@ public:
 
 		kLightNum,
 		kShadingNum,
+
+		kMaterialTexture,
 		
 		ParameterNum
 	};
@@ -43,7 +45,7 @@ public:
 		Vector4 pos;
 		Vector2 uv;
 	};
-	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture,ColorBuffer* shadowTexture ,DepthBuffer* depthTexture, DepthBuffer* nonCharacterDepthTexture);
+	void Initialize(ColorBuffer* originalTexture, ColorBuffer* normalTexture, ColorBuffer* materialTexture,ColorBuffer* shadowTexture ,DepthBuffer* depthTexture, DepthBuffer* nonCharacterDepthTexture);
 	void Render(CommandContext& commandContext, ColorBuffer* originalBuffer_, const ViewProjection& viewProjection, DirectionalLights& directionalLight,const PointLights& pointLights, const SpotLights& spotLights, ShadowSpotLights& shadowSpotLights,const LightNumBuffer& lightNumBuffer, float shading);
 
 private:
@@ -54,6 +56,7 @@ private:
 	RootSignature rootSignature_;
 	ColorBuffer* colorTexture_;
 	ColorBuffer* normalTexture_;
+	ColorBuffer* materialTexture_;
 	DepthBuffer* depthTexture_;
 	DepthBuffer* nonCharacterDepthTexture_;
 

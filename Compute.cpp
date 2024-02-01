@@ -6,10 +6,12 @@
 #include <assert.h>
 #include "ShadowSpotLights.h"
 #include "Game/Character/EnemyManager.h"
+#include "ViewProjection.h"
 
 using namespace Microsoft::WRL;
 
 void* Compute::data_ = nullptr;
+void* Compute::hitPosData_ = nullptr;
 
 void Compute::Initialize(ColorBuffer* indexBuffer)
 {
@@ -95,12 +97,13 @@ void Compute::Initialize(ColorBuffer* indexBuffer)
 			IID_PPV_ARGS(hitPosCopyBuffer_.GetAddressOf())
 		);
 
+		hitPosCopyBuffer_->Map(0, nullptr, &hitPosData_);
 	}
 
 	indexBuffer_ = indexBuffer;
 }
 
-void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer)
+void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer,const ViewProjection& viewProjection)
 {
 	D3D12_RESOURCE_DESC resourceDesc = copyBuffer_->GetDesc();
 	UINT bufferSizeInBytes = static_cast<UINT>(resourceDesc.Width);
@@ -117,6 +120,7 @@ void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer)
 
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kColorTexture), indexBuffer_->GetSRV());
 	commandContext.SetComputeDescriptorTable(static_cast<UINT>(RootParameter::kDepthTexture), depthBuffer.GetSRV());
+	commandContext.SetComputeConstantBuffer(static_cast<UINT>(RootParameter::kViewProjection),viewProjection.GetGPUVirtualAddress());
 	commandContext.Dispatch(1920 / 30, 1080 / 30, 1);
 
 	commandContext.CopyBuffer(copyBuffer_, rwStructureBuffer_);
@@ -127,6 +131,11 @@ void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer)
 void* Compute::GetData()
 {
 	return data_;
+}
+
+void* Compute::GetPosData()
+{
+	return hitPosData_;
 }
 
 void Compute::UnMap()
@@ -152,6 +161,7 @@ void Compute::CreatePipeline()
 	rootparams[(int)RootParameter::kColorTexture].InitAsDescriptorTable(1, &ranges[0]);
 	rootparams[(int)RootParameter::kDepthTexture].InitAsDescriptorTable(1, &ranges[1]);
 	rootparams[(int)RootParameter::kEnemyNum].InitAsConstants(1, 0);
+	rootparams[(int)RootParameter::kViewProjection].InitAsConstantBufferView(1, 0);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc =

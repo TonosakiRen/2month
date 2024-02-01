@@ -49,7 +49,6 @@ void ViewProjection::Update() {
 
 bool ViewProjection::Shake(Vector3 shakeValue, int& frame)
 {
-    frame--;
     if (frame > 0) {
         shakeValue_ = shakeValue;
         return true;

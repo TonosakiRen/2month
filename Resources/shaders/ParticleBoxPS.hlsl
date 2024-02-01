@@ -9,9 +9,9 @@ Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
 struct Material {
-	float32_t4 materialcolor; //Materialの色
+	float32_t4 materialColor; //Materialの色
 	float32_t4x4 uvTransfrom;//uvtransform
-	int32_t enableLighting; //lighitngするか
+	float32_t4 enableLighting; //lighitngするか
 };
 ConstantBuffer<Material> gMaterial  : register(b1);
 
@@ -25,6 +25,7 @@ struct VSOutput {
 struct PixelShaderOutput {
 	float32_t4 color : SV_TARGET0;
 	float32_t4 normal : SV_TARGET1;
+	float32_t4 enableLighting : SV_TARGET2;
 };
 
 PixelShaderOutput main(VSOutput input) {
@@ -33,11 +34,11 @@ PixelShaderOutput main(VSOutput input) {
 
 	PixelShaderOutput output;
 	output.color = float32_t4(0.0f, 0.0f, 0.0f, 1.0f);
-
+	output.enableLighting = float32_t4(0.0f, 0.0f, 0.0f, 0.0f);
 	// マテリアル
 	float32_t4 tranformedUV = mul(float32_t4(input.uv, 0.0f, 1.0f), gMaterial.uvTransfrom);
 	float32_t4 texColor = tex.Sample(smp, tranformedUV.xy);
-	output.color.xyz += gMaterial.materialcolor.xyz * texColor.xyz;
+	output.color.xyz += gMaterial.materialColor.xyz * texColor.xyz;
 
 	/*if (gMaterial.enableLighting != 0) {*/
 		//// 陰
@@ -74,6 +75,7 @@ PixelShaderOutput main(VSOutput input) {
 
 	output.normal.xyz = (normal.xyz + 1.0f) * 0.5f;
 	output.normal.w = 1.0f;
+	output.enableLighting.x = gMaterial.enableLighting;
 
 	return output;
 }

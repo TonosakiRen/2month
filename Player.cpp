@@ -4,12 +4,15 @@
 #include "GlobalVariables.h"
 #include "TextureManager.h"
 #include "./Game/Character/EnemyManager.h"
+#include "Compute.h"
+#include "GameScene.h"
 
 int32_t Player::hitShadowEnemyIndex_ = -1;
 Vector3 Player::hitShadowEnemyPos_ = {0.0f,0.0f,0.0f};
 Vector3 Player::playerPos_ = { 0.0f,0.0f,0.0f };
 Collider* Player::hitCollider_ = nullptr;
 Player::HitReaction Player::hitReaction_ = Player::knockBack;
+
 
 void Player::Initialize(const std::string name)
 {
@@ -62,6 +65,9 @@ void Player::Initialize(const std::string name)
 
 	isBlink_ = false;
 	isDash_ = false;
+
+	shadowHitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
+	hitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
 }
 
 void Player::SetGlobalVariable()
@@ -135,11 +141,14 @@ void Player::Update()
 	}
 	
 
+
 	MoveLimit();
 	
 	UpdateTrans();
 	InsertData();
 	UIUpdate();
+	shadowHitParticle_.Update();
+	hitParticle_.Update();
 	playerPos_ = MakeTranslation(worldTransform_.matWorld_);
 }
 
@@ -186,32 +195,42 @@ void Player::Draw() {
 
 void Player::EnemyShadowCollision()
 {
-	if (hitShadowEnemyIndex_ != -1 && MUTEKITime_ <= -1) {
+	if (hitShadowEnemyIndex_ != -1 ) {
 		//もしhitReactionがhealじゃなかったら
 		if (hitReaction_ != heal) {
+
+			Vector3* aa = static_cast<Vector3*>(Compute::GetPosData());
+			shadowHitParticle_.emitterWorldTransform_.translation_ = aa[0];
+
 			if (attackParam_.id_ != 1) {
-				if (isKnockBack_ == false) {
+				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
 						isKnockBack_ = true;
 						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
 						knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
+					GameScene::SetHitStop(3);
+					shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+					shadowHitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
 				}
 			}
 			else if (hitCollider_) {
 				if (hitCollider_->GetName() == "CannonBullet") {
-					if (hitReaction_ == knockBack) {
+					if (hitReaction_ == knockBack ) {
 						isKnockBack_ = true;
 						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 						knockBackDirection_ = Normalize(vec);
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
-					if (isKnockBack_ == false) {
+					if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 						hp_ -= damage_;
 						MUTEKITime_ = maxMUTEKITime_;
+						GameScene::SetHitStop(3);
+						shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+						shadowHitParticle_.SetIsEmit(true);
 						if (headRotate.x < 0.0f) {
 							attackParam_.phase = 3;
 						}
@@ -220,6 +239,11 @@ void Player::EnemyShadowCollision()
 						}
 					}
 				}
+			}
+			else {
+				GameScene::SetHitStop(3);
+				shadowHitParticle_.SetIsEmit(true);
+				shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.7f, 0.1f,1.0f };
 			}
 		}//healだったら
 		else {
@@ -232,28 +256,38 @@ void Player::EnemyShadowCollision()
 
 void Player::EnemyCollision()
 {
-	if (hitCollider_ && MUTEKITime_ <= -1) {
+	if (hitCollider_ ) {
 		if (hitReaction_ != heal) {
+			Vector3 hitPos = MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+			hitParticle_.emitterWorldTransform_.translation_ = hitPos + ((MakeTranslation(worldTransform_.matWorld_) - hitPos) / 2.0f);
 			if (attackParam_.id_ != 1) {
-				if (isKnockBack_ == false) {
+				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
 						isKnockBack_ = true;
 						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 						knockBackDirection_ = Normalize(vec);
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
+					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+					GameScene::SetHitStop(3);
+					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
 				}
 			}
 			else if (hitCollider_->GetName() == "CannonBullet") {
-				if (isKnockBack_ == false) {
+				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+				GameScene::SetHitStop(3);
+				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
 						isKnockBack_ = true;
 						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 						knockBackDirection_ = Normalize(vec);
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
+					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+					GameScene::SetHitStop(3);
+					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
 					if (headRotate.x < 0.0f) {
@@ -263,6 +297,12 @@ void Player::EnemyCollision()
 						attackParam_.phase = 2;
 					}
 				}
+			}
+			else {
+
+				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.7f, 0.1f, 1.0f };
+				hitParticle_.SetIsEmit(true);
+				GameScene::SetHitStop(3);
 			}
 		}
 		else {
@@ -432,4 +472,14 @@ void Player::UpdateTrans() {
 
 	headCollider_.AdjustmentScale();
 	headWorldTransform_.Update();
+}
+
+void Player::DrawParticle()
+{
+	shadowHitParticle_.Draw();
+}
+
+void Player::DrawParticleBox()
+{
+	hitParticle_.Draw();
 }

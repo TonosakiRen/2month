@@ -8,7 +8,6 @@
 
 void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLights,ShadowSpotLights* shadowSpotLights) {
 
-
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
@@ -56,6 +55,16 @@ void CreateStageScene::Draw() {
 	stage_->Draw();
 	enemy_->Draw();
 	player_->Draw();
+}
+
+void CreateStageScene::ParticleDraw()
+{
+	player_->DrawParticle();
+}
+
+void CreateStageScene::ParticleBoxDraw()
+{
+	player_->DrawParticleBox();
 }
 
 void CreateStageScene::ShadowDraw() {
