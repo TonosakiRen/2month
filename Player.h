@@ -115,6 +115,8 @@ private:
     //UI
     Sprite hpSprite_;
 
+    Quaternion inputQuaternion_;
+
 public:
     Collider headCollider_;
 private:
