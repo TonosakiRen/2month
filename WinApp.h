@@ -5,8 +5,8 @@
 class WinApp
 {
 public:
-	static const int kWindowWidth = 1280; 
-	static const int kWindowHeight = 720; 
+	static const int kWindowWidth = 1920;
+	static const int kWindowHeight = 1080;
 	static const wchar_t kWindowClassName[];
 
 	RECT windowRect_;
