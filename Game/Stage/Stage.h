@@ -67,9 +67,14 @@ private:
 
 private: // モンスターハウス用
 	struct MonstarHouseParam {
-
+		uint32_t boxNumber; // 生成した木箱のindex
+		uint32_t kBoxCount; // 木箱の数
+		bool isFalled_ = false; // 落ちてくるフラグ
+		bool isBreaked_ = false; // 壊れるフラグ
 	};
+	MonstarHouseParam mHouse_;
 	void ConfineInitialize(const Vector3& position); // 閉じ込めるための初期化
 	void Confine(); // 閉じ込める処理
+	void ConfineBreak(); // 閉じ込める処理
 
 };
