@@ -62,11 +62,11 @@ void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (collider_.Collision(collider, pushBackVector)) {
 		isColl = true;
 		Player::hitReaction_ = Player::knockBack;
+		Player::hitCollider_ = &collider_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 	}
 
 	if (isColl) {
-		Player::hitCollider_ = &collider_;
 		
 		UpdateTransform();
 	}

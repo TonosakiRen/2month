@@ -124,7 +124,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		
 		renderer->DeferredRender(gameScene->GetViewProjection(), gameScene->GetDirectionalLights(),gameScene->GetPointLights(), gameScene->GetSpotLights(), gameScene->GetShadowSpotLights());
 
-		renderer->EndMainRender();
+		renderer->EndMainRender(gameScene->GetViewProjection());
 
 		renderer->BeginUIRender();
 

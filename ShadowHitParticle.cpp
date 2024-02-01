@@ -1,12 +1,12 @@
-#include "WhiteParticle.h"
+#include "ShadowHitParticle.h"
 #include "ImGuiManager.h"
 
-WhiteParticle::WhiteParticle()
+ShadowHitParticle::ShadowHitParticle()
 {
 	particle_ = std::make_unique<Particle>(kParticleNum);
 }
 
-void WhiteParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
+void ShadowHitParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
 {
 
 	particle_->Initialize();
@@ -15,9 +15,10 @@ void WhiteParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
 	SetDirection(minDirection, maxDirection);
 	emitBox_ = MakeOBB(emitterWorldTransform_.matWorld_);
 	emitBox_.size = { 1.0f,1.0f,1.0f };
+	particle_->material_.enableLighting_ = false;
 }
 
-void WhiteParticle::Update() {
+void ShadowHitParticle::Update() {
 
 
 	if (isEmit_) {
@@ -35,7 +36,8 @@ void WhiteParticle::Update() {
 					else {
 						particles[i].direction_ = Normalize(Vector3{ Rand(minDirection_.x, maxDirection_.x) ,Rand(minDirection_.y,maxDirection_.y) ,Rand(minDirection_.z,maxDirection_.z) });
 					}
-					particles[i].worldTransform_.translation_ = MakeRandVector3(emitBox_);
+					Vector3 randVec = MakeRandVector3(emitBox_);
+					particles[i].worldTransform_.translation_ = randVec;
 					particles[i].worldTransform_.quaternion_ = IdentityQuaternion();
 					particles[i].worldTransform_.scale_ = emitterWorldTransform_.scale_;
 					break;
@@ -61,7 +63,7 @@ void WhiteParticle::Update() {
 
 }
 
-void WhiteParticle::Draw(Vector4 color, uint32_t textureHandle)
+void ShadowHitParticle::Draw(Vector4 color, uint32_t textureHandle)
 {
 
 	emitterWorldTransform_.Update();
@@ -77,6 +79,6 @@ void WhiteParticle::Draw(Vector4 color, uint32_t textureHandle)
 	}
 
 	if (!instancingBufferDatas.empty()) {
-		particle_->Draw(instancingBufferDatas, color, textureHandle);
+		particle_->Draw(instancingBufferDatas, particle_->material_.color_, textureHandle);
 	}
 }

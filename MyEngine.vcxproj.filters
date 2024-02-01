@@ -347,6 +347,12 @@
     <ClCompile Include="Game\Stage\TrapButton.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowHitParticle.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="HitParticle.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
     <ClCompile Include="Game\Camera\FollowCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
@@ -634,6 +640,12 @@
     </ClInclude>
     <ClInclude Include="Game\Stage\Goal.h">
       <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowHitParticle.h">
+      <Filter>Game\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="HitParticle.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

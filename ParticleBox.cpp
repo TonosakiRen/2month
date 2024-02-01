@@ -134,7 +134,24 @@ void ParticleBox::CreatePipeline() {
         blenddesc.SrcBlendAlpha = D3D12_BLEND_ONE;
         blenddesc.DestBlendAlpha = D3D12_BLEND_ZERO;
 
+        // レンダーターゲットのブレンド設定
+        D3D12_RENDER_TARGET_BLEND_DESC blenddesc2{};
+        blenddesc2.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+        blenddesc2.BlendEnable = false;
+        blenddesc2.BlendOp = D3D12_BLEND_OP_ADD;
+        blenddesc2.SrcBlend = D3D12_BLEND_SRC_ALPHA;
+        blenddesc2.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+
+        blenddesc2.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+        blenddesc2.SrcBlendAlpha = D3D12_BLEND_ONE;
+        blenddesc2.DestBlendAlpha = D3D12_BLEND_ZERO;
+
+        // ブレンドステートの設定
+        gpipeline.BlendState.IndependentBlendEnable = true;
         gpipeline.BlendState.RenderTarget[0] = blenddesc;
+        gpipeline.BlendState.RenderTarget[1] = blenddesc;
+        gpipeline.BlendState.RenderTarget[2] = blenddesc2;
+
 
         gpipeline.DSVFormat = Renderer::GetInstance()->GetDSVFormat();
 
@@ -146,6 +163,7 @@ void ParticleBox::CreatePipeline() {
         gpipeline.NumRenderTargets = Renderer::kRenderTargetNum;
         gpipeline.RTVFormats[int(Renderer::kColor)] = Renderer::GetInstance()->GetRTVFormat(Renderer::kColor);
         gpipeline.RTVFormats[int(Renderer::kNormal)] = Renderer::GetInstance()->GetRTVFormat(Renderer::kNormal);
+        gpipeline.RTVFormats[int(Renderer::kMaterial)] = Renderer::GetInstance()->GetRTVFormat(Renderer::kMaterial);
         gpipeline.SampleDesc.Count = 1;
 
 
@@ -268,6 +286,7 @@ void ParticleBox::Draw(const std::vector<InstancingBufferData>& bufferData, cons
     commandContext_->SetIndexBuffer(ibView_);
     commandContext_->SetDescriptorTable(0, srvHandle_);
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material_.GetGPUVirtualAddress());
+
  
     TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext_, static_cast<UINT>(RootParameter::kTexture), textureHadle);
 

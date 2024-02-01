@@ -7,11 +7,13 @@
 #include "ColorBuffer.h"
 
 class ShadowSpotLights;
+class ViewProjection;
 class Compute
 {
 public:
 
 	static void* data_;
+	static void* hitPosData_;
 
 	enum class RootParameter {
 		kRwStructure,
@@ -19,12 +21,14 @@ public:
 		kColorTexture,
 		kDepthTexture,
 		kEnemyNum,
+		kViewProjection,
 		
 		ParameterNum
 	};
 	void Initialize(ColorBuffer* indexBuffer);
-	void Dispatch(CommandContext& commandContext, DepthBuffer& depthBuffer);
+	void Dispatch(CommandContext& commandContext, DepthBuffer& depthBuffer, const ViewProjection& viewProjection);
 	static void* GetData();
+	static void* GetPosData();
 	void UnMap();
 private:
 	void CreatePipeline();

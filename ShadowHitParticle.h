@@ -1,10 +1,10 @@
 #pragma once
 #include "Particle.h"
-class WhiteParticle
+class ShadowHitParticle
 {
 public:
 	static const uint32_t kParticleNum = 300;
-	WhiteParticle();
+	ShadowHitParticle();
 	void Initialize(Vector3 minDirection, Vector3 maxDirection);
 	void Update();
 	void Draw(Vector4 color = { 1.0f,1.0f,1.0f,1.0f }, uint32_t textureHandle = 0);
@@ -31,12 +31,12 @@ public:
 	WorldTransform emitterWorldTransform_;
 	OBB emitBox_;
 	deadLineParticle particles[kParticleNum];
-	int EmitNum_ = 20;
+	int EmitNum_ = 60;
+	std::unique_ptr<Particle> particle_;
 private:
-	float speed_ = 0.05f;
+	float speed_ = 0.1f;
 	float scaleSpeed_ = 0.03f;
 	bool isEmit_ = false;
-	std::unique_ptr<Particle> particle_;
 	Vector3 minDirection_;
 	Vector3 maxDirection_;
 };

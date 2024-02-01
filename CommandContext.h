@@ -70,6 +70,7 @@ public:
     void SetComputeConstants(UINT rootIndex, DWParam x, DWParam y, DWParam z, DWParam w);
 
     void SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address);
+    void SetComputeConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address);
     void SetComputeUAVBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address);
     void SetDescriptorTable(UINT rootIndex, D3D12_GPU_DESCRIPTOR_HANDLE baseDescriptor);
     void SetComputeDescriptorTable(UINT rootIndex, D3D12_GPU_DESCRIPTOR_HANDLE baseDescriptor);
@@ -306,6 +307,10 @@ inline void CommandContext::SetComputeConstants(UINT rootIndex, DWParam x, DWPar
 
 inline void CommandContext::SetConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address) {
     commandList_->SetGraphicsRootConstantBufferView(rootIndex, address);
+}
+
+inline void CommandContext::SetComputeConstantBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address) {
+    commandList_->SetComputeRootConstantBufferView(rootIndex, address);
 }
 
 inline void CommandContext::SetComputeUAVBuffer(UINT rootIndex, D3D12_GPU_VIRTUAL_ADDRESS address)

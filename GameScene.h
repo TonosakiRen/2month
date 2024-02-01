@@ -48,6 +48,10 @@ public:
 	void SpotLightShadowMapDraw(CommandContext& commandContext);
 	void UIDraw(CommandContext& commandContext);
 
+	static void SetHitStop(int frame) {
+		hitStopFrame_ = frame;
+	}
+
 	DirectionalLights& GetDirectionalLights() {
 		return directionalLights_;
 	}
@@ -72,6 +76,7 @@ private:
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
+	static int hitStopFrame_;
 
 	std::unique_ptr <DebugCamera> debugCamera_;
 	ViewProjection* currentViewProjection_ = nullptr;

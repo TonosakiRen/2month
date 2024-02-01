@@ -4,6 +4,8 @@
 #include "Audio.h"
 #include "Collider.h"
 #include "Sprite.h"
+#include "ShadowHitParticle.h"
+#include "HitParticle.h"
 
 
 // enemyなどに送るための情報
@@ -43,6 +45,8 @@ public:
     void Draw();
     void DrawImGui();
     void DrawUI();
+    void DrawParticle();
+    void DrawParticleBox();
 
     void CollisionProcess(const Vector3& pushBackVector);
 private:
@@ -114,6 +118,10 @@ private:
 
     //UI
     Sprite hpSprite_;
+
+    ShadowHitParticle shadowHitParticle_;
+    HitParticle hitParticle_;
+
 
     Quaternion inputQuaternion_;
 

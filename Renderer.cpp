@@ -35,7 +35,7 @@ void Renderer::Initialize() {
 
     // メインとなるバッファを初期化
     auto& swapChainBuffer = swapChain_->GetColorBuffer();
-    float clearColor[4] = { 0.0f,0.0f,0.3f,0.0f };
+    float clearColor[4] = { 0.0f,0.0f,0.0f,0.0f };
     colorBuffers_[kColor] = std::make_unique<ColorBuffer>();
     colorBuffers_[kColor]->SetClearColor(clearColor);
     colorBuffers_[kColor]->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
@@ -56,6 +56,9 @@ void Renderer::Initialize() {
     colorBuffers_[kNormal]->SetClearColor(clearNormal);
     colorBuffers_[kNormal]->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
+    colorBuffers_[kMaterial] = std::make_unique<ColorBuffer>();
+    colorBuffers_[kMaterial]->SetClearColor(clearColor);
+    colorBuffers_[kMaterial]->Create(swapChainBuffer.GetWidth(), swapChainBuffer.GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
     // ブルームを初期化
     bloom_ = std::make_unique<Bloom>();
@@ -68,7 +71,7 @@ void Renderer::Initialize() {
     shadowTexture_->Create(colorBuffers_[kColor]->GetWidth(), colorBuffers_[kColor]->GetHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 
     deferredRenderer_ = std::make_unique<DeferredRenderer>();
-    deferredRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), shadowTexture_.get(), mainDepthBuffer_.get(), nonCharacterDepthBuffer_.get());
+    deferredRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), colorBuffers_[kMaterial].get(), shadowTexture_.get() , mainDepthBuffer_.get(), nonCharacterDepthBuffer_.get());
 
     edgeRenderer_ = std::make_unique<EdgeRenderer>();
     edgeRenderer_->Initialize(colorBuffers_[kColor].get(), colorBuffers_[kNormal].get(), mainDepthBuffer_.get());
@@ -123,11 +126,12 @@ void Renderer::BeginMainRender() {
     // メインカラーバッファをレンダ―ターゲットに
     commandContext_.TransitionResource(*colorBuffers_[kColor], D3D12_RESOURCE_STATE_RENDER_TARGET);
     commandContext_.TransitionResource(*colorBuffers_[kNormal], D3D12_RESOURCE_STATE_RENDER_TARGET);
+    commandContext_.TransitionResource(*colorBuffers_[kMaterial], D3D12_RESOURCE_STATE_RENDER_TARGET);
     commandContext_.TransitionResource(*mainDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
     commandContext_.TransitionResource(*nonCharacterDepthBuffer_, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
-    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { colorBuffers_[kColor]->GetRTV(),colorBuffers_[kNormal]->GetRTV() };
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle[] = { colorBuffers_[kColor]->GetRTV(),colorBuffers_[kNormal]->GetRTV() ,colorBuffers_[kMaterial]->GetRTV() };
     commandContext_.SetRenderTargets(kRenderTargetNum, rtvHandle, mainDepthBuffer_->GetDSV());
    
     for (int i = 0; i < kRenderTargetNum;i++) {
@@ -170,17 +174,14 @@ void Renderer::EndSpotLightShadowMapRender(ShadowSpotLights& shadowSpotLights)
     }
 }
 
-void Renderer::EndMainRender() {
- 
-    bool isCollision = ShadowIsCollision::isShadowCollision;
-    ImGui::Text("%d", int(isCollision));
+void Renderer::EndMainRender(const ViewProjection& viewProjection) {
 
-    compute_->Dispatch(commandContext_,*mainDepthBuffer_);
+    compute_->Dispatch(commandContext_,*mainDepthBuffer_, viewProjection);
     shadowIsCollision_->Dispatch(commandContext_,{0.0f,0.0f}, collisionLuminance_);
 
     edgeRenderer_->Render(commandContext_, resultBuffer_.get());
     shadowEdgeRenderer_->Render(commandContext_, resultBuffer_.get());
-    //bloom_.Render(commandContext_, &resultBuffer_);
+    bloom_->Render(commandContext_, resultBuffer_.get());
 }
 
 void Renderer::BeginUIRender()
