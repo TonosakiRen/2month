@@ -6,12 +6,12 @@
         "backHeadSpeed_": 13.65999984741211,
         "blinkingTime_": 2,
         "damage_": 5,
-        "dashSpeed_": 0.4320000112056732,
+        "dashSpeed_": 0.5,
         "heal_": 30,
-        "jumpPower_": 0.5,
+        "jumpPower_": 0.5400000214576721,
         "knockBackPowerX_": 0.3100000023841858,
         "knockBackPowerY_": 0.41999998688697815,
         "maxMUTEKITime_": 120,
-        "speed_": 0.2199999988079071
+        "speed_": 0.20999999344348907
     }
 }
