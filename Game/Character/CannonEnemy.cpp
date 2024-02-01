@@ -4,7 +4,7 @@
 
 void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
-		"enemy01", // 親
+		"gomibako_body", // 親
 	};
 	BaseInitialize(static_cast<uint32_t>(names.size()), names);
 	// 大砲の衝突判定
@@ -185,7 +185,7 @@ void CannonEnemy::CollisionProcess() {
 
 CannonEnemy::Bullet::Bullet() {
 	std::vector<std::string> names = {
-		"toge", // 親
+		"can", // 親
 	};
 	BaseInitialize(static_cast<uint32_t>(names.size()), names);
 	rotate = EulerAngle(worldTransform_.quaternion_);

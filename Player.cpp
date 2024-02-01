@@ -4,6 +4,7 @@
 #include "GlobalVariables.h"
 #include "TextureManager.h"
 #include "./Game/Character/EnemyManager.h"
+#include "Easing.h"
 
 int32_t Player::hitShadowEnemyIndex_ = -1;
 Vector3 Player::hitShadowEnemyPos_ = {0.0f,0.0f,0.0f};
@@ -71,6 +72,7 @@ void Player::SetGlobalVariable()
 	globalVariables_->AddItem(name, "jumpPower_", jumpPower_);
 	globalVariables_->AddItem(name, "speed_", speed_);
 	globalVariables_->AddItem(name, "attackSpeed_", attackSpeed_);
+	globalVariables_->AddItem(name, "kmaxattackCoolTime_", kmaxattackCoolTime_);
 	globalVariables_->AddItem(name, "backHeadSpeed_", backHeadSpeed_);
 	globalVariables_->AddItem(name, "attackReadySpeed_", attackReadySpeed_);
 	globalVariables_->AddItem(name, "knockBackPowerX_", knockBackPowerX_);
@@ -91,6 +93,7 @@ void Player::ApplyGlobalVariable()
 	jumpPower_ = globalVariables_->GetFloatValue(name, "jumpPower_");
 	speed_ = globalVariables_->GetFloatValue(name, "speed_");
 	attackSpeed_ = globalVariables_->GetFloatValue(name, "attackSpeed_");
+	kmaxattackCoolTime_ = globalVariables_->GetFloatValue(name, "kmaxattackCoolTime_");
 	backHeadSpeed_ = globalVariables_->GetFloatValue(name, "backHeadSpeed_");
 	attackReadySpeed_ = globalVariables_->GetFloatValue(name, "attackReadySpeed_");
 	knockBackPowerX_ = globalVariables_->GetFloatValue(name, "knockBackPowerX_");
@@ -353,9 +356,16 @@ void Player::Jump() {
 }
 
 void Player::Attack() {
-	if ((input_->TriggerKey(DIK_V) || input_->TriggerButton(XINPUT_GAMEPAD_X)) && !attackParam_.isAttacked && !isKnockBack_) {
-		attackParam_.phase = 0;
-		attackParam_.isAttacked = true;
+	if (attackCoolTime_ <= 0) {
+		if ((input_->TriggerKey(DIK_V) || input_->TriggerButton(XINPUT_GAMEPAD_X)) && !attackParam_.isAttacked && !isKnockBack_) {
+			attackParam_.phase = 0;
+			attackParam_.isAttacked = true;
+			easing_tBack = 0;
+			attackCoolTime_ = kmaxattackCoolTime_;
+		}
+	}
+	else {
+		attackCoolTime_-=0.01f;
 	}
 	if (attackParam_.isAttacked) {
 		switch (attackParam_.phase) {
@@ -367,12 +377,18 @@ void Player::Attack() {
 			}
 			if (headRotate.x <= -30.0f) {
 				headRotate.x = -30.0f;
+				worldTransform_.scale_ = Vector3(0.7f, 0.7f, 0.7f);
 				attackParam_.phase = 1;
 			}
 			isKnockBack_ = false;
 			isDash_ = true;
-
-			worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *worldTransform_.quaternion_) * dashSpeed_;
+			{
+				Quaternion a = worldTransform_.quaternion_;
+				a.x = 0.0f;
+				a.z = 0.0f;
+				Normalize(a);
+				worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *a) * dashSpeed_;
+			}
 
 			break;
 		case 1:
@@ -381,18 +397,36 @@ void Player::Attack() {
 			attackParam_.id_ = 1;
 			if (headRotate.x >= 90.0f) {
 				attackParam_.phase = 2;
+				//easing_t = 0.0f;
 			}
 			isDash_ = true;
-			worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *worldTransform_.quaternion_) * dashSpeed_;
+			{
+				//worldTransform_.quaternion_ = worldTransform_.quaternion_*  MakeForXAxis(0.5f) ;
+				worldTransform_.scale_ = Easing::easing(easing_t, Vector3(0.7f, 0.7f, 0.7f), Vector3(1.5f, 1.5f, 1.5f), 0.1f, Easing::easeInQuad, true);
+			}
+			{
+				Quaternion a = worldTransform_.quaternion_;
+				a.x = 0.0f;
+				a.z = 0.0f;
+				Normalize(a);
+				worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *a) * dashSpeed_;
+			}
 			break;
 		case 2:
 			//頭で元の位置に戻る
 			headRotate.x -= backHeadSpeed_;
 			attackParam_.id_ = 0u;
+			worldTransform_.scale_ = Easing::easing(easing_tBack, Vector3(1.5f, 1.5f, 1.5f), Vector3(1.0f, 1.0f, 1.0f), 0.1f, Easing::easeInQuad, true);
 			if (headRotate.x <= 0.0f) {
 				headRotate.x = 0.0f;
+				easing_t = 0.0f;
+				worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 				attackParam_.isAttacked = false;
 			}
+			worldTransform_.quaternion_.x = 0.0f;
+			worldTransform_.quaternion_.z = 0.0f;
+			worldTransform_.quaternion_ = Normalize(worldTransform_.quaternion_);
+
 			isDash_ = false;
 			break;
 		case 3:
@@ -402,7 +436,14 @@ void Player::Attack() {
 			if (headRotate.x >= 0.0f) {
 				headRotate.x = 0.0f;
 				attackParam_.isAttacked = false;
+				worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
+				easing_t = 0;
+				easing_tBack = 0;
 			}
+			worldTransform_.quaternion_.x = 0.0f;
+			worldTransform_.quaternion_.z = 0.0f;
+			worldTransform_.quaternion_ = Normalize(worldTransform_.quaternion_);
+			worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 			isDash_ = false;
 			break;
 		}

@@ -86,11 +86,15 @@ private:
         uint32_t id_; //
     };
     AttackParameter attackParam_;
+    float easing_t = 0;
+    float easing_tBack = 0;
 
     //調整項目
     float jumpPower_ = 0.5f;
     float speed_ = 0.3f;
     float attackSpeed_ = 2.0f;
+    float attackCoolTime_ = 0.0f;
+    float kmaxattackCoolTime_ = 2.0f;
     float backHeadSpeed_ = 0.3f;
     float attackReadySpeed_ = 0.3f;
     int maxHp_ = 100;
