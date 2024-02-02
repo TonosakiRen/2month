@@ -391,7 +391,7 @@
             2.5,
             -7.0
         ],
-        "MoveFloorConfirmation": 1,
+        "MoveFloorConfirmation": 0,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
             0.0,
@@ -414,7 +414,7 @@
             0.0,
             0.0
         ],
-        "NormalEnemyConfirmation": 8,
+        "NormalEnemyConfirmation": 3,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -427,9 +427,9 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            25.254562377929688,
-            2.4000000953674316,
-            -0.69959557056427
+            7.5,
+            3.299999952316284,
+            -7.400000095367432
         ],
         "NormalEnemyNumber : 1 : Rotate": [
             4.371138473402425e-08,
@@ -443,9 +443,9 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
-            109.4185562133789,
-            5.800000190734863,
-            0.5020819306373596
+            9.899999618530273,
+            8.300000190734863,
+            2.700000047683716
         ],
         "NormalEnemyNumber : 2 : Rotate": [
             4.371138473402425e-08,
@@ -459,9 +459,9 @@
             1.0
         ],
         "NormalEnemyNumber : 2 : Translate": [
-            122.78827667236328,
-            1.2999999523162842,
-            -6.772935390472412
+            33.0,
+            2.299999952316284,
+            -2.0999999046325684
         ],
         "NormalEnemyNumber : 3 : Rotate": [
             4.371138473402425e-08,
@@ -543,7 +543,7 @@
             8.300000190734863,
             2.700000047683716
         ],
-        "NormalLightEnemyConfirmation": 2,
+        "NormalLightEnemyConfirmation": 0,
         "NormalLightEnemyNumber : 0 : Rotate": [
             4.873898618029671e-09,
             -0.6491546630859375,
@@ -675,7 +675,23 @@
             0.6000000238418579,
             2.200000047683716
         ],
-        "TrapConfirmation": 0,
+        "TrapConfirmation": 1,
+        "TrapNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TrapNumber : 0 : Scale": [
+            2.4000000953674316,
+            11.199999809265137,
+            20.399999618530273
+        ],
+        "TrapNumber : 0 : Translate": [
+            104.0999984741211,
+            5.300000190734863,
+            -0.699999988079071
+        ],
         "TruckConfirmation": 0,
         "TruckNumber : 0 : Rotate": [
             4.371138473402425e-08,
