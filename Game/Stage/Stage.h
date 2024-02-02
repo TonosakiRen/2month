@@ -83,7 +83,11 @@ private: // モンスターハウス用
 	void Confine(); // 閉じ込める処理
 	void ConfineBreak(); // 閉じ込める処理
 
+
+	bool isClear_ = false; // クリア用フラグ
+
 public:
+	const bool& GetClear() const { return isClear_; }
 	const MonstarHouseParam& GetParam() const { return mHouse_; }
 	void SetTrapFinish() { mHouse_.isBreaked_ = true, mHouse_.isMomentActivation_ = true; }
 

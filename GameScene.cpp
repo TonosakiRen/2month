@@ -72,11 +72,9 @@ void GameScene::Initialize() {
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
-	inGameScene_->Initialize(&pointLights_,&spotLights_,&shadowSpotLights_);
 	
 	// 
 	editorScene_ = std::make_unique<CreateStageScene>();
-	editorScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
 #pragma endregion
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
@@ -86,7 +84,7 @@ void GameScene::Initialize() {
 
 	ui_ = std::make_unique<Sprite>();
 	uint32_t uiHandle = TextureManager::Load("sousa.png");
-	ui_->Initialize(uiHandle, { 1140.0f,90.0f });
+	ui_->Initialize(uiHandle, { 1780.0f,90.0f });
 
 	//skydome_ = std::make_unique<Skydome>();
 	//skydome_->Initialize("skydome");
@@ -110,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -215,7 +213,7 @@ void GameScene::InGameInitialize() {
 }
 void GameScene::InGameUpdate() {
 
-	if (input_->TriggerKey(DIK_P)) {
+	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
 		sceneRequest_ = Scene::Title;
 	}
 

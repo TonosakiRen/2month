@@ -25,7 +25,7 @@ void NormalSpawner::Initialize(const Vector3& scale, const Quaternion& quaternio
 	popInterval_ = interval;
 	kMaxPopEnemy_ = MaxPop;
 	hp_ = hp;
-	color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	color_ = Vector4(0.95f, 0.76f, 0.20f, 1.0f);
 
 	// とりあえず一個だけ
 	modelsTransform_.at(0).SetParent(&worldTransform_);

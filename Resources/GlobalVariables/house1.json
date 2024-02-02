@@ -1,5 +1,5 @@
 {
-    "house0": {
+    "house1": {
         "CannonEnemyConfirmation": 0,
         "CoinConfirmation": 0,
         "FloorConfirmation": 1,
@@ -55,11 +55,11 @@
             1.0
         ],
         "Player : Translate": [
-            -0.8689467906951904,
-            0.7840552926063538,
-            -2.0890984535217285
+            0.0,
+            0.800000011920929,
+            -3.0
         ],
-        "SpawnerConfirmation": 1,
+        "SpawnerConfirmation": 2,
         "SpawnerNumber : 0 : Interval": 60,
         "SpawnerNumber : 0 : MaxPop": 10,
         "SpawnerNumber : 0 : Rotate": [
@@ -74,39 +74,36 @@
             1.0
         ],
         "SpawnerNumber : 0 : Translate": [
-            -10.0,
+            -12.0,
             1.0,
-            0.0
+            1.0
         ],
-        "SpawnerNumber : 0 : hp": 3,
-        "StageLightConfirmation": 0,
-        "StandLightEnemyConfirmation": 0,
-        "ThornEnemyConfirmation": 1,
-        "ThornEnemyNumber : 0 : Amplitube": [
-            0.5,
-            0.0,
-            0.0
-        ],
-        "ThornEnemyNumber : 0 : Rotate": [
+        "SpawnerNumber : 0 : hp": 1,
+        "SpawnerNumber : 1 : Interval": 70,
+        "SpawnerNumber : 1 : MaxPop": 5,
+        "SpawnerNumber : 1 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
             4.371138473402425e-08,
             -1.0
         ],
-        "ThornEnemyNumber : 0 : Scale": [
+        "SpawnerNumber : 1 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "ThornEnemyNumber : 0 : Time": 20,
-        "ThornEnemyNumber : 0 : Translate": [
-            -4.5,
-            5.5,
-            0.0
+        "SpawnerNumber : 1 : Translate": [
+            10.0,
+            1.0,
+            -7.699999809265137
         ],
+        "SpawnerNumber : 1 : hp": 1,
+        "StageLightConfirmation": 0,
+        "StandLightEnemyConfirmation": 0,
+        "ThornEnemyConfirmation": 0,
         "TrapConfirmation": 0,
         "TruckConfirmation": 0,
-        "WallConfirmation": 1,
+        "WallConfirmation": 2,
         "WallLightConfirmation": 0,
         "WallNumber : 0 : Rotate": [
             -1.3315805347247078e-07,

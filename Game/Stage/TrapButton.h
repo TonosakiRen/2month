@@ -6,6 +6,7 @@
 class TrapButton : public GameObject {
 public:
 	TrapButton();
+	~TrapButton();
 	void Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate);
 	void Update(const Vector3& playerWorldPosition);
 	void Draw();
@@ -14,10 +15,10 @@ public:
 public:
 	Collider collider_;
 	Vector3 rotate;
+	static uint32_t masterNumber_;
 private:
 	bool ActiveChack(const Vector3& playerWorldPosition) const;
 	bool isActive_ = true;
-	static uint32_t masterNumber_;
 	const uint32_t kNumber_ = 0u;
 
 };

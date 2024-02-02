@@ -76,13 +76,6 @@ void CreateStageScene::Update() {
 	player_->EnemyCollision();
 	player_->EnemyShadowCollision();
 
-	static bool iscamera = true;
-	/*if (Input::GetInstance()->TriggerKey(DIK_L)) {
-		iscamera = !iscamera;
-		followCamera_->Inisialize(fixedCamera_->GetTransform());
-		fixedCamera_->Initialize(0.0f, followCamera_->GetTransform());
-	}*/
-
 	// 定点開始初期化処理
 	if (stage_->GetParam().isMomentActivation_ && stage_->GetParam().isFalled_) {
 		iscamera = false;
