@@ -72,11 +72,9 @@ void GameScene::Initialize() {
 
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
-	inGameScene_->Initialize(&pointLights_,&spotLights_,&shadowSpotLights_);
 	
 	// 
 	editorScene_ = std::make_unique<CreateStageScene>();
-	editorScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
 #pragma endregion
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
@@ -110,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}

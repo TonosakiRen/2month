@@ -67,6 +67,6 @@ private:
 
 	bool isTrapped_ = false; // true:起動している/false:していない
 	bool isTrappedInitialize = true;
-
+	bool iscamera = true;
 
 };
