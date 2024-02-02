@@ -7,6 +7,8 @@ void Coin::Initialize(const Vector3& scale, const Quaternion& quaternion, const 
 		"coin", // 親
 	};
 
+	audio_ = Audio::GetInstance();
+
 	BaseInitialize(1, names);
 
 	collider_.Initialize(&worldTransform_, "Enemy", models_.at(0).modelHandle_);
@@ -84,7 +86,12 @@ void Coin::EnemyDraw() {
 }
 
 void Coin::CollisionProcess() {
+	
 	isAlive_ = false;
+
+	size_t handle = audio_->SoundLoadWave("coin.wav");
+	size_t catchHandle = audio_->SoundPlayWave(handle);
+	audio_->SetValume(catchHandle, 0.1f);
 }
 
 void Coin::WaitProcess() {

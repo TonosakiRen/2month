@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseCharacter.h"
-
+#include "Audio.h"
 class Coin : public BaseCharacter {
 public: // 仮想関数
 	void Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) override;
@@ -15,6 +15,9 @@ protected:
 
 	int count = 0;
 	bool isHit_ = false;
+
+	Audio* audio_ = nullptr;
+
 	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
