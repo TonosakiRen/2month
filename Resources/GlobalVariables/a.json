@@ -275,7 +275,12 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "MoveFloorConfirmation": 1,
+        "Goal : Scale": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "MoveFloorConfirmation": 0,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
             0.0,
@@ -511,7 +516,7 @@
             0.800000011920929,
             2.200000047683716
         ],
-        "TrapConfirmation": 1,
+        "TrapConfirmation": 2,
         "TrapNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -525,6 +530,22 @@
         ],
         "TrapNumber : 0 : Translate": [
             3.5,
+            3.5,
+            -3.0
+        ],
+        "TrapNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TrapNumber : 1 : Scale": [
+            1.0,
+            5.0,
+            15.0
+        ],
+        "TrapNumber : 1 : Translate": [
+            26.0,
             3.5,
             -3.0
         ],
