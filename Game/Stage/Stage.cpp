@@ -545,7 +545,7 @@ void Stage::ConfineInitialize(const Vector3& position) {
 	int y = 0;
 	int x = 0;
 	int z = 0;
-	Vector3 space(9.0f,1.0f,1.0f);
+	Vector3 space(10.0f,1.0f,1.0f);
 	Vector3 scale(2.0f, 2.0f, 2.0f);
 	Quaternion rotate(0.0f, 0.0f, 0.0f, 1.0f);
 	float initY = 5.0f;
