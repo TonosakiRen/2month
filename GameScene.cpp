@@ -117,6 +117,13 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update(CommandContext& commandContext){
+	//後で消す処理
+	
+	if (input_->TriggerKey(DIK_R)) {
+		editorScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
+	}
+
+
 	Collider::SwitchIsDrawCollider();
 	ViewProjection::SwitchIsUseDebugCamera();
 #ifdef _DEBUG

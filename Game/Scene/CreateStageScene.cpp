@@ -26,10 +26,10 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	}
 	fileNumber_ = 0;
 	loadSelectName_ = fileName_[fileNumber_].c_str();
+	//isPlay = true;
 
 	followCamera_ = std::make_shared<FollowCamera>();
 	fixedCamera_ = std::make_shared<FixedCamera>();
-
 }
 
 void CreateStageScene::Update() {
