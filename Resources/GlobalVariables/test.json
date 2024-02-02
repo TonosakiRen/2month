@@ -375,6 +375,22 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
+        "Goal : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "Goal : Scale": [
+            2.5,
+            5.0,
+            2.5
+        ],
+        "Goal : Translate": [
+            127.0,
+            2.5,
+            -7.0
+        ],
         "MoveFloorConfirmation": 1,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
@@ -544,6 +560,7 @@
             1.4140238761901855,
             -5.314733982086182
         ],
+        "SpawnerConfirmation": 0,
         "StageLightConfirmation": 0,
         "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
@@ -626,6 +643,7 @@
             0.800000011920929,
             2.200000047683716
         ],
+        "TrapConfirmation": 0,
         "TruckConfirmation": 0,
         "TruckNumber : 0 : Rotate": [
             0.0,

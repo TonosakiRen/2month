@@ -103,6 +103,9 @@ void InGameScene::Update() {
 	cameraState_.position = handle.position;
 
 	stage_->PostUpdate();
+	if (stage_->GetClear()) {
+		isClear_ = true;
+	}
 }
 
 void InGameScene::Draw() {

@@ -442,8 +442,8 @@ void Stage::Save(const char* itemName) {
 
 	if (goal_) {
 		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->scale_);
-		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->quaternion_);
-		global->SetValue(itemName, ("Goal : Scale"), goal_->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("Goal : Rotate"), goal_->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("Goal : Translate"), goal_->GetWorldTransform()->translation_);
 	}
 
 }
@@ -499,6 +499,7 @@ void Stage::Collision(Player* player) {
 	if (goal_) {
 		if (goal_->collider_.Collision(player->bodyCollider_, pushBackVector)) {
 			// playerにクリア用の処理を持たせる予定
+			isClear_ = true;
 		}
 	}
 

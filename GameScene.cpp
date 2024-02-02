@@ -108,7 +108,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -206,7 +206,7 @@ void GameScene::InGameInitialize() {
 }
 void GameScene::InGameUpdate() {
 
-	if (input_->TriggerKey(DIK_P)) {
+	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
 		sceneRequest_ = Scene::Title;
 	}
 

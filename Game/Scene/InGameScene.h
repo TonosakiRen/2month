@@ -56,4 +56,9 @@ private:
 	char itemName_[256]{};
 	int fileNumber_ = 0;
 
+	// クリア用
+	bool isClear_ = false;
+public:
+	const bool& GetClear() const { return isClear_; }
+
 };
