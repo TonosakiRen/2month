@@ -7,7 +7,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
-	std::string filePath = "a";
+	std::string filePath = "test";
 
 	stage_ = std::make_unique<Stage>();
 	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights);
