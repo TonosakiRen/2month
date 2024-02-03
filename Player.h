@@ -123,6 +123,8 @@ private:
     HitParticle hitParticle_;
 
 
+    Quaternion inputQuaternion_;
+
 public:
     Collider headCollider_;
 private:

@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Game/Stage/Stage.h"
 #include "Game/Character/EnemyManager.h"
+#include "Game/Camera/FollowCamera.h"
+#include "Game/Camera/FixedCamera.h"
 #include <memory>
 #include <vector>
 class PointLights;
@@ -39,5 +41,24 @@ private:
 	std::unique_ptr<Stage> stage_;
 	//std::vector<std::unique_ptr<NormalEnemy>> nEnemy_;
 	std::unique_ptr<EnemyManager> enemy_;
+	std::unique_ptr<EnemyManager> houseEnemy_; // モンスターハウス用の敵たち
+
+	std::shared_ptr<FollowCamera> followCamera_;
+	std::shared_ptr<FixedCamera> fixedCamera_;
+
+	bool isTrapped_ = false; // true:起動している/false:していない
+	bool isTrappedInitialize = true;
+	bool iscamera = true;
+
+	GlobalVariables* g = nullptr;
+	std::vector<std::string> fileName_;
+	std::string loadSelectName_;
+	char itemName_[256]{};
+	int fileNumber_ = 0;
+
+	// クリア用
+	bool isClear_ = false;
+public:
+	const bool& GetClear() const { return isClear_; }
 
 };

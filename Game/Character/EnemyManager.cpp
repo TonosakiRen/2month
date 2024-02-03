@@ -18,7 +18,7 @@ void EnemyManager::Initialize(PointLights* pointLight, SpotLights* spotLight, Sh
 	pointLights_ = pointLight;
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
-
+	TrapButton::masterNumber_ = 0u;
 }
 
 template<typename Container>

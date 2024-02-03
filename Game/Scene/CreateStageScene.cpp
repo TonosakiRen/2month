@@ -26,10 +26,10 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	}
 	fileNumber_ = 0;
 	loadSelectName_ = fileName_[fileNumber_].c_str();
+	//isPlay = true;
 
 	followCamera_ = std::make_shared<FollowCamera>();
 	fixedCamera_ = std::make_shared<FixedCamera>();
-
 }
 
 void CreateStageScene::Update() {
@@ -75,13 +75,6 @@ void CreateStageScene::Update() {
 	stage_->Collision(enemy_.get());
 	player_->EnemyCollision();
 	player_->EnemyShadowCollision();
-
-	static bool iscamera = true;
-	/*if (Input::GetInstance()->TriggerKey(DIK_L)) {
-		iscamera = !iscamera;
-		followCamera_->Inisialize(fixedCamera_->GetTransform());
-		fixedCamera_->Initialize(0.0f, followCamera_->GetTransform());
-	}*/
 
 	// 定点開始初期化処理
 	if (stage_->GetParam().isMomentActivation_ && stage_->GetParam().isFalled_) {

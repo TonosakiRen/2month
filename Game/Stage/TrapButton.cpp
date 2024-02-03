@@ -10,6 +10,10 @@ TrapButton::TrapButton() : kNumber_(masterNumber_) {
 	masterNumber_++;
 }
 
+TrapButton::~TrapButton() {
+
+}
+
 void TrapButton::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
 	std::string name = "box1x1";
 	GameObject::Initialize(name);

@@ -259,6 +259,8 @@ void Player::EnemyShadowCollision()
 
 void Player::EnemyCollision()
 {
+	const int hitStopFrame = 2;
+
 	if (hitCollider_ ) {
 		if (hitReaction_ != heal) {
 			Vector3 hitPos = MakeTranslation(hitCollider_->worldTransform_.matWorld_);
@@ -272,7 +274,7 @@ void Player::EnemyCollision()
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
 					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					GameScene::SetHitStop(3);
+					GameScene::SetHitStop(hitStopFrame);
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
@@ -280,7 +282,7 @@ void Player::EnemyCollision()
 			}
 			else if (hitCollider_->GetName() == "CannonBullet") {
 				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-				GameScene::SetHitStop(3);
+				GameScene::SetHitStop(hitStopFrame);
 				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
 						isKnockBack_ = true;
@@ -289,7 +291,7 @@ void Player::EnemyCollision()
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
 					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					GameScene::SetHitStop(3);
+					GameScene::SetHitStop(hitStopFrame);
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
@@ -305,7 +307,7 @@ void Player::EnemyCollision()
 
 				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.7f, 0.1f, 1.0f };
 				hitParticle_.SetIsEmit(true);
-				GameScene::SetHitStop(3);
+				GameScene::SetHitStop(hitStopFrame);
 			}
 		}
 		else {
@@ -335,6 +337,8 @@ void Player::DrawUI() {
 }
 
 void Player::CollisionProcess(const Vector3& pushBackVector) {
+   
+
 	pushBackVector_ = pushBackVector;
 	worldTransform_.translation_ += pushBackVector;
 	// 座標更新
@@ -379,7 +383,8 @@ void Player::Move() {
 
 		if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
 			worldTransform_.translation_ += move;
-			worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, MakeLookRotation(direction));
+			inputQuaternion_ = MakeLookRotation(direction);
+			worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, inputQuaternion_);
 		}
 	}
 	
@@ -422,13 +427,10 @@ void Player::Attack() {
 			}
 			isKnockBack_ = false;
 			isDash_ = true;
-			{
-				Quaternion a = worldTransform_.quaternion_;
-				a.x = 0.0f;
-				a.z = 0.0f;
-				Normalize(a);
-				worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *a) * dashSpeed_;
-			}
+			
+			worldTransform_.quaternion_ = inputQuaternion_;
+			worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } * inputQuaternion_) * dashSpeed_;
+			
 
 			break;
 		case 1:
@@ -444,15 +446,12 @@ void Player::Attack() {
 				//worldTransform_.quaternion_ = worldTransform_.quaternion_*  MakeForXAxis(0.5f) ;
 				worldTransform_.scale_ = Easing::easing(easing_t, Vector3(0.7f, 0.7f, 0.7f), Vector3(1.5f, 1.5f, 1.5f), 0.1f, Easing::easeInQuad, true);
 			}
-			{
-				Quaternion a = worldTransform_.quaternion_;
-				a.x = 0.0f;
-				a.z = 0.0f;
-				Normalize(a);
-				worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } *a) * dashSpeed_;
-			}
+			
+				worldTransform_.quaternion_ = worldTransform_.quaternion_ * MakeForXAxis(0.5f);
+				worldTransform_.translation_ += Normalize(Vector3{ 0.0f,0.0f,1.0f } * inputQuaternion_) * dashSpeed_;
+			
 			break;
-		case 2:
+		case 2: {
 			//頭で元の位置に戻る
 			headRotate.x -= backHeadSpeed_;
 			attackParam_.id_ = 0u;
@@ -463,12 +462,13 @@ void Player::Attack() {
 				worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 				attackParam_.isAttacked = false;
 			}
-			worldTransform_.quaternion_.x = 0.0f;
-			worldTransform_.quaternion_.z = 0.0f;
-			worldTransform_.quaternion_ = Normalize(worldTransform_.quaternion_);
-
+			Vector3 foward = Vector3(0.0f, 0.0f, 1.0f) * worldTransform_.quaternion_;
+			foward.y = 0.0f;
+			worldTransform_.quaternion_ = MakeLookRotation(foward);
+			
 			isDash_ = false;
 			break;
+		}
 		case 3:
 			//攻撃準備中にノックバックしてしまって頭で元の位置に戻る
 			headRotate.x += backHeadSpeed_;

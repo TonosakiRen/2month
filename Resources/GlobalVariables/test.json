@@ -375,7 +375,23 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "MoveFloorConfirmation": 1,
+        "Goal : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "Goal : Scale": [
+            2.5,
+            5.0,
+            2.5
+        ],
+        "Goal : Translate": [
+            127.0,
+            2.5,
+            -7.0
+        ],
+        "MoveFloorConfirmation": 0,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
             0.0,
@@ -398,7 +414,7 @@
             0.0,
             0.0
         ],
-        "NormalEnemyConfirmation": 6,
+        "NormalEnemyConfirmation": 3,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -411,9 +427,9 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            25.254562377929688,
-            2.4000000953674316,
-            -0.69959557056427
+            7.5,
+            3.299999952316284,
+            -7.400000095367432
         ],
         "NormalEnemyNumber : 1 : Rotate": [
             4.371138473402425e-08,
@@ -427,9 +443,9 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
-            109.4185562133789,
-            5.800000190734863,
-            0.5020819306373596
+            9.899999618530273,
+            8.300000190734863,
+            2.700000047683716
         ],
         "NormalEnemyNumber : 2 : Rotate": [
             4.371138473402425e-08,
@@ -443,9 +459,9 @@
             1.0
         ],
         "NormalEnemyNumber : 2 : Translate": [
-            122.78827667236328,
-            1.2999999523162842,
-            -6.772935390472412
+            33.0,
+            2.299999952316284,
+            -2.0999999046325684
         ],
         "NormalEnemyNumber : 3 : Rotate": [
             4.371138473402425e-08,
@@ -495,7 +511,39 @@
             1.2000000476837158,
             -0.4614175260066986
         ],
-        "NormalLightEnemyConfirmation": 2,
+        "NormalEnemyNumber : 6 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalEnemyNumber : 6 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 6 : Translate": [
+            7.5,
+            3.299999952316284,
+            -7.400000095367432
+        ],
+        "NormalEnemyNumber : 7 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalEnemyNumber : 7 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalEnemyNumber : 7 : Translate": [
+            9.899999618530273,
+            8.300000190734863,
+            2.700000047683716
+        ],
+        "NormalLightEnemyConfirmation": 0,
         "NormalLightEnemyNumber : 0 : Rotate": [
             4.873898618029671e-09,
             -0.6491546630859375,
@@ -544,6 +592,7 @@
             1.4140238761901855,
             -5.314733982086182
         ],
+        "SpawnerConfirmation": 0,
         "StageLightConfirmation": 0,
         "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
@@ -623,15 +672,32 @@
         "ThornEnemyNumber : 1 : Time": 6,
         "ThornEnemyNumber : 1 : Translate": [
             40.400001525878906,
-            0.800000011920929,
+            0.6000000238418579,
             2.200000047683716
+        ],
+        "TrapConfirmation": 1,
+        "TrapNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TrapNumber : 0 : Scale": [
+            2.4000000953674316,
+            11.199999809265137,
+            20.399999618530273
+        ],
+        "TrapNumber : 0 : Translate": [
+            102.69999694824219,
+            5.300000190734863,
+            -0.699999988079071
         ],
         "TruckConfirmation": 0,
         "TruckNumber : 0 : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
         ],
         "TruckNumber : 0 : Scale": [
             1.0,
@@ -639,9 +705,9 @@
             1.0
         ],
         "TruckNumber : 0 : Translate": [
-            9.0,
-            2.0,
-            2.4000000953674316
+            -16.200000762939453,
+            0.0,
+            3.0999999046325684
         ],
         "TruckNumber : 1 : Rotate": [
             0.0,
