@@ -112,6 +112,7 @@ void Compute::Dispatch(CommandContext& commandContext,DepthBuffer& depthBuffer,c
 	commandContext.TransitionResource(rwStructureBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.TransitionResource(hitPosBuffer_, D3D12_RESOURCE_STATE_UNORDERED_ACCESS);
 	commandContext.TransitionResource(depthBuffer, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
+	commandContext.TransitionResource(*indexBuffer_, D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE);
 	commandContext.SetPipelineState(pipelineState_);
 	commandContext.SetComputeRootSignature(rootSignature_);
 	commandContext.SetComputeUAVBuffer(0, rwStructureBuffer_->GetGPUVirtualAddress());
