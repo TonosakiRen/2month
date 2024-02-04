@@ -11,8 +11,6 @@ void ShadowSpotLights::Initialize() {
         lights_[i].collisionData.Create(shadowWidth, shadowHeight, DXGI_FORMAT_R32G32_FLOAT);
         lights_[i].shadowDescriptorHeapIndex = lights_[i].shadowMap_.GetSRV().GetIndex();
         lights_[i].collisionDescriptorHeapIndex = lights_[i].collisionData.GetSRV().GetIndex();
-        //とりあえず
-        lights_[i].worldTransform.translation_ = { 0.0f,1.3f,-12.0f };
     }
     // インスタンシングデータのサイズ
     UINT sizeINB = static_cast<UINT>(sizeof(ConstBufferData) * lightNum);
@@ -60,8 +58,9 @@ void ShadowSpotLights::ApplyGlobalVariable()
 
 void ShadowSpotLights::Update() {
 
-    ApplyGlobalVariable();
-    for (int i = 0; i < lightNum; i++) {
+    //ApplyGlobalVariable();
+
+    /*for (int i = 0; i < lightNum; i++) {
         lights_[i].playerDistance = Length(Player::playerPos_ - lights_[i].worldTransform.translation_);
         if (lights_[i].playerDistance >= 40.0f) {
             lights_[i].isActive = false;
@@ -70,7 +69,7 @@ void ShadowSpotLights::Update() {
             lights_[i].isActive = true;
         }
        
-    }
+    }*/
 
     std::vector<ConstBufferData> bufferData;
     bufferData.reserve(lightNum);
@@ -98,7 +97,7 @@ void ShadowSpotLights::Update() {
 
         float fov = (231.0f - data.cosAngle * 100.0f * 2.0f) * std::numbers::pi_v <float> / 180.0f;
 
-        data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance + 5.0f);
+        data.viewProjection = viewMatrix * MakePerspectiveFovMatrix(fov, aspectRatio_, nearZ_, lights_[i].distance + lights_[i].shadeDistance);
         data.shadowDescriptorHeapIndex = lights_[i].shadowDescriptorHeapIndex;
         data.collisionDescriptorHeapIndex = lights_[i].collisionDescriptorHeapIndex;
 

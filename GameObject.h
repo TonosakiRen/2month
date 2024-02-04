@@ -13,6 +13,7 @@ public:
 	void UpdateMaterial(Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void Draw(uint32_t textureHandle ,Vector4 color = { 1.0f,1.0f,1.0f,1.0f } );
 	void Draw(Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
+	void NonIndexLightDraw(int lightIndex,Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void Draw(const WorldTransform& worldTransform, uint32_t textureHandle, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void Draw(const WorldTransform& worldTransform, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });
 	void PlayerDraw(const WorldTransform& worldTransform, Vector4 color = { 1.0f,1.0f,1.0f,1.0f });

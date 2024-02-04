@@ -53,6 +53,25 @@ void GameObject::Draw(Vector4 color)
 	}
 }
 
+void GameObject::NonIndexLightDraw(int lightIndex, Vector4 color)
+{
+	if (ShadowMap::isDrawShadowMap) {
+		ShadowMap::Draw(modelHandle_, worldTransform_);
+	}
+	else if (SpotLightShadowMap::isDrawSpotLightShadowMap) {
+		SpotLightShadowMap::Draw(lightIndex,modelHandle_, worldTransform_);
+	}
+	else if (DepthRenderer::isDrawDepth) {
+		DepthRenderer::Draw(modelHandle_, worldTransform_);
+	}
+	else {
+		material_.color_ = color;
+		material_.Update();
+		Model::Draw(modelHandle_, worldTransform_, material_);
+	}
+}
+
+
 void GameObject::Draw(const WorldTransform& worldTransform, Vector4 color)
 {
 	if (ShadowMap::isDrawShadowMap) {

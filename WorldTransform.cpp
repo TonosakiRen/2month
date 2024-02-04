@@ -5,6 +5,15 @@ void WorldTransform::Initialize() {
     Update();
 }
 
+void WorldTransform::SetInitialize()
+{
+    translation_ = { 0.0f,0.0f,0.0f };
+    quaternion_ = { 0.0f,0.0f,0.0f,1.0f };
+    scale_ = { 1.0f,1.0f,1.0f };
+    parent_ = nullptr;
+    Update();
+}
+
 void WorldTransform::Update() {
 
     // スケール、回転、平行移動行列の計算

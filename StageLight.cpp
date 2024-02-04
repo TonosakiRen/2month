@@ -2,9 +2,10 @@
 #include "ModelManager.h"
 #include "ImGuiManager.h"
 #include "Game/Character/BaseCharacter.h"
+#include "ShadowSpotLights.h"
 #undef min
 
-void StageLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate) {
+void StageLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 translate, ShadowSpotLights* shadowSpotLights,float distance,float shadeDistance) {
 	std::string name = "light";
 	GameObject::Initialize(name);
 	collider_.Initialize(&worldTransform_, name, modelHandle_);
@@ -14,19 +15,52 @@ void StageLight::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transl
 	worldTransform_.translation_ = translate;
 	UpdateMatrix();
 	rotate = EulerAngle(worldTransform_.quaternion_);
-	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
-
+	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y); rotate.z = Degree(rotate.z) - 180.0f;
+	shadowSpotLights_ = shadowSpotLights;
+	distance_ = distance;
+	shadeDistance_ = shadeDistance;
 	//Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-
 }
 
 void StageLight::Update(const Vector3& playerWorldPosition) {
 
 	if (!ActiveChack(playerWorldPosition)) {
 		isActive_ = false;
+		if (lightIndex_ != -1) {
+			shadowSpotLights_->lights_[lightIndex_].isActive = false;
+			lightIndex_ = -1;
+		}
 		return;
 	}
 	isActive_ = true;
+
+	if (lightIndex_ == -1) {
+		for (int i = 0; auto & light : shadowSpotLights_->lights_) {
+			if (light.isActive == false) {
+
+				light.isActive = true;
+				lightIndex_ = i;
+				//lightの初期化
+				light.color = {1.0f,1.0,0.58f};
+				light.worldTransform.SetInitialize();
+				light.worldTransform.parent_ = &worldTransform_;
+				light.intensity = 5.5f;
+				light.direction = MakeDirection(worldTransform_.quaternion_);
+				light.distance = distance_;
+				light.shadeDistance = shadeDistance_;
+				light.decay = 1.0f;
+				light.cosAngle = 0.8f;
+				break;
+			}
+			i++;
+		}
+	}
+	else {
+		shadowSpotLights_->lights_[lightIndex_].direction = MakeDirection(worldTransform_.quaternion_);
+		shadowSpotLights_->lights_[lightIndex_].distance = distance_;
+		shadowSpotLights_->lights_[lightIndex_].shadeDistance = shadeDistance_;
+	}
+
 
 
 	collider_.AdjustmentScale();
@@ -49,6 +83,8 @@ void StageLight::DrawImGui() {
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
+	ImGui::DragFloat("Distance", &distance_, 0.1f);
+	ImGui::DragFloat("ShadeDistance", &shadeDistance_, 0.1f);
 
 	UpdateMatrix();
 #endif // _DEBUG

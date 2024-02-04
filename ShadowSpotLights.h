@@ -22,9 +22,10 @@ public:
 		float intensity = 5.5f;
 		Vector3 direction = { 0.0f,0.0f,1.0f };
 		float distance = 20.0f;
+		float shadeDistance = 5.0f;
 		float decay = 1.0f;
 		float cosAngle = 0.8f;
-		bool isActive = true;
+		bool isActive = false;
 		float playerDistance = 0.0f;
 		Vector3 lockUp = { 1.0f,0.0f,0.0f };
 		DepthBuffer shadowMap_;
