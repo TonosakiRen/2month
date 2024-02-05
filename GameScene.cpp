@@ -55,14 +55,6 @@ void GameScene::Initialize() {
 	spotLights_.Update();
 
 	shadowSpotLights_.Initialize();
-	shadowSpotLights_.lights_[0].worldTransform.translation_ = { 0.0f,1.3f,-12.0f };
-	shadowSpotLights_.lights_[0].color = { 1.0f,1.0f,0.58f };
-	shadowSpotLights_.lights_[0].intensity = 5.5f;
-	shadowSpotLights_.lights_[0].direction = { 0.0f,0.0f,1.0f };
-	shadowSpotLights_.lights_[0].distance = 20.0f;
-	shadowSpotLights_.lights_[0].cosAngle = 0.8f;
-	shadowSpotLights_.lights_[0].isActive = true;
-
 	shadowSpotLights_.Update();
 
 #pragma region Scene関係
@@ -108,7 +100,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}

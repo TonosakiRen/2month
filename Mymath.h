@@ -1308,6 +1308,11 @@ inline Vector3 EulerAngle(const Quaternion& q) {
 	return euler;
 }
 
+inline Vector3 MakeDirection(const Quaternion& q) {
+	Vector3 result = Vector3(-1.0f, 0.0f, 0.0f) * q;
+	return result;
+}
+
 inline Quaternion Normalize(const Quaternion& q) {
 	float tmp = q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z;
 	tmp = sqrtf(tmp);

@@ -13,6 +13,7 @@ public:
 
 	//bufferに送る場合の初期化
 	void Initialize();
+	void SetInitialize();
 	void Update();
 
 	void ConstUpdate() {
@@ -68,8 +69,8 @@ public:
 	Quaternion quaternion_ = IdentityQuaternion();
 	Vector3 translation_ = { 0.0f,0.0f,0.0f };
 	Matrix4x4 matWorld_;
-private:
 	WorldTransform* parent_ = nullptr;
+private:
 	bool isScaleParent_ = true;
 	bool isRotateParent_ = true;
 

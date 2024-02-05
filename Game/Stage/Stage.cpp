@@ -10,10 +10,10 @@
 #include "Game/Character/EnemyManager.h"
 
 void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
-	Load(loadFile);
 	pointLights_ = pointLight;
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
+	Load(loadFile);
 	SetSpotLight();
 
 }
@@ -227,7 +227,7 @@ void Stage::DrawImGui() {
 
 		if (ImGui::BeginMenu("StageLight")) {
 			if (ImGui::Button("Create")) {
-				stagelights_.emplace_back(std::make_unique<StageLight>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+				stagelights_.emplace_back(std::make_unique<StageLight>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f),shadowSpotLights_,20.0f,5.0f);
 			}
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", stagelights_.size());
@@ -349,8 +349,10 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(selectName, ("StageLightNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(selectName, ("StageLightNumber : " + std::to_string(i) + " : Translate").c_str());
+		float distance = global->GetFloatValue(selectName, ("StageLightNumber : " + std::to_string(i) + " : Distance").c_str());
+		float shadeDistance = global->GetFloatValue(selectName, ("StageLightNumber : " + std::to_string(i) + " : ShadeDistance").c_str());
 		auto& stagelight = stagelights_.emplace_back(std::make_unique<StageLight>());
-		stagelight->Initialize(scale, rotate, trans);
+		stagelight->Initialize(scale, rotate, trans,shadowSpotLights_, distance, shadeDistance);
 	}
 	
 	num = global->GetIntValue(selectName, "TrapConfirmation");
@@ -431,6 +433,8 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Scale").c_str(), stagelights_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Rotate").c_str(), stagelights_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Translate").c_str(), stagelights_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : Distance").c_str(), stagelights_[index]->distance_);
+		global->SetValue(itemName, ("StageLightNumber : " + std::to_string(index) + " : ShadeDistance").c_str(), stagelights_[index]->shadeDistance_);
 	}
 	
 	global->SetValue(itemName, "TrapConfirmation" + std::string(), static_cast<int>(trapButtons_.size()));
