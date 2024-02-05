@@ -40,7 +40,7 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 	isActive_ = true;
 	
 	if (!isHit_) {
-		Move(playerPosition);
+		//Move(playerPosition);
 	}
 	else {
 		CollisionProcess();
