@@ -4,8 +4,8 @@
 #include <algorithm>
 
 FollowCamera::FollowCamera() {
-    transform_.translation_ = Vector3(0.0f, 8.45f, -26.0f);
-    transform_.quaternion_ = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
+    transform_.translation_ = Vector3(0.0f, 6.0f, -28.0f);
+    transform_.quaternion_ = MakeFromEulerAngle(Vector3(Radian(7.0f), 0.0f, 0.0f));
 
     end_.translate = Vector3(0.0f, 8.45f, -26.0f);
     end_.rotate = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
