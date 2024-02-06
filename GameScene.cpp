@@ -100,7 +100,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
