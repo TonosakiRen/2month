@@ -110,12 +110,11 @@ Vector3 NormalEnemy::Move(const Vector3& playerPosition) {
 		vec = Vector3(0.0f, 0.0f, 0.0f);
 	}
 	vec.y = 0.0f;
-
+	vec.z = 0.0f;
 
 	const float kSpeed = 0.05f;
 
 	worldTransform_.quaternion_ = MakeLookRotation(-vec);
-
 	worldTransform_.translation_ += vec * kSpeed;
 	UpdateTransform();
 
