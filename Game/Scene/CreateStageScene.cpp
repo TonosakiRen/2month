@@ -12,12 +12,12 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	player_->Initialize("playerBody");
 
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize("test", pointLights, spotLights, shadowSpotLights);
+	stage_->Initialize("stage1", pointLights, spotLights, shadowSpotLights);
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();
 	enemy_->Initialize(pointLights, spotLights, shadowSpotLights);
-	enemy_->Load("test");
+	enemy_->Load("stage1");
 
 	g = GlobalVariables::GetInstance();
 	g->ChackFiles(fileName_);
