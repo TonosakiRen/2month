@@ -184,29 +184,58 @@ PixelShaderOutput main(VSOutput input)
 
 								if (nonWp.z <= wp.z) {
 
-									if (enemyIndex.x == 2.0f) {
+									if (enemyIndex.x == 4.0f) {
+										//♡
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+										output.shadow.w = 2.0f;
+
+										color.xyz = float32_t3(0.5f, 1.0f, 0.5f);
+									}
+									else if (enemyIndex.x == 3.0f) {
+										//コイン
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+										output.shadow.w = 1.0f;
+
+										color.xyz = float32_t3(1.0f, 1.0f, 0.0f);
+									}
+									else if (enemyIndex.x == 2.0f) {
+										//敵
 										output.shadow.y = 2.0f;
 										output.shadow.z = enemyIndex.y;
 
 										color.xyz = float32_t3(1.0f, 0.2f, 0.4f);
-										shading *= shade.value;
+										
 
 									}
 									else if (enemyIndex.x == 1.0f) {
+										//player
 										output.shadow.y = 1.0f;
 
 										//color.xyz = float32_t3(1.0f, 0.0f, 0.0f);
-										shading *= shade.value;
+										
 									}
-									else {
-										shading *= shade.value;
-									}
+					
+									shading *= shade.value;
 									output.shadow.x = 1.0f;
 
 								}
 								else {
 
-									if (enemyIndex.x == 2.0f) {
+									if (enemyIndex.x == 4.0f) {
+										//♡
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+										output.shadow.w = 2.0f;
+									}
+									else if (enemyIndex.x == 3.0f) {
+										//コイン
+										output.shadow.y = 2.0f;
+										output.shadow.z = enemyIndex.y;
+										output.shadow.w = 1.0f;
+									}
+									else if (enemyIndex.x == 2.0f) {
 										output.shadow.y = 2.0f;
 										output.shadow.z = enemyIndex.y;
 									}

@@ -60,3 +60,16 @@ void BaseCharacter::BaseEnemyDraw() {
 		models_.at(index).EnemyDraw(Vector2(2, static_cast<float>(kNumber_)), modelsTransform_.at(index));
 	}
 }
+
+void BaseCharacter::BaseCoinDraw() {
+	for (uint32_t index = 0u; index < models_.size(); index++) {
+		models_.at(index).EnemyDraw(Vector2(3, static_cast<float>(kNumber_)), modelsTransform_.at(index));
+	}
+}
+
+void BaseCharacter::BaseHeartDraw() {
+	for (uint32_t index = 0u; index < models_.size(); index++) {
+		models_.at(index).EnemyDraw(Vector2(4, static_cast<float>(kNumber_)), modelsTransform_.at(index));
+	}
+}
+

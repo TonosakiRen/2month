@@ -33,6 +33,8 @@ protected:
 	void UpdateTransform();
 	void BaseDraw();
 	void BaseEnemyDraw();
+	void BaseCoinDraw();
+	void BaseHeartDraw();
 
 protected:
 	WorldTransform worldTransform_;

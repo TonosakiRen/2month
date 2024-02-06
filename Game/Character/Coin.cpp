@@ -82,7 +82,7 @@ void Coin::EnemyDraw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
-	BaseEnemyDraw();
+	BaseCoinDraw();
 }
 
 void Coin::CollisionProcess() {
