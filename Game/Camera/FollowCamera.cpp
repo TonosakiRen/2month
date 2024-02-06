@@ -6,14 +6,18 @@
 
 FollowCamera::FollowCamera() {
     auto global = GlobalVariables::GetInstance();
-    Vector3 trans = global->GetVector3Value("Player", "FollowCameraOffset : Translate");
-    Quaternion rot = global->GetQuaternionValue("Player", "FollowCameraOffset : Rotate");
+    global->LoadFile("FollowCamera");
+    Vector3 trans = global->GetVector3Value("FollowCamera", "FollowCameraOffset : Translate");
+    Quaternion rot = global->GetQuaternionValue("FollowCamera", "FollowCameraOffset : Rotate");
 
-    transform_.translation_ = trans;
-    transform_.quaternion_ = rot;
+    end_.translate = trans;
+    end_.rotate = rot;
 
-    end_.translate = Vector3(0.0f, 8.45f, -26.0f);
-    end_.rotate = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
+    transform_.translation_ = end_.translate;
+    transform_.quaternion_ = end_.rotate;
+
+    rotate = EulerAngle(transform_.quaternion_);
+    rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 }
 
 void FollowCamera::Inisialize(const WorldTransform& transform) {
@@ -24,7 +28,7 @@ void FollowCamera::Inisialize(const WorldTransform& transform) {
 }
 
 void FollowCamera::Update(float playerX) {
-    //DrawImGui();
+    DrawImGui();
 
     const float offset = 6.5f;
     if (isEase_) {
@@ -52,7 +56,6 @@ void FollowCamera::Update(float playerX) {
 
 void FollowCamera::DrawImGui() {
 #ifdef _DEBUG
-    static Vector3 rotate;
     ImGui::Begin("Camera");
     ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
     Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
@@ -60,9 +63,9 @@ void FollowCamera::DrawImGui() {
     ImGui::DragFloat3("translate", &transform_.translation_.x, 0.1f);
     if (ImGui::Button("FollowCameraSave")) {
         auto global = GlobalVariables::GetInstance();
-        global->SetValue("Player", "FollowCameraOffset : Translate", transform_.GetWorldTranslate());
-        global->SetValue("Player", "FollowCameraOffset : Rotate", transform_.quaternion_);
-        global->SaveFile("Player");
+        global->SetValue("FollowCamera", "FollowCameraOffset : Translate", transform_.GetWorldTranslate());
+        global->SetValue("FollowCamera", "FollowCameraOffset : Rotate", transform_.quaternion_);
+        global->SaveFile("FollowCamera");
     }
     ImGui::End();
     transform_.Update();

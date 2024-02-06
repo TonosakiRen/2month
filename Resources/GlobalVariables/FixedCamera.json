@@ -1,0 +1,15 @@
+{
+    "FixedCamera": {
+        "FixedCameraOffset : Rotate": [
+            0.008726535364985466,
+            0.0,
+            0.0,
+            0.9999619126319885
+        ],
+        "FixedCameraOffset : Translate": [
+            109.5,
+            8.0,
+            -46.0
+        ]
+    }
+}

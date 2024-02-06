@@ -1,10 +1,19 @@
 #include "FixedCamera.h"
 #include "Easing.h"
 #include <algorithm>
+#include "GlobalVariables.h"
+#include "ImGuiManager.h"
 
 FixedCamera::FixedCamera() {
-	end_.translate = Vector3(0.0f, 10.0f, -30.0f);
-	end_.rotate = MakeFromEulerAngle(Vector3(Radian(6.0f), 0.0f, 0.0f));
+	auto global = GlobalVariables::GetInstance();
+	global->LoadFile("FixedCamera");
+	Vector3 trans = global->GetVector3Value("FixedCamera", "FixedCameraOffset : Translate");
+	Quaternion rot = global->GetQuaternionValue("FixedCamera", "FixedCameraOffset : Rotate");
+	end_.translate = trans;
+	end_.rotate = rot;
+
+	rotate = EulerAngle(transform_.quaternion_);
+	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 }
 
 void FixedCamera::Initialize(const float& trapPosition, const WorldTransform& transform) {
@@ -16,6 +25,7 @@ void FixedCamera::Initialize(const float& trapPosition, const WorldTransform& tr
 }
 
 void FixedCamera::Update() {
+	DrawImGui();
 	if (!isMove_) { return; }
 
 	float MaxFrame = 120.0f;
@@ -31,6 +41,24 @@ void FixedCamera::Update() {
 	transform_.quaternion_ = Slerp(T, start_.rotate, end_.rotate);
 	transform_.translation_ = Lerp(start_.translate, end_.translate, T) + shake;
 	transform_.Update();
+}
+
+void FixedCamera::DrawImGui() {
+#ifdef _DEBUG
+	ImGui::Begin("Camera");
+	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
+	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
+	transform_.quaternion_ = MakeFromEulerAngle(handle);
+	ImGui::DragFloat3("translate", &transform_.translation_.x, 0.1f);
+	if (ImGui::Button("FixedCameraSave")) {
+		auto global = GlobalVariables::GetInstance();
+		global->SetValue("FixedCamera", "FixedCameraOffset : Translate", transform_.GetWorldTranslate());
+		global->SetValue("FixedCamera", "FixedCameraOffset : Rotate", transform_.quaternion_);
+		global->SaveFile("FixedCamera");
+	}
+	ImGui::End();
+	transform_.Update();
+#endif // _DEBUG
 }
 
 Vector3 FixedCamera::Shake(Vector3 shakeValue) {
