@@ -439,7 +439,7 @@ void Player::Attack() {
 
 			size_t handle = audio_->SoundLoadWave("attack.wav");
 			size_t attackHandle = audio_->SoundPlayWave(handle);
-			audio_->SetValume(attackHandle, 1.0f);
+			audio_->SetValume(attackHandle, 0.33f);
 		}
 	}
 	else {
