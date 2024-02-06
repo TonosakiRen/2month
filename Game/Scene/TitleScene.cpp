@@ -7,7 +7,6 @@
 TitleScene::~TitleScene()
 {
 	spotLights_->lights_[0].isActive = false;
-
 }
 
 void TitleScene::Initialize(ShadowSpotLights* spotLights) {

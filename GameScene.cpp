@@ -159,6 +159,7 @@ void GameScene::Update(CommandContext& commandContext){
 
 			if (Transition::isNextScene_) {
 				scene_ = saveSceneRequest_.value();
+				spotLights_.lights_[0].isActive = false;
 				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 				saveSceneRequest_ = std::nullopt;
 			}
@@ -218,7 +219,9 @@ void GameScene::TitleInitialize() {
 void GameScene::TitleUpdate() {
 
 	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
-		sceneRequest_ = Scene::InGame;
+		if (!Transition::isTransition_) {
+			sceneRequest_ = Scene::InGame;
+		}
 	}
 
 	titleScene_->Update();
@@ -241,7 +244,9 @@ void GameScene::InGameInitialize() {
 void GameScene::InGameUpdate() {
 
 	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
-		sceneRequest_ = Scene::Title;
+		if (!Transition::isTransition_) {
+			sceneRequest_ = Scene::Title;
+		}
 	}
 
 	inGameScene_->Update();
