@@ -55,10 +55,15 @@ void Coin::OnCollision(Collider& collider, const PlayerDate& date) {
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
 		isColl = true;
+		Player::hitCollider_ = &collider_;
+		Player::hitReaction_ = Player::coin;
 	}
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
+		Player::hitShadowEnemyIndex_ = kNumber_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::coin;
 		isColl = true;
 	}
 
@@ -82,7 +87,7 @@ void Coin::EnemyDraw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
-	BaseCoinDraw();
+	BaseHeartDraw();
 }
 
 void Coin::CollisionProcess() {

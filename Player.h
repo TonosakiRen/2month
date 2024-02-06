@@ -24,7 +24,8 @@ public:
     enum HitReaction {
         knockBack,
         damage,
-        heal
+        heal,
+        coin
     };
 
     //そのフレームの当たった敵のインデックス　-1は当たっていない
@@ -124,6 +125,8 @@ private:
 
 
     Quaternion inputQuaternion_;
+
+    int coinNum_ = 0;
 
 public:
     Collider headCollider_;

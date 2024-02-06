@@ -69,6 +69,8 @@ void Player::Initialize(const std::string name)
 
 	shadowHitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
 	hitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
+
+	coinNum_ = 0;
 }
 
 void Player::SetGlobalVariable()
@@ -203,7 +205,7 @@ void Player::EnemyShadowCollision()
 
 	if (hitShadowEnemyIndex_ != -1 ) {
 		//もしhitReactionがhealじゃなかったら
-		if (hitReaction_ != heal) {
+		if (hitReaction_ != heal && hitReaction_ != coin) {
 
 			Vector3* aa = static_cast<Vector3*>(Compute::GetPosData());
 			shadowHitParticle_.emitterWorldTransform_.translation_ = aa[0];
@@ -261,9 +263,12 @@ void Player::EnemyShadowCollision()
 				shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.7f, 0.1f,1.0f };
 			}
 		}//healだったら
-		else {
+		else if (hitReaction_ == heal){
 			hp_ += heal_;
 			hp_ = clamp(hp_, -100, maxHp_);
+		}
+		else {
+			coinNum_++;
 		}
 		
 	}
@@ -274,7 +279,7 @@ void Player::EnemyCollision()
 	const int hitStopFrame = 2;
 
 	if (hitCollider_ ) {
-		if (hitReaction_ != heal) {
+		if (hitReaction_ != heal && hitReaction_ != coin) {
 			Vector3 hitPos = MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 			hitParticle_.emitterWorldTransform_.translation_ = hitPos + ((MakeTranslation(worldTransform_.matWorld_) - hitPos) / 2.0f);
 			if (attackParam_.id_ != 1) {
@@ -331,9 +336,12 @@ void Player::EnemyCollision()
 				GameScene::SetHitStop(hitStopFrame);
 			}
 		}
-		else {
+		else if (hitReaction_ == heal){
 			hp_ += heal_;
 			hp_ = clamp(hp_, -100, maxHp_);
+		}
+		else {
+			coinNum_++;
 		}
 	}
 }

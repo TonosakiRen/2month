@@ -52,17 +52,23 @@ void Heart::Update(const Vector3& playerPosition) {
 void Heart::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (!isActive_) { return; }
 
+
+
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)) {
 		isColl = true;
+		Player::hitCollider_ = &collider_;
+		Player::hitReaction_ = Player::heal;
 	}
 
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
+		Player::hitShadowEnemyIndex_ = kNumber_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::heal;
 		isColl = true;
 	}
-
 	if (isColl) {
 		if (!isHit_) {
 			isHit_ = true;
