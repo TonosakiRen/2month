@@ -429,7 +429,7 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
-	if (savePoints_.at(savePointIndex_)) {
+	if (savePoints_.size() > savePointIndex_) {
 		playerRespawnPoint_.translate = savePoints_.at(savePointIndex_)->GetWorldTransform()->GetWorldTranslate();
 	}
 	else {
