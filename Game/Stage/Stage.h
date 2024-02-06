@@ -8,6 +8,7 @@
 #include "StageLight.h"
 #include "TrapButton.h"
 #include "Goal.h"
+#include "SavePoint.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -56,6 +57,7 @@ private:
 	std::vector<std::unique_ptr<StageLight>> stagelights_;
 	std::vector<std::unique_ptr<TrapButton>> trapButtons_;
 	std::unique_ptr<Goal> goal_;
+	std::vector<std::unique_ptr<SavePoint>> savePoints_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;
@@ -83,7 +85,7 @@ private: // モンスターハウス用
 	void Confine(); // 閉じ込める処理
 	void ConfineBreak(); // 閉じ込める処理
 
-
+	uint32_t savePointIndex_ = 0u; // 中間地点でどこから進めるかの変数
 	bool isClear_ = false; // クリア用フラグ
 
 public:

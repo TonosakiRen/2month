@@ -33,6 +33,15 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 }
 
 void TitleScene::Update() {
+
+	spotLights_->lights_[0].worldTransform.translation_ = { 0.0f,24.0f,26.0f };
+	spotLights_->lights_[0].color = { 1.0f,1.0f,0.58f };
+	spotLights_->lights_[0].intensity = 3.0f;
+	spotLights_->lights_[0].direction = { 0.0f,-0.703f,-0.711f };
+	spotLights_->lights_[0].distance = 52.3f;
+	spotLights_->lights_[0].decay = 1.0f;
+	spotLights_->lights_[0].cosAngle = 0.785f;
+
 	titleModel_.UpdateMatrix();
 	spotLights_->lights_[0].isActive = true;
 	ImGui::Begin("spotLight");

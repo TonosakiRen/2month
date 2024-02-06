@@ -43,9 +43,9 @@ protected:
 	const uint32_t kNumber_;
 	bool isAlive_ = true; // 生きているか
 	bool isActive_ = true; // 起動しているか
-	bool shadowOnly_ = false; // 影だけ描画するか
 
 public:
+	bool shadowOnly_ = false; // 影だけ描画するか
 	Collider collider_;
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
 	const bool& GetIsAlive() const { return isAlive_; }

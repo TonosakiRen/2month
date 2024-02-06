@@ -15,7 +15,7 @@ void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* point
 	shadowSpotLights_ = shadowSpotLight;
 	Load(loadFile);
 	SetSpotLight();
-
+	playerRespawnPoint_;
 }
 
 void Stage::Update(const Vector3& playerWorldPosition) {
@@ -44,6 +44,9 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 		trap->Update(playerWorldPosition);
 	}
 	goal_->Update(playerWorldPosition);
+	for (auto& point : savePoints_) {
+		point->Update(playerWorldPosition);
+	}
 
 	if (mHouse_.isFalled_) {
 		Confine();
@@ -86,6 +89,9 @@ void Stage::Draw() {
 		trap->Draw();
 	}
 	goal_->Draw();
+	for (auto& point : savePoints_) {
+		point->Draw();
+	}
 }
 
 
@@ -100,6 +106,9 @@ void Stage::ShadowDraw() {
 		woodbox->Draw();
 	}
 	goal_->Draw();
+	for (auto& point : savePoints_) {
+		point->Draw();
+	}
 }
 
 void Stage::SpotLightShadowDraw() {
@@ -269,6 +278,24 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("SavePointButton")) {
+			if (ImGui::Button("Create")) {
+				savePoints_.emplace_back(std::make_unique<SavePoint>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", savePoints_.size());
+			for (int i = 0; i < savePoints_.size(); i++) {
+				if (ImGui::TreeNode(("SavePointButtonNumber : " + std::to_string(i)).c_str())) {
+					savePoints_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						savePoints_.erase(savePoints_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenu();
 	}
 	
@@ -388,11 +415,26 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		goal_->Initialize(scale, rotate, trans);
 	}
 
+	num = global->GetIntValue(selectName, "SavePointConfirmation");
+	savePoints_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(selectName, ("SavePointNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("SavePointNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("SavePointNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& save = savePoints_.emplace_back(std::make_unique<SavePoint>());
+		save->Initialize(scale, rotate, trans);
+	}
+	//SavePoint::playerRespawnPosition = savePoints_.at(0)->GetWorldTransform()->GetWorldTranslate();
 
 	// playerの初期位置
 	playerRespawnPoint_.scale = global->GetVector3Value(selectName, "Player : Scale");
 	playerRespawnPoint_.rotate = global->GetQuaternionValue(selectName, "Player : Rotate");
-	playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
+	if (savePoints_.at(savePointIndex_)) {
+		playerRespawnPoint_.translate = savePoints_.at(savePointIndex_)->GetWorldTransform()->GetWorldTranslate();
+	}
+	else {
+		playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
+	}
 }
 
 void Stage::Save(const char* itemName) {
@@ -466,6 +508,16 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("Goal : Translate"), goal_->GetWorldTransform()->translation_);
 	}
 
+	global->SetValue(itemName, "SavePointConfirmation" + std::string(), static_cast<int>(savePoints_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(savePoints_.size()); index++) {
+		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Scale").c_str(), savePoints_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Rotate").c_str(), savePoints_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Translate").c_str(), savePoints_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "Player : Scale", playerRespawnPoint_.scale);
+	global->SetValue(itemName, "Player : Rotate", playerRespawnPoint_.rotate);
+
 }
 
 void Stage::Collision(Player* player) {
@@ -523,6 +575,11 @@ void Stage::Collision(Player* player) {
 		}
 	}
 
+	for (auto& point : savePoints_) {
+		if (point->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			//SavePoint::playerRespawnPosition = point->GetWorldTransform()->GetWorldTranslate();
+		}
+	}
 	//player->worldTransform_.Update();
 }
 

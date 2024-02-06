@@ -177,6 +177,7 @@ void CreateStageScene::DrawImGui() {
 					isPlay = false;
 					stage_->Load("temporary");
 					enemy_->Load("temporary");
+					stage_->SetPlayerRespawn(player_.get());
 				}
 			}
 			if (ImGui::TreeNode("FileSave")) {

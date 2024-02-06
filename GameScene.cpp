@@ -115,6 +115,13 @@ void GameScene::Initialize() {
 void GameScene::Update(CommandContext& commandContext){
 	//後で消す処理
 	
+	ImGui::Begin("DirectionalLight");
+	ImGui::DragFloat3("lightDirection", &directionalLights_.lights_[0].direction.x, 0.01f);
+	ImGui::DragFloat3("lightPosition", &directionalLights_.lights_[0].position.x, 1.0f);
+	ImGui::DragFloat4("lightColor", &directionalLights_.lights_[0].color.x, 1.0f, 0.0f, 255.0f);
+	ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
+	ImGui::End();
+
 	if (input_->TriggerKey(DIK_R)) {
 		editorScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
 	}
@@ -240,6 +247,7 @@ void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
 		inGameScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
+		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}
 }
 void GameScene::InGameUpdate() {
