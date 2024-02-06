@@ -1,7 +1,7 @@
 {
     "stage1": {
         "CannonEnemyConfirmation": 0,
-        "CoinConfirmation": 8,
+        "CoinConfirmation": 10,
         "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -129,6 +129,38 @@
             55.29999923706055,
             2.0,
             -5.800000190734863
+        ],
+        "CoinNumber : 8 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 8 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 8 : Translate": [
+            61.0,
+            2.0,
+            3.0
+        ],
+        "CoinNumber : 9 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 9 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 9 : Translate": [
+            65.0,
+            2.0,
+            3.0
         ],
         "FloorConfirmation": 3,
         "FloorNumber : 0 : Rotate": [
@@ -307,6 +339,7 @@
             2.5,
             -7.0
         ],
+        "HeartConfirmation": 0,
         "MoveFloorConfirmation": 0,
         "NormalEnemyConfirmation": 1,
         "NormalEnemyNumber : 0 : Rotate": [
@@ -328,9 +361,9 @@
         "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
             0.0,
-            0.9952605366706848,
+            0.999435305595398,
             0.0,
-            0.09724409878253937
+            -0.033604949712753296
         ],
         "Player : Scale": [
             1.0,
@@ -338,9 +371,9 @@
             1.0
         ],
         "Player : Translate": [
-            -18.354318618774414,
+            -17.0,
             0.7840560674667358,
-            -5.105147361755371
+            -3.0
         ],
         "SpawnerConfirmation": 0,
         "StageLightConfirmation": 3,
@@ -364,7 +397,7 @@
         ],
         "StageLightNumber : 0 : decay": 1.0,
         "StageLightNumber : 0 : intensity": 5.5,
-        "StageLightNumber : 1 : Distance": 40.0,
+        "StageLightNumber : 1 : Distance": 30.0,
         "StageLightNumber : 1 : Rotate": [
             1.0672351891116705e-11,
             0.7072288393974304,
@@ -378,13 +411,13 @@
         ],
         "StageLightNumber : 1 : ShadeDistance": 5.0,
         "StageLightNumber : 1 : Translate": [
-            102.19999694824219,
+            101.0,
             1.0,
             -18.299999237060547
         ],
         "StageLightNumber : 1 : decay": 1.0,
         "StageLightNumber : 1 : intensity": 5.5,
-        "StageLightNumber : 2 : Distance": 30.0,
+        "StageLightNumber : 2 : Distance": 85.0,
         "StageLightNumber : 2 : Rotate": [
             -1.4827943317641257e-08,
             -0.8992152810096741,
@@ -402,8 +435,8 @@
             1.0,
             -12.0
         ],
-        "StageLightNumber : 2 : decay": 1.0,
-        "StageLightNumber : 2 : intensity": 3.0,
+        "StageLightNumber : 2 : decay": -0.800000011920929,
+        "StageLightNumber : 2 : intensity": 1.0,
         "StageLightNumber : 3 : Distance": 30.0,
         "StageLightNumber : 3 : Rotate": [
             -1.4308628060177853e-08,
@@ -489,7 +522,7 @@
             2.700000047683716
         ],
         "WallConfirmation": 7,
-        "WallLightConfirmation": 2,
+        "WallLightConfirmation": 4,
         "WallLightNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -521,6 +554,38 @@
             8.100000381469727,
             7.0,
             3.0999999046325684
+        ],
+        "WallLightNumber : 2 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WallLightNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallLightNumber : 2 : Translate": [
+            72.30000305175781,
+            6.300000190734863,
+            3.5
+        ],
+        "WallLightNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WallLightNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallLightNumber : 3 : Translate": [
+            77.69999694824219,
+            8.600000381469727,
+            0.0
         ],
         "WallNumber : 0 : Rotate": [
             -1.3315805347247078e-07,
@@ -711,7 +776,7 @@
             2.0
         ],
         "WoodBoxNumber : 12 : Translate": [
-            66.69999694824219,
+            56.79999923706055,
             1.7999999523162842,
             2.700000047683716
         ],
@@ -727,7 +792,7 @@
             1.0
         ],
         "WoodBoxNumber : 13 : Translate": [
-            63.70000076293945,
+            53.900001525878906,
             0.800000011920929,
             3.4000000953674316
         ],
