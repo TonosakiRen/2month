@@ -119,13 +119,11 @@ void CreateStageScene::Draw() {
 	player_->Draw();
 }
 
-void CreateStageScene::ParticleDraw()
-{
+void CreateStageScene::ParticleDraw() {
 	player_->DrawParticle();
 }
 
-void CreateStageScene::ParticleBoxDraw()
-{
+void CreateStageScene::ParticleBoxDraw() {
 	player_->DrawParticleBox();
 }
 
