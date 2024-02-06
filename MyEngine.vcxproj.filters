@@ -371,6 +371,9 @@
     <ClCompile Include="Game\Character\Heart.cpp">
       <Filter>Game\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Stage\SavePoint.cpp">
+      <Filter>Game\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -664,6 +667,9 @@
     </ClInclude>
     <ClInclude Include="Game\Character\Heart.h">
       <Filter>Game\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Stage\SavePoint.h">
+      <Filter>Game\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -391,6 +391,7 @@
             2.5,
             -7.0
         ],
+        "HeartConfirmation": 0,
         "MoveFloorConfirmation": 0,
         "MoveFloorNumber : 0 : EndPosition": [
             10.0,
@@ -592,6 +593,23 @@
             0.7840562462806702,
             -5.720212459564209
         ],
+        "SavePointConfirmation": 1,
+        "SavePointNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "SavePointNumber : 0 : Scale": [
+            1.0,
+            5.0,
+            4.0
+        ],
+        "SavePointNumber : 0 : Translate": [
+            -15.100000381469727,
+            2.5,
+            -5.0
+        ],
         "SpawnerConfirmation": 0,
         "StageLightConfirmation": 3,
         "StageLightNumber : 0 : Distance": 20.0,
@@ -612,6 +630,8 @@
             1.5,
             -11.100000381469727
         ],
+        "StageLightNumber : 0 : decay": 1.0,
+        "StageLightNumber : 0 : intensity": 5.5,
         "StageLightNumber : 1 : Distance": 20.0,
         "StageLightNumber : 1 : Rotate": [
             -1.9956587493652478e-09,
@@ -624,12 +644,14 @@
             1.0,
             1.0
         ],
-        "StageLightNumber : 1 : ShadeDistance": 0.0,
+        "StageLightNumber : 1 : ShadeDistance": 5.0,
         "StageLightNumber : 1 : Translate": [
             39.400001525878906,
             1.0,
             -13.399999618530273
         ],
+        "StageLightNumber : 1 : decay": 1.0,
+        "StageLightNumber : 1 : intensity": 5.5,
         "StageLightNumber : 2 : Distance": 20.0,
         "StageLightNumber : 2 : Rotate": [
             1.099997426479149e-08,
@@ -642,12 +664,14 @@
             1.0,
             1.0
         ],
-        "StageLightNumber : 2 : ShadeDistance": 0.0,
+        "StageLightNumber : 2 : ShadeDistance": 5.0,
         "StageLightNumber : 2 : Translate": [
             107.30000305175781,
             2.799999952316284,
             -12.899999618530273
         ],
+        "StageLightNumber : 2 : decay": 1.0,
+        "StageLightNumber : 2 : intensity": 5.5,
         "StandLightEnemyConfirmation": 0,
         "StandLightEnemyNumber : 0 : FlashCount": 4,
         "StandLightEnemyNumber : 0 : Interval": 6,
