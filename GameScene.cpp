@@ -196,15 +196,26 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		else {
 			currentViewProjection_ = camera_.get();
-			//float float_x = inGameScene_->GetPlayerTrans()->GetWorldTranslate().x;
-			if (scene_ == Scene::Editor) {
-				//float_x = editorScene_->GetPlayerTrans()->GetWorldTranslate().x;
-				camera_->Update(editorScene_->GetCameraState().position, editorScene_->GetCameraState().rotate);
+			Vector3 camerapos;
+			Quaternion camerarot;
+			switch (scene_) {
+			case GameScene::Scene::Title:
+				camerapos = titleScene_->GetCameraState().position;
+				camerarot = titleScene_->GetCameraState().rotate;
+				break;
+			case GameScene::Scene::StageSelect:
+				break;
+			case GameScene::Scene::InGame:
+				camerapos = inGameScene_->GetCameraState().position;
+				camerarot = inGameScene_->GetCameraState().rotate;
+				break;
+			case GameScene::Scene::Editor:
+				camerapos = editorScene_->GetCameraState().position;
+				camerarot = editorScene_->GetCameraState().rotate;
+				break;
 			}
-			else if (scene_ == Scene::InGame) {
-				camera_->Update(inGameScene_->GetCameraState().position, inGameScene_->GetCameraState().rotate);
-			}
-			//camera_->Update(float_x);
+			camera_->Update(camerapos, camerarot);
+
 		}
 	}
 
