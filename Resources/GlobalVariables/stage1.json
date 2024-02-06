@@ -1,44 +1,120 @@
 {
     "stage1": {
-        "CannonEnemyConfirmation": 2,
-        "CannonEnemyNumber : 0 : BulletSpeed": 0.5,
-        "CannonEnemyNumber : 0 : Interval": 120,
-        "CannonEnemyNumber : 0 : Rotate": [
-            8.4429974123168e-09,
-            -0.6039038896560669,
-            8.4429974123168e-09,
-            -0.7970571517944336
-        ],
-        "CannonEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "CannonEnemyNumber : 0 : Translate": [
-            126.19999694824219,
-            3.0,
-            0.0
-        ],
-        "CannonEnemyNumber : 1 : BulletSpeed": 0.5,
-        "CannonEnemyNumber : 1 : Interval": 180,
-        "CannonEnemyNumber : 1 : Rotate": [
+        "CannonEnemyConfirmation": 0,
+        "CoinConfirmation": 7,
+        "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
             4.371138473402425e-08,
             -1.0
         ],
-        "CannonEnemyNumber : 1 : Scale": [
+        "CoinNumber : 0 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "CannonEnemyNumber : 1 : Translate": [
-            90.0999984741211,
-            10.800000190734863,
+        "CoinNumber : 0 : Translate": [
+            -6.5,
+            1.0,
+            -2.5
+        ],
+        "CoinNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 1 : Translate": [
+            2.0,
+            1.0,
+            -2.5
+        ],
+        "CoinNumber : 2 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 2 : Translate": [
+            28.200000762939453,
+            1.0,
             0.0
         ],
-        "CoinConfirmation": 0,
-        "FloorConfirmation": 10,
+        "CoinNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 3 : Translate": [
+            20.0,
+            1.0,
+            0.0
+        ],
+        "CoinNumber : 4 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 4 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 4 : Translate": [
+            38.0,
+            7.0,
+            2.200000047683716
+        ],
+        "CoinNumber : 5 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 5 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 5 : Translate": [
+            41.0,
+            7.0,
+            2.200000047683716
+        ],
+        "CoinNumber : 6 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 6 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 6 : Translate": [
+            44.0,
+            7.0,
+            2.200000047683716
+        ],
+        "FloorConfirmation": 3,
         "FloorNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -47,13 +123,13 @@
         ],
         "FloorNumber : 0 : Scale": [
             1.0,
-            1.0,
-            1.0
+            2.0,
+            1.5
         ],
         "FloorNumber : 0 : Translate": [
-            0.0,
-            -1.2000000476837158,
-            -3.0
+            -11.699999809265137,
+            -2.200000047683716,
+            0.0
         ],
         "FloorNumber : 1 : Rotate": [
             4.371138473402425e-08,
@@ -62,13 +138,13 @@
             -1.0
         ],
         "FloorNumber : 1 : Scale": [
-            0.10000000149011612,
             1.0,
-            1.0
+            2.0,
+            1.5
         ],
         "FloorNumber : 1 : Translate": [
-            23.700000762939453,
-            1.0,
+            48.099998474121094,
+            -2.200000047683716,
             0.0
         ],
         "FloorNumber : 2 : Rotate": [
@@ -78,14 +154,14 @@
             -1.0
         ],
         "FloorNumber : 2 : Scale": [
-            0.4000000059604645,
             1.0,
-            1.0
+            2.0,
+            1.5
         ],
         "FloorNumber : 2 : Translate": [
-            41.29999923706055,
-            -1.2000000476837158,
-            -3.0
+            106.69999694824219,
+            -2.200000047683716,
+            0.0
         ],
         "FloorNumber : 3 : Rotate": [
             4.371138828673793e-08,
@@ -199,12 +275,29 @@
             -2.0999999046325684,
             -5.599999904632568
         ],
-        "NormalEnemyConfirmation": 2,
-        "NormalEnemyNumber : 0 : Rotate": [
+        "Goal : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
             4.371138473402425e-08,
             -1.0
+        ],
+        "Goal : Scale": [
+            2.5,
+            5.0,
+            2.5
+        ],
+        "Goal : Translate": [
+            127.0,
+            2.5,
+            -7.0
+        ],
+        "MoveFloorConfirmation": 0,
+        "NormalEnemyConfirmation": 0,
+        "NormalEnemyNumber : 0 : Rotate": [
+            0.0,
+            0.7289609909057617,
+            0.0,
+            0.6845552921295166
         ],
         "NormalEnemyNumber : 0 : Scale": [
             1.0,
@@ -212,64 +305,16 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            27.296594619750977,
-            2.4000000953674316,
-            -0.5359176993370056
+            77.5251235961914,
+            8.300000190734863,
+            -3.0664031505584717
         ],
-        "NormalEnemyNumber : 1 : Rotate": [
-            0.0,
-            0.6652342677116394,
-            0.0,
-            0.7466346621513367
-        ],
-        "NormalEnemyNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "NormalEnemyNumber : 1 : Translate": [
-            113.6540756225586,
-            2.5999999046325684,
-            -1.9172745943069458
-        ],
-        "NormalLightEnemyConfirmation": 2,
-        "NormalLightEnemyNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "NormalLightEnemyNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "NormalLightEnemyNumber : 0 : Translate": [
-            97.92559814453125,
-            1.7000000476837158,
-            -3.804039716720581
-        ],
-        "NormalLightEnemyNumber : 1 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
-        ],
-        "NormalLightEnemyNumber : 1 : Scale": [
-            1.0,
-            1.0,
-            1.0
-        ],
-        "NormalLightEnemyNumber : 1 : Translate": [
-            107.16484832763672,
-            9.800000190734863,
-            -1.5326296091079712
-        ],
+        "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
             0.0,
-            0.7018315196037292,
+            0.28960680961608887,
             0.0,
-            0.7123212218284607
+            0.9571456909179688
         ],
         "Player : Scale": [
             1.0,
@@ -277,14 +322,149 @@
             1.0
         ],
         "Player : Translate": [
-            94.9044189453125,
-            0.7840255498886108,
-            -4.086483478546143
+            -19.792999267578125,
+            1.184000015258789,
+            -4.677000045776367
+        ],
+        "SpawnerConfirmation": 0,
+        "StageLightConfirmation": 4,
+        "StageLightNumber : 0 : Distance": 20.0,
+        "StageLightNumber : 0 : Rotate": [
+            -5.5864859405119205e-09,
+            0.6858186721801758,
+            -5.5864859405119205e-09,
+            0.7277724742889404
+        ],
+        "StageLightNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 0 : ShadeDistance": 5.0,
+        "StageLightNumber : 0 : Translate": [
+            -2.200000047683716,
+            1.5,
+            -11.100000381469727
+        ],
+        "StageLightNumber : 1 : Distance": 20.0,
+        "StageLightNumber : 1 : Rotate": [
+            -6.079417858018132e-09,
+            0.6839103698730469,
+            -6.079417858018132e-09,
+            0.7295660376548767
+        ],
+        "StageLightNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 1 : ShadeDistance": 0.0,
+        "StageLightNumber : 1 : Translate": [
+            39.400001525878906,
+            1.0,
+            -13.399999618530273
+        ],
+        "StageLightNumber : 2 : Distance": 30.899999618530273,
+        "StageLightNumber : 2 : Rotate": [
+            0.0,
+            0.7071067690849304,
+            0.0,
+            0.7071067690849304
+        ],
+        "StageLightNumber : 2 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 2 : ShadeDistance": 0.0,
+        "StageLightNumber : 2 : Translate": [
+            102.0999984741211,
+            1.0,
+            -15.5
+        ],
+        "StageLightNumber : 3 : Distance": 20.0,
+        "StageLightNumber : 3 : Rotate": [
+            1.5999479074935152e-08,
+            0.8660253882408142,
+            1.5999479074935152e-08,
+            0.5
+        ],
+        "StageLightNumber : 3 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 3 : ShadeDistance": 5.0,
+        "StageLightNumber : 3 : Translate": [
+            13.300000190734863,
+            1.0,
+            -12.0
         ],
         "StandLightEnemyConfirmation": 0,
         "ThornEnemyConfirmation": 0,
-        "TruckConfirmation": 0,
-        "WallConfirmation": 6,
+        "ThornEnemyNumber : 0 : Amplitube": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ThornEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "ThornEnemyNumber : 0 : Scale": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "ThornEnemyNumber : 0 : Time": 19,
+        "ThornEnemyNumber : 0 : Translate": [
+            38.79999923706055,
+            0.6000000238418579,
+            2.0999999046325684
+        ],
+        "ThornEnemyNumber : 1 : Amplitube": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "ThornEnemyNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "ThornEnemyNumber : 1 : Scale": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "ThornEnemyNumber : 1 : Time": 6,
+        "ThornEnemyNumber : 1 : Translate": [
+            40.400001525878906,
+            0.6000000238418579,
+            2.200000047683716
+        ],
+        "TrapConfirmation": 0,
+        "TruckConfirmation": 1,
+        "TruckNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TruckNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "TruckNumber : 0 : Translate": [
+            40.0,
+            1.899999976158142,
+            2.700000047683716
+        ],
+        "WallConfirmation": 7,
         "WallLightConfirmation": 2,
         "WallLightNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -319,10 +499,10 @@
             3.0999999046325684
         ],
         "WallNumber : 0 : Rotate": [
-            0.0,
+            -1.3315805347247078e-07,
             -1.0,
-            0.0,
-            -4.371138828673793e-08
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
         ],
         "WallNumber : 0 : Scale": [
             1.0,
@@ -335,10 +515,10 @@
             10.0
         ],
         "WallNumber : 1 : Rotate": [
-            0.0,
+            -1.3315805347247078e-07,
             -1.0,
-            0.0,
-            -4.371138828673793e-08
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
         ],
         "WallNumber : 1 : Scale": [
             1.0,
@@ -351,10 +531,10 @@
             10.0
         ],
         "WallNumber : 2 : Rotate": [
-            -8.74227694680485e-08,
+            -1.3315805347247078e-07,
             -1.0,
-            -8.74227694680485e-08,
-            -4.3711395392165286e-08
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
         ],
         "WallNumber : 2 : Scale": [
             1.0,
@@ -367,10 +547,10 @@
             10.0
         ],
         "WallNumber : 3 : Rotate": [
-            0.0,
-            -0.7071067690849304,
-            0.0,
-            -0.7071067690849304
+            6.181723222198343e-08,
+            0.7069846391677856,
+            6.181723222198343e-08,
+            -0.7072288990020752
         ],
         "WallNumber : 3 : Scale": [
             1.0,
@@ -378,15 +558,15 @@
             1.0
         ],
         "WallNumber : 3 : Translate": [
-            -45.900001525878906,
+            -35.400001525878906,
             8.100000381469727,
-            -0.8999999761581421
+            5.0
         ],
         "WallNumber : 4 : Rotate": [
-            4.371138828673793e-08,
-            1.0,
-            4.371138828673793e-08,
-            1.910685465164705e-15
+            -1.3315805347247078e-07,
+            -1.0,
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
         ],
         "WallNumber : 4 : Scale": [
             0.699999988079071,
@@ -395,14 +575,14 @@
         ],
         "WallNumber : 4 : Translate": [
             63.0,
-            13.5,
+            8.100000381469727,
             10.0
         ],
         "WallNumber : 5 : Rotate": [
-            4.371138828673793e-08,
-            1.0,
-            4.371138828673793e-08,
-            1.910685465164705e-15
+            -1.3315805347247078e-07,
+            -1.0,
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
         ],
         "WallNumber : 5 : Scale": [
             1.7000000476837158,
@@ -411,10 +591,26 @@
         ],
         "WallNumber : 5 : Translate": [
             104.0999984741211,
-            22.0,
+            23.200000762939453,
             9.0
         ],
-        "WoodBoxConfirmation": 12,
+        "WallNumber : 6 : Rotate": [
+            1.0672351891116705e-11,
+            -0.7069846987724304,
+            1.0672351891116705e-11,
+            -0.7072288393974304
+        ],
+        "WallNumber : 6 : Scale": [
+            1.0,
+            3.200000047683716,
+            1.0
+        ],
+        "WallNumber : 6 : Translate": [
+            140.10000610351563,
+            23.0,
+            -6.800000190734863
+        ],
+        "WoodBoxConfirmation": 14,
         "WoodBoxNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -454,14 +650,14 @@
             -1.0
         ],
         "WoodBoxNumber : 10 : Scale": [
-            1.0,
-            1.0,
-            1.0
+            3.0,
+            3.0,
+            3.0
         ],
         "WoodBoxNumber : 10 : Translate": [
-            50.0,
-            4.5,
-            0.0
+            133.0,
+            2.5,
+            -6.800000190734863
         ],
         "WoodBoxNumber : 11 : Rotate": [
             4.371138473402425e-08,
@@ -470,14 +666,78 @@
             -1.0
         ],
         "WoodBoxNumber : 11 : Scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "WoodBoxNumber : 11 : Translate": [
+            132.5,
+            8.600000381469727,
+            -3.4000000953674316
+        ],
+        "WoodBoxNumber : 12 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 12 : Scale": [
+            2.0,
+            2.0,
+            2.0
+        ],
+        "WoodBoxNumber : 12 : Translate": [
+            66.69999694824219,
+            1.7999999523162842,
+            2.700000047683716
+        ],
+        "WoodBoxNumber : 13 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 13 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "WoodBoxNumber : 11 : Translate": [
-            43.900001525878906,
+        "WoodBoxNumber : 13 : Translate": [
+            63.70000076293945,
             0.800000011920929,
             3.4000000953674316
+        ],
+        "WoodBoxNumber : 14 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 14 : Scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "WoodBoxNumber : 14 : Translate": [
+            132.5,
+            8.600000381469727,
+            -3.4000000953674316
+        ],
+        "WoodBoxNumber : 15 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 15 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 15 : Translate": [
+            38.0,
+            0.800000011920929,
+            -2.4000000953674316
         ],
         "WoodBoxNumber : 2 : Rotate": [
             4.371138473402425e-08,
@@ -598,14 +858,14 @@
             -1.0
         ],
         "WoodBoxNumber : 9 : Scale": [
-            1.0,
-            1.0,
-            1.0
+            3.0,
+            3.0,
+            3.0
         ],
         "WoodBoxNumber : 9 : Translate": [
-            50.0,
-            4.5,
-            2.799999952316284
+            130.10000610351563,
+            2.799999952316284,
+            1.100000023841858
         ]
     }
 }
