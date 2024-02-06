@@ -92,7 +92,7 @@ void StageLight::DrawImGui() {
 #ifdef _DEBUG
 	ImGui::DragFloat3("scale", &worldTransform_.scale_.x, 0.1f);
 	rotate = { 0.0f,0.0f,0.0f };
-	ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
+	ImGui::DragFloat3("rotate", &rotate.x, 0.02f, -360.0f, 360.0f);
 	Quaternion q = MakeFromEulerAngle(rotate);
 	//Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = worldTransform_.quaternion_ * q;
