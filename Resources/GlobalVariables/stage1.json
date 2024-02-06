@@ -1,7 +1,7 @@
 {
     "stage1": {
         "CannonEnemyConfirmation": 0,
-        "CoinConfirmation": 7,
+        "CoinConfirmation": 8,
         "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -15,7 +15,7 @@
         ],
         "CoinNumber : 0 : Translate": [
             -6.5,
-            1.0,
+            2.0,
             -2.5
         ],
         "CoinNumber : 1 : Rotate": [
@@ -31,7 +31,7 @@
         ],
         "CoinNumber : 1 : Translate": [
             2.0,
-            1.0,
+            2.0,
             -2.5
         ],
         "CoinNumber : 2 : Rotate": [
@@ -47,7 +47,7 @@
         ],
         "CoinNumber : 2 : Translate": [
             28.200000762939453,
-            1.0,
+            2.0,
             0.0
         ],
         "CoinNumber : 3 : Rotate": [
@@ -63,7 +63,7 @@
         ],
         "CoinNumber : 3 : Translate": [
             20.0,
-            1.0,
+            2.0,
             0.0
         ],
         "CoinNumber : 4 : Rotate": [
@@ -113,6 +113,22 @@
             44.0,
             7.0,
             2.200000047683716
+        ],
+        "CoinNumber : 7 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CoinNumber : 7 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CoinNumber : 7 : Translate": [
+            55.29999923706055,
+            2.0,
+            -5.800000190734863
         ],
         "FloorConfirmation": 3,
         "FloorNumber : 0 : Rotate": [
@@ -305,16 +321,16 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            100.4000015258789,
+            111.5,
             1.0,
             0.0
         ],
         "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
             0.0,
-            0.28960680961608887,
+            0.9952605366706848,
             0.0,
-            0.9571456909179688
+            0.09724409878253937
         ],
         "Player : Scale": [
             1.0,
@@ -322,12 +338,12 @@
             1.0
         ],
         "Player : Translate": [
-            -19.792999267578125,
-            0.7840563058853149,
-            -4.677000045776367
+            -18.354318618774414,
+            0.7840561270713806,
+            -5.105147361755371
         ],
         "SpawnerConfirmation": 0,
-        "StageLightConfirmation": 4,
+        "StageLightConfirmation": 3,
         "StageLightNumber : 0 : Distance": 20.0,
         "StageLightNumber : 0 : Rotate": [
             6.835144006345217e-09,
@@ -346,60 +362,68 @@
             1.5,
             -11.100000381469727
         ],
-        "StageLightNumber : 1 : Distance": 20.0,
+        "StageLightNumber : 0 : decay": 1.0,
+        "StageLightNumber : 0 : intensity": 5.5,
+        "StageLightNumber : 1 : Distance": 40.0,
         "StageLightNumber : 1 : Rotate": [
-            -6.079417858018132e-09,
-            0.6839103698730469,
-            -6.079417858018132e-09,
-            0.7295660376548767
+            1.0672351891116705e-11,
+            0.7072288393974304,
+            1.0672351891116705e-11,
+            0.7069846987724304
         ],
         "StageLightNumber : 1 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "StageLightNumber : 1 : ShadeDistance": 0.0,
+        "StageLightNumber : 1 : ShadeDistance": 5.0,
         "StageLightNumber : 1 : Translate": [
-            39.400001525878906,
+            102.19999694824219,
             1.0,
-            -13.399999618530273
+            -18.299999237060547
         ],
-        "StageLightNumber : 2 : Distance": 40.0,
+        "StageLightNumber : 1 : decay": 1.0,
+        "StageLightNumber : 1 : intensity": 5.5,
+        "StageLightNumber : 2 : Distance": 30.0,
         "StageLightNumber : 2 : Rotate": [
-            1.0672351891116705e-11,
-            0.7072288393974304,
-            1.0672351891116705e-11,
-            0.7069846987724304
+            -1.4827943317641257e-08,
+            -0.8992152810096741,
+            -1.7090847848066915e-08,
+            -0.43750429153442383
         ],
         "StageLightNumber : 2 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "StageLightNumber : 2 : ShadeDistance": 0.0,
+        "StageLightNumber : 2 : ShadeDistance": 10.0,
         "StageLightNumber : 2 : Translate": [
-            102.0999984741211,
+            20.0,
             1.0,
-            -18.299999237060547
+            -12.0
         ],
-        "StageLightNumber : 3 : Distance": 20.0,
+        "StageLightNumber : 2 : decay": 1.0,
+        "StageLightNumber : 2 : intensity": 3.0,
+        "StageLightNumber : 3 : Distance": 30.0,
         "StageLightNumber : 3 : Rotate": [
-            1.5999479074935152e-08,
-            0.8660253882408142,
-            1.5999479074935152e-08,
-            0.5
+            -1.4308628060177853e-08,
+            -0.9119340181350708,
+            -1.7527931106542383e-08,
+            -0.4103350341320038
         ],
         "StageLightNumber : 3 : Scale": [
             1.0,
             1.0,
             1.0
         ],
-        "StageLightNumber : 3 : ShadeDistance": 5.0,
+        "StageLightNumber : 3 : ShadeDistance": 10.0,
         "StageLightNumber : 3 : Translate": [
-            13.300000190734863,
+            12.800000190734863,
             1.0,
             -12.0
         ],
+        "StageLightNumber : 3 : decay": 1.0,
+        "StageLightNumber : 3 : intensity": 3.0,
         "StandLightEnemyConfirmation": 0,
         "ThornEnemyConfirmation": 0,
         "ThornEnemyNumber : 0 : Amplitube": [
@@ -547,10 +571,10 @@
             10.0
         ],
         "WallNumber : 3 : Rotate": [
-            6.181723222198343e-08,
-            0.7069846391677856,
-            6.181723222198343e-08,
-            -0.7072288990020752
+            1.0672351891116705e-11,
+            -0.7069846987724304,
+            1.0672351891116705e-11,
+            -0.7072288393974304
         ],
         "WallNumber : 3 : Scale": [
             1.0,
