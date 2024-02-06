@@ -131,7 +131,7 @@ inline void CommandContext::FlushResourceBarriers() {
 }
 
 inline void CommandContext::CopyBuffer(GPUResource& dest, GPUResource& src) {
-    TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST);
+    //TransitionResource(dest, D3D12_RESOURCE_STATE_COPY_DEST);
     TransitionResource(src, D3D12_RESOURCE_STATE_COPY_SOURCE);
     FlushResourceBarriers();
     commandList_->CopyResource(dest, src);

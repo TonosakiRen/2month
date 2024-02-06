@@ -52,7 +52,7 @@ void Compute::Initialize(ColorBuffer* indexBuffer)
 			&copyHeapProps,
 			D3D12_HEAP_FLAG_NONE,
 			&copyDesc,
-			D3D12_RESOURCE_STATE_COMMON,
+			D3D12_RESOURCE_STATE_COPY_DEST,
 			nullptr,
 			IID_PPV_ARGS(copyBuffer_.GetAddressOf())
 		);
@@ -92,7 +92,7 @@ void Compute::Initialize(ColorBuffer* indexBuffer)
 			&copyHeapProps,
 			D3D12_HEAP_FLAG_NONE,
 			&copyDesc,
-			D3D12_RESOURCE_STATE_COMMON,
+			D3D12_RESOURCE_STATE_COPY_DEST,
 			nullptr,
 			IID_PPV_ARGS(hitPosCopyBuffer_.GetAddressOf())
 		);
