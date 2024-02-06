@@ -158,8 +158,8 @@ void GameScene::Update(CommandContext& commandContext){
 		if (saveSceneRequest_) {
 
 			if (Transition::isNextScene_) {
+				shadowSpotLights_.lights_[0].isActive = false;
 				scene_ = saveSceneRequest_.value();
-				spotLights_.lights_[0].isActive = false;
 				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 				saveSceneRequest_ = std::nullopt;
 			}
