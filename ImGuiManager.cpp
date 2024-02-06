@@ -12,6 +12,7 @@ ImGuiManager* ImGuiManager::GetInstance() {
 
 void ImGuiManager::Initialize(WinApp* winApp) {
 
+#ifdef _DEBUG
 	// ImGuiのコンテキストを生成
 	ImGui::CreateContext();
 	// ImGuiのスタイルを設定
@@ -31,27 +32,33 @@ void ImGuiManager::Initialize(WinApp* winApp) {
 	ImGuiIO& io = ImGui::GetIO();
 	// 標準フォントを追加する
 	io.Fonts->AddFontDefault();
+#endif
 }
 
 void ImGuiManager::Finalize() {
+#ifdef _DEBUG
 	// 後始末
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+#endif
 }
 
 void ImGuiManager::Begin() {
+#ifdef _DEBUG
 	// ImGuiフレーム開始
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+#endif
 }
 
 void ImGuiManager::Draw(CommandContext& commandContext) {
-
+#ifdef _DEBUG
 	// 描画前準備
 	ImGui::Render();
 
 	// 描画コマンドを発行
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandContext);
+#endif
 }
