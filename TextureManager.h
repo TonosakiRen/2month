@@ -34,6 +34,8 @@ public:
 	void SetGraphicsRootDescriptorTable(
 		CommandContext* commandList, UINT rootParamIndex, uint32_t textureHandle);
 
+	DescriptorHandle GetSRV(const std::string& fileName);
+
 private:
 	TextureManager() = default;
 	~TextureManager() = default;

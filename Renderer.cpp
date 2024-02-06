@@ -94,6 +94,9 @@ void Renderer::Initialize() {
 
     compute_ = std::make_unique<Compute>();
     compute_->Initialize(shadowTexture_.get());
+
+    transition_ = std::make_unique<Transition>();
+    transition_->Initialize(*resultBuffer_);
 }
 
 void Renderer::SetGlobalVariable()
@@ -198,12 +201,13 @@ void Renderer::BeginUIRender()
     commandContext_.SetRenderTarget(swapChain_->GetRTV());
     commandContext_.ClearColor(swapChain_->GetColorBuffer());
 
+
     postEffect_->Draw(resultBuffer_->GetSRV(),commandContext_);
 }
 
 void Renderer::EndUIRender()
 {
-
+    transition_->Draw(swapChain_->GetColorBuffer(), TextureManager::GetInstance()->GetSRV("white1x1.png"),commandContext_);
     // ImGuiを描画
     auto imguiManager = ImGuiManager::GetInstance();
     imguiManager->Draw(commandContext_);

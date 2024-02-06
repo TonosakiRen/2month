@@ -20,6 +20,10 @@ TextureManager* TextureManager::GetInstance() {
 	return &instance;
 }
 
+DescriptorHandle TextureManager::GetSRV(const std::string& fileName) {
+	return (*textures_)[TextureManager::GetInstance()->LoadInternal(fileName)].srvHandle;
+}
+
 void TextureManager::Initialize(std::string directoryPath) {
 
 	device_ = DirectXCommon::GetInstance()->GetDevice();

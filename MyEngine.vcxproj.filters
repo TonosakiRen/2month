@@ -362,6 +362,9 @@
     <ClCompile Include="Game\Stage\Goal.cpp">
       <Filter>Game\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Transition.cpp">
+      <Filter>Engine\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -647,6 +650,9 @@
     <ClInclude Include="HitParticle.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Transition.h">
+      <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl">
@@ -731,6 +737,12 @@
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\DepthVS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\TransitionPS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\TransitionVS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

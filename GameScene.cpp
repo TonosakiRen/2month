@@ -6,6 +6,7 @@
 #include "ModelManager.h"
 #include "ShadowMap.h"
 #include "SpotLightShadowMap.h"
+#include "Transition.h"
 
 int GameScene::hitStopFrame_ = 0;
 
@@ -100,7 +101,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -134,11 +135,33 @@ void GameScene::Update(CommandContext& commandContext){
 	//Scene
 	{
 		//Scene初期化
-		if (sceneRequest_) {
-			scene_ = sceneRequest_.value();
-			(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
-			sceneRequest_ = std::nullopt;
+		if (sceneRequest_ && !Transition::isTransition_) {
+
+				//最初
+				if (scene_ == Scene::SceneNum) {
+					scene_ = sceneRequest_.value();
+					(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
+					sceneRequest_ = std::nullopt;
+				}
+				else {
+
+					Transition::StartTransition();
+					saveSceneRequest_ = sceneRequest_;
+					sceneRequest_ = std::nullopt;
+				}
 		}
+
+		if (saveSceneRequest_) {
+
+			if (Transition::isNextScene_) {
+				scene_ = saveSceneRequest_.value();
+				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
+				saveSceneRequest_ = std::nullopt;
+			}
+
+		}
+
+
 		if (hitStopFrame_ <= 0.0f) {
 			//SceneUpdate
 			(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();

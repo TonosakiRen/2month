@@ -8,6 +8,7 @@
 #include "Bloom.h"
 #include "PostEffect.h"
 #include "Compute.h"
+#include "Transition.h"
 
 #include "DeferredRenderer.h"
 #include "EdgeRenderer.h"
@@ -92,6 +93,8 @@ private:
     std::unique_ptr<LightNumBuffer> lightNumBuffer_;
 
     std::unique_ptr<Compute> compute_;
+
+    std::unique_ptr<Transition> transition_;
 
     float shading_ = 0.3f;
     float collisionLuminance_ = 0.8f;

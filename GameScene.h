@@ -116,11 +116,12 @@ private:
 		SceneNum
 	};
 
-	Scene scene_ = Scene::InGame;
+	Scene scene_ = Scene::SceneNum;
 	Scene nextScene = Scene::InGame;
 	static void (GameScene::* SceneInitializeTable[])();
 	static void (GameScene::* SceneUpdateTable[])();
 	std::optional<Scene> sceneRequest_ = std::nullopt;
+	std::optional<Scene> saveSceneRequest_ = std::nullopt;
 
 	//タイトル
 	void TitleInitialize();
