@@ -63,7 +63,7 @@ void GameScene::Initialize() {
 #pragma region Scene関係
 
 	titleScene_ = std::make_unique<TitleScene>();
-	titleScene_->Initialize();
+	titleScene_->Initialize(&shadowSpotLights_);
 
 	selectScene_ = std::make_unique<StageSelectScene>();
 
@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -212,7 +212,7 @@ void GameScene::Update(CommandContext& commandContext){
 void GameScene::TitleInitialize() {
 	if (titleScene_) {
 		titleScene_.reset(new TitleScene());
-		titleScene_->Initialize();
+		titleScene_->Initialize(&shadowSpotLights_);
 	}
 }
 void GameScene::TitleUpdate() {
@@ -265,6 +265,7 @@ void GameScene::ModelDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
+		titleScene_->ModelDraw();
 		break;
 	case GameScene::Scene::InGame:
 		//skydome_->Draw();
@@ -302,6 +303,7 @@ void GameScene::ShadowDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
+		titleScene_->ModelDraw();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->ShadowDraw();
@@ -319,6 +321,7 @@ void GameScene::SpotLightShadowDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
+		titleScene_->ModelDraw();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->SpotLightShadowDraw();
@@ -384,7 +387,7 @@ void GameScene::PostSpriteDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
-		titleScene_->Draw();
+		//titleScene_->Draw();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();
