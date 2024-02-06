@@ -7,7 +7,7 @@ public:
 	~FollowCamera() = default;
 
 	void Inisialize(const WorldTransform& transform);
-	void Update(float playerX);
+	void Update(const Vector3& playerPosition);
 	const WorldTransform& GetTransform() const { return transform_; }
 
 private:
@@ -16,6 +16,7 @@ private:
 
 	WorldTransform transform_;
 	float savePlayerX_ = 0.0f;
+	float savePlayerY_ = 0.0f;
 
 	struct RT {
 		Quaternion rotate;

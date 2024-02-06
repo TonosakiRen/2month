@@ -52,4 +52,4 @@ public:
 
 };
 
-const float kMaxDistance = 50.0f; // playerとの距離が一定以上なら処理されない
+const float kMaxDistance = 70.0f; // playerとの距離が一定以上なら処理されない
