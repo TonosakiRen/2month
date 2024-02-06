@@ -1,17 +1,18 @@
-#include "Coin.h"
+#include "Heart.h"
 #include "Player.h"
 #include "Compute.h"
+#include "Audio.h"
 
-void Coin::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
+void Heart::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
-		"coin", // 親
+		"Heart", // 親
 	};
 
 	audio_ = Audio::GetInstance();
 
 	BaseInitialize(1, names);
 
-	collider_.Initialize(&worldTransform_, "Coin", models_.at(0).modelHandle_);
+	collider_.Initialize(&worldTransform_, "Heart", models_.at(0).modelHandle_);
 
 	worldTransform_.scale_ = scale;
 	worldTransform_.quaternion_ = quaternion;
@@ -26,7 +27,7 @@ void Coin::Initialize(const Vector3& scale, const Quaternion& quaternion, const 
 	modelsTransform_.at(0).Update();
 }
 
-void Coin::Update(const Vector3& playerPosition) {
+void Heart::Update(const Vector3& playerPosition) {
 	float distance = Distance(playerPosition, worldTransform_.translation_);
 
 	// Playerとの距離が一定数以下なら早期リターン
@@ -48,7 +49,7 @@ void Coin::Update(const Vector3& playerPosition) {
 	UpdateTransform();
 }
 
-void Coin::OnCollision(Collider& collider, const PlayerDate& date) {
+void Heart::OnCollision(Collider& collider, const PlayerDate& date) {
 	if (!isActive_) { return; }
 
 	bool isColl = false;
@@ -70,7 +71,7 @@ void Coin::OnCollision(Collider& collider, const PlayerDate& date) {
 	}
 }
 
-void Coin::Draw() {
+void Heart::Draw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
@@ -78,15 +79,15 @@ void Coin::Draw() {
 	BaseDraw();
 }
 
-void Coin::EnemyDraw() {
+void Heart::EnemyDraw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
-	BaseCoinDraw();
+	BaseHeartDraw();
 }
 
-void Coin::CollisionProcess() {
-	
+void Heart::CollisionProcess() {
+
 	isAlive_ = false;
 
 	size_t handle = audio_->SoundLoadWave("coin.wav");
@@ -94,7 +95,7 @@ void Coin::CollisionProcess() {
 	audio_->SetValume(catchHandle, 0.1f);
 }
 
-void Coin::WaitProcess() {
+void Heart::WaitProcess() {
 	rotate.y += 2.0f;
 	if (rotate.y >= 360.0f) {
 		rotate.y -= 360.0f;
