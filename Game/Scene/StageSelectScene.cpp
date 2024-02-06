@@ -41,12 +41,21 @@ void StageSelectScene::StageChange() {
 	if (cp_.isSwitch) {
 		// 右ならば番号を加算する
 		if (cp_.direction) {
-
+			currentStageNumber_++;
 		}
-		// 左ならば番号を加算する
+		// 左ならば番号を減算する
 		if (!cp_.direction) {
-
+			currentStageNumber_--;
 		}
+
+		// ステージの最大数以上だと最小値に戻す
+		if (currentStageNumber_ > kMaxStageNumber_) {
+			currentStageNumber_ = 0u;
+		}
+		else if (currentStageNumber_ <= 0u) {
+			currentStageNumber_ = kMaxStageNumber_;
+		}
+
 	}
 
 }

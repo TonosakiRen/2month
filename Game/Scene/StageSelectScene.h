@@ -22,9 +22,11 @@ private:
 	struct ChangeParam {
 		bool isSwitch = false; // Stage切り替えをするか
 		bool direction = false; // 移動方向 true:右/false:左
-
 	};
 	ChangeParam cp_;
+
+	uint32_t currentStageNumber_ = 0u;
+	uint32_t kMaxStageNumber_ = 10u;
 
 
 };
