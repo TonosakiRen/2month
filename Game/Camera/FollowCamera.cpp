@@ -2,13 +2,22 @@
 #include "Easing.h"
 #include "ImGuiManager.h"
 #include <algorithm>
+#include "GlobalVariables.h"
 
 FollowCamera::FollowCamera() {
-    transform_.translation_ = Vector3(0.0f, 8.45f, -26.0f);
-    transform_.quaternion_ = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
+    auto global = GlobalVariables::GetInstance();
+    global->LoadFile("FollowCamera");
+    Vector3 trans = global->GetVector3Value("FollowCamera", "FollowCameraOffset : Translate");
+    Quaternion rot = global->GetQuaternionValue("FollowCamera", "FollowCameraOffset : Rotate");
 
-    end_.translate = Vector3(0.0f, 8.45f, -26.0f);
-    end_.rotate = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
+    end_.translate = trans;
+    end_.rotate = rot;
+
+    transform_.translation_ = end_.translate;
+    transform_.quaternion_ = end_.rotate;
+
+    rotate = EulerAngle(transform_.quaternion_);
+    rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 }
 
 void FollowCamera::Inisialize(const WorldTransform& transform) {
@@ -19,7 +28,7 @@ void FollowCamera::Inisialize(const WorldTransform& transform) {
 }
 
 void FollowCamera::Update(float playerX) {
-    //DrawImGui();
+    DrawImGui();
 
     const float offset = 6.5f;
     if (isEase_) {
@@ -47,12 +56,17 @@ void FollowCamera::Update(float playerX) {
 
 void FollowCamera::DrawImGui() {
 #ifdef _DEBUG
-    static Vector3 rotate;
     ImGui::Begin("Camera");
     ImGui::DragFloat3("rotate", &rotate.x, 0.1f, -360.0f, 360.0f);
     Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
     transform_.quaternion_ = MakeFromEulerAngle(handle);
     ImGui::DragFloat3("translate", &transform_.translation_.x, 0.1f);
+    if (ImGui::Button("FollowCameraSave")) {
+        auto global = GlobalVariables::GetInstance();
+        global->SetValue("FollowCamera", "FollowCameraOffset : Translate", transform_.GetWorldTranslate());
+        global->SetValue("FollowCamera", "FollowCameraOffset : Rotate", transform_.quaternion_);
+        global->SaveFile("FollowCamera");
+    }
     ImGui::End();
     transform_.Update();
 #endif // _DEBUG

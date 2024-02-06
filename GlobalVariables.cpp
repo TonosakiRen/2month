@@ -376,7 +376,11 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	// グループを検索
 	const auto& groupIt = datas_.find(groupName);
 	// 未登録チェック
-	assert(groupIt != datas_.end());
+	//assert(groupIt != datas_.end());
+	// itemがなければ0を返す
+	if (groupIt == datas_.end()) {
+		return Vector3();
+	}
 #endif // _DEBUG
 	// グループの参照を取得
 	const Group& group = datas_.at(groupName);
@@ -394,7 +398,11 @@ Quaternion GlobalVariables::GetQuaternionValue(const std::string& groupName, con
 	// グループを検索
 	const auto& groupIt = datas_.find(groupName);
 	// 未登録チェック
-	assert(groupIt != datas_.end());
+	//assert(groupIt != datas_.end());
+	// itemがなければ0を返す
+	if (groupIt == datas_.end()) {
+		return Quaternion();
+	}
 #endif // _DEBUG
 	// グループの参照を取得
 	const Group& group = datas_.at(groupName);

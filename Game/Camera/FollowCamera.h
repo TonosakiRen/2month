@@ -26,4 +26,5 @@ private:
 	float count_ = 0.0f;
 	bool isEase_ = false;
 
+	Vector3 rotate;
 };

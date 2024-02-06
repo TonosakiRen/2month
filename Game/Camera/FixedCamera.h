@@ -13,6 +13,7 @@ public:
 	const bool& GetMove() const { return isMove_; }
 
 private:
+	void DrawImGui();
 	Vector3 Shake(Vector3 shakeValue);
 
 private:
@@ -26,4 +27,5 @@ private:
 	float count_ = 0.0f;
 	bool isMove_ = false;
 
+	Vector3 rotate;
 };

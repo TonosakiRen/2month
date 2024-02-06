@@ -1,0 +1,15 @@
+{
+    "FollowCamera": {
+        "FollowCameraOffset : Rotate": [
+            0.043619390577077866,
+            0.0,
+            0.0,
+            0.9990482330322266
+        ],
+        "FollowCameraOffset : Translate": [
+            -2.9799671173095703,
+            6.0,
+            -30.0
+        ]
+    }
+}
