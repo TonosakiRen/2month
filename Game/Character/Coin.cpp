@@ -87,7 +87,7 @@ void Coin::EnemyDraw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
-	BaseHeartDraw();
+	BaseCoinDraw();
 }
 
 void Coin::CollisionProcess() {
