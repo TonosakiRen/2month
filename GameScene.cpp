@@ -34,7 +34,7 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
-	Vector3 initializeCameraPos = { 0.0f,8.45f,-26.0f };
+	Vector3 initializeCameraPos = { 0.13f,14.7f,-34.0f };
 	Vector3 initializeCameraRotate = { 0.21f,0.0f,0.0f };
 
 	debugCamera_ = std::make_unique<DebugCamera>();
@@ -285,6 +285,7 @@ void GameScene::DepthDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
+		titleScene_->DepthDraw();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->StageDepthDraw();;
