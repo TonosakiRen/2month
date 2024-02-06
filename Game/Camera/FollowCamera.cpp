@@ -27,28 +27,38 @@ void FollowCamera::Inisialize(const WorldTransform& transform) {
     isEase_ = true;
 }
 
-void FollowCamera::Update(float playerX) {
+void FollowCamera::Update(const Vector3& playerPosition) {
     DrawImGui();
 
-    const float offset = 6.5f;
+    float offset = 6.5f;
     if (isEase_) {
         float MaxFrame = 20.0f;
         Vector3 shake(0.5f, 0.5f, 0.0f);
         shake = Shake(shake);
         float T = count_ / MaxFrame;
         T = std::clamp(T, 0.0f, 1.0f);
-        end_.translate.x = playerX + offset;
+        end_.translate.x = playerPosition.x + offset;
         transform_.quaternion_ = Slerp(T, start_.rotate, end_.rotate);
         transform_.translation_ = Lerp(start_.translate, end_.translate, T) + shake;
         if (count_++ >= MaxFrame) { 
             count_ = MaxFrame;
             isEase_ = false;
-            savePlayerX_ = playerX;
+            savePlayerX_ = playerPosition.x;
         }
     }
     else {
-        savePlayerX_ = Easing::easing(0.2f, savePlayerX_, playerX);
+        savePlayerX_ = Easing::easing(0.2f, savePlayerX_, playerPosition.x);
         transform_.translation_.x = savePlayerX_ + offset;
+
+        if (playerPosition.y > 5.0f) {
+            offset = end_.translate.y + playerPosition.y;
+        }
+        else {
+            offset = end_.translate.y;
+        }
+        //savePlayerY_ = Easing::easing(0.2f, savePlayerY_, offset);
+        savePlayerY_ = savePlayerY_ + (offset - savePlayerY_) * 0.2f;
+        transform_.translation_.y = savePlayerY_;
     }
     transform_.Update();
     

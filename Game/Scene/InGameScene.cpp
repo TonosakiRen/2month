@@ -87,7 +87,7 @@ void InGameScene::Update() {
 
 	RT handle;
 	if (iscamera) {
-		followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate().x);
+		followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate());
 		handle.rotate = followCamera_->GetTransform().quaternion_;
 		handle.position = followCamera_->GetTransform().GetWorldTranslate();
 	}
