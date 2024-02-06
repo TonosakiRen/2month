@@ -58,6 +58,9 @@ void StandLightEnemy::DrawImGui() {
 	int time = static_cast<int>(kMaxTime_); ImGui::DragInt("MaxTime", &time, 1); kMaxTime_ = static_cast<uint32_t>(time);
 	time = static_cast<int>(kMaxFlashCount_); ImGui::DragInt("MaxFlashCount", &time, 1); kMaxFlashCount_ = static_cast<uint32_t>(time);
 	time = static_cast<int>(kInterval_); ImGui::DragInt("Interval", &time, 1); kInterval_ = static_cast<uint32_t>(time);
+	if (ImGui::Button("isDraw")) {
+		shadowOnly_ = !shadowOnly_;
+	}
 
 	UpdateTransform();
 #endif // _DEBUG

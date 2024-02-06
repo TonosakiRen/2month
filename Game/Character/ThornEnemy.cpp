@@ -97,6 +97,9 @@ void ThornEnemy::DrawImGui() {
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("amplitude", &amplitude_.x, 0.1f);
 	ImGui::DragInt("Count", &kMaxTime_, 1, 1, 1000);
+	if (ImGui::Button("isDraw")) {
+		shadowOnly_ = !shadowOnly_;
+	}
 	UpdateTransform();
 #endif // _DEBUG
 }

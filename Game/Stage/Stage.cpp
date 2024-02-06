@@ -515,6 +515,9 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Translate").c_str(), savePoints_[index]->GetWorldTransform()->translation_);
 	}
 
+	global->SetValue(itemName, "Player : Scale", playerRespawnPoint_.scale);
+	global->SetValue(itemName, "Player : Rotate", playerRespawnPoint_.rotate);
+
 }
 
 void Stage::Collision(Player* player) {

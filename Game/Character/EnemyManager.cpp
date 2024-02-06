@@ -271,6 +271,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), nEnemis_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), nEnemis_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), nEnemis_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("NormalEnemyNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(nEnemis_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "NormalLightEnemyConfirmation" + std::string(), static_cast<int>(nLightEnemis_.size()));
@@ -278,6 +279,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Scale").c_str(), nLightEnemis_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Rotate").c_str(), nLightEnemis_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), nLightEnemis_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(nLightEnemis_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "ThornEnemyConfirmation" + std::string(), static_cast<int>(tEnemis_.size()));
@@ -287,6 +289,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), tEnemis_[index]->GetWorldTransform()->translation_);
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Amplitube").c_str(), tEnemis_[index]->amplitude_);
 		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Time").c_str(), tEnemis_[index]->kMaxTime_);
+		global->SetValue(itemName, ("ThornEnemyNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(tEnemis_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "StandLightEnemyConfirmation" + std::string(), static_cast<int>(sLightEnemis_.size()));
@@ -297,6 +300,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : MaxTime").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxTime_));
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : FlashCount").c_str(), static_cast<int>(sLightEnemis_[index]->kMaxFlashCount_));
 		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Interval").c_str(), static_cast<int>(sLightEnemis_[index]->kInterval_));
+		global->SetValue(itemName, ("StandLightEnemyNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(sLightEnemis_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "CannonEnemyConfirmation" + std::string(), static_cast<int>(cEnemis_.size()));
@@ -306,6 +310,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Translate").c_str(), cEnemis_[index]->GetWorldTransform()->translation_);
 		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Interval").c_str(), static_cast<int>(cEnemis_[index]->kInterval_));
 		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : BulletSpeed").c_str(), cEnemis_[index]->bulletSpeed_);
+		global->SetValue(itemName, ("CannonEnemyNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(cEnemis_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "CoinConfirmation" + std::string(), static_cast<int>(coins_.size()));
@@ -313,6 +318,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Scale").c_str(), coins_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Rotate").c_str(), coins_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Translate").c_str(), coins_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(coins_[index]->shadowOnly_));
 	}
 
 	global->SetValue(itemName, "HeartConfirmation" + std::string(), static_cast<int>(hearts_.size()));
@@ -320,6 +326,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Scale").c_str(), hearts_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Rotate").c_str(), hearts_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Translate").c_str(), hearts_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(hearts_[index]->shadowOnly_));
 	}
 	
 	global->SetValue(itemName, "SpawnerConfirmation" + std::string(), static_cast<int>(nSpawners_.size()));
@@ -330,6 +337,7 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Interval").c_str(), nSpawners_[index]->GetSRT().interval);
 		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : MaxPop").c_str(), nSpawners_[index]->GetSRT().MaxPopEnemy);
 		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : hp").c_str(), nSpawners_[index]->GetSRT().hp);
+		global->SetValue(itemName, ("SpawnerNumber : " + std::to_string(index) + " : Draw").c_str(), static_cast<int>(nSpawners_[index]->shadowOnly_));
 	}
 
 
@@ -346,8 +354,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		int flag = global->GetIntValue(itemName, ("NormalEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = nEnemis_.emplace_back(std::make_unique<NormalEnemy>());
 		enemy->Initialize(scale, rotate, trans);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "NormalLightEnemyConfirmation");
@@ -356,9 +366,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
+		int flag = global->GetIntValue(itemName, ("NormalLightEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = nLightEnemis_.emplace_back(std::make_unique<NormalLightEnemy>());
 		enemy->Initialize(scale, rotate, trans);
-		//enemy->SetLight(shadowSpotLights_, index);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "ThornEnemyConfirmation");
@@ -370,8 +381,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 amplitude = global->GetVector3Value(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Amplitube").c_str());
 		int kMaxtime = global->GetIntValue(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Time").c_str());
 		auto& enemy = tEnemis_.emplace_back(std::make_unique<ThornEnemy>());
+		int flag = global->GetIntValue(itemName, ("ThornEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		enemy->Initialize(scale, rotate, trans);
 		enemy->SetState(amplitude, kMaxtime);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "StandLightEnemyConfirmation");
@@ -383,9 +396,11 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		int maxtime = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : MaxTime").c_str());
 		int flashCount = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : FlashCount").c_str());
 		int interval = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Interval").c_str());
+		int flag = global->GetIntValue(itemName, ("StandLightEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = sLightEnemis_.emplace_back(std::make_unique<StandLightEnemy>());
 		enemy->Initialize(scale, rotate, trans);
 		enemy->SetParameters(static_cast<uint32_t>(maxtime),static_cast<uint32_t>(flashCount),static_cast<uint32_t>(interval));
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "CannonEnemyConfirmation");
@@ -396,10 +411,12 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 trans = global->GetVector3Value(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Translate").c_str());
 		int interval = global->GetIntValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Interval").c_str());
 		float speed = global->GetFloatValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : BulletSpeed").c_str());
+		int flag = global->GetIntValue(itemName, ("CannonEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = cEnemis_.emplace_back(std::make_unique<CannonEnemy>());
 		enemy->Initialize(scale, rotate, trans);
 		enemy->kInterval_ = static_cast<uint32_t>(interval);
 		enemy->bulletSpeed_ = speed;
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "CoinConfirmation");
@@ -408,8 +425,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(itemName, ("CoinNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(itemName, ("CoinNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(itemName, ("CoinNumber : " + std::to_string(i) + " : Translate").c_str());
+		int flag = global->GetIntValue(itemName, ("CoinNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = coins_.emplace_back(std::make_unique<Coin>());
 		enemy->Initialize(scale, rotate, trans);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "HeartConfirmation");
@@ -418,8 +437,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(itemName, ("HeartNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(itemName, ("HeartNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(itemName, ("HeartNumber : " + std::to_string(i) + " : Translate").c_str());
+		int flag = global->GetIntValue(itemName, ("HeartNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = hearts_.emplace_back(std::make_unique<Heart>());
 		enemy->Initialize(scale, rotate, trans);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 
 	num = global->GetIntValue(itemName, "SpawnerConfirmation");
@@ -431,8 +452,10 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		int interval = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : Interval").c_str());
 		int maxpop = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : MaxPop").c_str());
 		int hp = global->GetIntValue(itemName, ("SpawnerNumber : " + std::to_string(i) + " : hp").c_str());
+		int flag = global->GetIntValue(itemName, ("SpawnerEnemyNumber : " + std::to_string(i) + " : Draw").c_str());
 		auto& enemy = nSpawners_.emplace_back(std::make_unique<NormalSpawner>());
 		enemy->Initialize(scale, rotate, trans, static_cast<uint32_t>(interval), static_cast<uint32_t>(maxpop), hp);
+		enemy->shadowOnly_ = static_cast<bool>(flag);
 	}
 }
 

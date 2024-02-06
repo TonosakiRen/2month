@@ -142,6 +142,9 @@ void CannonEnemy::DrawImGui() {
 	int handle = static_cast<int>(kInterval_); ImGui::DragInt("interval", &handle, 1); kInterval_ = static_cast<uint32_t>(handle);
 	ImGui::DragFloat("bulletSpeed", &bulletSpeed_, 0.01f);
 	ImGui::Text("bulletCount : %d", static_cast<int>(bullets_.size()));
+	if (ImGui::Button("isDraw")) {
+		shadowOnly_ = !shadowOnly_;
+	}
 	
 	UpdateTransform();
 #endif // _DEBUG
@@ -166,6 +169,7 @@ void CannonEnemy::Attack(const Vector3& playerPosition) {
 			// 弾を登録する
 			auto& bullet = bullets_.emplace_back(std::make_unique<Bullet>());
 			bullet->Initialize(worldTransform_.translation_, vec, bulletSpeed_); // world座標を渡してあげる
+			bullet->shadowOnly_ = this->shadowOnly_;
 			timer_ = 0u;
 		}
 	}
