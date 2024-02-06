@@ -13,6 +13,7 @@ void Camera::Initialize(Vector3 position, Quaternion quaternion)
     ViewProjection::Initialize();
     translation_ = position;
     quaternion_ = quaternion;
+    ViewProjection::Update();
 }
 
 void Camera::Update(float playerX)

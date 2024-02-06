@@ -8,11 +8,12 @@ class ShadowSpotLights;
 class TitleScene {
 public:
 	TitleScene() = default;
-	~TitleScene() = default;
+	~TitleScene();
 
 	void Initialize(ShadowSpotLights* spotLights);
 	void Update();
 	void Draw();
+	void DepthDraw();
 	void ModelDraw();
 
 private:

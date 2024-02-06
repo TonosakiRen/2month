@@ -4,6 +4,12 @@
 #include "ImGuiManager.h"
 #include "ShadowSpotLights.h"
 
+TitleScene::~TitleScene()
+{
+	spotLights_->lights_[0].isActive = false;
+
+}
+
 void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 	title_ = std::make_unique<Sprite>();
 	uint32_t handle = TextureManager::Load("title.png");
@@ -15,15 +21,14 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 	titleModel_.worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
 
 	floor_.Initialize("stagefloor");
-	floor_.worldTransform_.translation_ = { 0.0f,7.0f,-23.0f };
-	floor_.worldTransform_.scale_ = { 2.0f,2.0f,2.0f };
-
+	floor_.worldTransform_.scale_ = { 3.0f,1.0f,3.0f };
+	floor_.worldTransform_.translation_ = { 0.0f,3.0f,0.0f };
 	spotLights_ = spotLights;
-	spotLights_->lights_[0].worldTransform.translation_ = {0.0f,20.0f,10.0f};
+	spotLights_->lights_[0].worldTransform.translation_ = {0.0f,24.0f,26.0f};
 	spotLights_->lights_[0].color = {1.0f,1.0f,0.58f};
-	spotLights_->lights_[0].intensity = 5.0f;
-	spotLights_->lights_[0].direction = { 0.0f,-0.74f,-0.67f };
-	spotLights_->lights_[0].distance = 30.0f;
+	spotLights_->lights_[0].intensity = 3.65f;
+	spotLights_->lights_[0].direction = { 0.0f,-0.703f,-0.711f };
+	spotLights_->lights_[0].distance = 52.3f;
 	spotLights_->lights_[0].decay = 1.0f;
 	spotLights_->lights_[0].cosAngle = 0.785f;
 }
@@ -45,11 +50,15 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("title", &titleModel_.worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("titleSca", &titleModel_.worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("stagefloor", &floor_.worldTransform_.translation_.x, 0.1f);
-
+	floor_.UpdateMatrix();
 }
 
 void TitleScene::Draw() {
 	title_->Draw();
+}
+
+void TitleScene::DepthDraw() {
+	floor_.Draw();
 }
 
 void TitleScene::ModelDraw()
