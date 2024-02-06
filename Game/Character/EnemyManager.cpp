@@ -44,6 +44,7 @@ void EnemyManager::Update(const Vector3& playerPosition) {
 	TempEnemyUpdate(sLightEnemis_,playerPosition, gomi);
 	TempEnemyUpdate(cEnemis_,playerPosition, remainderNumber_);
 	TempEnemyUpdate(coins_,playerPosition, gomi);
+	TempEnemyUpdate(hearts_,playerPosition, gomi);
 	
 	for (uint32_t index = 0u; index < nSpawners_.size(); index++) {
 		if (!nSpawners_.at(index)->GetIsAlive()) {
@@ -82,6 +83,10 @@ void EnemyManager::OnCollisionPlayer(Collider& collider, const PlayerDate& date)
 	for (auto& coin : coins_) {
 		if (!coin->GetIsAlive()) { continue; }
 		coin->OnCollision(collider, date);
+	}
+	for (auto& heart : hearts_) {
+		if (!heart->GetIsAlive()) { continue; }
+		heart->OnCollision(collider, date);
 	}
 	for (auto& spawn : nSpawners_) {
 		if (!spawn->GetIsAlive()) { continue; }
@@ -219,6 +224,23 @@ void EnemyManager::DrawImGui() {
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Heart")) {
+			if (ImGui::Button("Create")) {
+				hearts_.emplace_back(std::make_unique<Heart>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", hearts_.size());
+			for (int i = 0; i < hearts_.size(); i++) {
+				if (ImGui::TreeNode(("heartNumber : " + std::to_string(i)).c_str())) {
+					hearts_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						hearts_.erase(hearts_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("NormalSpawner")) {
 			if (ImGui::Button("Create")) {
 				nSpawners_.emplace_back(std::make_unique<NormalSpawner>())->Initialize(Vector3(1.0f, 1.0f, 1.0f), Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
@@ -291,6 +313,13 @@ void EnemyManager::Save(const char* itemName) {
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Scale").c_str(), coins_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Rotate").c_str(), coins_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("CoinNumber : " + std::to_string(index) + " : Translate").c_str(), coins_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "HeartConfirmation" + std::string(), static_cast<int>(hearts_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(hearts_.size()); index++) {
+		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Scale").c_str(), hearts_[index]->GetWorldTransform()->scale_);
+		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Rotate").c_str(), hearts_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("HeartNumber : " + std::to_string(index) + " : Translate").c_str(), hearts_[index]->GetWorldTransform()->translation_);
 	}
 	
 	global->SetValue(itemName, "SpawnerConfirmation" + std::string(), static_cast<int>(nSpawners_.size()));
@@ -381,7 +410,16 @@ void EnemyManager::Load(const std::filesystem::path& loadFile) {
 		Vector3 trans = global->GetVector3Value(itemName, ("CoinNumber : " + std::to_string(i) + " : Translate").c_str());
 		auto& enemy = coins_.emplace_back(std::make_unique<Coin>());
 		enemy->Initialize(scale, rotate, trans);
-		//enemy->SetLight(shadowSpotLights_, index);
+	}
+
+	num = global->GetIntValue(itemName, "HeartConfirmation");
+	if (!hearts_.empty()) { hearts_.clear(); }
+	for (int i = 0; i < num; i++) {
+		Vector3 scale = global->GetVector3Value(itemName, ("HeartNumber : " + std::to_string(i) + " : Scale").c_str());
+		Quaternion rotate = global->GetQuaternionValue(itemName, ("HeartNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(itemName, ("HeartNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& enemy = hearts_.emplace_back(std::make_unique<Heart>());
+		enemy->Initialize(scale, rotate, trans);
 	}
 
 	num = global->GetIntValue(itemName, "SpawnerConfirmation");
@@ -423,6 +461,10 @@ void EnemyManager::Draw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : hearts_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 	for (auto& spawn : nSpawners_) {
 		if (!spawn->GetIsAlive()) { continue; }
 		spawn->Draw();
@@ -455,6 +497,10 @@ void EnemyManager::ShadowDraw() {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->Draw();
 	}
+	for (auto& enemy : hearts_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->Draw();
+	}
 	for (auto& spawn : nSpawners_) {
 		if (!spawn->GetIsAlive()) { continue; }
 		spawn->Draw();
@@ -479,6 +525,10 @@ void EnemyManager::SpotLightShadowDraw() {
 		enemy->EnemyDraw();
 	}
 	for (auto& enemy : coins_) {
+		if (!enemy->GetIsAlive()) { continue; }
+		enemy->EnemyDraw();
+	}
+	for (auto& enemy : hearts_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->EnemyDraw();
 	}

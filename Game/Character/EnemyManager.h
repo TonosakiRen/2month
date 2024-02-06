@@ -9,6 +9,7 @@
 #include "StandLightEnemy.h"
 #include "CannonEnemy.h"
 #include "Coin.h"
+#include "Heart.h"
 
 #include "NormalSpawner.h"
 
@@ -53,6 +54,7 @@ private:
 	std::vector<std::unique_ptr<StandLightEnemy>> sLightEnemis_;
 	std::vector<std::unique_ptr<CannonEnemy>> cEnemis_;
 	std::vector<std::unique_ptr<Coin>> coins_;
+	std::vector<std::unique_ptr<Heart>> hearts_;
 
 	std::vector<std::unique_ptr<NormalSpawner>> nSpawners_;
 
