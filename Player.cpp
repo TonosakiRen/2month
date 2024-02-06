@@ -198,6 +198,9 @@ void Player::Draw() {
 
 void Player::EnemyShadowCollision()
 {
+
+	const int hitStopFrame = 2;
+
 	if (hitShadowEnemyIndex_ != -1 ) {
 		//もしhitReactionがhealじゃなかったら
 		if (hitReaction_ != heal) {
@@ -213,11 +216,15 @@ void Player::EnemyShadowCollision()
 						knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
 						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 					}
-					GameScene::SetHitStop(3);
+					GameScene::SetHitStop(hitStopFrame);
 					shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
 					shadowHitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
+
+					size_t handle = audio_->SoundLoadWave("hit.wav");
+					size_t hitHandle = audio_->SoundPlayWave(handle);
+					audio_->SetValume(hitHandle, 1.0f);
 				}
 			}
 			else if (hitCollider_) {
@@ -231,9 +238,14 @@ void Player::EnemyShadowCollision()
 					if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 						hp_ -= damage_;
 						MUTEKITime_ = maxMUTEKITime_;
-						GameScene::SetHitStop(3);
+						GameScene::SetHitStop(hitStopFrame);
 						shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
 						shadowHitParticle_.SetIsEmit(true);
+
+						size_t handle = audio_->SoundLoadWave("hit.wav");
+						size_t hitHandle = audio_->SoundPlayWave(handle);
+						audio_->SetValume(hitHandle, 1.0f);
+
 						if (headRotate.x < 0.0f) {
 							attackParam_.phase = 3;
 						}
@@ -278,6 +290,10 @@ void Player::EnemyCollision()
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
+
+					size_t handle = audio_->SoundLoadWave("hit.wav");
+					size_t hitHandle = audio_->SoundPlayWave(handle);
+					audio_->SetValume(hitHandle, 1.0f);
 				}
 			}
 			else if (hitCollider_->GetName() == "CannonBullet") {
@@ -295,6 +311,11 @@ void Player::EnemyCollision()
 					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
+
+					size_t handle = audio_->SoundLoadWave("hit.wav");
+					size_t hitHandle = audio_->SoundPlayWave(handle);
+					audio_->SetValume(hitHandle, 1.0f);
+
 					if (headRotate.x < 0.0f) {
 						attackParam_.phase = 3;
 					}
@@ -407,6 +428,10 @@ void Player::Attack() {
 			attackParam_.isAttacked = true;
 			easing_tBack = 0;
 			attackCoolTime_ = kmaxattackCoolTime_;
+
+			size_t handle = audio_->SoundLoadWave("attack.wav");
+			size_t attackHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(attackHandle, 1.0f);
 		}
 	}
 	else {

@@ -2,6 +2,7 @@
 #include "ModelManager.h"
 #include "Player.h"
 #include "Compute.h"
+#include "Audio.h"
 
 void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
@@ -82,6 +83,11 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 			id_ = date.id;
 			knockBackVector_ = playerPosition_ - worldTransform_.translation_;
 			hp_ -= date.damage_;
+			Audio* audio = Audio::GetInstance();
+			size_t handle = audio->SoundLoadWave("hit.wav");
+			size_t hitHandle = audio->SoundPlayWave(handle);
+			audio->SetValume(hitHandle, 1.0f);
+
 		}
 		UpdateTransform();
 	}

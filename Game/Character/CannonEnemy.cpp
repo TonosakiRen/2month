@@ -1,6 +1,7 @@
 #include "CannonEnemy.h"
 #include "Player.h"
 #include "Compute.h"
+#include "Audio.h"
 
 void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion, const Vector3& translate) {
 	std::vector<std::string> names = {
@@ -75,6 +76,11 @@ void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 				isHit_ = true;
 				id_ = date.id;
 				hp_ -= date.damage_;
+
+				Audio* audio = Audio::GetInstance();
+				size_t handle = audio->SoundLoadWave("hit.wav");
+				size_t hitHandle = audio->SoundPlayWave(handle);
+				audio->SetValume(hitHandle, 1.0f);
 			}
 			else {
 				Player::hitCollider_ = &collider_;

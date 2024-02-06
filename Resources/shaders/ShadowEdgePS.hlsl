@@ -115,7 +115,7 @@ float4 main(VSOutput input) : SV_TARGET
 				output.color.xyzw = float32_t4(1.0f, 1.0f, 0.0f, 1.0f);
 			}
 			else if (wData == 2.0f) {
-
+				output.color.xyzw = float32_t4(0.5f, 1.0f, 0.5f,1.0f);
 			}
 			else {
 				output.color.xyzw = float32_t4(0.5f, 0.0f, 0.5f, 1.0f);

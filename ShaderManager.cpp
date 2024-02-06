@@ -14,12 +14,12 @@ using namespace Microsoft::WRL;
 namespace {
 
     std::wstring profiles[ShaderManager::kNumTypes] = {
-        L"vs_6_0",
-        L"ps_6_0",
-        L"gs_6_0",
-        L"hs_6_0",
-        L"ds_6_0",
-        L"cs_6_5"
+        L"vs_5_0",
+        L"ps_5_0",
+        L"gs_5_0",
+        L"hs_5_0",
+        L"ds_5_0",
+        L"cs_5_0"
     };
 
 }
