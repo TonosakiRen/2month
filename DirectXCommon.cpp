@@ -55,9 +55,9 @@ void DirectXCommon::CreateDevice() {
 	ComPtr<ID3D12Debug1> debugController = nullptr;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		//デバックレイヤーを有効化する	
-		debugController->EnableDebugLayer();
+		//debugController->EnableDebugLayer();
 		//さらにGPU側でもチェックを行えるようにする
-		debugController->SetEnableGPUBasedValidation(TRUE);
+		//debugController->SetEnableGPUBasedValidation(TRUE);
 
 	}
 
