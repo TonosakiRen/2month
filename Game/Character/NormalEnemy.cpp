@@ -131,7 +131,8 @@ void NormalEnemy::KnockBack() {
 	Vector3 vec = knockBackVector_;
 	vec = Normalize(vec);
 	vec.y = 0.0f;
-	const float speed = 1.5f;
+	vec.z = 0.0f;
+	const float speed = 1.2f;
 
 	worldTransform_.translation_ += -vec * speed;
 	if (++count >= 5) {
