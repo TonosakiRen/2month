@@ -27,6 +27,13 @@ void DirectionalLights::Initialize() {
 
 void DirectionalLights::Update() {
 
+    if (playerPos_) {
+        lights_[0].position.x = playerPos_->x;
+    }
+    else {
+        lights_[0].position = { 0.0f,150.0f,0.0f };
+    }
+
     // 定数バッファに書き込み
     std::vector<ConstBufferData> bufferData;
     bufferData.reserve(lightNum);

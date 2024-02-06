@@ -17,7 +17,7 @@ public:
 	struct DirectionalLight {
 		Vector4 color = { 1.0f, 1.0f, 1.0f,1.0f };
 		Vector3 direction = { 0.0f, -1.0f, 0.0f };
-		Vector3 position = { 0.0f,150.0f,0.0f };
+		Vector3 position = { 0.0f,100.0f,0.0f };
 		float intensity = 1.0f;
 		Vector3 lockUp = { 1.0f,0.0f,0.0f };
 		DepthBuffer shadowMap_;
@@ -36,6 +36,10 @@ public:
 	void Initialize();
 	void Update();
 
+	void SetPlayerPos(const Vector3& pos) {
+		playerPos_ = &pos;
+	}
+
 	//影用viewProjection
 	float fovAngleY_ = 45.0f * std::numbers::pi_v <float> / 180.0f;
 	float aspectRatio_ = (float)1 / (float)1;
@@ -46,6 +50,8 @@ public:
 	std::vector<DirectionalLight> lights_;
 	UploadBuffer structureBuffer_;
 	DescriptorHandle srvHandle_;
+
+	const Vector3* playerPos_ = nullptr;
 private:
 	
 };
