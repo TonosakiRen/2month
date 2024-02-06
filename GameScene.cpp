@@ -291,6 +291,9 @@ void GameScene::ModelDraw()
 	case GameScene::Scene::Title:
 		titleScene_->ModelDraw();
 		break;
+	case GameScene::Scene::StageSelect:
+		selectScene_->Draw();
+		break;
 	case GameScene::Scene::InGame:
 		//skydome_->Draw();
 		inGameScene_->Draw();
@@ -400,6 +403,8 @@ void GameScene::PreSpriteDraw()
 	{
 	case GameScene::Scene::Title:
 		break;
+	case GameScene::Scene::StageSelect:
+		break;
 	case GameScene::Scene::InGame:
 		break;
 	default:
@@ -413,6 +418,9 @@ void GameScene::PostSpriteDraw()
 	{
 	case GameScene::Scene::Title:
 		//titleScene_->Draw();
+		break;
+	case GameScene::Scene::StageSelect:
+		selectScene_->DrawUI();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();
