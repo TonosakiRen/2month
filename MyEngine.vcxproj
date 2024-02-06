@@ -150,6 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Character\ThornEnemy.cpp" />
     <ClCompile Include="Game\Scene\CreateStageScene.cpp" />
     <ClCompile Include="Game\Scene\InGameScene.cpp" />
+    <ClCompile Include="Game\Scene\StageSelectScene.cpp" />
     <ClCompile Include="Game\Scene\TitleScene.cpp" />
     <ClCompile Include="Game\Stage\Floor.cpp" />
     <ClCompile Include="Game\Stage\Goal.cpp" />
@@ -247,6 +248,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Character\ThornEnemy.h" />
     <ClInclude Include="Game\Scene\CreateStageScene.h" />
     <ClInclude Include="Game\Scene\InGameScene.h" />
+    <ClInclude Include="Game\Scene\StageSelectScene.h" />
     <ClInclude Include="Game\Scene\TitleScene.h" />
     <ClInclude Include="Game\Stage\Floor.h" />
     <ClInclude Include="Game\Stage\Goal.h" />

@@ -24,6 +24,7 @@
 #include "Game/Scene/InGameScene.h"
 #include "Game/Scene/CreateStageScene.h"
 #include "Game/Scene/TitleScene.h"
+#include "Game/Scene/StageSelectScene.h"
 
 #include <optional>
 class GameScene 
@@ -87,7 +88,7 @@ private:
 	ShadowSpotLights shadowSpotLights_;
 	SpotLights spotLights_;
 
-	uint32_t textureHandle_;
+	uint32_t textureHandle_ = 0u;
 
 	std::unique_ptr<Sprite> sprite_;
 
@@ -106,10 +107,12 @@ private:
 	std::unique_ptr<InGameScene> inGameScene_;
 	std::unique_ptr<CreateStageScene> editorScene_;
 	std::unique_ptr<TitleScene> titleScene_;
+	std::unique_ptr<StageSelectScene> selectScene_;
 
 	//Scene
 	enum class Scene {
 		Title,
+		StageSelect,
 		InGame,
 		Editor,
 
@@ -117,7 +120,6 @@ private:
 	};
 
 	Scene scene_ = Scene::SceneNum;
-	Scene nextScene = Scene::InGame;
 	static void (GameScene::* SceneInitializeTable[])();
 	static void (GameScene::* SceneUpdateTable[])();
 	std::optional<Scene> sceneRequest_ = std::nullopt;
@@ -126,6 +128,10 @@ private:
 	//タイトル
 	void TitleInitialize();
 	void TitleUpdate();
+	// ステージセレクト
+	void StageSelectInitialize();
+	void StageSelectUpdate();
+
 	//インゲーム
 	void InGameInitialize();
 	void InGameUpdate();
