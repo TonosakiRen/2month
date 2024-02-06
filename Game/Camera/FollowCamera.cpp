@@ -2,10 +2,15 @@
 #include "Easing.h"
 #include "ImGuiManager.h"
 #include <algorithm>
+#include "GlobalVariables.h"
 
 FollowCamera::FollowCamera() {
-    transform_.translation_ = Vector3(0.0f, 8.45f, -26.0f);
-    transform_.quaternion_ = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
+    auto global = GlobalVariables::GetInstance();
+    Vector3 trans = global->GetVector3Value("Player", "FollowCameraOffset : Translate");
+    Quaternion rot = global->GetQuaternionValue("Player", "FollowCameraOffset : Rotate");
+
+    transform_.translation_ = trans;
+    transform_.quaternion_ = rot;
 
     end_.translate = Vector3(0.0f, 8.45f, -26.0f);
     end_.rotate = MakeFromEulerAngle(Vector3(Radian(9.0f), 0.0f, 0.0f));
@@ -53,6 +58,12 @@ void FollowCamera::DrawImGui() {
     Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
     transform_.quaternion_ = MakeFromEulerAngle(handle);
     ImGui::DragFloat3("translate", &transform_.translation_.x, 0.1f);
+    if (ImGui::Button("FollowCameraSave")) {
+        auto global = GlobalVariables::GetInstance();
+        global->SetValue("Player", "FollowCameraOffset : Translate", transform_.GetWorldTranslate());
+        global->SetValue("Player", "FollowCameraOffset : Rotate", transform_.quaternion_);
+        global->SaveFile("Player");
+    }
     ImGui::End();
     transform_.Update();
 #endif // _DEBUG
