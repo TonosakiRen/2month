@@ -12,12 +12,14 @@ int GameScene::hitStopFrame_ = 0;
 
 void (GameScene::* GameScene::SceneUpdateTable[])() = {
 	&GameScene::TitleUpdate,
+	&GameScene::StageSelectUpdate,
 	&GameScene::InGameUpdate,
 	&GameScene::EditorUpdate,
 };
 
 void (GameScene::* GameScene::SceneInitializeTable[])() = {
 	&GameScene::TitleInitialize,
+	&GameScene::StageSelectInitialize,
 	&GameScene::InGameInitialize,
 	&GameScene::EditorInitialize,
 };
@@ -63,6 +65,8 @@ void GameScene::Initialize() {
 	titleScene_ = std::make_unique<TitleScene>();
 	titleScene_->Initialize();
 
+	selectScene_ = std::make_unique<StageSelectScene>();
+
 	// InGameSceneの生成と初期化
 	inGameScene_ = std::make_unique<InGameScene>();
 	
@@ -101,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -219,6 +223,14 @@ void GameScene::TitleUpdate() {
 
 	titleScene_->Update();
 
+}
+void GameScene::StageSelectInitialize() {
+	if (selectScene_) {
+		selectScene_.reset(new StageSelectScene());
+	}
+}
+void GameScene::StageSelectUpdate() {
+	selectScene_->Update();
 }
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {

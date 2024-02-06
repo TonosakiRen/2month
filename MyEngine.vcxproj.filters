@@ -365,6 +365,9 @@
     <ClCompile Include="Transition.cpp">
       <Filter>Engine\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Scene\StageSelectScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -652,6 +655,9 @@
     </ClInclude>
     <ClInclude Include="Transition.h">
       <Filter>Engine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scene\StageSelectScene.h">
+      <Filter>Game\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
