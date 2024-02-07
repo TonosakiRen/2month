@@ -78,6 +78,7 @@ private: // モンスターハウス用
 		bool isBreaked_ = false; // 壊れるフラグ
 		bool isMomentActivation_ = false; // 起動した瞬間
 		float centerPosX_ = 0.0f;
+		float centerPosY_ = 0.0f;
 		uint32_t trapNumber_ = 0u; // trapに当たった番号
 	};
 	MonstarHouseParam mHouse_;

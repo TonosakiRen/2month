@@ -28,7 +28,7 @@ void NormalSpawner::Initialize(const Vector3& scale, const Quaternion& quaternio
 	color_ = Vector4(0.95f, 0.76f, 0.20f, 1.0f);
 
 	// とりあえず一個だけ
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 

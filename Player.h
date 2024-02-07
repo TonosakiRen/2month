@@ -15,6 +15,7 @@ struct PlayerDate {
     uint32_t damage_ = 0u; // ダメージ量
     bool isAttack_ = false; // 攻撃中か
     uint32_t id = 0u; //
+    int attackIndex = -1;
 };
 
 class GlobalVariables;
@@ -123,6 +124,7 @@ private:
 
     //UI
     Sprite hpSprite_;
+    Sprite HpbarSprite_;
 
     ShadowHitParticle shadowHitParticle_;
     HitParticle hitParticle_;

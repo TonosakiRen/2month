@@ -58,7 +58,9 @@ private:
 
 	// クリア用
 	bool isEndClearAnimation_ = false;
+	bool isEndDeadAnimation_ = false;
 public:
 	const bool& GetEndClearAnimation() const { return isEndClearAnimation_; }
+	const bool& GetEndDeadAnimation() const { return isEndDeadAnimation_; }
 
 };

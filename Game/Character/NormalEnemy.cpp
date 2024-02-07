@@ -23,7 +23,7 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 	// とりあえず一個だけ
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 }
@@ -74,22 +74,45 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 
 	bool isColl = false;
 
+	bool isShadowHit = false;
+	bool isHit = false;
+	
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
-		Player::hitShadowEnemyIndex_ = kNumber_;
-		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
-		Player::hitReaction_ = Player::damage;
 		isColl = true;
+		isShadowHit = true;
 	}
 
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector)&& !shadowOnly_) {
 		isColl = true;
-		Player::hitCollider_ = &collider_;
-		Player::hitReaction_ = Player::knockBack;
+		isHit = true;
 	}
 
 	if (isColl) {
+		if (date.isAttack_ == false) {
+			if (isHit) {
+				Player::hitCollider_ = &collider_;
+				Player::hitReaction_ = Player::knockBack;
+			}
+			else if (isShadowHit) {
+				Player::hitShadowEnemyIndex_ = kNumber_;
+				Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+				Player::hitReaction_ = Player::knockBack;
+			}
+		}else
+		if (attackIndex_ != date.attackIndex) {
+			if (isHit) {
+				Player::hitCollider_ = &collider_;
+				Player::hitReaction_ = Player::knockBack;
+			}
+			else if (isShadowHit) {
+				Player::hitShadowEnemyIndex_ = kNumber_;
+				Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+				Player::hitReaction_ = Player::knockBack;
+			}
+		}
+
 		if (!isHit_ && date.isAttack_ && (id_ != date.id)) {
 			// 当たった瞬間
 			isHit_ = true;
@@ -100,6 +123,8 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 			size_t handle = audio->SoundLoadWave("hit.wav");
 			size_t hitHandle = audio->SoundPlayWave(handle);
 			audio->SetValume(hitHandle, 1.0f);
+
+			attackIndex_ = date.attackIndex;
 
 		}
 		UpdateTransform();
@@ -165,7 +190,7 @@ void NormalEnemy::DownAnimation() {
 	rotate.y += 2.0f;
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	if (60.0f < count++) {
+	if (30.0f < count++) {
 		isAlive_ = false;
 	}
 }

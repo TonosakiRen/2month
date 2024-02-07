@@ -4,13 +4,14 @@
 #include "ShadowSpotLights.h"
 
 void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint) {
+	uint32_t point = respawnPoint;
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
 	std::string filePath = "stage1";
 
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights, respawnPoint);
+	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights, point);
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();
@@ -32,6 +33,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	fixedCamera_ = std::make_shared<FixedCamera>();
 
 	isEndClearAnimation_ = false;
+	isEndDeadAnimation_ = false;
 }
 
 void InGameScene::Update() {
@@ -108,6 +110,9 @@ void InGameScene::Update() {
 	stage_->PostUpdate();
 	if (player_->isEndClearAnimation) {
 		isEndClearAnimation_ = true;
+	}
+	if (player_->isEndDeadAnimation_) {
+		isEndDeadAnimation_ = true;
 	}
 }
 

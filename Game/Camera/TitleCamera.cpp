@@ -1,6 +1,7 @@
 #include "TitleCamera.h"
 #include "ImGuiManager.h"
 #include "GlobalVariables.h"
+#include "Easing.h"
 
 void TitleCamera::Inisialize() {
     Vector3 initializeCameraPos = { 0.13f,14.7f,-34.0f };
@@ -31,3 +32,4 @@ void TitleCamera::DrawImGui() {
     transform_.Update();
 #endif // _DEBUG
 }
+

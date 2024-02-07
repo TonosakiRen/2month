@@ -10,7 +10,7 @@
             -1.0
         ],
         "FloorNumber : 0 : Scale": [
-            0.5,
+            0.6000000238418579,
             1.0,
             1.0
         ],
@@ -55,6 +55,7 @@
             0.7840545773506165,
             -9.46721076965332
         ],
+        "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
         "StageLightConfirmation": 2,
         "StageLightNumber : 0 : Distance": 20.0,
@@ -119,6 +120,38 @@
             8.0,
             10.0
         ],
-        "WoodBoxConfirmation": 0
+        "WoodBoxConfirmation": 2,
+        "WoodBoxNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 0 : Scale": [
+            1.600000023841858,
+            1.600000023841858,
+            1.600000023841858
+        ],
+        "WoodBoxNumber : 0 : Translate": [
+            10.0,
+            1.399999976158142,
+            -0.5
+        ],
+        "WoodBoxNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "WoodBoxNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WoodBoxNumber : 1 : Translate": [
+            -10.0,
+            0.800000011920929,
+            -3.0
+        ]
     }
 }
