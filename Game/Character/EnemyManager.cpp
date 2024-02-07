@@ -111,6 +111,7 @@ void EnemyManager::OnCollisionStage(Collider& collider) {
 	for (auto& enemy : cEnemis_) {
 		if (!enemy->GetIsAlive()) { continue; }
 		enemy->PushBackCollision(collider);
+		enemy->OnCollision(collider);
 	}
 	for (auto& spawn : nSpawners_) {
 		if (!spawn->GetIsAlive()) { continue; }

@@ -91,9 +91,15 @@ void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	// 弾
 
 	for (auto& bullet : bullets_) {
-		bullet->OnCollision(collider, date);
+		bullet->OnCollision(collider);
 	}
 
+}
+
+void CannonEnemy::OnCollision(Collider& collider) {
+	for (auto& bullet : bullets_) {
+		bullet->OnCollision(collider);
+	}
 }
 
 void CannonEnemy::Draw() {
@@ -229,7 +235,7 @@ void CannonEnemy::Bullet::Update(const Vector3& playerPosition) {
 	this->UpdateTransform();
 }
 
-void CannonEnemy::Bullet::OnCollision(Collider& collider, const PlayerDate& date) {
+void CannonEnemy::Bullet::OnCollision(Collider& collider) {
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (this->collider_.Collision(collider, pushBackVector) && !shadowOnly_) {

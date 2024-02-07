@@ -1,5 +1,7 @@
 #include "SelectCamera.h"
 #include "ImGuiManager.h"
+#include "Easing.h"
+#include "Input.h"
 
 SelectCamera::SelectCamera() {
     Vector3 initializeCameraPos = { 0.0f,8.0f,-20.0f };
@@ -11,6 +13,7 @@ SelectCamera::SelectCamera() {
 
 void SelectCamera::Update() {
     //DrawImGui();
+    Move();
     transform_.Update();
 }
 
@@ -30,4 +33,16 @@ void SelectCamera::DrawImGui() {
     ImGui::End();
     transform_.Update();
 #endif // _DEBUG
+}
+
+void SelectCamera::Move() {
+    const float start = Radian(3.0f);
+    const float end = Radian(363.0f);
+    if (T >= 1.0f) {
+        T = 1.0f;
+        return;
+    }
+    static const float speed = 1.0f / 20.0f;
+    rotate.x = Easing::easing(T, start, end, speed, Easing::EasingMode::easeInBounce);
+    transform_.quaternion_ = MakeFromEulerAngle(rotate);
 }
