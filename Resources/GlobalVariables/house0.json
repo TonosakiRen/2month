@@ -37,7 +37,8 @@
         ],
         "HeartConfirmation": 0,
         "MoveFloorConfirmation": 0,
-        "NormalEnemyConfirmation": 3,
+        "NormalEnemyConfirmation": 4,
+        "NormalEnemyNumber : 0 : Draw": 0,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -50,10 +51,11 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            10.5,
-            9.0,
-            3.0
+            4.900000095367432,
+            6.699999809265137,
+            0.0
         ],
+        "NormalEnemyNumber : 1 : Draw": 1,
         "NormalEnemyNumber : 1 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -66,10 +68,11 @@
             1.0
         ],
         "NormalEnemyNumber : 1 : Translate": [
-            -10.0,
-            9.0,
-            3.0
+            -6.400000095367432,
+            2.5,
+            0.0
         ],
+        "NormalEnemyNumber : 2 : Draw": 1,
         "NormalEnemyNumber : 2 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -82,10 +85,11 @@
             1.0
         ],
         "NormalEnemyNumber : 2 : Translate": [
-            4.300000190734863,
-            2.5,
-            0.0
+            -0.4000000059604645,
+            8.899999618530273,
+            3.700000047683716
         ],
+        "NormalEnemyNumber : 3 : Draw": 1,
         "NormalEnemyNumber : 3 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -98,9 +102,9 @@
             1.0
         ],
         "NormalEnemyNumber : 3 : Translate": [
-            5.199999809265137,
             0.0,
-            -8.199999809265137
+            1.7999999523162842,
+            2.5
         ],
         "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
@@ -119,6 +123,7 @@
             0.7840552926063538,
             -2.0890984535217285
         ],
+        "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
         "SpawnerNumber : 0 : Interval": 60,
         "SpawnerNumber : 0 : MaxPop": 10,

@@ -157,6 +157,11 @@ void NormalEnemy::KnockBack() {
 
 void NormalEnemy::DownAnimation() {
 	worldTransform_.translation_.y += 0.5f;
+	Vector3 vec = knockBackVector_;
+	vec = Normalize(vec);
+	const float speed = 1.2f;
+	worldTransform_.translation_ += -vec * speed;
+	//KnockBack();
 	rotate.y += 2.0f;
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
