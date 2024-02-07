@@ -380,6 +380,9 @@
     <ClCompile Include="Game\Camera\SelectCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="DeadParticle.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -419,9 +422,6 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="WhiteParticle.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Audio.h">
@@ -682,6 +682,12 @@
     </ClInclude>
     <ClInclude Include="Game\Camera\SelectCamera.h">
       <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="WhiteParticle.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadParticle.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

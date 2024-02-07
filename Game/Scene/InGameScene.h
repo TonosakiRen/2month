@@ -57,8 +57,8 @@ private:
 	int fileNumber_ = 0;
 
 	// クリア用
-	bool isClear_ = false;
+	bool isEndClearAnimation_ = false;
 public:
-	const bool& GetClear() const { return isClear_; }
+	const bool& GetEndClearAnimation() const { return isEndClearAnimation_; }
 
 };

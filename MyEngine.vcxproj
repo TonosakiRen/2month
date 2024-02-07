@@ -115,6 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="CommandContext.cpp" />
     <ClCompile Include="CommandQueue.cpp" />
     <ClCompile Include="Compute.cpp" />
+    <ClCompile Include="DeadParticle.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DeferredRenderer.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
@@ -215,6 +216,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="CommandQueue.h" />
     <ClInclude Include="Compute.h" />
+    <ClInclude Include="DeadParticle.h" />
     <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DeferredRenderer.h" />
     <ClInclude Include="DepthBuffer.h" />

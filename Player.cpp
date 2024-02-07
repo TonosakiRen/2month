@@ -71,6 +71,26 @@ void Player::Initialize(const std::string name)
 	hitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
 
 	coinNum_ = 0;
+
+	
+	deadFrame_ = 0;
+	deadParticle_.Initialize({-0.5f,0.5f,-0.5f},{0.5f,1.0f,0.5f});
+	deadParticleHandle_ = TextureManager::Load("blackEffect.png");
+
+	deadParticle_.emitterWorldTransform_.SetParent(&worldTransform_);
+	deadParticle_.emitterWorldTransform_.translation_ = { 0.0f,0.2f,0.3f };
+
+	isDead_ = false;
+
+	isEndDeadAnimation_ = false;
+
+	deadT = 0.0f;
+
+	isClear_ = false;
+
+	isEndClearAnimation = false;
+
+	ty_.Initialize("box1x1");
 }
 
 void Player::SetGlobalVariable()
@@ -121,19 +141,28 @@ void Player::Update()
 	DrawImGui();
 	ImGui::DragFloat2("hpBar", &hpSprite_.position_.x);
 	ImGui::DragFloat2("hpBarSize", &hpSprite_.size_.x);
+	if (input_->TriggerKey(DIK_K)) {
+		hp_ = 0;
+	}
 	ImGui::End();
 #endif
-	if (MUTEKITime_ > -1) {
-		MUTEKITime_--;
-	}
 
-	if (!isKnockBack_) {
-		if (!isDash_) {
-			Move();
-			Jump();
-		}	
+	DeadUpdate();
+	ClearUpdate();
+
+	if (isDead_ == false && isClear_ == false) {
+		if (MUTEKITime_ > -1) {
+			MUTEKITime_--;
+		}
+
+		if (!isKnockBack_) {
+			if (!isDash_) {
+				Move();
+				Jump();
+			}
+		}
+		Attack();
 	}
-	Attack();
 	
 	jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
 	jumpParam_.velocity_ += jumpParam_.acceleration_;
@@ -196,6 +225,10 @@ void Player::Draw() {
 		headCollider_.Draw();
 		GameObject::PlayerDraw(headWorldTransform_, headModelHandle_, { 0.2f,0.0f,0.0f,1.0f });
 	}
+	if (isClear_ == true) {
+		ty_.Draw();
+	}
+
 }
 
 void Player::EnemyShadowCollision()
@@ -551,9 +584,52 @@ void Player::UpdateTrans() {
 void Player::DrawParticle()
 {
 	shadowHitParticle_.Draw();
+	deadParticle_.Draw({ 1.0f,1.0f,1.0f,1.0f }, deadParticleHandle_);
 }
 
 void Player::DrawParticleBox()
 {
 	hitParticle_.Draw();
 }
+
+void Player::DeadUpdate()
+{
+	const int particleFrame = 80;
+	if (hp_ == 0) {
+		if (deadFrame_ == 0) {
+			//初期化
+			isDead_ = true;
+			deadParticle_.SetIsEmit(true);
+		}
+		MUTEKITime_ = -1;
+		deadParticle_.Update();
+		deadFrame_++;
+
+		jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
+		jumpParam_.velocity_ += jumpParam_.acceleration_;
+
+		headWorldTransform_.translation_.y += jumpParam_.velocity_.y;
+		headWorldTransform_.translation_.y = clamp(headWorldTransform_.translation_.y, -0.9f, FLT_MAX);
+
+		bodyWorldTransform_.scale_ = Easing::easing(deadT, { 1.0f,1.0f,1.0f }, { 0.1f,0.1f,0.1f }, 1.0f / particleFrame, Easing::easeNormal, true);
+
+		if (deadFrame_ >= particleFrame) {
+			deadParticle_.SetIsEmit(false);
+			isEndDeadAnimation_ = true;
+		}
+
+	}
+}
+
+void Player::ClearUpdate()
+{
+	if (isClear_ == true) {
+		worldTransform_.translation_.x += speed_;
+
+		ImGui::DragFloat3("ty",&ty_.worldTransform_.translation_.x,0.1f);
+		ty_.UpdateMatrix();
+
+	}
+}
+
+

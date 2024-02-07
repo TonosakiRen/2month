@@ -6,7 +6,8 @@
 #include "Sprite.h"
 #include "ShadowHitParticle.h"
 #include "HitParticle.h"
-
+#include "Particle.h"
+#include "DeadParticle.h"
 
 // enemyなどに送るための情報
 struct PlayerDate {
@@ -57,6 +58,9 @@ private:
     void MoveLimit();
     void InsertData();
     void UpdateTrans();
+
+    void DeadUpdate();
+    void ClearUpdate();
 
 public:
     Collider bodyCollider_;
@@ -130,9 +134,28 @@ private:
 
 public:
     Collider headCollider_;
+
+    bool isDead_ = false;
+
+    bool isEndDeadAnimation_ = false;
+
+    int deadFrame_ = 0;
+
+    DeadParticle deadParticle_;
+
+    uint32_t deadParticleHandle_ = 0;
+
+    float deadT = 0.0f;
+
+    bool isClear_ = false;
+
+    bool isEndClearAnimation = false;
+
+    GameObject ty_;
 private:
 
 public:
     PlayerDate date_;
+
 
 };

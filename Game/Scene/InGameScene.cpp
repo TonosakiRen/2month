@@ -30,6 +30,8 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	followCamera_ = std::make_shared<FollowCamera>();
 	//followCamera_->Inisialize(trans);
 	fixedCamera_ = std::make_shared<FixedCamera>();
+
+	isEndClearAnimation_ = false;
 }
 
 void InGameScene::Update() {
@@ -72,7 +74,6 @@ void InGameScene::Update() {
 	player_->EnemyCollision();
 	player_->EnemyShadowCollision();
 
-	
 	// 定点開始初期化処理
 	if (stage_->GetParam().isMomentActivation_ && stage_->GetParam().isFalled_) {
 		iscamera = false;
@@ -85,26 +86,28 @@ void InGameScene::Update() {
 		followCamera_->Inisialize(fixedCamera_->GetTransform());
 	}
 
-	RT handle;
-	if (iscamera) {
-		followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate());
-		handle.rotate = followCamera_->GetTransform().quaternion_;
-		handle.position = followCamera_->GetTransform().GetWorldTranslate();
-	}
-	else {
-		fixedCamera_->Update();
-		isTrapped_ = !fixedCamera_->GetMove(); // カメラが動いていないとトラップが起動された状態
-		handle.rotate = fixedCamera_->GetTransform().quaternion_;
-		handle.position = fixedCamera_->GetTransform().GetWorldTranslate();
-	}
 	// カメラの更新
+	if (!player_->isClear_) {
+		RT handle;
+		if (iscamera) {
+			followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate());
+			handle.rotate = followCamera_->GetTransform().quaternion_;
+			handle.position = followCamera_->GetTransform().GetWorldTranslate();
+		}
+		else {
+			fixedCamera_->Update();
+			isTrapped_ = !fixedCamera_->GetMove(); // カメラが動いていないとトラップが起動された状態
+			handle.rotate = fixedCamera_->GetTransform().quaternion_;
+			handle.position = fixedCamera_->GetTransform().GetWorldTranslate();
+		}
 
-	cameraState_.rotate = handle.rotate;
-	cameraState_.position = handle.position;
+		cameraState_.rotate = handle.rotate;
+		cameraState_.position = handle.position;
+	}
 
 	stage_->PostUpdate();
-	if (stage_->GetClear()) {
-		isClear_ = true;
+	if (player_->isEndClearAnimation) {
+		isEndClearAnimation_ = true;
 	}
 }
 

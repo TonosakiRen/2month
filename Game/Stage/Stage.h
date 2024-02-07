@@ -86,10 +86,8 @@ private: // モンスターハウス用
 	void ConfineBreak(); // 閉じ込める処理
 
 	uint32_t savePointIndex_ = 0u; // 中間地点でどこから進めるかの変数
-	bool isClear_ = false; // クリア用フラグ
 
 public:
-	const bool& GetClear() const { return isClear_; }
 	const MonstarHouseParam& GetParam() const { return mHouse_; }
 	void SetTrapFinish() { mHouse_.isBreaked_ = true, mHouse_.isMomentActivation_ = true; }
 

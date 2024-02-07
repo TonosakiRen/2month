@@ -570,9 +570,10 @@ void Stage::Collision(Player* player) {
 		}
 	}
 	if (goal_) {
-		if (goal_->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+		if (goal_->collider_.Collision(player->bodyCollider_, pushBackVector) && player->isClear_ == false) {
 			// playerにクリア用の処理を持たせる予定
-			isClear_ = true;
+			player->isClear_ = true;
+			player->ty_.worldTransform_.translation_ = goal_->GetWorldTransform()->translation_;
 		}
 	}
 
