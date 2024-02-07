@@ -1623,9 +1623,9 @@
         ],
         "Player : Rotate": [
             0.0,
-            0.36499249935150146,
+            0.9996535181999207,
             0.0,
-            0.9310105443000793
+            0.02632235921919346
         ],
         "Player : Scale": [
             1.0,
@@ -1633,9 +1633,9 @@
             1.0
         ],
         "Player : Translate": [
-            -16.799999237060547,
-            0.20000000298023224,
-            3.0
+            894.1210327148438,
+            7.784059524536133,
+            -9.46721076965332
         ],
         "SavePointConfirmation": 5,
         "SavePointNumber : 0 : Rotate": [
@@ -1739,7 +1739,7 @@
             0.0
         ],
         "SpawnerNumber : 0 : hp": 1,
-        "StageLightConfirmation": 22,
+        "StageLightConfirmation": 24,
         "StageLightNumber : 0 : Distance": 20.0,
         "StageLightNumber : 0 : Rotate": [
             6.835144006345217e-09,
@@ -2040,6 +2040,46 @@
         ],
         "StageLightNumber : 21 : decay": 1.0,
         "StageLightNumber : 21 : intensity": 5.5,
+        "StageLightNumber : 22 : Distance": 31.299999237060547,
+        "StageLightNumber : 22 : Rotate": [
+            0.0,
+            0.6961352825164795,
+            0.0,
+            0.7179110050201416
+        ],
+        "StageLightNumber : 22 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 22 : ShadeDistance": 5.0,
+        "StageLightNumber : 22 : Translate": [
+            894.5999755859375,
+            7.699999809265137,
+            -15.100000381469727
+        ],
+        "StageLightNumber : 22 : decay": 1.0,
+        "StageLightNumber : 22 : intensity": 2.200000047683716,
+        "StageLightNumber : 23 : Distance": 30.200000762939453,
+        "StageLightNumber : 23 : Rotate": [
+            -0.4497723877429962,
+            -0.5677122473716736,
+            0.4281691908836365,
+            0.5404441952705383
+        ],
+        "StageLightNumber : 23 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 23 : ShadeDistance": 5.0,
+        "StageLightNumber : 23 : Translate": [
+            894.5999755859375,
+            23.299999237060547,
+            1.7999999523162842
+        ],
+        "StageLightNumber : 23 : decay": 1.0,
+        "StageLightNumber : 23 : intensity": 2.200000047683716,
         "StageLightNumber : 3 : Distance": 30.0,
         "StageLightNumber : 3 : Rotate": [
             -0.07402220368385315,
@@ -2474,10 +2514,10 @@
             -1.899999976158142
         ],
         "TruckNumber : 5 : Rotate": [
-            -0.30386078357696533,
-            0.6397103071212769,
-            0.3038800358772278,
-            0.6372567415237427
+            6.176959743697807e-08,
+            0.7343165874481201,
+            6.176959743697807e-08,
+            -0.6788071393966675
         ],
         "TruckNumber : 5 : Scale": [
             1.0,
