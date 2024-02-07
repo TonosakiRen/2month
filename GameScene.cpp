@@ -233,9 +233,6 @@ void GameScene::TitleInitialize() {
 	if (titleScene_) {
 		titleScene_.reset(new TitleScene());
 		titleScene_->Initialize(&shadowSpotLights_);
-		if (selectScene_) {
-			selectScene_.release();
-		}
 	}
 }
 void GameScene::TitleUpdate() {
@@ -254,7 +251,7 @@ void GameScene::StageSelectInitialize() {
 	selectScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
 }
 void GameScene::StageSelectUpdate() {
-	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
+	if (selectScene_->SceneChange()) {
 		if (!Transition::isTransition_) {
 			sceneRequest_ = Scene::Title;
 		}
@@ -264,7 +261,8 @@ void GameScene::StageSelectUpdate() {
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
+		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, selectScene_->GetStageNumber());
+
 		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}
 }

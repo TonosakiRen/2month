@@ -27,7 +27,8 @@ private:
 
 public:
 	const RT& GetCameraState() const { return cameraState_; }
-
+	const uint32_t& GetStageNumber() const { return currentStageNumber_; }
+	const bool& SceneChange() const { return isChangeScene_; }
 private:
 	std::unique_ptr<Sprite> stageTexture_;
 	Vector2 sTexturePosition_;
@@ -44,5 +45,7 @@ private:
 	std::unique_ptr<SelectCamera> camera_;
 	std::unique_ptr<Stage> stage_;
 	ShadowSpotLights* shadowSpotLight_;
+
+	bool isChangeScene_ = false; // シーン切り替え用フラグ
 
 };

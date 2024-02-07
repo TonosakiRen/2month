@@ -3,14 +3,14 @@
 #include "SpotLights.h"
 #include "ShadowSpotLights.h"
 
-void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
+void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint) {
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
 	std::string filePath = "stage1";
 
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights);
+	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights, respawnPoint);
 	stage_->SetPlayerRespawn(player_.get());
 
 	enemy_ = std::make_unique<EnemyManager>();

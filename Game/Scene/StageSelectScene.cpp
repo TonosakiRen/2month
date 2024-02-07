@@ -8,7 +8,6 @@
 #include "ShadowSpotLights.h"
 
 StageSelectScene::~StageSelectScene() {
-	shadowSpotLight_->lights_[1].isActive = false;
 }
 
 void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
@@ -26,10 +25,13 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 
 	stage_ = std::make_unique<Stage>();
 	stage_->Initialize("stageSelect", pointLights, spotLights, shadowSpotLight_);
+	shadowSpotLight_->lights_[0].isActive = false;
+	shadowSpotLight_->lights_[1].isActive = false;
 }
 
 void StageSelectScene::Update() {
 	stage_->Update(Vector3());
+	StageChange();
 
 	camera_->Update();
 	cameraState_.position = camera_->GetTransform().GetWorldTranslate();
@@ -72,7 +74,12 @@ void StageSelectScene::StageChange() {
 		else if (currentStageNumber_ <= 0u) {
 			currentStageNumber_ = kMaxStageNumber_;
 		}
+	}
 
+	if (key->TriggerKey(DIK_SPACE)) {
+		isChangeScene_ = true;
+		shadowSpotLight_->lights_[0].isActive = false;
+		shadowSpotLight_->lights_[1].isActive = false;
 	}
 
 }

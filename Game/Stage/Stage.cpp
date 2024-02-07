@@ -9,10 +9,11 @@
 #include "ShadowSpotLights.h"
 #include "Game/Character/EnemyManager.h"
 
-void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
+void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight, const uint32_t& respawnIndex) {
 	pointLights_ = pointLight;
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
+	savePointIndex_ = respawnIndex;
 	Load(loadFile);
 	SetSpotLight();
 	playerRespawnPoint_;
