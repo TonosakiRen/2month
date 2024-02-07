@@ -19,7 +19,7 @@ void CannonEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
 	// 親 大砲
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 
@@ -207,7 +207,7 @@ CannonEnemy::Bullet::Bullet() {
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 
 	// 親 大砲の弾
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 	isDead_ = false;

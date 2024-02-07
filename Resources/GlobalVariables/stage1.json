@@ -975,9 +975,9 @@
             1.0
         ],
         "Player : Translate": [
-            589.6640014648438,
-            2.984055995941162,
-            -5.344852924346924
+            -20.0,
+            0.0,
+            -5.0
         ],
         "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
@@ -1257,7 +1257,7 @@
             -1.0
         ],
         "ThornEnemyNumber : 0 : Scale": [
-            1.0,
+            2.5,
             1.0,
             1.0
         ],
