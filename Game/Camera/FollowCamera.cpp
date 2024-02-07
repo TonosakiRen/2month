@@ -50,7 +50,7 @@ void FollowCamera::Update(const Vector3& playerPosition) {
         savePlayerX_ = Easing::easing(0.2f, savePlayerX_, playerPosition.x);
         transform_.translation_.x = savePlayerX_ + offset;
 
-        if (playerPosition.y > 5.0f) {
+        if (playerPosition.y > end_.translate.y) {
             offset = end_.translate.y + playerPosition.y;
         }
         else {

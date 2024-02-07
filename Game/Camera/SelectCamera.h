@@ -20,7 +20,7 @@ private:
 		Vector3 translate;
 	};
 	Vector3 rotate;
-	float T = 0.0f;
+	float T = 1.0f;
 
 };
 

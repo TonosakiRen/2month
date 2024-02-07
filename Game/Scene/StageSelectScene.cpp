@@ -115,8 +115,8 @@ void StageSelectScene::StageChange() {
 
 	if (key->TriggerKey(DIK_SPACE)) {
 		isChangeScene_ = true;
-		shadowSpotLight_->lights_[0].isActive = false;
-		shadowSpotLight_->lights_[1].isActive = false;
+		//shadowSpotLight_->lights_[0].isActive = false;
+		//shadowSpotLight_->lights_[1].isActive = false;
 	}
 
 }
