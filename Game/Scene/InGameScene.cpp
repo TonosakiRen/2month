@@ -52,7 +52,7 @@ void InGameScene::Update() {
 		if (isTrappedInitialize) {
 			houseEnemy_ = std::make_unique<EnemyManager>();
 			houseEnemy_->Load("house" + std::to_string(stage_->GetParam().trapNumber_));
-			houseEnemy_->HousePopInitialize(stage_->GetParam().centerPosX_);
+			houseEnemy_->HousePopInitialize(Vector3(stage_->GetParam().centerPosX_, stage_->GetParam().centerPosY_, 0.0f));
 			isTrappedInitialize = false;
 		}
 
