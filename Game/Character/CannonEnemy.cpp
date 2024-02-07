@@ -105,7 +105,7 @@ void CannonEnemy::Draw() {
 		collider_.Draw();
 		BaseDraw();
 	}
-	else if (!flag){
+	else if (!flag) {
 		collider_.Draw();
 		BaseDraw();
 	}
@@ -145,7 +145,7 @@ void CannonEnemy::DrawImGui() {
 	if (ImGui::Button("isDraw")) {
 		shadowOnly_ = !shadowOnly_;
 	}
-	
+
 	UpdateTransform();
 #endif // _DEBUG
 }
@@ -160,7 +160,7 @@ void CannonEnemy::Attack(const Vector3& playerPosition) {
 	if (isActive_) {
 		if (kInterval_ < timer_++) {
 			//Vector3 vec = playerPosition - worldTransform_.translation_; // playerの方向に発射
-			Vector3 vec(1.0f, 0.0f, 0.0f); // 一定ベクトルに向けて発射
+			Vector3 vec(-1.0f, 0.0f, 0.0f); // 一定ベクトルに向けて発射
 			vec = Normalize(vec);
 			if (isnan(vec.x) || isnan(vec.y) || isnan(vec.z)) {
 				vec = Vector3(1.0f, 0.0f, 0.0f);
@@ -182,14 +182,13 @@ void CannonEnemy::Attack(const Vector3& playerPosition) {
 
 void CannonEnemy::CollisionProcess() {
 	// 当たった時の処理。体力が0になったらisActiv_をfalseにする
-	if (hp_ <= 0u) {
-		// 死亡アニメーション
-		isAlive_ = false;
+	// 死亡した時
+	if (hp_ <= 0) {
+		DownAnimation();
 		return;
-	}
+	}else isHit_ = false;
 
 	// 通常ダメージ処理
-
 
 }
 
@@ -211,7 +210,7 @@ CannonEnemy::Bullet::Bullet() {
 }
 
 void CannonEnemy::Bullet::Initialize(const Vector3& translate, const Vector3& shotVec, const float& speed) {
-	this->worldTransform_.translation_ = translate;
+	this->worldTransform_.translation_ = Vector3(translate.x, translate.y + 2.0f, translate.z);
 	this->shotVec_ = shotVec;
 	this->speed_ = speed;
 }
@@ -260,4 +259,15 @@ void CannonEnemy::Bullet::Draw() {
 
 void CannonEnemy::Bullet::EnemyDraw() {
 	BaseEnemyDraw();
+}
+
+void CannonEnemy::DownAnimation() {
+	worldTransform_.translation_.y += 0.5f;
+	Vector3 vec = knockBackVector_;
+	vec = Normalize(vec);
+	const float speed = 1.2f;
+	worldTransform_.translation_ += -vec * speed;
+	if (60.0f < count++) {
+		isAlive_ = false;
+	}
 }
