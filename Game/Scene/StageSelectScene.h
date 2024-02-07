@@ -6,6 +6,7 @@
 #include "Game/Stage/Stage.h"
 #include "GameObject.h"
 #include <vector>
+#include "Player.h"
 
 class ShadowSpotLights;
 class StageSelectScene {
@@ -36,11 +37,21 @@ public:
 	const bool& SceneChange() const { return isChangeScene_; }
 private:
 	//std::unique_ptr<Sprite> stageTexture_;
-	std::unique_ptr<GameObject> stageTexture_;
-	WorldTransform sTextureTransform_;
-	Vector4 sTextureColor_;
+	//std::unique_ptr<GameObject> stageTexture_;
+	//WorldTransform sTextureTransform_;
+	//Vector4 sTextureColor_;
 	Vector3 sTextureScaleOffset_;
 	
+	struct Object{
+		std::unique_ptr<GameObject> object;
+		WorldTransform transform;
+		Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	};
+	Object playerHead_;
+	Object playerBody_;
+	Object stageTexture_;
+	//std::unique_ptr<Player> player_;
+
 	struct ChangeParam {
 		bool isSwitch = false; // Stage切り替えをするか
 		bool direction = false; // 移動方向 true:右/false:左
@@ -56,7 +67,7 @@ private:
 	ShadowSpotLights* shadowSpotLight_;
 
 	bool isChangeScene_ = false; // シーン切り替え用フラグ
-	std::vector<uint32_t> textureHandle_;
+	std::vector<uint32_t> textureHandle_; // ステージテクスチャー用の切り替えハンドル
 
 
 };
