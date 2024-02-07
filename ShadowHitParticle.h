@@ -7,7 +7,7 @@ public:
 	ShadowHitParticle();
 	void Initialize(Vector3 minDirection, Vector3 maxDirection);
 	void Update();
-	void Draw(Vector4 color = { 1.0f,1.0f,1.0f,1.0f }, uint32_t textureHandle = 0);
+	void Draw(uint32_t textureHandle = 0);
 	void SetDirection(Vector3 minDirection, Vector3 maxDirection) {
 		minDirection_ = minDirection;
 		maxDirection_ = maxDirection;
@@ -25,13 +25,14 @@ public:
 		WorldTransform worldTransform_;
 		Vector3 direction_;
 		Vector3 velocity_;
+		int aliveFrame_;
 		bool isActive_;
 	};
 public:
 	WorldTransform emitterWorldTransform_;
 	OBB emitBox_;
 	deadLineParticle particles[kParticleNum];
-	int EmitNum_ = 60;
+	int EmitNum_ = 4;
 	std::unique_ptr<Particle> particle_;
 private:
 	float speed_ = 0.1f;

@@ -14,7 +14,7 @@ void HitParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
 	emitterWorldTransform_.Update();
 	SetDirection(minDirection, maxDirection);
 	particleBox_->material_.enableLighting_ = false;
-	emitterWorldTransform_.scale_ = { 0.7f,0.7f,0.7f };
+	emitterWorldTransform_.scale_ = { 0.7f,0.7f,0.1f };
 }
 
 void HitParticle::Update() {
