@@ -41,7 +41,20 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 	isActive_ = true;
 	
 	if (!isHit_) {
-		Move(playerPosition);
+		//Move(playerPosition);
+		Vector3 vec = playerPosition - MakeTranslation(worldTransform_.matWorld_);
+		vec = Normalize(vec);
+		if (isnan(vec.x) || isnan(vec.y) || isnan(vec.z)) {
+			vec = Vector3(0.0f, 0.0f, 0.0f);
+		}
+		/*vec.y = 0.0f;
+		vec.z = 0.0f;*/
+
+		const float kSpeed = 0.0f;
+
+		worldTransform_.quaternion_ = MakeLookRotation(-vec);
+		worldTransform_.translation_ += vec * kSpeed;
+		UpdateTransform();
 	}
 	else {
 		CollisionProcess();
@@ -70,7 +83,7 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	}
 
 	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
+	if (collider_.Collision(collider, pushBackVector)&& !shadowOnly_) {
 		isColl = true;
 		Player::hitCollider_ = &collider_;
 		Player::hitReaction_ = Player::knockBack;
@@ -144,6 +157,11 @@ void NormalEnemy::KnockBack() {
 
 void NormalEnemy::DownAnimation() {
 	worldTransform_.translation_.y += 0.5f;
+	Vector3 vec = knockBackVector_;
+	vec = Normalize(vec);
+	const float speed = 1.2f;
+	worldTransform_.translation_ += -vec * speed;
+	//KnockBack();
 	rotate.y += 2.0f;
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);

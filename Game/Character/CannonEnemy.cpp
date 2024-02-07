@@ -233,7 +233,7 @@ void CannonEnemy::Bullet::Update(const Vector3& playerPosition) {
 void CannonEnemy::Bullet::OnCollision(Collider& collider, const PlayerDate& date) {
 	bool isColl = false;
 	Vector3 pushBackVector;
-	if (this->collider_.Collision(collider, pushBackVector)) {
+	if (this->collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
 		isColl = true;
 	}
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());

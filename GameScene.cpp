@@ -108,6 +108,7 @@ void GameScene::Initialize() {
 	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
+		audio_->SetValume(bgmPlayHandle, 0.0f);
 	}
 }
 
