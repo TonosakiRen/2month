@@ -128,7 +128,7 @@ void CreateStageScene::ParticleBoxDraw() {
 }
 
 void CreateStageScene::ShadowDraw() {
-	stage_->Draw();
+	stage_->ShadowDraw();
 	enemy_->ShadowDraw();
 	if (isTrapped_) {
 		if (houseEnemy_) {

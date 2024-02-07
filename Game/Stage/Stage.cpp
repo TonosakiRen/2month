@@ -106,7 +106,19 @@ void Stage::ShadowDraw() {
 	for (auto& woodbox : woodboxs_) {
 		woodbox->Draw();
 	}
+	for (auto& floor : moveFloors_) {
+		floor->Draw();
+	}
+	for (auto& spotlight : stagelights_) {
+		spotlight->Draw();
+	}
+	for (auto& trap : trapButtons_) {
+		trap->Draw();
+	}
 	goal_->Draw();
+	for (auto& point : savePoints_) {
+		point->Draw();
+	}
 	for (auto& point : savePoints_) {
 		point->Draw();
 	}
