@@ -19,6 +19,7 @@ protected:
 	int count = 0;
 	bool isHit_ = false;
 	uint32_t id_;
+	int attackIndex_ = -1;
 	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	Vector3 playerPosition_;

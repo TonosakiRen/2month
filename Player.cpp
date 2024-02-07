@@ -61,14 +61,17 @@ void Player::Initialize(const std::string name)
 	MUTEKITime_ = -1;
 
 	uint32_t hpHandle = TextureManager::Load("hp.png");
-	hpSprite_.Initialize(hpHandle, { 190.0f,1000.0f });
-	hpSprite_.size_ = {285.0f,32.0f};
+	hpSprite_.Initialize(hpHandle, { 230.0f,1000.0f });
+	hpSprite_.size_ = {260.0f,32.0f};
+
+	HpbarSprite_.Initialize(TextureManager::Load("Hpbar.png"),{196.0f,979.0f});
+	HpbarSprite_.size_ = { 340.0f,100.0f };
 
 	isBlink_ = false;
 	isDash_ = false;
 
 	shadowHitParticle_.Initialize({ -0.5f,0.5f,0.0f }, { 0.5f,1.0f,0.0f });
-	hitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
+	hitParticle_.Initialize({ -1.0f,-1.0f,0.0f }, { 1.0f,1.0f,0.0f });
 
 	coinNum_ = 0;
 
@@ -92,6 +95,8 @@ void Player::Initialize(const std::string name)
 
 	ty_.Initialize("thankyou");
 	ty_.worldTransform_.translation_ = { 0.0f,30.0f,0.0f };
+
+	date_.attackIndex = -1;
 }
 
 void Player::SetGlobalVariable()
@@ -140,8 +145,8 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("Player");
 	DrawImGui();
-	ImGui::DragFloat2("hpBar", &hpSprite_.position_.x);
-	ImGui::DragFloat2("hpBarSize", &hpSprite_.size_.x);
+	ImGui::DragFloat2("hpBar", &HpbarSprite_.position_.x);
+	ImGui::DragFloat2("hpBarSize", &HpbarSprite_.size_.x);
 	if (input_->TriggerKey(DIK_K)) {
 		hp_ = 0;
 	}
@@ -150,7 +155,7 @@ void Player::Update()
 
 	DeadUpdate();
 	ClearUpdate();
-
+	attackParam_.id_ = 0;
 	if (isDead_ == false && isClear_ == false) {
 		if (MUTEKITime_ > -1) {
 			MUTEKITime_--;
@@ -192,9 +197,9 @@ void Player::UIUpdate()
 	hp_;
 	hp_ = clamp(hp_, 0, maxHp_);
 	//285
-	hpSprite_.size_.x = 285.0f * (hp_ / float(maxHp_));
-	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0.0f, 285.0f);
-	hpSprite_.position_.x = 190.0f - (maxHp_ - hp_) * 1.5f;
+	hpSprite_.size_.x = 260.0f * (hp_ / float(maxHp_));
+	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0.0f, 265.0f);
+	hpSprite_.position_.x = 230.0f - (maxHp_ - hp_) * 1.5f;
 }
 
 void Player::Draw() {
@@ -318,9 +323,9 @@ void Player::EnemyCollision()
 					knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
 					jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
 
+					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
 					GameScene::SetHitStop(hitStopFrame);
-					shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					shadowHitParticle_.SetIsEmit(true);
+					hitParticle_.SetIsEmit(true);
 					hp_ -= damage_;
 					MUTEKITime_ = maxMUTEKITime_;
 
@@ -383,6 +388,7 @@ void Player::DrawImGui() {
 
 void Player::DrawUI() {
 	hpSprite_.Draw();
+	HpbarSprite_.Draw();
 }
 
 void Player::CollisionProcess(const Vector3& pushBackVector) {
@@ -460,6 +466,7 @@ void Player::Attack() {
 			size_t handle = audio_->SoundLoadWave("attack.wav");
 			size_t attackHandle = audio_->SoundPlayWave(handle);
 			audio_->SetValume(attackHandle, 0.33f);
+			date_.attackIndex++;
 		}
 	}
 	else {
@@ -507,7 +514,7 @@ void Player::Attack() {
 		case 2: {
 			//頭で元の位置に戻る
 			headRotate.x -= backHeadSpeed_;
-			attackParam_.id_ = 0u;
+			attackParam_.id_ = 1;
 			worldTransform_.scale_ = Easing::easing(easing_tBack, Vector3(1.5f, 1.5f, 1.5f), Vector3(1.0f, 1.0f, 1.0f), 0.1f, Easing::easeInQuad, true);
 			if (headRotate.x <= 0.0f) {
 				headRotate.x = 0.0f;
@@ -617,7 +624,7 @@ void Player::DeadUpdate()
 
 		bodyWorldTransform_.scale_ = Easing::easing(deadT, { 1.0f,1.0f,1.0f }, { 0.1f,0.1f,0.1f }, 1.0f / particleFrame, Easing::easeNormal, true);
 
-		if (deadFrame_ >= particleFrame) {
+		if (deadFrame_ + 20 >= particleFrame) {
 			deadParticle_.SetIsEmit(false);
 			isEndDeadAnimation_ = true;
 		}

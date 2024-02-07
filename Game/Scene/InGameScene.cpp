@@ -32,6 +32,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	fixedCamera_ = std::make_shared<FixedCamera>();
 
 	isEndClearAnimation_ = false;
+	isEndDeadAnimation_ = false;
 }
 
 void InGameScene::Update() {
@@ -108,6 +109,9 @@ void InGameScene::Update() {
 	stage_->PostUpdate();
 	if (player_->isEndClearAnimation) {
 		isEndClearAnimation_ = true;
+	}
+	if (player_->isEndDeadAnimation_) {
+		isEndDeadAnimation_ = true;
 	}
 }
 
