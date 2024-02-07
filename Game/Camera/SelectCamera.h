@@ -1,20 +1,24 @@
 #pragma once
 #include "WorldTransform.h"
 
-class TitleCamera {
+class SelectCamera {
 public:
-	TitleCamera() = default;
-	~TitleCamera() = default;
+	SelectCamera();
+	~SelectCamera() = default;
 
-	void Inisialize();
 	void Update();
 	const WorldTransform& GetTransform() const { return transform_; }
-
 private:
+
 	void DrawImGui();
-	//Vector3 Shake(Vector3 shakeValue);
 
 	WorldTransform transform_;
+
+	struct RT {
+		Quaternion rotate;
+		Vector3 translate;
+	};
 	Vector3 rotate;
 
 };
+

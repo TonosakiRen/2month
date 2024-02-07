@@ -377,6 +377,9 @@
     <ClCompile Include="Game\Camera\TitleCamera.cpp">
       <Filter>Game\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Camera\SelectCamera.cpp">
+      <Filter>Game\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -675,6 +678,9 @@
       <Filter>Game\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Game\Camera\TitleCamera.h">
+      <Filter>Game\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Camera\SelectCamera.h">
       <Filter>Game\Camera</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,8 +2,12 @@
 #include "TextureManager.h"
 #include "WinApp.h"
 #include "Input.h"
+#include "GlobalVariables.h"
+#include "PointLights.h"
+#include "SpotLights.h"
+#include "ShadowSpotLights.h"
 
-StageSelectScene::StageSelectScene() {
+StageSelectScene::StageSelectScene(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
 	sTextureColor_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	stageTexture_ = std::make_unique<Sprite>();
 	float width = static_cast<int>(WinApp::kWindowWidth) / 2.0f;
@@ -13,18 +17,27 @@ StageSelectScene::StageSelectScene() {
 	stageTexture_->Initialize(handle, sTexturePosition_, sTextureColor_);
 	stageTexture_->size_ = Vector2(width, height);
 
+	camera_ = std::make_unique<SelectCamera>();
+
+	stage_ = std::make_unique<Stage>();
+	stage_->Initialize("stageSelect", pointLights, spotLights, shadowSpotLights);
+
 }
 
 void StageSelectScene::Update() {
+	stage_->Update(Vector3());
 
+	camera_->Update();
+	cameraState_.position = camera_->GetTransform().GetWorldTranslate();
+	cameraState_.rotate = camera_->GetTransform().quaternion_;
 }
 
 void StageSelectScene::Draw() {
-	
+	stage_->Draw();
 }
 
 void StageSelectScene::DrawUI() {
-	stageTexture_->Draw();
+	//stageTexture_->Draw();
 }
 
 void StageSelectScene::StageChange() {

@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::StageSelect;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -204,6 +204,8 @@ void GameScene::Update(CommandContext& commandContext){
 				camerarot = titleScene_->GetCameraState().rotate;
 				break;
 			case GameScene::Scene::StageSelect:
+				camerapos = selectScene_->GetCameraState().position;
+				camerarot = selectScene_->GetCameraState().rotate;
 				break;
 			case GameScene::Scene::InGame:
 				camerapos = inGameScene_->GetCameraState().position;
@@ -215,7 +217,6 @@ void GameScene::Update(CommandContext& commandContext){
 				break;
 			}
 			camera_->Update(camerapos, camerarot);
-
 		}
 	}
 
@@ -247,7 +248,7 @@ void GameScene::TitleUpdate() {
 }
 void GameScene::StageSelectInitialize() {
 	if (selectScene_) {
-		selectScene_.reset(new StageSelectScene());
+		selectScene_.reset(new StageSelectScene(&pointLights_, &spotLights_, &shadowSpotLights_));
 	}
 }
 void GameScene::StageSelectUpdate() {

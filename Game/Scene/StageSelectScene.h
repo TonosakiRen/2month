@@ -1,10 +1,13 @@
 #pragma once
 #include "Sprite.h"
 #include <memory>
+#include "Game/Camera/SelectCamera.h"
+#include "Game/Stage/Stage.h"
 
 class StageSelectScene {
 public:
-	StageSelectScene();
+	StageSelectScene() = default;
+	StageSelectScene(class PointLights* pointLights, class SpotLights* spotLights, class ShadowSpotLights* shadowSpotLights);
 	~StageSelectScene() = default;
 
 	void Update();
@@ -13,6 +16,16 @@ public:
 
 private:
 	void StageChange();
+
+private:
+	struct RT {
+		Quaternion rotate;
+		Vector3 position;
+	};
+	RT cameraState_;
+
+public:
+	const RT& GetCameraState() const { return cameraState_; }
 
 private:
 	std::unique_ptr<Sprite> stageTexture_;
@@ -27,6 +40,8 @@ private:
 
 	uint32_t currentStageNumber_ = 0u;
 	uint32_t kMaxStageNumber_ = 10u;
+	std::unique_ptr<SelectCamera> camera_;
+	std::unique_ptr<Stage> stage_;
 
 
 };
