@@ -190,7 +190,7 @@ void NormalEnemy::DownAnimation() {
 	rotate.y += 2.0f;
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	if (60.0f < count++) {
+	if (30.0f < count++) {
 		isAlive_ = false;
 	}
 }
