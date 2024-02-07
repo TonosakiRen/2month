@@ -242,7 +242,7 @@ void GameScene::TitleInitialize() {
 }
 void GameScene::TitleUpdate() {
 
-	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
+	if ((input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_SPACE)) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
 		if (!Transition::isTransition_) {
 			sceneRequest_ = Scene::StageSelect;
 		}
@@ -273,19 +273,24 @@ void GameScene::InGameInitialize() {
 }
 void GameScene::InGameUpdate() {
 
-	if (input_->TriggerKey(DIK_P) || inGameScene_->GetEndClearAnimation()) {
+	if ((input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_P)) || inGameScene_->GetEndClearAnimation()) {
 		if (!Transition::isTransition_) {
 			sceneRequest_ = Scene::Title;
 		}
 	}
 
-	if (input_->TriggerKey(DIK_O) || inGameScene_->GetEndDeadAnimation()) {
+	if (input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_O) || inGameScene_->GetEndDeadAnimation()) {
 		if (!Transition::isTransition_) {
 			sceneRequest_ = Scene::StageSelect;
 		}
 	}
-	
 
+	if (input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_R)) {
+		if (!Transition::isTransition_) {
+			sceneRequest_ = Scene::InGame;
+		}
+	}
+	
 	inGameScene_->Update();
 
 	//skydome_->Update(inGameScene_->GetPlayerTrans()->translation_);

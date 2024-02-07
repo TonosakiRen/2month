@@ -29,6 +29,7 @@ public:
 private:
 
 	std::unique_ptr<Sprite> title_;
+	std::unique_ptr<Sprite> pressA_;
 	GameObject titleModel_;
 	GameObject floor_;
 	GameObject tatemono_;

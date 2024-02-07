@@ -18,6 +18,12 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 	sinf = 0;
 
 	title_->size_ = Vector2(1920.0f, 1080.f);
+
+	pressA_ = std::make_unique<Sprite>();
+	handle = TextureManager::Load("pressA.png");
+	pressA_->Initialize(handle,Vector2());
+	pressA_->size_ = Vector2(1.0f, 1.0f);
+
 	titleModel_.Initialize("Title");
 	titleModel_.worldTransform_.translation_ = { 0.0f,7.7f,0.0f };
 	titleModel_.worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
