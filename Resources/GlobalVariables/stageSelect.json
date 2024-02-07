@@ -41,9 +41,9 @@
         "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
             0.0,
-            -0.8897852301597595,
-            -0.0,
-            0.456379771232605
+            0.7788512706756592,
+            0.0,
+            0.6272085309028625
         ],
         "Player : Scale": [
             1.0,
@@ -51,18 +51,18 @@
             1.0
         ],
         "Player : Translate": [
-            1.0807476043701172,
+            -2.8723063468933105,
             0.7840545773506165,
-            -9.35718059539795
+            -9.46721076965332
         ],
         "SpawnerConfirmation": 0,
-        "StageLightConfirmation": 1,
+        "StageLightConfirmation": 2,
         "StageLightNumber : 0 : Distance": 20.0,
         "StageLightNumber : 0 : Rotate": [
-            0.36246880888938904,
-            0.8951786756515503,
-            -0.1910560578107834,
-            0.17540988326072693
+            0.3851546347141266,
+            0.8803344964981079,
+            -0.19238005578517914,
+            0.19913722574710846
         ],
         "StageLightNumber : 0 : Scale": [
             1.0,
@@ -77,6 +77,26 @@
         ],
         "StageLightNumber : 0 : decay": 1.0,
         "StageLightNumber : 0 : intensity": 5.5,
+        "StageLightNumber : 1 : Distance": 20.0,
+        "StageLightNumber : 1 : Rotate": [
+            -0.1454409658908844,
+            0.21285609900951385,
+            0.387361615896225,
+            0.8851494789123535
+        ],
+        "StageLightNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 1 : ShadeDistance": 5.0,
+        "StageLightNumber : 1 : Translate": [
+            13.0,
+            13.0,
+            2.0
+        ],
+        "StageLightNumber : 1 : decay": 1.0,
+        "StageLightNumber : 1 : intensity": 5.5,
         "StandLightEnemyConfirmation": 0,
         "ThornEnemyConfirmation": 0,
         "TrapConfirmation": 0,
