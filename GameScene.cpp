@@ -256,7 +256,7 @@ void GameScene::StageSelectInitialize() {
 void GameScene::StageSelectUpdate() {
 	if (selectScene_->SceneChange()) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::Title;
+			sceneRequest_ = Scene::InGame;
 		}
 	}
 	selectScene_->Update();

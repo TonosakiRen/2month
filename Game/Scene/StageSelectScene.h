@@ -1,8 +1,11 @@
 #pragma once
 #include "Sprite.h"
+#include "Model.h"
 #include <memory>
 #include "Game/Camera/SelectCamera.h"
 #include "Game/Stage/Stage.h"
+#include "GameObject.h"
+#include <vector>
 
 class ShadowSpotLights;
 class StageSelectScene {
@@ -17,6 +20,8 @@ public:
 
 private:
 	void StageChange();
+	void ScaleUpdate(); // 拡縮演出
+	void DrawImGui();
 
 private:
 	struct RT {
@@ -30,22 +35,28 @@ public:
 	const uint32_t& GetStageNumber() const { return currentStageNumber_; }
 	const bool& SceneChange() const { return isChangeScene_; }
 private:
-	std::unique_ptr<Sprite> stageTexture_;
-	Vector2 sTexturePosition_;
+	//std::unique_ptr<Sprite> stageTexture_;
+	std::unique_ptr<GameObject> stageTexture_;
+	WorldTransform sTextureTransform_;
 	Vector4 sTextureColor_;
+	Vector3 sTextureScaleOffset_;
 	
 	struct ChangeParam {
 		bool isSwitch = false; // Stage切り替えをするか
 		bool direction = false; // 移動方向 true:右/false:左
+		bool startUp = false; // 拡縮演出の起動 true:する/false:しない
+		bool isOnZoom = false; // 拡大中か true:拡大/false:縮小
 	};
 	ChangeParam cp_;
 
-	uint32_t currentStageNumber_ = 0u;
-	uint32_t kMaxStageNumber_ = 10u;
+	int currentStageNumber_ = 0u;
+	const uint32_t kMaxStageNumber_ = 4u;
 	std::unique_ptr<SelectCamera> camera_;
 	std::unique_ptr<Stage> stage_;
 	ShadowSpotLights* shadowSpotLight_;
 
 	bool isChangeScene_ = false; // シーン切り替え用フラグ
+	std::vector<uint32_t> textureHandle_;
+
 
 };
