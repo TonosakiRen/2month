@@ -6,7 +6,7 @@ public:
 	FixedCamera();
 	~FixedCamera() = default;
 
-	void Initialize(const float& trapPosition, const WorldTransform& transform);
+	void Initialize(const Vector3& trapPosition, const WorldTransform& transform);
 
 	void Update(); 
 	const WorldTransform& GetTransform() const { return transform_; }
@@ -27,5 +27,7 @@ private:
 	float count_ = 0.0f;
 	bool isMove_ = false;
 
+	Vector3 offsetTrans;
 	Vector3 rotate;
+
 };

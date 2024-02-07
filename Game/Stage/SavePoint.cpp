@@ -24,6 +24,9 @@ void SavePoint::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transla
 	UpdateMatrix();
 	rotate = EulerAngle(worldTransform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
+	dustBox_ = std::make_unique<GameObject>();
+	dustBox_->Initialize("tyuukan");
+	dustBox_->worldTransform_.SetParent(&worldTransform_);
 }
 
 void SavePoint::Update(const Vector3& playerWorldPosition) {
@@ -35,6 +38,7 @@ void SavePoint::Update(const Vector3& playerWorldPosition) {
 
 	collider_.AdjustmentScale();
 	UpdateMatrix();
+	dustBox_->UpdateMatrix();
 }
 
 void SavePoint::Draw() {
@@ -43,6 +47,7 @@ void SavePoint::Draw() {
 #endif // RELEASE
 	collider_.Draw();
 	GameObject::Draw(Vector4(0.85f, 0.92f, 0.24f, 1.0f));
+	dustBox_->Draw();
 }
 
 void SavePoint::DrawImGui() {

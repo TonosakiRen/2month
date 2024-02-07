@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Collider.h"
+#include <memory>
 
 // 中間地点用のオブジェクト
 class SavePoint : public GameObject {
@@ -20,6 +21,7 @@ private:
 	bool ActiveChack(const Vector3& playerWorldPosition) const;
 	bool isActive_ = true;
 	const uint32_t kNumber_ = 0u;
+	std::unique_ptr<GameObject> dustBox_;
 
 };
 

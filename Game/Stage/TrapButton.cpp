@@ -62,7 +62,7 @@ void TrapButton::DrawImGui() {
 const Vector3& TrapButton::GetWorldPosition() const {
 	Vector3 result = worldTransform_.GetWorldTranslate();
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	result.y -= modelSize.y;
+	result.y -= (modelSize.y * (worldTransform_.scale_.y / 2.0f));
 	return result;
 }
 
