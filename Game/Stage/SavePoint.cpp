@@ -29,6 +29,7 @@ void SavePoint::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transla
 	dustBox_->worldTransform_.parent_ = &worldTransform_;
 	dustBox_->worldTransform_.SetIsScaleParent(false);
 	dustBox_->worldTransform_.SetIsRotateParent(false);
+	dustBox_->UpdateMatrix();
 }
 
 void SavePoint::Update(const Vector3& playerWorldPosition) {
