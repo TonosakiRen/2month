@@ -574,7 +574,7 @@ void Stage::Collision(Player* player) {
 	}
 	for (uint32_t index = 0u; index < static_cast<uint32_t>(trapButtons_.size()); index++) {
 		if (trapButtons_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
-			ConfineInitialize(trapButtons_.at(index)->GetWorldTransform()->GetWorldTranslate());
+			ConfineInitialize(trapButtons_.at(index)->GetWorldPosition());
 			mHouse_.trapNumber_ = trapButtons_.at(index)->GetNumber();
 			// ボタンの削除
 			trapButtons_.erase(trapButtons_.begin() + index);
@@ -638,6 +638,7 @@ void Stage::ConfineInitialize(const Vector3& position) {
 	mHouse_.kBoxCount = 24u; // 3の倍数のみかつ2で割れるもの
 	mHouse_.isFalled_ = true;
 	mHouse_.centerPosX_ = position.x;
+	mHouse_.centerPosY_ = position.y;
 	mHouse_.isMomentActivation_ = true;
 
 	int y = 0;
@@ -667,7 +668,7 @@ void Stage::ConfineInitialize(const Vector3& position) {
 			}
 			z = 0u;
 		}
-		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y) + (static_cast<float>(z) * initY));
+		trans.y = initY + scale.y + (static_cast<float>(y) * (scale.y * 2.0f + space.y) + (static_cast<float>(z) * initY)) + mHouse_.centerPosY_;
 		
 		trans.z = (-3.0f) + (static_cast<float>(z - 1) * (scale.z * 2.0f + space.z));
 		
@@ -693,7 +694,7 @@ void Stage::Confine() {
 				y = 0u;
 			}
 		}
-		float incY = woodbox->GetWorldTransform()->scale_.y + (static_cast<float>(y) * (woodbox->GetWorldTransform()->scale_.y * 2.0f));
+		float incY = woodbox->GetWorldTransform()->scale_.y + (static_cast<float>(y) * (woodbox->GetWorldTransform()->scale_.y * 2.0f)) + mHouse_.centerPosY_;
 
 		if (woodbox->GetWorldTransform()->translation_.y <= incY) {
 			woodbox->GetWorldTransform()->translation_.y = incY;

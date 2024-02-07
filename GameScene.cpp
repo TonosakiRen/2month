@@ -81,7 +81,7 @@ void GameScene::Initialize() {
 
 	ui_ = std::make_unique<Sprite>();
 	uint32_t uiHandle = TextureManager::Load("sousa.png");
-	ui_->Initialize(uiHandle, { 1780.0f,90.0f });
+	ui_->Initialize(uiHandle, { 1720.0f,90.0f });
 
 	//skydome_ = std::make_unique<Skydome>();
 	//skydome_->Initialize("skydome");
@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Title;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 		audio_->SetValume(bgmPlayHandle, 0.0f);
@@ -114,13 +114,14 @@ void GameScene::Initialize() {
 
 void GameScene::Update(CommandContext& commandContext){
 	//後で消す処理
-	
+#ifdef _DEBUG
 	ImGui::Begin("DirectionalLight");
 	ImGui::DragFloat3("lightDirection", &directionalLights_.lights_[0].direction.x, 0.01f);
 	ImGui::DragFloat3("lightPosition", &directionalLights_.lights_[0].position.x, 1.0f);
 	ImGui::DragFloat4("lightColor", &directionalLights_.lights_[0].color.x, 1.0f, 0.0f, 255.0f);
 	ImGui::DragFloat("intensity", &directionalLights_.lights_[0].intensity, 0.01f, 0.0f);
 	ImGui::End();
+#endif // _DEBUG
 
 	if (input_->TriggerKey(DIK_R)) {
 		editorScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);

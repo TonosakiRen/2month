@@ -23,7 +23,7 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 	// とりあえず一個だけ
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 }
@@ -190,7 +190,7 @@ void NormalEnemy::DownAnimation() {
 	rotate.y += 2.0f;
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
-	if (60.0f < count++) {
+	if (30.0f < count++) {
 		isAlive_ = false;
 	}
 }

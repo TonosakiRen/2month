@@ -12,6 +12,7 @@ public:
 	void Draw();
 	void DrawImGui();
 	const uint32_t& GetNumber() const { return kNumber_; }
+	const Vector3& GetWorldPosition() const;
 public:
 	Collider collider_;
 	Vector3 rotate;
@@ -20,6 +21,7 @@ private:
 	bool ActiveChack(const Vector3& playerWorldPosition) const;
 	bool isActive_ = true;
 	const uint32_t kNumber_ = 0u;
+
 
 };
 

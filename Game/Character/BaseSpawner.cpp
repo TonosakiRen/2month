@@ -20,7 +20,7 @@ void BaseSpawner::Initialize(const Vector3& scale, const Quaternion& quaternion,
 
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(models_.at(0).modelHandle_);
 	// とりあえず一個だけ
-	modelsTransform_.at(0).SetParent(&worldTransform_);
+	modelsTransform_.at(0).parent_ = &worldTransform_;
 	modelsTransform_.at(0).translation_ = Vector3(0.0f, 0.0f, 0.0f);
 	modelsTransform_.at(0).Update();
 }

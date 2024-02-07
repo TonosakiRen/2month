@@ -57,6 +57,13 @@ void TrapButton::DrawImGui() {
 #endif // _DEBUG
 }
 
+const Vector3& TrapButton::GetWorldPosition() const {
+	Vector3 result = worldTransform_.GetWorldTranslate();
+	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
+	result.y -= modelSize.y;
+	return result;
+}
+
 bool TrapButton::ActiveChack(const Vector3& playerWorldPosition) const {
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
 	Vector3 minSize = worldTransform_.GetWorldTranslate() - modelSize;
