@@ -42,7 +42,9 @@ void TrapButton::Draw() {
 	if (!isActive_) { return; }
 #endif // RELEASE
 	collider_.Draw();
+#ifdef _DEBUG
 	GameObject::Draw();
+#endif // _DEBUG
 }
 
 void TrapButton::DrawImGui() {
