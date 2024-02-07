@@ -6,7 +6,6 @@
 #include "Game/Stage/Stage.h"
 #include "GameObject.h"
 #include <vector>
-#include "Player.h"
 
 class ShadowSpotLights;
 class StageSelectScene {
@@ -50,7 +49,6 @@ private:
 	Object playerHead_;
 	Object playerBody_;
 	Object stageTexture_;
-	//std::unique_ptr<Player> player_;
 
 	struct ChangeParam {
 		bool isSwitch = false; // Stage切り替えをするか

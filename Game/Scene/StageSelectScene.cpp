@@ -72,13 +72,21 @@ void StageSelectScene::DrawUI() {
 
 void StageSelectScene::StageChange() {
 	auto key = Input::GetInstance();
-
+	bool direction = false;
+	bool flag = false;
 	if (key->TriggerKey(DIK_LEFTARROW)) {
-		cp_.direction = false;
-		cp_.startUp = true;
+		direction = false;
+		flag = true;
+		
 	}else if (key->TriggerKey(DIK_RIGHTARROW)) {
-		cp_.direction = true;
+		direction = true;
+		flag = true;
+	}
+
+	if (flag && !cp_.startUp) {
 		cp_.startUp = true;
+		cp_.direction = direction;
+		camera_->ChangeStage();
 	}
 
 	if (cp_.startUp) {
@@ -114,7 +122,7 @@ void StageSelectScene::StageChange() {
 }
 
 void StageSelectScene::ScaleUpdate() {
-	const float oneFrameSize = 15.0f;
+	const float oneFrameSize = 10.0f;
 	const Vector3 normal = Vector3(0.0f, sTextureScaleOffset_.y / oneFrameSize, 0.0f);
 	
 	if (cp_.isOnZoom) {
