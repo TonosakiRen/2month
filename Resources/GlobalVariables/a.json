@@ -478,20 +478,20 @@
         ],
         "SavePointConfirmation": 1,
         "SavePointNumber : 0 : Rotate": [
-            4.371138473402425e-08,
-            -4.371139183945161e-08,
-            4.371138473402425e-08,
-            -1.0
+            0.0,
+            0.0,
+            0.0,
+            1.0
         ],
         "SavePointNumber : 0 : Scale": [
-            1.0,
-            1.0,
-            11.199999809265137
+            0.10000000149011612,
+            15.0,
+            15.0
         ],
         "SavePointNumber : 0 : Translate": [
-            -7.800000190734863,
+            -9.0,
             0.5,
-            0.0
+            -3.0
         ],
         "SpawnerConfirmation": 0,
         "SpawnerNumber : 0 : Interval": 60,

@@ -26,7 +26,9 @@ void SavePoint::Initialize(Vector3 scale, Quaternion quaternion, Vector3 transla
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 	dustBox_ = std::make_unique<GameObject>();
 	dustBox_->Initialize("tyuukan");
-	dustBox_->worldTransform_.SetParent(&worldTransform_);
+	dustBox_->worldTransform_.parent_ = &worldTransform_;
+	dustBox_->worldTransform_.SetIsScaleParent(false);
+	dustBox_->worldTransform_.SetIsRotateParent(false);
 }
 
 void SavePoint::Update(const Vector3& playerWorldPosition) {
@@ -46,7 +48,9 @@ void SavePoint::Draw() {
 	if (!isActive_) { return; }
 #endif // RELEASE
 	collider_.Draw();
+#ifdef _DEBUG
 	GameObject::Draw(Vector4(0.85f, 0.92f, 0.24f, 1.0f));
+#endif // _DEBUG
 	dustBox_->Draw();
 }
 
@@ -59,6 +63,7 @@ void SavePoint::DrawImGui() {
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
 
 	UpdateMatrix();
+	dustBox_->UpdateMatrix();
 #endif // _DEBUG
 }
 
