@@ -440,7 +440,7 @@ void GameScene::PostSpriteDraw()
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
-		//titleScene_->Draw();
+		titleScene_->Draw();
 		break;
 	case GameScene::Scene::StageSelect:
 		selectScene_->DrawUI();

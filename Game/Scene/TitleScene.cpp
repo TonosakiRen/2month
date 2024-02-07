@@ -21,8 +21,8 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 
 	pressA_ = std::make_unique<Sprite>();
 	handle = TextureManager::Load("pressA.png");
-	pressA_->Initialize(handle,Vector2());
-	pressA_->size_ = Vector2(1.0f, 1.0f);
+	pressA_->Initialize(handle, Vector2(860.0f, 820.0f));
+	pressA_->size_ = Vector2(955.0f, 399.0f);
 
 	titleModel_.Initialize("Title");
 	titleModel_.worldTransform_.translation_ = { 0.0f,7.7f,0.0f };
@@ -111,7 +111,14 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("titleSca", &titleModel_.worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("tatemono", &tatemono_.worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("tatemonos", &tatemono_.worldTransform_.scale_.x, 0.1f);
+
+	ImGui::DragFloat2("pressAtrans", &pressA_->position_.x, 1.0f);
+	ImGui::DragFloat2("pressAsize", &pressA_->size_.x, 1.0f);
+
 #endif // _DEBUG
+
+	FlashColor();
+
 	floor_.UpdateMatrix();
 	tatemono_.UpdateMatrix();
 	// カメラの更新
@@ -122,7 +129,7 @@ void TitleScene::Update() {
 }
 
 void TitleScene::Draw() {
-	title_->Draw();
+	pressA_->Draw();
 }
 
 void TitleScene::TatemonoDraw()
@@ -139,4 +146,23 @@ void TitleScene::ModelDraw()
 	titleModel_.Draw();
 	floor_.Draw();
 	tatemono_.Draw();
+}
+
+void TitleScene::FlashColor() {
+	const float speed = 0.01f;
+	if (isInOut_) {
+		pressAColor_.w += speed;
+		if (pressAColor_.w >= 1.0f) {
+			pressAColor_.w = 1.0f;
+			isInOut_ = false;
+		}
+	}
+	else {
+		pressAColor_.w -= speed;
+		if (pressAColor_.w <= 0.0f) {
+			pressAColor_.w = 0.0f;
+			isInOut_ = true;
+		}
+	}
+	pressA_->color_ = pressAColor_;
 }
