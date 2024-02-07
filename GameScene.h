@@ -103,6 +103,7 @@ private:
 
 	Vector4 color = {1.0f,1.0f,1.0f,1.0f};
 
+	
 	// Scene用クラス
 	std::unique_ptr<InGameScene> inGameScene_;
 	std::unique_ptr<CreateStageScene> editorScene_;

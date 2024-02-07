@@ -243,8 +243,13 @@ void GameScene::TitleInitialize() {
 void GameScene::TitleUpdate() {
 
 	if ((input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_SPACE)) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
-		if (!Transition::isTransition_) {
+		if (!Transition::isTransition_) 
+		{
+			size_t handle = audio_->SoundLoadWave("tap.wav");
+			size_t catchHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(catchHandle, 0.1f);
 			sceneRequest_ = Scene::StageSelect;
+			
 		}
 	}
 
@@ -258,6 +263,9 @@ void GameScene::StageSelectInitialize() {
 void GameScene::StageSelectUpdate() {
 	if (selectScene_->SceneChange()) {
 		if (!Transition::isTransition_) {
+			size_t handle = audio_->SoundLoadWave("tap.wav");
+			size_t catchHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(catchHandle, 0.1f);
 			sceneRequest_ = Scene::InGame;
 		}
 	}

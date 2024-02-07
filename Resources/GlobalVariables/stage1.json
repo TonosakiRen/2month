@@ -1623,9 +1623,9 @@
         ],
         "Player : Rotate": [
             0.0,
-            0.40555980801582336,
+            0.7071066498756409,
             0.0,
-            0.9140685200691223
+            0.70710688829422
         ],
         "Player : Scale": [
             1.0,
@@ -1633,9 +1633,9 @@
             1.0
         ],
         "Player : Translate": [
-            621.5742797851563,
-            23.971839904785156,
-            -6.600390911102295
+            968.5999755859375,
+            7.7840576171875,
+            -9.46721076965332
         ],
         "SavePointConfirmation": 5,
         "SavePointNumber : 0 : Rotate": [
@@ -1880,7 +1880,7 @@
         ],
         "StageLightNumber : 14 : decay": 1.0,
         "StageLightNumber : 14 : intensity": 2.0,
-        "StageLightNumber : 15 : Distance": 33.70000076293945,
+        "StageLightNumber : 15 : Distance": 34.400001525878906,
         "StageLightNumber : 15 : Rotate": [
             0.0,
             0.6889212727546692,
@@ -1896,7 +1896,7 @@
         "StageLightNumber : 15 : Translate": [
             940.2999877929688,
             8.100000381469727,
-            -13.800000190734863
+            -21.700000762939453
         ],
         "StageLightNumber : 15 : decay": 1.0,
         "StageLightNumber : 15 : intensity": 1.7000000476837158,
@@ -2425,12 +2425,12 @@
         "TrapNumber : 2 : Scale": [
             2.700000047683716,
             9.300000190734863,
-            23.899999618530273
+            14.0
         ],
         "TrapNumber : 2 : Translate": [
             894.5,
-            11.300000190734863,
-            -2.5
+            11.5,
+            -6.300000190734863
         ],
         "TruckConfirmation": 6,
         "TruckNumber : 0 : Rotate": [

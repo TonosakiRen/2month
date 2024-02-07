@@ -18,7 +18,7 @@
         "CannonEnemyNumber : 0 : Translate": [
             8.5,
             0.0,
-            2.200000047683716
+            -6.900000095367432
         ],
         "CannonEnemyNumber : 1 : BulletSpeed": -0.20000000298023224,
         "CannonEnemyNumber : 1 : Draw": 0,
@@ -94,7 +94,7 @@
             0.0
         ],
         "NormalLightEnemyConfirmation": 1,
-        "NormalLightEnemyNumber : 0 : Draw": 1,
+        "NormalLightEnemyNumber : 0 : Draw": 0,
         "NormalLightEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
