@@ -165,7 +165,10 @@ void GameScene::Update(CommandContext& commandContext){
 		if (saveSceneRequest_) {
 
 			if (Transition::isNextScene_) {
-				shadowSpotLights_.lights_[0].isActive = false;
+				for (auto& light : shadowSpotLights_.lights_) {
+					light.isActive = false;
+					light.worldTransform.SetInitialize();
+				}
 				scene_ = saveSceneRequest_.value();
 				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 				saveSceneRequest_ = std::nullopt;

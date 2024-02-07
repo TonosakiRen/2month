@@ -28,6 +28,7 @@ StageLight::~StageLight()
 {
 	if (lightIndex_ != -1) {
 		shadowSpotLights_->lights_[lightIndex_].isActive = false;
+		shadowSpotLights_->lights_[lightIndex_].worldTransform.SetInitialize();
 		lightIndex_ = -1;
 	}
 }
