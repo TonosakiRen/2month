@@ -8,6 +8,7 @@
 #include "ShadowSpotLights.h"
 
 StageSelectScene::StageSelectScene(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
+	shadowSpotLight_ = shadowSpotLights;
 	sTextureColor_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	stageTexture_ = std::make_unique<Sprite>();
 	float width = static_cast<int>(WinApp::kWindowWidth) / 2.0f;
@@ -20,8 +21,7 @@ StageSelectScene::StageSelectScene(PointLights* pointLights, SpotLights* spotLig
 	camera_ = std::make_unique<SelectCamera>();
 
 	stage_ = std::make_unique<Stage>();
-	stage_->Initialize("stageSelect", pointLights, spotLights, shadowSpotLights);
-
+	stage_->Initialize("stageSelect", pointLights, spotLights, shadowSpotLight_);
 }
 
 void StageSelectScene::Update() {

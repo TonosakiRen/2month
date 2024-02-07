@@ -4,10 +4,11 @@
 #include "Game/Camera/SelectCamera.h"
 #include "Game/Stage/Stage.h"
 
+class ShadowSpotLights;
 class StageSelectScene {
 public:
 	StageSelectScene() = default;
-	StageSelectScene(class PointLights* pointLights, class SpotLights* spotLights, class ShadowSpotLights* shadowSpotLights);
+	StageSelectScene(class PointLights* pointLights, class SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	~StageSelectScene() = default;
 
 	void Update();
@@ -42,6 +43,6 @@ private:
 	uint32_t kMaxStageNumber_ = 10u;
 	std::unique_ptr<SelectCamera> camera_;
 	std::unique_ptr<Stage> stage_;
-
+	ShadowSpotLights* shadowSpotLight_;
 
 };

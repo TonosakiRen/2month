@@ -233,13 +233,16 @@ void GameScene::TitleInitialize() {
 	if (titleScene_) {
 		titleScene_.reset(new TitleScene());
 		titleScene_->Initialize(&shadowSpotLights_);
+		if (selectScene_) {
+			selectScene_.release();
+		}
 	}
 }
 void GameScene::TitleUpdate() {
 
 	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::InGame;
+			sceneRequest_ = Scene::StageSelect;
 		}
 	}
 
@@ -247,11 +250,14 @@ void GameScene::TitleUpdate() {
 
 }
 void GameScene::StageSelectInitialize() {
-	if (selectScene_) {
-		selectScene_.reset(new StageSelectScene(&pointLights_, &spotLights_, &shadowSpotLights_));
-	}
+	selectScene_.reset(new StageSelectScene(&pointLights_, &spotLights_, &shadowSpotLights_));
 }
 void GameScene::StageSelectUpdate() {
+	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
+		if (!Transition::isTransition_) {
+			sceneRequest_ = Scene::Title;
+		}
+	}
 	selectScene_->Update();
 }
 void GameScene::InGameInitialize() {
