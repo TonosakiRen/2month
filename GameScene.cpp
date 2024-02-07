@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::InGame;
+	sceneRequest_ = Scene::Editor;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 		audio_->SetValume(bgmPlayHandle, 0.0f);
@@ -257,7 +257,7 @@ void GameScene::StageSelectInitialize() {
 void GameScene::StageSelectUpdate() {
 	if (selectScene_->SceneChange()) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::Title;
+			sceneRequest_ = Scene::InGame;
 		}
 	}
 	selectScene_->Update();
