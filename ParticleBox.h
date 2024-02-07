@@ -52,6 +52,7 @@ public:
 
 	void Initialize();
 	void Draw(const std::vector<InstancingBufferData>& bufferData, const Vector4& color = { 1.0f,1.0f,1.0f,1.0f }, const uint32_t textureHadle = 0);
+	void Draw(const std::vector<InstancingBufferData>& bufferData, const uint32_t modelHadle = 0, const Vector4& color = { 1.0f,1.0f,1.0f,1.0f });
 	void CreateMesh();
 
 public:

@@ -61,7 +61,7 @@ void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	Vector3 pushBackVector;
 	if (collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
 		isColl = true;
-		Player::hitReaction_ = Player::knockBack;
+		Player::hitReaction_ = Player::damage;
 		Player::hitCollider_ = &collider_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 	}

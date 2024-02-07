@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "Renderer.h"
 #include "TextureManager.h"
+#include "ModelManager.h"
 
 using namespace Microsoft::WRL;
 
@@ -282,13 +283,45 @@ void ParticleBox::Draw(const std::vector<InstancingBufferData>& bufferData, cons
     material_.color_ = color;
     material_.Update();
 
+
+
     commandContext_->SetVertexBuffer(0, 1, &vbView_);
     commandContext_->SetIndexBuffer(ibView_);
     commandContext_->SetDescriptorTable(0, srvHandle_);
+
     commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material_.GetGPUVirtualAddress());
 
  
     TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext_, static_cast<UINT>(RootParameter::kTexture), textureHadle);
 
     commandContext_->DrawIndexedInstanced(static_cast<UINT>(indices_.size()), static_cast<UINT>(bufferData.size()), 0, 0, 0);
+}
+
+void ParticleBox::Draw(const std::vector<InstancingBufferData>& bufferData, const uint32_t modelHandle, const Vector4& color)
+{
+    assert(commandContext_);
+    assert(!bufferData.empty());
+
+    //マッピング
+    instancingBuffer_.Copy(bufferData.data(), sizeof(bufferData[0]) * bufferData.size());
+
+    material_.color_ = color;
+    material_.Update();
+
+
+
+ /*   commandContext_->SetVertexBuffer(0, 1, &vbView_);
+    commandContext_->SetIndexBuffer(ibView_);*/
+    commandContext_->SetDescriptorTable(0, srvHandle_);
+
+   
+
+    commandContext_->SetConstantBuffer(static_cast<UINT>(RootParameter::kMaterial), material_.GetGPUVirtualAddress());
+
+
+    //TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext_, static_cast<UINT>(RootParameter::kTexture), textureHadle);
+
+    ModelManager::GetInstance()->DrawInstancing(commandContext_, modelHandle, static_cast<UINT>(bufferData.size()), static_cast<UINT>(RootParameter::kTexture));
+
+   // commandContext_->DrawIndexedInstanced(static_cast<UINT>(indices_.size()), static_cast<UINT>(bufferData.size()), 0, 0, 0);
 }

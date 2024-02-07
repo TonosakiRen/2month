@@ -30,7 +30,7 @@ public:
 public:
 	WorldTransform emitterWorldTransform_;
 	Particle particles[kParticleNum];
-	int EmitNum_ = 30;
+	int EmitNum_ = 4;
 	std::unique_ptr<ParticleBox> particleBox_;
 private:
 	float speed_ = 0.2f;
@@ -38,4 +38,5 @@ private:
 	bool isEmit_ = false;
 	Vector3 minDirection_;
 	Vector3 maxDirection_;
+	uint32_t modelHandle_;
 };
