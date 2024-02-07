@@ -47,6 +47,8 @@ void TitleScene::Update() {
 
 	titleModel_.UpdateMatrix();
 	spotLights_->lights_[0].isActive = true;
+#ifdef _DEBUG
+
 	ImGui::Begin("spotLight");
 	ImGui::DragFloat3("lightPosition", &spotLights_->lights_[0].worldTransform.translation_.x, 0.01f);
 	ImGui::DragFloat3("lightColor", &spotLights_->lights_[0].color.x, 1.0f, 0.0f, 255.0f);
@@ -61,6 +63,7 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("title", &titleModel_.worldTransform_.translation_.x, 0.1f);
 	ImGui::DragFloat3("titleSca", &titleModel_.worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("stagefloor", &floor_.worldTransform_.translation_.x, 0.1f);
+#endif // _DEBUG
 	floor_.UpdateMatrix();
 
 	// カメラの更新
