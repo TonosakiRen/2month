@@ -59,7 +59,7 @@ private:
 	ChangeParam cp_;
 
 	int currentStageNumber_ = 0u;
-	const uint32_t kMaxStageNumber_ = 4u;
+	const uint32_t kMaxStageNumber_ = 5u;
 	std::unique_ptr<SelectCamera> camera_;
 	std::unique_ptr<Stage> stage_;
 	ShadowSpotLights* shadowSpotLight_;

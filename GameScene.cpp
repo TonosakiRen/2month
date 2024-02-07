@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 		audio_->SetValume(bgmPlayHandle, 0.0f);
@@ -123,9 +123,9 @@ void GameScene::Update(CommandContext& commandContext){
 	ImGui::End();
 #endif // _DEBUG
 
-	if (input_->TriggerKey(DIK_R)) {
+	/*if (input_->TriggerKey(DIK_R)) {
 		editorScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
-	}
+	}*/
 
 
 	Collider::SwitchIsDrawCollider();
