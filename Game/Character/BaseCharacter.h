@@ -23,7 +23,7 @@ public:
 
 	void PushBackCollision(Collider& collider); // 押し戻し処理
 
-	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position; }
+	void SetPosition(const Vector3& position) { worldTransform_.translation_ = position, worldTransform_.Update(); }
 
 protected:
 	// 回転用

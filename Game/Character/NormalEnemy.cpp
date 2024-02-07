@@ -30,7 +30,7 @@ void NormalEnemy::Initialize(const Vector3& scale, const Quaternion& quaternion,
 
 void NormalEnemy::Update(const Vector3& playerPosition) {
 	playerPosition_ = playerPosition;
-	float distance = Distance(playerPosition, worldTransform_.translation_);
+	float distance = Distance(playerPosition, worldTransform_.GetWorldTranslate());
 
 	// Playerとの距離が一定数以下なら早期リターン
 	// 後で調整。画面外で処理を走らせないのが目的
