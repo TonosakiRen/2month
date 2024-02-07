@@ -30,6 +30,9 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 	spotLights_->lights_[0].distance = 52.3f;
 	spotLights_->lights_[0].decay = 1.0f;
 	spotLights_->lights_[0].cosAngle = 0.785f;
+
+	titleCamera_ = std::make_unique<TitleCamera>();
+	titleCamera_->Inisialize();
 }
 
 void TitleScene::Update() {
@@ -59,6 +62,12 @@ void TitleScene::Update() {
 	ImGui::DragFloat3("titleSca", &titleModel_.worldTransform_.scale_.x, 0.1f);
 	ImGui::DragFloat3("stagefloor", &floor_.worldTransform_.translation_.x, 0.1f);
 	floor_.UpdateMatrix();
+
+	// カメラの更新
+	titleCamera_->Update();
+	cameraState_.position = titleCamera_->GetTransform().GetWorldTranslate();
+	cameraState_.rotate = titleCamera_->GetTransform().quaternion_;
+
 }
 
 void TitleScene::Draw() {

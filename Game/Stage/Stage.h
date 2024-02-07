@@ -23,7 +23,7 @@ public:
 	Stage() = default;
 	~Stage() = default;
 
-	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight);
+	void Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowspotLight, const uint32_t& respawnIndex = 0u);
 	void Update(const Vector3& playerWorldPosition);
 	void PostUpdate();
 	void Draw();

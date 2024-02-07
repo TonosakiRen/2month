@@ -9,10 +9,11 @@
 #include "ShadowSpotLights.h"
 #include "Game/Character/EnemyManager.h"
 
-void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight) {
+void Stage::Initialize(const std::filesystem::path& loadFile, PointLights* pointLight, SpotLights* spotLight, ShadowSpotLights* shadowSpotLight, const uint32_t& respawnIndex) {
 	pointLights_ = pointLight;
 	spotLights_ = spotLight;
 	shadowSpotLights_ = shadowSpotLight;
+	savePointIndex_ = respawnIndex;
 	Load(loadFile);
 	SetSpotLight();
 	playerRespawnPoint_;
@@ -608,8 +609,10 @@ void Stage::SetPlayerRespawn(Player* const player) const {
 }
 
 void Stage::SetSpotLight() {
-	spotLights_->lights_.at(0).worldTransform.translation_ = wallLights_.at(0)->GetLightPos();
-	spotLights_->lights_.at(0).worldTransform.Update();
+	if (wallLights_.size() > 1) {
+		spotLights_->lights_.at(0).worldTransform.translation_ = wallLights_.at(0)->GetLightPos();
+		spotLights_->lights_.at(0).worldTransform.Update();
+	}
 }
 
 void Stage::ConfineInitialize(const Vector3& position) {

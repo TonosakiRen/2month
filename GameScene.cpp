@@ -166,7 +166,10 @@ void GameScene::Update(CommandContext& commandContext){
 		if (saveSceneRequest_) {
 
 			if (Transition::isNextScene_) {
-				shadowSpotLights_.lights_[0].isActive = false;
+				for (auto& light : shadowSpotLights_.lights_) {
+					light.isActive = false;
+					light.worldTransform.SetInitialize();
+				}
 				scene_ = saveSceneRequest_.value();
 				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 				saveSceneRequest_ = std::nullopt;
@@ -197,15 +200,27 @@ void GameScene::Update(CommandContext& commandContext){
 		}
 		else {
 			currentViewProjection_ = camera_.get();
-			//float float_x = inGameScene_->GetPlayerTrans()->GetWorldTranslate().x;
-			if (scene_ == Scene::Editor) {
-				//float_x = editorScene_->GetPlayerTrans()->GetWorldTranslate().x;
-				camera_->Update(editorScene_->GetCameraState().position, editorScene_->GetCameraState().rotate);
+			Vector3 camerapos;
+			Quaternion camerarot;
+			switch (scene_) {
+			case GameScene::Scene::Title:
+				camerapos = titleScene_->GetCameraState().position;
+				camerarot = titleScene_->GetCameraState().rotate;
+				break;
+			case GameScene::Scene::StageSelect:
+				camerapos = selectScene_->GetCameraState().position;
+				camerarot = selectScene_->GetCameraState().rotate;
+				break;
+			case GameScene::Scene::InGame:
+				camerapos = inGameScene_->GetCameraState().position;
+				camerarot = inGameScene_->GetCameraState().rotate;
+				break;
+			case GameScene::Scene::Editor:
+				camerapos = editorScene_->GetCameraState().position;
+				camerarot = editorScene_->GetCameraState().rotate;
+				break;
 			}
-			else if (scene_ == Scene::InGame) {
-				camera_->Update(inGameScene_->GetCameraState().position, inGameScene_->GetCameraState().rotate);
-			}
-			//camera_->Update(float_x);
+			camera_->Update(camerapos, camerarot);
 		}
 	}
 
@@ -228,7 +243,7 @@ void GameScene::TitleUpdate() {
 
 	if (input_->TriggerKey(DIK_P) || input_->TriggerButton(XINPUT_GAMEPAD_X) || input_->TriggerButton(XINPUT_GAMEPAD_A) || input_->TriggerButton(XINPUT_GAMEPAD_B)) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::InGame;
+			sceneRequest_ = Scene::StageSelect;
 		}
 	}
 
@@ -236,17 +251,22 @@ void GameScene::TitleUpdate() {
 
 }
 void GameScene::StageSelectInitialize() {
-	if (selectScene_) {
-		selectScene_.reset(new StageSelectScene());
-	}
+	selectScene_.reset(new StageSelectScene());
+	selectScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
 }
 void GameScene::StageSelectUpdate() {
+	if (selectScene_->SceneChange()) {
+		if (!Transition::isTransition_) {
+			sceneRequest_ = Scene::Title;
+		}
+	}
 	selectScene_->Update();
 }
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize(&pointLights_, &spotLights_,&shadowSpotLights_);
+		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, selectScene_->GetStageNumber());
+
 		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}
 }
@@ -280,6 +300,9 @@ void GameScene::ModelDraw()
 	{
 	case GameScene::Scene::Title:
 		titleScene_->ModelDraw();
+		break;
+	case GameScene::Scene::StageSelect:
+		selectScene_->Draw();
 		break;
 	case GameScene::Scene::InGame:
 		//skydome_->Draw();
@@ -390,6 +413,8 @@ void GameScene::PreSpriteDraw()
 	{
 	case GameScene::Scene::Title:
 		break;
+	case GameScene::Scene::StageSelect:
+		break;
 	case GameScene::Scene::InGame:
 		break;
 	default:
@@ -403,6 +428,9 @@ void GameScene::PostSpriteDraw()
 	{
 	case GameScene::Scene::Title:
 		//titleScene_->Draw();
+		break;
+	case GameScene::Scene::StageSelect:
+		selectScene_->DrawUI();
 		break;
 	case GameScene::Scene::InGame:
 		inGameScene_->DrawUI();

@@ -1,0 +1,124 @@
+{
+    "stageSelect": {
+        "CannonEnemyConfirmation": 0,
+        "CoinConfirmation": 0,
+        "FloorConfirmation": 1,
+        "FloorNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "FloorNumber : 0 : Scale": [
+            0.5,
+            1.0,
+            1.0
+        ],
+        "FloorNumber : 0 : Translate": [
+            0.0,
+            -1.2000000476837158,
+            -3.0
+        ],
+        "Goal : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "Goal : Scale": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "Goal : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "HeartConfirmation": 0,
+        "MoveFloorConfirmation": 0,
+        "NormalEnemyConfirmation": 0,
+        "NormalLightEnemyConfirmation": 0,
+        "Player : Rotate": [
+            0.0,
+            0.7788512706756592,
+            0.0,
+            0.6272085309028625
+        ],
+        "Player : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Player : Translate": [
+            -2.8723063468933105,
+            0.7840545773506165,
+            -9.46721076965332
+        ],
+        "SpawnerConfirmation": 0,
+        "StageLightConfirmation": 2,
+        "StageLightNumber : 0 : Distance": 20.0,
+        "StageLightNumber : 0 : Rotate": [
+            0.3851546347141266,
+            0.8803344964981079,
+            -0.19238005578517914,
+            0.19913722574710846
+        ],
+        "StageLightNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 0 : ShadeDistance": 5.0,
+        "StageLightNumber : 0 : Translate": [
+            -13.0,
+            13.0,
+            2.0
+        ],
+        "StageLightNumber : 0 : decay": 1.0,
+        "StageLightNumber : 0 : intensity": 5.5,
+        "StageLightNumber : 1 : Distance": 20.0,
+        "StageLightNumber : 1 : Rotate": [
+            -0.1454409658908844,
+            0.21285609900951385,
+            0.387361615896225,
+            0.8851494789123535
+        ],
+        "StageLightNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 1 : ShadeDistance": 5.0,
+        "StageLightNumber : 1 : Translate": [
+            13.0,
+            13.0,
+            2.0
+        ],
+        "StageLightNumber : 1 : decay": 1.0,
+        "StageLightNumber : 1 : intensity": 5.5,
+        "StandLightEnemyConfirmation": 0,
+        "ThornEnemyConfirmation": 0,
+        "TrapConfirmation": 0,
+        "TruckConfirmation": 0,
+        "WallConfirmation": 1,
+        "WallLightConfirmation": 0,
+        "WallNumber : 0 : Rotate": [
+            -1.3315805347247078e-07,
+            -1.0,
+            -1.3315805347247078e-07,
+            -4.371140605030632e-08
+        ],
+        "WallNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "WallNumber : 0 : Translate": [
+            0.0,
+            8.0,
+            10.0
+        ],
+        "WoodBoxConfirmation": 0
+    }
+}
