@@ -1,6 +1,44 @@
 {
     "house1": {
-        "CannonEnemyConfirmation": 0,
+        "CannonEnemyConfirmation": 2,
+        "CannonEnemyNumber : 0 : BulletSpeed": 0.20000000298023224,
+        "CannonEnemyNumber : 0 : Draw": 0,
+        "CannonEnemyNumber : 0 : Interval": 130,
+        "CannonEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CannonEnemyNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CannonEnemyNumber : 0 : Translate": [
+            8.5,
+            0.0,
+            2.200000047683716
+        ],
+        "CannonEnemyNumber : 1 : BulletSpeed": -0.20000000298023224,
+        "CannonEnemyNumber : 1 : Draw": 0,
+        "CannonEnemyNumber : 1 : Interval": 130,
+        "CannonEnemyNumber : 1 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CannonEnemyNumber : 1 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CannonEnemyNumber : 1 : Translate": [
+            -9.5,
+            0.0,
+            -7.199999809265137
+        ],
         "CoinConfirmation": 0,
         "FloorConfirmation": 1,
         "FloorNumber : 0 : Rotate": [
@@ -19,13 +57,26 @@
             -1.2000000476837158,
             -3.0
         ],
+        "Goal : Rotate": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+        ],
         "Goal : Scale": [
             0.0,
             0.0,
             0.0
         ],
+        "Goal : Translate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "HeartConfirmation": 0,
         "MoveFloorConfirmation": 0,
         "NormalEnemyConfirmation": 1,
+        "NormalEnemyNumber : 0 : Draw": 0,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -38,11 +89,28 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            8.100000381469727,
-            2.0,
+            -6.300000190734863,
+            2.9000000953674316,
             0.0
         ],
-        "NormalLightEnemyConfirmation": 0,
+        "NormalLightEnemyConfirmation": 1,
+        "NormalLightEnemyNumber : 0 : Draw": 1,
+        "NormalLightEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "NormalLightEnemyNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "NormalLightEnemyNumber : 0 : Translate": [
+            0.0,
+            5.400000095367432,
+            0.0
+        ],
         "Player : Rotate": [
             0.0,
             0.7818900346755981,
@@ -59,7 +127,8 @@
             0.800000011920929,
             -3.0
         ],
-        "SpawnerConfirmation": 2,
+        "SavePointConfirmation": 0,
+        "SpawnerConfirmation": 0,
         "SpawnerNumber : 0 : Interval": 60,
         "SpawnerNumber : 0 : MaxPop": 10,
         "SpawnerNumber : 0 : Rotate": [
