@@ -586,8 +586,10 @@ void Stage::Collision(Player* player) {
 			// playerにクリア用の処理を持たせる予定
 			player->isClear_ = true;
 			player->ty_.worldTransform_.translation_ = goal_->GetWorldTransform()->translation_;
-			player->ty_.worldTransform_.translation_.x += 3.0f;
+			player->ty_.worldTransform_.translation_.x += 7.0f;
+			player->ty_.worldTransform_.scale_ = { 3.0f,3.0f,3.0f };
 		}
+
 	}
 
 	for (auto& point : savePoints_) {

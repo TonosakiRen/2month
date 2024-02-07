@@ -67,7 +67,7 @@ void Player::Initialize(const std::string name)
 	isBlink_ = false;
 	isDash_ = false;
 
-	shadowHitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
+	shadowHitParticle_.Initialize({ -0.5f,0.5f,0.0f }, { 0.5f,1.0f,0.0f });
 	hitParticle_.Initialize({ -1.0f,-1.0f,-1.0f }, { 1.0f,1.0f,1.0f });
 
 	coinNum_ = 0;
@@ -90,7 +90,7 @@ void Player::Initialize(const std::string name)
 
 	isEndClearAnimation = false;
 
-	ty_.Initialize("box1x1");
+	ty_.Initialize("thankyou");
 }
 
 void Player::SetGlobalVariable()
@@ -242,6 +242,7 @@ void Player::EnemyShadowCollision()
 
 			Vector3* aa = static_cast<Vector3*>(Compute::GetPosData());
 			shadowHitParticle_.emitterWorldTransform_.translation_ = aa[0];
+			shadowHitParticle_.emitterWorldTransform_.translation_.z -= 1.0f;
 
 			if (attackParam_.id_ != 1) {
 				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
@@ -583,7 +584,7 @@ void Player::UpdateTrans() {
 
 void Player::DrawParticle()
 {
-	shadowHitParticle_.Draw();
+	shadowHitParticle_.Draw(TextureManager::GetInstance()->Load("syadlonTex.png"));
 	deadParticle_.Draw({ 1.0f,1.0f,1.0f,1.0f }, deadParticleHandle_);
 }
 
@@ -626,7 +627,7 @@ void Player::ClearUpdate()
 	if (isClear_ == true) {
 		worldTransform_.translation_.x += speed_;
 
-		ImGui::DragFloat3("ty",&ty_.worldTransform_.translation_.x,0.1f);
+
 		ty_.UpdateMatrix();
 
 	}
