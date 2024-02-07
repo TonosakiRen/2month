@@ -78,7 +78,7 @@ private:
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	static int hitStopFrame_;
-
+	 
 	std::unique_ptr <DebugCamera> debugCamera_;
 	ViewProjection* currentViewProjection_ = nullptr;
 	
