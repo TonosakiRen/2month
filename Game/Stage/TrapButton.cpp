@@ -42,7 +42,9 @@ void TrapButton::Draw() {
 	if (!isActive_) { return; }
 #endif // RELEASE
 	collider_.Draw();
+#ifdef _DEBUG
 	GameObject::Draw();
+#endif // _DEBUG
 }
 
 void TrapButton::DrawImGui() {
@@ -60,7 +62,7 @@ void TrapButton::DrawImGui() {
 const Vector3& TrapButton::GetWorldPosition() const {
 	Vector3 result = worldTransform_.GetWorldTranslate();
 	Vector3 modelSize = ModelManager::GetInstance()->GetModelSize(modelHandle_);
-	result.y -= modelSize.y;
+	result.y -= (modelSize.y * (worldTransform_.scale_.y / 2.0f));
 	return result;
 }
 

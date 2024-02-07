@@ -14,6 +14,7 @@ public:
 	void Initialize(ShadowSpotLights* spotLights);
 	void Update();
 	void Draw();
+	void TatemonoDraw();
 	void DepthDraw();
 	void ModelDraw();
 private:
@@ -30,6 +31,7 @@ private:
 	std::unique_ptr<Sprite> title_;
 	GameObject titleModel_;
 	GameObject floor_;
+	GameObject tatemono_;
 	ShadowSpotLights* spotLights_;
 	std::unique_ptr<TitleCamera> titleCamera_;
 };

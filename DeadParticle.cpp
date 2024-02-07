@@ -14,7 +14,7 @@ void DeadParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
 	emitterWorldTransform_.Update();
 	SetDirection(minDirection, maxDirection);
 	emitBox_ = MakeOBB(emitterWorldTransform_.matWorld_);
-	emitBox_.size = { 1.0f,1.0f,1.0f };
+	emitBox_.size = { 0.01f,0.01f,0.01f };
 }
 
 void DeadParticle::Update() {

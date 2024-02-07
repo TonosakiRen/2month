@@ -7,17 +7,18 @@
 FixedCamera::FixedCamera() {
 	auto global = GlobalVariables::GetInstance();
 	global->LoadFile("FixedCamera");
-	Vector3 trans = global->GetVector3Value("FixedCamera", "FixedCameraOffset : Translate");
+	offsetTrans = global->GetVector3Value("FixedCamera", "FixedCameraOffset : Translate");
 	Quaternion rot = global->GetQuaternionValue("FixedCamera", "FixedCameraOffset : Rotate");
-	end_.translate = trans;
+	end_.translate = offsetTrans;
 	end_.rotate = rot;
 
 	rotate = EulerAngle(transform_.quaternion_);
 	rotate.x = Degree(rotate.x) - 180.0f; rotate.y = Degree(rotate.y) - 180.0f; rotate.z = Degree(rotate.z) - 180.0f;
 }
 
-void FixedCamera::Initialize(const float& trapPosition, const WorldTransform& transform) {
-	end_.translate.x = trapPosition;
+void FixedCamera::Initialize(const Vector3& trapPosition, const WorldTransform& transform) {
+	end_.translate.x = trapPosition.x;
+	end_.translate.y = trapPosition.y + offsetTrans.y;
 	start_.translate = transform.translation_;
 	start_.rotate = transform.quaternion_;
 	count_ = 0.0f;

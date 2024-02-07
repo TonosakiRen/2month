@@ -81,7 +81,8 @@ void Player::Initialize(const std::string name)
 	deadParticleHandle_ = TextureManager::Load("blackEffect.png");
 
 	deadParticle_.emitterWorldTransform_.SetParent(&worldTransform_);
-	deadParticle_.emitterWorldTransform_.translation_ = { 0.0f,0.2f,0.3f };
+	deadParticle_.emitterWorldTransform_.translation_ = { 0.0f,-2.0f,0.0f };
+	deadParticle_.EmitNum_ = 1;
 
 	isDead_ = false;
 
@@ -204,6 +205,7 @@ void Player::Update()
 	shadowHitParticle_.Update();
 	hitParticle_.Update();
 	playerPos_ = MakeTranslation(worldTransform_.matWorld_);
+	deadParticle_.Update();
 }
 
 void Player::UIUpdate()
@@ -317,6 +319,9 @@ void Player::EnemyShadowCollision()
 		else if (hitReaction_ == heal){
 			hp_ += heal_;
 			hp_ = clamp(hp_, -100, maxHp_);
+			size_t handle = audio_->SoundLoadWave("heal.wav");
+			size_t healHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(healHandle, 1.0f);
 		}
 		else {
 			coinNum_++;
@@ -382,6 +387,10 @@ void Player::EnemyCollision()
 		else if (hitReaction_ == heal){
 			hp_ += heal_;
 			hp_ = clamp(hp_, -100, maxHp_);
+
+			size_t handle = audio_->SoundLoadWave("heal.wav");
+			size_t healHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(healHandle, 1.0f);
 		}
 		else {
 			coinNum_++;
@@ -421,7 +430,7 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 	worldTransform_.Update();
 	bodyWorldTransform_.Update();
 	headWorldTransform_.Update();
-	if (Normalize(pushBackVector).y == 1.0f) {
+	if (Normalize(pushBackVector).y >= 0.8f) {
 		jumpParam_.isJumped_ = false;
 		isKnockBack_ = false;
 		jumpParam_.velocity_.x = 0.0f;
@@ -458,9 +467,14 @@ void Player::Move() {
 		Vector3 move = Normalize(direction) * speed_;
 
 		if (direction.x != 0.0f || direction.y != 0.0f || direction.z != 0.0f) {
+
 			worldTransform_.translation_ += move;
 			inputQuaternion_ = MakeLookRotation(direction);
 			worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, inputQuaternion_);
+			deadParticle_.SetIsEmit(true);
+		}
+		else {
+			deadParticle_.SetIsEmit(false);
 		}
 	}
 	
@@ -629,9 +643,10 @@ void Player::DeadUpdate()
 			isDead_ = true;
 			deadParticle_.SetIsEmit(true);
 			deadT = 0;
+			deadParticle_.emitterWorldTransform_.translation_ = { 0.0f,0.1f,0.3f };
+			deadParticle_.EmitNum_ = 3;
 		}
 		MUTEKITime_ = -1;
-		deadParticle_.Update();
 		deadFrame_++;
 
 		jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
