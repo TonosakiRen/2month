@@ -25,6 +25,7 @@ private:
 		void Initialize(const Vector3& translate, const Vector3& shotVec, const float& speed);
 		void Update(const Vector3& playerPosition) override;
 		void OnCollision(Collider& collider);
+		void OnCollision(Collider& collider,bool isPlayer);
 		void Draw() override;
 		void EnemyDraw() override;
 		bool isDead_ = false;

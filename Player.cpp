@@ -97,6 +97,18 @@ void Player::Initialize(const std::string name)
 	ty_.worldTransform_.translation_ = { 0.0f,30.0f,0.0f };
 
 	date_.attackIndex = -1;
+
+	coinUI_.Initialize(TextureManager::Load("coin.png"),{91.0f,83.0f});
+	coinUI_.size_ = { 131.0f,110.0f };
+
+	one_.Initialize(TextureManager::Load("dekisokonai36.png"), {248.0f,92.0f});
+	ten_.Initialize(TextureManager::Load("dekisokonai36.png"), {190.0f,92.0f});
+	one_.size_ = { 50.0f,50.0f };
+	ten_.size_ = { 50.0f,50.0f };
+	one_.texSize_ = { 36.0f,36.0f };
+	one_.texBase_ = { 0.0f,0.0f };
+	ten_.texSize_ = { 36.0f,36.0f };
+	ten_.texBase_ = { 0.0f,0.0f };
 }
 
 void Player::SetGlobalVariable()
@@ -145,8 +157,10 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::Begin("Player");
 	DrawImGui();
-	ImGui::DragFloat2("hpBar", &HpbarSprite_.position_.x);
-	ImGui::DragFloat2("hpBarSize", &HpbarSprite_.size_.x);
+	ImGui::DragFloat2("hpBar", &one_.position_.x);
+	ImGui::DragFloat2("hpBarSize", &one_.size_.x);
+	ImGui::DragFloat2("tenHpBar", &ten_.position_.x);
+	ImGui::DragFloat2("tenHpBarSize", &ten_.size_.x);
 	if (input_->TriggerKey(DIK_K)) {
 		hp_ = 0;
 	}
@@ -200,6 +214,10 @@ void Player::UIUpdate()
 	hpSprite_.size_.x = 260.0f * (hp_ / float(maxHp_));
 	hpSprite_.size_.x = clamp(hpSprite_.size_.x, 0.0f, 265.0f);
 	hpSprite_.position_.x = 230.0f - (maxHp_ - hp_) * 1.5f;
+
+
+	one_.texBase_.x = 36 * (coinNum_ % 10);
+	ten_.texBase_.x = 36 * (coinNum_ / 10);
 }
 
 void Player::Draw() {
@@ -232,7 +250,7 @@ void Player::Draw() {
 		GameObject::PlayerDraw(headWorldTransform_, headModelHandle_, { 0.2f,0.0f,0.0f,1.0f });
 	}
 	if (isClear_ == true) {
-		ty_.Draw();
+		ty_.Draw({1.0f,1.0f,0.0f,1.0f});
 	}
 
 }
@@ -389,6 +407,9 @@ void Player::DrawImGui() {
 void Player::DrawUI() {
 	hpSprite_.Draw();
 	HpbarSprite_.Draw();
+	coinUI_.Draw();
+	one_.Draw();
+	ten_.Draw();
 }
 
 void Player::CollisionProcess(const Vector3& pushBackVector) {
@@ -601,7 +622,7 @@ void Player::DrawParticleBox()
 
 void Player::DeadUpdate()
 {
-	const int particleFrame = 100;
+	const int particleFrame = 130;
 	if (hp_ == 0) {
 		if (deadFrame_ == 0) {
 			//初期化
@@ -624,7 +645,7 @@ void Player::DeadUpdate()
 
 		bodyWorldTransform_.scale_ = Easing::easing(deadT, { 1.0f,1.0f,1.0f }, { 0.1f,0.1f,0.1f }, 1.0f / particleFrame, Easing::easeNormal, true);
 
-		if (deadFrame_ + 20 >= particleFrame) {
+		if (deadFrame_ + 30 >= particleFrame) {
 			deadParticle_.SetIsEmit(false);
 			isEndDeadAnimation_ = true;
 		}

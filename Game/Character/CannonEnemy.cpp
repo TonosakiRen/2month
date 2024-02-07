@@ -91,7 +91,7 @@ void CannonEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	// 弾
 
 	for (auto& bullet : bullets_) {
-		bullet->OnCollision(collider);
+		bullet->OnCollision(collider,false);
 	}
 
 }
@@ -239,6 +239,18 @@ void CannonEnemy::Bullet::OnCollision(Collider& collider) {
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (this->collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
+		isColl = true;
+	}
+	if (isColl) {
+		isDead_ = true; // playerと当たった時に弾を消している。無敵があれば消さなくてもいい
+	}
+}
+
+void CannonEnemy::Bullet::OnCollision(Collider& collider,bool isPlayer_) {
+	bool isColl = false;
+	Vector3 pushBackVector;
+	if (this->collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
+		this->collider_.Collision(collider, pushBackVector);
 		Player::hitReaction_ = Player::damage;
 		Player::hitCollider_ = &collider_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);

@@ -27,6 +27,16 @@ inline int clamp(int num, int min, int max) {
 	return num;
 }
 
+inline uint32_t Digit(int32_t num) {
+	uint32_t digit = 1;
+	int32_t tmp = abs(num);
+	while (!(tmp < 10)) {
+		tmp = tmp / 10;
+		digit++;
+	}
+	return digit;
+}
+
 inline bool closeValue(float& num, float goal, float speed) {
 	if (std::fabs(num - goal) < std::fabs(speed)) {
 		num = goal;
