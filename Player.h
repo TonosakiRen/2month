@@ -126,6 +126,11 @@ private:
     Sprite hpSprite_;
     Sprite HpbarSprite_;
 
+    Sprite coinUI_;
+
+    Sprite one_;
+    Sprite ten_;
+
     ShadowHitParticle shadowHitParticle_;
     HitParticle hitParticle_;
 
