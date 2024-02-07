@@ -37,7 +37,7 @@ public:
 	void ShadowDraw();
 	void SpotLightShadowDraw();
 
-	void HousePopInitialize(const float& centerPosX);
+	void HousePopInitialize(const Vector3& centerPos);
 	bool Exists() const; // 敵が存在するか true:する/false:しない
 
 private:

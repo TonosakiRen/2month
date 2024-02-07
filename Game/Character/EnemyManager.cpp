@@ -562,25 +562,41 @@ void EnemyManager::SpotLightShadowDraw() {
 	}
 }
 
-void EnemyManager::HousePopInitialize(const float& centerPosX) {
+void EnemyManager::HousePopInitialize(const Vector3& centerPos) {
 	for (auto& enemy : nEnemis_) {
 		Vector3 pos = enemy->GetWorldTransform()->translation_;
-		pos.x += centerPosX;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
+		enemy->SetPosition(pos);
+	}
+	for (auto& enemy : nLightEnemis_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
 		enemy->SetPosition(pos);
 	}
 	for (auto& enemy : tEnemis_) {
 		Vector3 pos = enemy->GetWorldTransform()->translation_;
-		pos.x += centerPosX;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
 		enemy->SetPosition(pos);
 	}
 	for (auto& enemy : cEnemis_) {
 		Vector3 pos = enemy->GetWorldTransform()->translation_;
-		pos.x += centerPosX;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
 		enemy->SetPosition(pos);
 	}
 	for (auto& enemy : nSpawners_) {
 		Vector3 pos = enemy->GetWorldTransform()->translation_;
-		pos.x += centerPosX;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
+		enemy->SetPosition(pos);
+	}
+	for (auto& enemy : coins_) {
+		Vector3 pos = enemy->GetWorldTransform()->translation_;
+		pos.x += centerPos.x;
+		pos.y += centerPos.y;
 		enemy->SetPosition(pos);
 	}
 }
