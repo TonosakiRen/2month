@@ -71,19 +71,21 @@ void StageSelectScene::DrawUI() {
 }
 
 void StageSelectScene::StageChange() {
-	auto key = Input::GetInstance();
+	auto input = Input::GetInstance();
 	bool direction = false;
 	bool flag = false;
-	if (key->TriggerKey(DIK_LEFTARROW)) {
+
+	float lStic = input->GetLStick().x / SHORT_MAX;
+	if (input->TriggerKey(DIK_LEFTARROW) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_LEFT) || (lStic <= -0.5f)) {
 		direction = false;
 		flag = true;
 		
-	}else if (key->TriggerKey(DIK_RIGHTARROW)) {
+	}else if (input->TriggerKey(DIK_RIGHTARROW) || input->TriggerButton(XINPUT_GAMEPAD_DPAD_RIGHT) || (lStic >= 0.5f)) {
 		direction = true;
 		flag = true;
 	}
 
-	if (flag && !cp_.startUp) {
+	if (flag && !cp_.startUp && !isChangeScene_) {
 		cp_.startUp = true;
 		cp_.direction = direction;
 		camera_->ChangeStage();
@@ -113,7 +115,7 @@ void StageSelectScene::StageChange() {
 		}
 	}
 
-	if (key->TriggerKey(DIK_SPACE)) {
+	if (input->TriggerKey(DIK_SPACE) || input->TriggerButton(XINPUT_GAMEPAD_A)) {
 		isChangeScene_ = true;
 		//shadowSpotLight_->lights_[0].isActive = false;
 		//shadowSpotLight_->lights_[1].isActive = false;
