@@ -274,6 +274,24 @@ void ModelManager::DrawInstanced(CommandContext* commandContext, uint32_t modelH
 	}
 }
 
+void ModelManager::DrawInstancing(CommandContext* commandContext, uint32_t modelHandle, UINT instancingNum, UINT textureRootParamterIndex) {
+	assert(modelHandle < kNumModels);
+
+	const auto& modelItem = (*models_)[modelHandle];
+	// 頂点バッファの設定
+	commandContext->SetVertexBuffer(0, 1, &modelItem.vbView_);
+
+	for (const auto& mesh : modelItem.meshes) {
+		// srvセット
+		TextureManager::GetInstance()->SetGraphicsRootDescriptorTable(commandContext, textureRootParamterIndex, mesh.GetUv());
+		// インデックスバッファの設定
+		commandContext->SetIndexBuffer(*mesh.GetIbView());
+		// 描画コマンド
+		commandContext->DrawIndexedInstanced(static_cast<UINT>(mesh.indices_.size()), instancingNum, 0, 0, 0);
+	}
+}
+
+
 uint32_t ModelManager::LoadInternal(const std::string& name) {
 
 	assert(useModelCount_ < kNumModels);

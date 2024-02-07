@@ -91,6 +91,7 @@ void Player::Initialize(const std::string name)
 	isEndClearAnimation = false;
 
 	ty_.Initialize("thankyou");
+	ty_.worldTransform_.translation_ = { 0.0f,30.0f,0.0f };
 }
 
 void Player::SetGlobalVariable()
@@ -244,6 +245,27 @@ void Player::EnemyShadowCollision()
 			shadowHitParticle_.emitterWorldTransform_.translation_ = aa[0];
 			shadowHitParticle_.emitterWorldTransform_.translation_.z -= 1.0f;
 
+			if (hitReaction_ == damage) {
+				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
+					
+					isKnockBack_ = true;
+					Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
+					knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
+					jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					
+					GameScene::SetHitStop(hitStopFrame);
+					shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+					shadowHitParticle_.SetIsEmit(true);
+					hp_ -= damage_;
+					MUTEKITime_ = maxMUTEKITime_;
+
+					size_t handle = audio_->SoundLoadWave("hit.wav");
+					size_t hitHandle = audio_->SoundPlayWave(handle);
+					audio_->SetValume(hitHandle, 1.0f);
+
+					attackParam_.phase = 4;
+				}
+			}else
 			if (attackParam_.id_ != 1) {
 				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
 					if (hitReaction_ == knockBack) {
@@ -261,34 +283,6 @@ void Player::EnemyShadowCollision()
 					size_t handle = audio_->SoundLoadWave("hit.wav");
 					size_t hitHandle = audio_->SoundPlayWave(handle);
 					audio_->SetValume(hitHandle, 1.0f);
-				}
-			}
-			else if (hitCollider_) {
-				if (hitCollider_->GetName() == "CannonBullet") {
-					if (hitReaction_ == knockBack ) {
-						isKnockBack_ = true;
-						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-						knockBackDirection_ = Normalize(vec);
-						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
-					}
-					if (isKnockBack_ == false && MUTEKITime_ <= -1) {
-						hp_ -= damage_;
-						MUTEKITime_ = maxMUTEKITime_;
-						GameScene::SetHitStop(hitStopFrame);
-						shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-						shadowHitParticle_.SetIsEmit(true);
-
-						size_t handle = audio_->SoundLoadWave("hit.wav");
-						size_t hitHandle = audio_->SoundPlayWave(handle);
-						audio_->SetValume(hitHandle, 1.0f);
-
-						if (headRotate.x < 0.0f) {
-							attackParam_.phase = 3;
-						}
-						else {
-							attackParam_.phase = 2;
-						}
-					}
 				}
 			}
 			else {
@@ -316,14 +310,34 @@ void Player::EnemyCollision()
 		if (hitReaction_ != heal && hitReaction_ != coin) {
 			Vector3 hitPos = MakeTranslation(hitCollider_->worldTransform_.matWorld_);
 			hitParticle_.emitterWorldTransform_.translation_ = hitPos + ((MakeTranslation(worldTransform_.matWorld_) - hitPos) / 2.0f);
+			if (hitReaction_ == damage) {
+				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
+
+					isKnockBack_ = true;
+					Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - hitShadowEnemyPos_;
+					knockBackDirection_ = Normalize(Vector3{ vec.x,0.0f,0.0f });
+					jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+
+					GameScene::SetHitStop(hitStopFrame);
+					shadowHitParticle_.particle_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
+					shadowHitParticle_.SetIsEmit(true);
+					hp_ -= damage_;
+					MUTEKITime_ = maxMUTEKITime_;
+
+					size_t handle = audio_->SoundLoadWave("hit.wav");
+					size_t hitHandle = audio_->SoundPlayWave(handle);
+					audio_->SetValume(hitHandle, 1.0f);
+
+					attackParam_.phase = 4;
+				}
+			}else
 			if (attackParam_.id_ != 1) {
 				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
-					if (hitReaction_ == knockBack) {
-						isKnockBack_ = true;
-						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-						knockBackDirection_ = Normalize(vec);
-						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
-					}
+					isKnockBack_ = true;
+					Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
+					knockBackDirection_ = Normalize(vec);
+					jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
+					
 					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
 					GameScene::SetHitStop(hitStopFrame);
 					hitParticle_.SetIsEmit(true);
@@ -333,34 +347,6 @@ void Player::EnemyCollision()
 					size_t handle = audio_->SoundLoadWave("hit.wav");
 					size_t hitHandle = audio_->SoundPlayWave(handle);
 					audio_->SetValume(hitHandle, 1.0f);
-				}
-			}
-			else if (hitCollider_->GetName() == "CannonBullet") {
-				hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-				GameScene::SetHitStop(hitStopFrame);
-				if (isKnockBack_ == false && MUTEKITime_ <= -1) {
-					if (hitReaction_ == knockBack) {
-						isKnockBack_ = true;
-						Vector3 vec = MakeTranslation(worldTransform_.matWorld_) - MakeTranslation(hitCollider_->worldTransform_.matWorld_);
-						knockBackDirection_ = Normalize(vec);
-						jumpParam_.velocity_ = { knockBackDirection_.x * knockBackPowerX_, 1.0f * knockBackPowerY_, knockBackDirection_.z * knockBackPowerX_ };
-					}
-					hitParticle_.particleBox_->material_.color_ = { 1.0f, 0.2f, 1.0f, 1.0f };
-					GameScene::SetHitStop(hitStopFrame);
-					hitParticle_.SetIsEmit(true);
-					hp_ -= damage_;
-					MUTEKITime_ = maxMUTEKITime_;
-
-					size_t handle = audio_->SoundLoadWave("hit.wav");
-					size_t hitHandle = audio_->SoundPlayWave(handle);
-					audio_->SetValume(hitHandle, 1.0f);
-
-					if (headRotate.x < 0.0f) {
-						attackParam_.phase = 3;
-					}
-					else {
-						attackParam_.phase = 2;
-					}
 				}
 			}
 			else {
@@ -419,7 +405,7 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 
 void Player::Move() {
 	if (!isDash_) {
-		Vector3 direction = { 0.0f,0.0f,0.0f };
+ 		Vector3 direction = { 0.0f,0.0f,0.0f };
 
 		if (input_->GetIsGamePadConnect()) {
 			// 移動量
@@ -552,6 +538,19 @@ void Player::Attack() {
 			worldTransform_.quaternion_ = Normalize(worldTransform_.quaternion_);
 			worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 			isDash_ = false;
+
+			break;
+		case 4:
+			//とげに当たってノックバック
+			easing_tBack = 0;
+				headRotate.x = 0.0f;
+				easing_t = 0.0f;
+				worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
+				attackParam_.isAttacked = false;
+				isDash_ = false;
+				Vector3 foward = Vector3(0.0f, 0.0f, 1.0f) * worldTransform_.quaternion_;
+				foward.y = 0.0f;
+				worldTransform_.quaternion_ = MakeLookRotation(foward);
 			break;
 		}
 	}
@@ -595,12 +594,13 @@ void Player::DrawParticleBox()
 
 void Player::DeadUpdate()
 {
-	const int particleFrame = 80;
+	const int particleFrame = 100;
 	if (hp_ == 0) {
 		if (deadFrame_ == 0) {
 			//初期化
 			isDead_ = true;
 			deadParticle_.SetIsEmit(true);
+			deadT = 0;
 		}
 		MUTEKITime_ = -1;
 		deadParticle_.Update();
@@ -608,6 +608,9 @@ void Player::DeadUpdate()
 
 		jumpParam_.velocity_.y = clamp(jumpParam_.velocity_.y, -0.5f, 200.0f);
 		jumpParam_.velocity_ += jumpParam_.acceleration_;
+
+		worldTransform_.translation_ += jumpParam_.velocity_;
+		worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 
 		headWorldTransform_.translation_.y += jumpParam_.velocity_.y;
 		headWorldTransform_.translation_.y = clamp(headWorldTransform_.translation_.y, -0.9f, FLT_MAX);
@@ -626,7 +629,15 @@ void Player::ClearUpdate()
 {
 	if (isClear_ == true) {
 		worldTransform_.translation_.x += speed_;
+		inputQuaternion_ = MakeLookRotation({1.0f,0.0f,0.0f});
+		worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, inputQuaternion_);
+		worldTransform_.translation_.x = clamp(worldTransform_.translation_.x, 0.0f, ty_.worldTransform_.translation_.x + 25.0f);
 
+		ty_.worldTransform_.translation_.y = Easing::easing(0.01f, ty_.worldTransform_.translation_.y, tySaveY_, Easing::easeNormal);
+
+		if (ty_.worldTransform_.translation_.y <= tySaveY_ + 0.1f) {
+			isEndClearAnimation = true;
+		}
 
 		ty_.UpdateMatrix();
 

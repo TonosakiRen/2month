@@ -10,6 +10,10 @@ Easing::~Easing()
 }
 
 
+float Easing::easing(float t, float start, float end) {
+
+	return((1.0f - t) * start + t * end);
+}
 
 float Easing::easing(float& t, float start, float end, float speed, EasingMode easingMode, bool isAdd) {
 	if (isAdd == true) {
@@ -18,11 +22,6 @@ float Easing::easing(float& t, float start, float end, float speed, EasingMode e
 	t = clamp(t, 0.0f, 1.0f);
 
 	return((1.0f - easingFunction[easingMode](t)) * start + easingFunction[easingMode](t) * end);
-}
-
-float Easing::easing(float t, float start, float end) {
-
-	return((1.0f - t) * start + t * end);
 }
 
 Vector2 Easing::easing(float& t, Vector2 start, Vector2 end, float speed, EasingMode easingMode, bool isAdd) {
@@ -37,6 +36,21 @@ Vector3 Easing::easing(float& t, Vector3 start, Vector3 end, float speed, Easing
 	if (isAdd == true) {
 		t += speed;
 	}
+	t = clamp(t, 0.0f, 1.0f);
+	return{ ((1.0f - easingFunction[easingMode](t)) * start.x + easingFunction[easingMode](t) * end.x) ,((1.0f - easingFunction[easingMode](t)) * start.y + easingFunction[easingMode](t) * end.y),((1.0f - easingFunction[easingMode](t)) * start.z + easingFunction[easingMode](t) * end.z) };
+}
+
+float Easing::easing(float t, float start, float end, EasingMode easingMode) {
+	t = clamp(t, 0.0f, 1.0f);
+	return((1.0f - easingFunction[easingMode](t)) * start + easingFunction[easingMode](t) * end);
+}
+
+Vector2 Easing::easing(float t, Vector2 start, Vector2 end, EasingMode easingMode) {
+	t = clamp(t, 0.0f, 1.0f);
+	return{ ((1.0f - easingFunction[easingMode](t)) * start.x + easingFunction[easingMode](t) * end.x) ,((1.0f - easingFunction[easingMode](t)) * start.y + easingFunction[easingMode](t) * end.y) };
+}
+
+Vector3 Easing::easing(float t, Vector3 start, Vector3 end, EasingMode easingMode) {
 	t = clamp(t, 0.0f, 1.0f);
 	return{ ((1.0f - easingFunction[easingMode](t)) * start.x + easingFunction[easingMode](t) * end.x) ,((1.0f - easingFunction[easingMode](t)) * start.y + easingFunction[easingMode](t) * end.y),((1.0f - easingFunction[easingMode](t)) * start.z + easingFunction[easingMode](t) * end.z) };
 }

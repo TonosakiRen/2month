@@ -152,6 +152,8 @@ public:
     bool isEndClearAnimation = false;
 
     GameObject ty_;
+
+    float tySaveY_ = 0.0f;
 private:
 
 public:

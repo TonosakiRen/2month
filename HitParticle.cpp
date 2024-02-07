@@ -1,5 +1,6 @@
 #include "HitParticle.h"
 #include "ImGuiManager.h"
+#include "ModelManager.h"
 
 HitParticle::HitParticle()
 {
@@ -14,7 +15,8 @@ void HitParticle::Initialize(Vector3 minDirection, Vector3 maxDirection)
 	emitterWorldTransform_.Update();
 	SetDirection(minDirection, maxDirection);
 	particleBox_->material_.enableLighting_ = false;
-	emitterWorldTransform_.scale_ = { 0.7f,0.7f,0.1f };
+	emitterWorldTransform_.scale_ = { 1.0f,1.0f,1.0f };
+	modelHandle_ = ModelManager::GetInstance()->Load("Title2");
 }
 
 void HitParticle::Update() {
@@ -45,7 +47,7 @@ void HitParticle::Update() {
 	for (size_t i = 0; i < kParticleNum; i++) {
 		float rotationSpeed = Radian(1.0f) * (float(i % 2) * 2.0f - 1.0f);
 		if (particles[i].isActive_ == true) {
-			particles[i].worldTransform_.quaternion_ *= MakeFromAngleAxis({ 1.0f,1.0f,1.0f }, rotationSpeed);
+			//particles[i].worldTransform_.quaternion_ *= MakeFromAngleAxis({ 1.0f,1.0f,1.0f }, rotationSpeed);
 			particles[i].worldTransform_.translation_ += particles[i].direction_ * speed_;
 			particles[i].worldTransform_.scale_ = particles[i].worldTransform_.scale_ - scaleSpeed_;
 			if (particles[i].worldTransform_.scale_.x <= 0.0f) {
@@ -74,6 +76,6 @@ void HitParticle::Draw()
 	}
 
 	if (!instancingBufferDatas.empty()) {
-		particleBox_->Draw(instancingBufferDatas,particleBox_->material_.color_);
+		particleBox_->Draw(instancingBufferDatas, modelHandle_, particleBox_->material_.color_);
 	}
 }

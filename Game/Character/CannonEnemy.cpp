@@ -234,12 +234,16 @@ void CannonEnemy::Bullet::OnCollision(Collider& collider, const PlayerDate& date
 	bool isColl = false;
 	Vector3 pushBackVector;
 	if (this->collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
+		Player::hitReaction_ = Player::damage;
+		Player::hitCollider_ = &collider_;
+		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
 		isColl = true;
 	}
 	uint32_t* shadowDate = static_cast<uint32_t*>(Compute::GetData());
 	if (shadowDate[kNumber_] == 1) {
 		Player::hitShadowEnemyIndex_ = kNumber_;
 		Player::hitShadowEnemyPos_ = MakeTranslation(worldTransform_.matWorld_);
+		Player::hitReaction_ = Player::damage;
 		isColl = true;
 	}
 
