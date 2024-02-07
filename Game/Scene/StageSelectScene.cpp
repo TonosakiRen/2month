@@ -7,7 +7,11 @@
 #include "SpotLights.h"
 #include "ShadowSpotLights.h"
 
-StageSelectScene::StageSelectScene(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
+StageSelectScene::~StageSelectScene() {
+	shadowSpotLight_->lights_[1].isActive = false;
+}
+
+void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
 	shadowSpotLight_ = shadowSpotLights;
 	sTextureColor_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	stageTexture_ = std::make_unique<Sprite>();

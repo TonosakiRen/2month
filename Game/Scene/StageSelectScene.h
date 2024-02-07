@@ -8,9 +8,9 @@ class ShadowSpotLights;
 class StageSelectScene {
 public:
 	StageSelectScene() = default;
-	StageSelectScene(class PointLights* pointLights, class SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
-	~StageSelectScene() = default;
+	~StageSelectScene();
 
+	void Initialize(class PointLights* pointLights, class SpotLights* spotLights, ShadowSpotLights* shadowSpotLights);
 	void Update();
 	void Draw();
 	void DrawUI();

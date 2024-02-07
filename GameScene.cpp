@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::StageSelect;
+	sceneRequest_ = Scene::Title;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 	}
@@ -250,7 +250,8 @@ void GameScene::TitleUpdate() {
 
 }
 void GameScene::StageSelectInitialize() {
-	selectScene_.reset(new StageSelectScene(&pointLights_, &spotLights_, &shadowSpotLights_));
+	selectScene_.reset(new StageSelectScene());
+	selectScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
 }
 void GameScene::StageSelectUpdate() {
 	if (input_->TriggerKey(DIK_P) || inGameScene_->GetClear()) {
