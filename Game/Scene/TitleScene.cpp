@@ -15,6 +15,8 @@ void TitleScene::Initialize(ShadowSpotLights* spotLights) {
 	uint32_t handle = TextureManager::Load("title.png");
 	title_->Initialize(handle, Vector2(960, 540.0f));
 
+	sinf = 0;
+
 	title_->size_ = Vector2(1920.0f, 1080.f);
 	titleModel_.Initialize("Title");
 	titleModel_.worldTransform_.translation_ = { 0.0f,7.7f,0.0f };
@@ -69,6 +71,8 @@ void TitleScene::Update() {
 	spotLights_->lights_[1].distance = 52.3f;
 	spotLights_->lights_[1].decay = 1.0f;
 	spotLights_->lights_[1].cosAngle = 0.785f;
+	sinf += 0.01f;
+	titleModel_.worldTransform_.translation_.y = 7.7f + std::sinf(sinf);
 
 	titleModel_.UpdateMatrix();
 	spotLights_->lights_[0].isActive = true;

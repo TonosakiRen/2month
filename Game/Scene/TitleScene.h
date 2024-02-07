@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include <memory>
 #include "Game/Camera/TitleCamera.h"
-
+#include "Mymath.h"
 class ShadowSpotLights;
 
 class TitleScene {
@@ -34,4 +34,6 @@ private:
 	GameObject tatemono_;
 	ShadowSpotLights* spotLights_;
 	std::unique_ptr<TitleCamera> titleCamera_;
+
+	float sinf = 0;
 };
