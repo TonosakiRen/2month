@@ -81,7 +81,7 @@ void GameScene::Initialize() {
 
 	ui_ = std::make_unique<Sprite>();
 	uint32_t uiHandle = TextureManager::Load("sousa.png");
-	ui_->Initialize(uiHandle, { 1780.0f,90.0f });
+	ui_->Initialize(uiHandle, { 1720.0f,90.0f });
 
 	//skydome_ = std::make_unique<Skydome>();
 	//skydome_->Initialize("skydome");
@@ -105,7 +105,7 @@ void GameScene::Initialize() {
 
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
-	sceneRequest_ = Scene::Editor;
+	sceneRequest_ = Scene::InGame;
 	if (sceneRequest_ == Scene::Editor) {
 		ViewProjection::isUseDebugCamera = true;
 		audio_->SetValume(bgmPlayHandle, 0.0f);
