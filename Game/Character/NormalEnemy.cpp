@@ -70,7 +70,7 @@ void NormalEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	}
 
 	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
+	if (collider_.Collision(collider, pushBackVector)&& !shadowOnly_) {
 		isColl = true;
 		Player::hitCollider_ = &collider_;
 		Player::hitReaction_ = Player::knockBack;

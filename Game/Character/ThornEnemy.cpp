@@ -59,7 +59,7 @@ void ThornEnemy::OnCollision(Collider& collider, const PlayerDate& date) {
 	}
 
 	Vector3 pushBackVector;
-	if (collider_.Collision(collider, pushBackVector)) {
+	if (collider_.Collision(collider, pushBackVector) && !shadowOnly_) {
 		isColl = true;
 		Player::hitReaction_ = Player::knockBack;
 		Player::hitCollider_ = &collider_;

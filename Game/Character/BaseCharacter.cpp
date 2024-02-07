@@ -56,6 +56,7 @@ void BaseCharacter::UpdateTransform() {
 void BaseCharacter::BaseDraw() {
 	if (shadowOnly_) { return; }
 	for (uint32_t index = 0u; index < models_.size(); index++) {
+		
 		models_.at(index).Draw(modelsTransform_.at(index));
 	}
 }
