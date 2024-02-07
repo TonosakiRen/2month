@@ -889,15 +889,15 @@
             1.0
         ],
         "NormalLightEnemyNumber : 0 : Translate": [
-            495.79998779296875,
+            494.79998779296875,
             2.4000000953674316,
-            -8.199999809265137
+            -2.700000047683716
         ],
         "Player : Rotate": [
             0.0,
-            -0.707369327545166,
+            0.9995315074920654,
             0.0,
-            0.7068406939506531
+            0.03060506470501423
         ],
         "Player : Scale": [
             1.0,
@@ -905,13 +905,13 @@
             1.0
         ],
         "Player : Translate": [
-            -17.0,
-            1.384049415588379,
-            -3.047450065612793
+            495.1704406738281,
+            1.3840553760528564,
+            -9.46721076965332
         ],
         "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
-        "StageLightConfirmation": 11,
+        "StageLightConfirmation": 12,
         "StageLightNumber : 0 : Distance": 20.0,
         "StageLightNumber : 0 : Rotate": [
             6.835144006345217e-09,
@@ -972,12 +972,12 @@
         ],
         "StageLightNumber : 10 : decay": 1.0,
         "StageLightNumber : 10 : intensity": 5.5,
-        "StageLightNumber : 11 : Distance": 29.5,
+        "StageLightNumber : 11 : Distance": 20.0,
         "StageLightNumber : 11 : Rotate": [
-            -0.061264656484127045,
-            0.6788795590400696,
-            -0.06576310843229294,
-            0.7287272214889526
+            -0.0644749328494072,
+            0.714452862739563,
+            -0.06261903047561646,
+            0.69388747215271
         ],
         "StageLightNumber : 11 : Scale": [
             1.0,
@@ -986,9 +986,9 @@
         ],
         "StageLightNumber : 11 : ShadeDistance": 5.0,
         "StageLightNumber : 11 : Translate": [
-            448.6000061035156,
-            0.6000000238418579,
-            -13.100000381469727
+            495.29998779296875,
+            1.0,
+            -14.5
         ],
         "StageLightNumber : 11 : decay": 1.0,
         "StageLightNumber : 11 : intensity": 5.5,
@@ -1309,7 +1309,7 @@
             0.0,
             -3.299999952316284
         ],
-        "TruckConfirmation": 2,
+        "TruckConfirmation": 4,
         "TruckNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -1342,7 +1342,39 @@
             7.400000095367432,
             6.099999904632568
         ],
-        "WallConfirmation": 15,
+        "TruckNumber : 2 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TruckNumber : 2 : Scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "TruckNumber : 2 : Translate": [
+            491.70001220703125,
+            1.600000023841858,
+            5.5
+        ],
+        "TruckNumber : 3 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "TruckNumber : 3 : Scale": [
+            3.0,
+            3.0,
+            3.0
+        ],
+        "TruckNumber : 3 : Translate": [
+            522.4000244140625,
+            1.600000023841858,
+            5.5
+        ],
+        "WallConfirmation": 14,
         "WallLightConfirmation": 4,
         "WallLightNumber : 0 : Rotate": [
             4.371138473402425e-08,
