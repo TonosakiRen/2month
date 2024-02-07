@@ -41,7 +41,20 @@ void NormalEnemy::Update(const Vector3& playerPosition) {
 	isActive_ = true;
 	
 	if (!isHit_) {
-		Move(playerPosition);
+		//Move(playerPosition);
+		Vector3 vec = playerPosition - MakeTranslation(worldTransform_.matWorld_);
+		vec = Normalize(vec);
+		if (isnan(vec.x) || isnan(vec.y) || isnan(vec.z)) {
+			vec = Vector3(0.0f, 0.0f, 0.0f);
+		}
+		/*vec.y = 0.0f;
+		vec.z = 0.0f;*/
+
+		const float kSpeed = 0.0f;
+
+		worldTransform_.quaternion_ = MakeLookRotation(-vec);
+		worldTransform_.translation_ += vec * kSpeed;
+		UpdateTransform();
 	}
 	else {
 		CollisionProcess();
