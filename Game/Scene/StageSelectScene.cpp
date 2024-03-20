@@ -27,6 +27,7 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	stageTexture_.transform.scale_ = sTextureScaleOffset_;
 	stageTexture_.transform.translation_ = Vector3(0.0f, 7.0f, 4.0f);
 
+#pragma region Model
 	playerHead_.object = std::make_unique<GameObject>();
 	playerHead_.object->Initialize("playerHead");
 	playerHead_.transform.Initialize();
@@ -40,6 +41,10 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	playerBody_.transform.quaternion_ = MakeFromEulerAngle(Vector3(0.0f, Radian(20.0f), 0.0f));
 
 	playerHead_.transform.parent_ = &playerBody_.transform;
+#pragma endregion
+
+	player_ = std::make_unique<Player>();
+	player_->Initialize("playerBody");
 
 	camera_ = std::make_unique<SelectCamera>();
 	stage_ = std::make_unique<Stage>();
@@ -49,7 +54,9 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 void StageSelectScene::Update() {
 	//DrawImGui();
 	stage_->Update(Vector3());
-	StageChange();
+	//StageChange();
+	player_->Update();
+	stage_->Collision(player_.get());
 
 	stageTexture_.transform.Update();
 	playerHead_.transform.Update();
@@ -64,6 +71,7 @@ void StageSelectScene::Draw() {
 	stageTexture_.object->Draw(stageTexture_.transform, textureHandle_[currentStageNumber_]);
 	playerHead_.object->Draw(playerHead_.transform);
 	playerBody_.object->Draw(playerBody_.transform);
+	player_->Draw();
 }
 
 void StageSelectScene::DrawUI() {
