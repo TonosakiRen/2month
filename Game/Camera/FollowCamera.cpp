@@ -40,6 +40,17 @@ void FollowCamera::Update(const Vector3& playerPosition) {
         end_.translate.x = playerPosition.x + offset;
         transform_.quaternion_ = Slerp(T, start_.rotate, end_.rotate);
         transform_.translation_ = Lerp(start_.translate, end_.translate, T) + shake;
+
+        if (playerPosition.y > end_.translate.y) {
+            offset = end_.translate.y + playerPosition.y;
+        }
+        else {
+            offset = end_.translate.y;
+        }
+        savePlayerY_ = savePlayerY_ + (offset - savePlayerY_) * 0.2f;
+        transform_.translation_.y = savePlayerY_;
+
+
         if (count_++ >= MaxFrame) { 
             count_ = MaxFrame;
             isEase_ = false;
