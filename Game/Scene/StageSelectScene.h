@@ -23,6 +23,8 @@ private:
 	void ScaleUpdate(); // 拡縮演出
 	void DrawImGui();
 
+	Vector3 Shake(Vector3 shakeValue);
+
 private:
 	struct RT {
 		Quaternion rotate;
@@ -49,6 +51,7 @@ private:
 	Object playerHead_;
 	Object playerBody_;
 	Object stageTexture_;
+	Object noiseTexture_;
 
 	struct ChangeParam {
 		bool isSwitch = false; // Stage切り替えをするか
@@ -67,5 +70,7 @@ private:
 	bool isChangeScene_ = false; // シーン切り替え用フラグ
 	std::vector<uint32_t> textureHandle_; // ステージテクスチャー用の切り替えハンドル
 
+	uint32_t count_ = 0u;
+	bool isNoise_ = false;
 
 };
