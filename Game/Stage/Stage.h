@@ -86,6 +86,7 @@ private: // モンスターハウス用
 	void Confine(); // 閉じ込める処理
 	void ConfineBreak(); // 閉じ込める処理
 
+public:
 	uint32_t savePointIndex_ = 0u; // 中間地点でどこから進めるかの変数
 
 public:

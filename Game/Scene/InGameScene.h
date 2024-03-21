@@ -26,6 +26,7 @@ public:
 	void SpotLightShadowDraw();
 
 	WorldTransform* GetPlayerTrans() const { return player_.get()->GetWorldTransform(); }
+	uint32_t GetPoint() const { return stage_->savePointIndex_; }
 private:
 	struct RT {
 		Quaternion rotate;
@@ -59,6 +60,8 @@ private:
 	// クリア用
 	bool isEndClearAnimation_ = false;
 	bool isEndDeadAnimation_ = false;
+	// チェックポイント用
+	uint32_t chackPointNum_ = 0u;
 public:
 	const bool& GetEndClearAnimation() const { return isEndClearAnimation_; }
 	const bool& GetEndDeadAnimation() const { return isEndDeadAnimation_; }

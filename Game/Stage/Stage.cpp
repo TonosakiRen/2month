@@ -594,9 +594,9 @@ void Stage::Collision(Player* player) {
 
 	}
 
-	for (auto& point : savePoints_) {
-		if (point->collider_.Collision(player->bodyCollider_, pushBackVector)) {
-			//SavePoint::playerRespawnPosition = point->GetWorldTransform()->GetWorldTranslate();
+	for (int index = 0; index < savePoints_.size(); index++) {
+		if (savePoints_.at(index)->collider_.Collision(player->bodyCollider_, pushBackVector)) {
+			savePointIndex_ = index;
 		}
 	}
 	//player->worldTransform_.Update();
