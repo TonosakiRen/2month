@@ -352,7 +352,7 @@ void GameScene::StageSelectUpdate() {
 			size_t catchHandle = audio_->SoundPlayWave(handle);
 			audio_->SetValume(catchHandle, 0.1f);
 			sceneRequest_ = Scene::InGame;
-			chackPointNum_ = selectScene_->GetStageNumber();
+			//chackPointNum_ = selectScene_->GetStageNumber();
 		}
 	}
 	selectScene_->Update();
@@ -360,7 +360,7 @@ void GameScene::StageSelectUpdate() {
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, chackPointNum_);
+		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, chackPointNum_,selectScene_->GetStageNumber());
 
 		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}

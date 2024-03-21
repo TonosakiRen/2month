@@ -15,7 +15,7 @@ public:
 	InGameScene() = default;
 	~InGameScene() = default; 
 
-	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint);
+	void Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint, const uint32_t& stageNumber);
 	void Update();
 	void Draw();
 	void StageDepthDraw();

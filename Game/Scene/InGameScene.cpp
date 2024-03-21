@@ -4,12 +4,21 @@
 #include "ShadowSpotLights.h"
 #include "Input.h"
 
-void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint) {
+void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint, const uint32_t& stageNumber) {
 	uint32_t point = respawnPoint;
+	uint32_t stageNum = stageNumber;
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
 	std::string filePath = "stage1";
+	switch (stageNum) {
+	case 0:
+		filePath = "stage1";
+		break;
+	case 1:
+		filePath = "stage2";
+		break;
+	}
 
 	stage_ = std::make_unique<Stage>();
 	stage_->Initialize(filePath, pointLights, spotLights, shadowSpotLights, point);
