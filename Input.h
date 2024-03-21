@@ -99,7 +99,7 @@ public:
 		return false;
 	}
 	bool UpLStick(SHORT deadZone = 20000) {
-		if (xInputState_.Gamepad.sThumbLY < deadZone) {
+		if (xInputState_.Gamepad.sThumbLY > deadZone) {
 			return true;
 		}
 		return false;
@@ -124,7 +124,7 @@ public:
 		return false;
 	}
 	bool UpRStick(SHORT deadZone = 20000) {
-		if (xInputState_.Gamepad.sThumbRY < deadZone) {
+		if (xInputState_.Gamepad.sThumbRY > deadZone) {
 			return true;
 		}
 		return false;

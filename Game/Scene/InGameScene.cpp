@@ -2,6 +2,7 @@
 #include "PointLights.h"
 #include "SpotLights.h"
 #include "ShadowSpotLights.h"
+#include "Input.h"
 
 void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights, const uint32_t& respawnPoint) {
 	uint32_t point = respawnPoint;
@@ -37,6 +38,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 }
 
 void InGameScene::Update() {
+
 
 	// 以下通常通りの更新処理
 	Player::hitShadowEnemyIndex_ = -1;
@@ -115,6 +117,7 @@ void InGameScene::Update() {
 	if (player_->isEndDeadAnimation_) {
 		isEndDeadAnimation_ = true;
 	}
+
 }
 
 void InGameScene::Draw() {

@@ -103,6 +103,22 @@ private:
 
 	Vector4 color = {1.0f,1.0f,1.0f,1.0f};
 
+	bool isPause_ = false;
+
+	std::unique_ptr<Sprite> poseBack_;
+
+	std::unique_ptr<Sprite> poseStageSelect_;
+
+	std::unique_ptr<Sprite> poseTitle_;
+
+	std::unique_ptr<Sprite> poseArrow_;
+
+	std::unique_ptr<Sprite> poseBackground_;
+
+	int arrowStats_ = 0;
+
+	int padCoolTime_ = 0;
+
 	
 	// Scene用クラス
 	std::unique_ptr<InGameScene> inGameScene_;

@@ -103,6 +103,25 @@ void GameScene::Initialize() {
 	size_t bgmPlayHandle = audio_->SoundPlayLoopStart(bgmHandle);
 	audio_->SetValume(bgmPlayHandle, 0.1f);
 
+	poseBack_ = std::make_unique<Sprite>();
+	poseBack_->Initialize(TextureManager::Load("poseBack.png"), { 965.0f,540.0f });
+	poseBack_->size_ = { 236.0f,90.0f };
+
+	poseStageSelect_ = std::make_unique<Sprite>();
+	poseStageSelect_->Initialize(TextureManager::Load("poseStageSelect.png"), { 960.0f,710.0f });
+	poseStageSelect_->size_ = { 600.0f,90.0f };
+
+	poseTitle_ = std::make_unique<Sprite>();
+	poseTitle_->Initialize(TextureManager::Load("poseTitle.png"), { 960.0f,860.0f });
+	poseTitle_->size_ = { 300.0f,90.0f };
+
+	poseArrow_ = std::make_unique<Sprite>();
+	poseArrow_->Initialize(TextureManager::Load("poseArrow.png"), { 0.0f,0.0f });
+	poseArrow_->size_ = { 95.0f,90.0f };
+
+	poseBackground_ = std::make_unique<Sprite>();
+	poseBackground_->Initialize(TextureManager::Load("poseBackGround.png"), { 960.0f,540.0f });
+
 	// シーンリクエスト
 	// editor使用時のみ初期からDebugCameraを使用
 	sceneRequest_ = Scene::Title;
@@ -110,9 +129,50 @@ void GameScene::Initialize() {
 		ViewProjection::isUseDebugCamera = true;
 		audio_->SetValume(bgmPlayHandle, 0.0f);
 	}
+	padCoolTime_ = 0;
 }
 
 void GameScene::Update(CommandContext& commandContext){
+
+	if (scene_ != Scene::Title) {
+		if (input_->TriggerKey(DIK_L) || input_->TriggerButton(XINPUT_GAMEPAD_START)) {
+			size_t handle = audio_->SoundLoadWave("tap.wav");
+			size_t catchHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(catchHandle, 0.1f);
+			if (isPause_ == false) {
+				isPause_ = true;
+			}
+			else {
+				isPause_ = false;
+			}
+		}
+
+		if (isPause_ == true) {
+			padCoolTime_--;
+			if (input_->DownLStick() && arrowStats_ < 2 && padCoolTime_ <= 0) {
+				arrowStats_++;
+				padCoolTime_ = 10;
+
+				size_t handle = audio_->SoundLoadWave("tap.wav");
+				size_t catchHandle = audio_->SoundPlayWave(handle);
+				audio_->SetValume(catchHandle, 0.1f);
+			}
+
+			if (input_->UpLStick() && arrowStats_ > 0 && padCoolTime_ <= 0) {
+				arrowStats_--;
+				padCoolTime_ = 10;
+				size_t handle = audio_->SoundLoadWave("tap.wav");
+				size_t catchHandle = audio_->SoundPlayWave(handle);
+				audio_->SetValume(catchHandle, 0.1f);
+			}
+
+		}
+		else {
+			arrowStats_ = 0;
+		}
+	}
+
+
 	//後で消す処理
 #ifdef _DEBUG
 	ImGui::Begin("DirectionalLight");
@@ -174,18 +234,20 @@ void GameScene::Update(CommandContext& commandContext){
 				scene_ = saveSceneRequest_.value();
 				(this->*SceneInitializeTable[static_cast<size_t>(scene_)])();
 				saveSceneRequest_ = std::nullopt;
+				isPause_ = false;
 			}
 
 		}
 
-
-		if (hitStopFrame_ <= 0.0f) {
-			//SceneUpdate
-			(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
-		}
-		else {
-			hitStopFrame_--;
-			currentViewProjection_->Shake({ 0.3f,0.3f,0.3f }, hitStopFrame_);
+		if (!isPause_) {
+			if (hitStopFrame_ <= 0.0f) {
+				//SceneUpdate
+				(this->*SceneUpdateTable[static_cast<size_t>(scene_)])();
+			}
+			else {
+				hitStopFrame_--;
+				currentViewProjection_->Shake({ 0.3f,0.3f,0.3f }, hitStopFrame_);
+			}
 		}
 		
 	}
@@ -232,6 +294,29 @@ void GameScene::Update(CommandContext& commandContext){
 	ImGui::DragFloat3("emitterPos", &whiteParticle_->emitterWorldTransform_.translation_.x, 0.01f);
 	ImGui::End();
 #endif
+
+
+	if (isPause_ == true) {
+	
+		if (input_->TriggerButton(XINPUT_GAMEPAD_A)) {
+
+			size_t handle = audio_->SoundLoadWave("tap.wav");
+			size_t catchHandle = audio_->SoundPlayWave(handle);
+			audio_->SetValume(catchHandle, 0.1f);
+
+			if (arrowStats_ == 0) {
+				isPause_ = false;
+			}
+			else if (arrowStats_ == 1) {
+				sceneRequest_ = Scene::StageSelect;
+			}
+			else if (arrowStats_ == 2) {
+				sceneRequest_ = Scene::Title;
+			}
+		}
+
+	}
+
 }
 
 void GameScene::TitleInitialize() {
@@ -445,6 +530,7 @@ void GameScene::PreSpriteDraw()
 
 void GameScene::PostSpriteDraw()
 {
+
 	switch (scene_)
 	{
 	case GameScene::Scene::Title:
@@ -463,6 +549,28 @@ void GameScene::PostSpriteDraw()
 	default:
 		break;
 	}
+
+	if (isPause_ == true) {
+
+		poseBackground_->Draw();
+
+		if (arrowStats_ == 0) {
+			poseArrow_->position_ = { 740.0f,540.0f };
+		}
+		else if (arrowStats_ == 1) {
+			poseArrow_->position_ = { 580.0f,705.0f };
+		}
+		else if (arrowStats_ == 2) {
+			poseArrow_->position_ = { 743.0f,862.0f };
+		}
+
+		poseBack_->Draw();
+		poseStageSelect_->Draw();
+		poseTitle_->Draw();
+
+		poseArrow_->Draw();
+	}
+
 }
 
 void GameScene::Draw(CommandContext& commandContext) {
