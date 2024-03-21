@@ -352,6 +352,7 @@ void GameScene::StageSelectUpdate() {
 			size_t catchHandle = audio_->SoundPlayWave(handle);
 			audio_->SetValume(catchHandle, 0.1f);
 			sceneRequest_ = Scene::InGame;
+			chackPointNum_ = selectScene_->GetStageNumber();
 		}
 	}
 	selectScene_->Update();
@@ -359,7 +360,7 @@ void GameScene::StageSelectUpdate() {
 void GameScene::InGameInitialize() {
 	if (inGameScene_) {
 		inGameScene_.reset(new InGameScene());
-		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, selectScene_->GetStageNumber());
+		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, chackPointNum_);
 
 		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}
@@ -374,7 +375,8 @@ void GameScene::InGameUpdate() {
 
 	if (input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_O) || inGameScene_->GetEndDeadAnimation()) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::StageSelect;
+			sceneRequest_ = Scene::InGame;
+			chackPointNum_ = inGameScene_->GetPoint();
 		}
 	}
 

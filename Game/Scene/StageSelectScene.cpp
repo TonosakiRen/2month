@@ -14,10 +14,12 @@ StageSelectScene::~StageSelectScene() {
 
 void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLights, ShadowSpotLights* shadowSpotLights) {
 	shadowSpotLight_ = shadowSpotLights;
-	textureHandle_.resize(kMaxStageNumber_);
+	textureHandle_.resize(kMaxStageNumber_ + 1u);
 	for (uint32_t index = 0u; index < kMaxStageNumber_; index++) {
 		textureHandle_[index] = TextureManager::Load(("stageTexture" + std::to_string(index) + ".png").c_str());
 	}
+	textureHandle_[kMaxStageNumber_] = TextureManager::Load("sandStorm.png");
+
 	stageTexture_.object = std::make_unique<GameObject>();
 	stageTexture_.object->Initialize("plane");
 	stageTexture_.object->SetEnableLighting(true);
@@ -27,6 +29,15 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	stageTexture_.transform.scale_ = sTextureScaleOffset_;
 	stageTexture_.transform.translation_ = Vector3(0.0f, 7.0f, 4.0f);
 
+	noiseTexture_.object = std::make_unique<GameObject>();
+	noiseTexture_.object->Initialize("plane");
+	noiseTexture_.object->SetEnableLighting(true);
+	noiseTexture_.transform.Initialize();
+	noiseTexture_.transform.scale_ = sTextureScaleOffset_;
+	noiseTexture_.transform.translation_ = Vector3(0.0f, 7.0f, 3.9f);
+	noiseTexture_.color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+
+#pragma region Model
 	playerHead_.object = std::make_unique<GameObject>();
 	playerHead_.object->Initialize("playerHead");
 	playerHead_.transform.Initialize();
@@ -40,6 +51,7 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	playerBody_.transform.quaternion_ = MakeFromEulerAngle(Vector3(0.0f, Radian(20.0f), 0.0f));
 
 	playerHead_.transform.parent_ = &playerBody_.transform;
+#pragma endregion
 
 	camera_ = std::make_unique<SelectCamera>();
 	stage_ = std::make_unique<Stage>();
@@ -47,11 +59,12 @@ void StageSelectScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 }
 
 void StageSelectScene::Update() {
-	//DrawImGui();
+	DrawImGui();
 	stage_->Update(Vector3());
 	StageChange();
 
 	stageTexture_.transform.Update();
+	noiseTexture_.transform.Update();
 	playerHead_.transform.Update();
 	playerBody_.transform.Update();
 	camera_->Update();
@@ -61,7 +74,12 @@ void StageSelectScene::Update() {
 
 void StageSelectScene::Draw() {
 	stage_->Draw();
-	stageTexture_.object->Draw(stageTexture_.transform, textureHandle_[currentStageNumber_]);
+	if (isNoise_) {
+		noiseTexture_.object->Draw(noiseTexture_.transform, textureHandle_[kMaxStageNumber_], noiseTexture_.color);
+	}
+	else {
+		stageTexture_.object->Draw(stageTexture_.transform, textureHandle_[currentStageNumber_]);
+	}
 	playerHead_.object->Draw(playerHead_.transform);
 	playerBody_.object->Draw(playerBody_.transform);
 }
@@ -88,7 +106,7 @@ void StageSelectScene::StageChange() {
 	if (flag && !cp_.startUp && !isChangeScene_) {
 		cp_.startUp = true;
 		cp_.direction = direction;
-		camera_->ChangeStage();
+		//camera_->ChangeStage();
 	}
 
 	if (cp_.startUp) {
@@ -127,24 +145,41 @@ void StageSelectScene::ScaleUpdate() {
 	const float oneFrameSize = 10.0f;
 	const Vector3 normal = Vector3(0.0f, sTextureScaleOffset_.y / oneFrameSize, 0.0f);
 	
-	if (cp_.isOnZoom) {
-		// 拡大
-		stageTexture_.transform.scale_ += normal;
-		if (/*sTextureTransform_.scale_.x >= sTextureScaleOffset_.x || */stageTexture_.transform.scale_.y >= sTextureScaleOffset_.y) {
-			stageTexture_.transform.scale_ = sTextureScaleOffset_;
-			cp_.isOnZoom = false;
-			cp_.startUp = false;
-		}
+	//if (cp_.isOnZoom) {
+	//	// 拡大
+	//	stageTexture_.transform.scale_ += normal;
+	//	if (/*sTextureTransform_.scale_.x >= sTextureScaleOffset_.x || */stageTexture_.transform.scale_.y >= sTextureScaleOffset_.y) {
+	//		stageTexture_.transform.scale_ = sTextureScaleOffset_;
+	//		cp_.isOnZoom = false;
+	//		cp_.startUp = false;
+	//	}
+	//}
+	//else {
+	//	// 縮小
+	//	stageTexture_.transform.scale_ -= normal;
+	//	if (/*sTextureTransform_.scale_.x <= 0.0f || */stageTexture_.transform.scale_.y <= 0.0f) {
+	//		stageTexture_.transform.scale_.y = 0.0f;
+	//		cp_.isSwitch = true;
+	//		cp_.isOnZoom = true;
+	//	}
+	//}
+
+	const uint32_t kMaxCount = 15u;
+	if (count_++ > kMaxCount) {
+		cp_.startUp = false;
+		count_ = 0u;
+		isNoise_ = false;
+		cp_.isSwitch = true;
+		shadowSpotLight_->lights_[0].isActive = true;
+		shadowSpotLight_->lights_[1].isActive = true;
 	}
 	else {
-		// 縮小
-		stageTexture_.transform.scale_ -= normal;
-		if (/*sTextureTransform_.scale_.x <= 0.0f || */stageTexture_.transform.scale_.y <= 0.0f) {
-			stageTexture_.transform.scale_.y = 0.0f;
-			cp_.isSwitch = true;
-			cp_.isOnZoom = true;
-		}
+		isNoise_ = true;
+		noiseTexture_.object->material_.translation_ = Shake(Vector3(1.0f, 1.0f, 1.0f));
+		shadowSpotLight_->lights_[0].isActive = false;
+		shadowSpotLight_->lights_[1].isActive = false;
 	}
+
 }
 
 void StageSelectScene::DrawImGui() {
@@ -156,6 +191,12 @@ void StageSelectScene::DrawImGui() {
 		ImGui::DragFloat3("rot", &rot.x, Radian(1.0f));
 		stageTexture_.transform.quaternion_ = MakeFromEulerAngle(rot);
 		ImGui::DragFloat3("trans", &stageTexture_.transform.translation_.x, 0.1f);
+
+		ImGui::ColorEdit4("color", &noiseTexture_.color.x);
+		static Vector3 trans = noiseTexture_.object->material_.translation_;
+		ImGui::DragFloat3("noiseTrans", &trans.x, 0.1f);
+		noiseTexture_.object->material_.translation_ = trans;
+
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Player")) {
@@ -181,4 +222,8 @@ void StageSelectScene::DrawImGui() {
 
 	ImGui::End();
 #endif // _DEBUG
+}
+
+Vector3 StageSelectScene::Shake(Vector3 shakeValue) {
+	return Vector3(Rand(-shakeValue.x, shakeValue.x), Rand(-shakeValue.y, shakeValue.y), Rand(-shakeValue.z, shakeValue.z));
 }

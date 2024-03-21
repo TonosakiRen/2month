@@ -157,6 +157,7 @@ private:
 	void EditorInitialize();
 	void EditorUpdate();
 
-
+	// チェックポイント用
+	uint32_t chackPointNum_ = 0u;
 };
 
