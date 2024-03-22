@@ -16,11 +16,10 @@ public:
 public:
 	Collider collider_;
 	Vector3 rotate;
-	static uint32_t masterNumber_;
+	uint32_t kNumber_ = 0u;
 private:
 	bool ActiveChack(const Vector3& playerWorldPosition) const;
 	bool isActive_ = true;
-	const uint32_t kNumber_ = 0u;
 
 
 };
