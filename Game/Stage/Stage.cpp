@@ -415,8 +415,10 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		Vector3 scale = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Scale").c_str());
 		Quaternion rotate = global->GetQuaternionValue(selectName, ("TrapNumber : " + std::to_string(i) + " : Rotate").c_str());
 		Vector3 trans = global->GetVector3Value(selectName, ("TrapNumber : " + std::to_string(i) + " : Translate").c_str());
+		int number = global->GetIntValue(selectName, ("TrapNumber : " + std::to_string(i) + " : Number").c_str());
 		auto& trap = trapButtons_.emplace_back(std::make_unique<TrapButton>());
 		trap->Initialize(scale, rotate, trans);
+		trap->kNumber_ = number;
 	}
 
 	if (goal_) { goal_.reset();	}
@@ -513,6 +515,7 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Scale").c_str(), trapButtons_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Rotate").c_str(), trapButtons_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Translate").c_str(), trapButtons_[index]->GetWorldTransform()->translation_);
+		global->SetValue(itemName, ("TrapNumber : " + std::to_string(index) + " : Number").c_str(), static_cast<int>(trapButtons_[index]->kNumber_));
 	}
 
 	if (goal_) {
