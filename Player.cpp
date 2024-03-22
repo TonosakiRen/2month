@@ -94,8 +94,9 @@ void Player::Initialize(const std::string name)
 
 	isEndClearAnimation = false;
 
-	ty_.Initialize("thankyou");
+	ty_.Initialize("goal");
 	ty_.worldTransform_.translation_ = { 0.0f,30.0f,0.0f };
+	ty_.worldTransform_.scale_ = { 3.0f,3.0f,3.0f };
 
 	date_.attackIndex = -1;
 
@@ -440,6 +441,12 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 }
 
 void Player::Move() {
+
+
+	if (input_->TriggerKey(DIK_U)) {
+		worldTransform_.translation_ = { 430.0f,-0.816f,-3.6f };
+	}
+
 	if (!isDash_) {
  		Vector3 direction = { 0.0f,0.0f,0.0f };
 
@@ -604,6 +611,9 @@ void Player::Attack() {
 
 void Player::MoveLimit() {
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -10.5f + bodyModelSize_.z / 2.0f, FLT_MAX);
+	if (worldTransform_.GetWorldTranslate().y <= -20.0f) {
+		hp_ = 0;
+	}
 }
 
 void Player::InsertData() {
@@ -670,13 +680,20 @@ void Player::DeadUpdate()
 
 void Player::ClearUpdate()
 {
+
+	rotate_ = { 1.6f,3.2f,0.0f };
+
+	ImGui::DragFloat3("a",&rotate_.x,0.1f);
+
+	ty_.worldTransform_.quaternion_ = MakeFromEulerAngle(rotate_);
+
 	if (isClear_ == true) {
 		worldTransform_.translation_.x += speed_;
 		inputQuaternion_ = MakeLookRotation({1.0f,0.0f,0.0f});
 		worldTransform_.quaternion_ = Slerp(0.2f, worldTransform_.quaternion_, inputQuaternion_);
-		worldTransform_.translation_.x = clamp(worldTransform_.translation_.x, 0.0f, ty_.worldTransform_.translation_.x + 25.0f);
+		worldTransform_.translation_.x = clamp(worldTransform_.translation_.x, 0.0f, ty_.worldTransform_.translation_.x + 20.0f);
 
-		ty_.worldTransform_.translation_.y = Easing::easing(0.01f, ty_.worldTransform_.translation_.y, tySaveY_, Easing::easeNormal);
+		ty_.worldTransform_.translation_.y = Easing::easing(0.02f, ty_.worldTransform_.translation_.y, tySaveY_, Easing::easeNormal);
 
 		if (ty_.worldTransform_.translation_.y <= tySaveY_ + 0.1f) {
 			isEndClearAnimation = true;

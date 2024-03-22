@@ -590,9 +590,9 @@ void Stage::Collision(Player* player) {
 			player->isClear_ = true;
 			player->ty_.worldTransform_.translation_.x = goal_->GetWorldTransform()->translation_.x;
 			player->ty_.worldTransform_.translation_.z = goal_->GetWorldTransform()->translation_.z;
-			player->ty_.worldTransform_.translation_.x += 7.0f;
-			player->tySaveY_ = goal_->GetWorldTransform()->translation_.y;
-			player->ty_.worldTransform_.scale_ = { 3.0f,3.0f,3.0f };
+			player->ty_.worldTransform_.translation_.x += 3.0f;
+			player->tySaveY_ = goal_->GetWorldTransform()->translation_.y + 1.0f;
+			player->ty_.worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
 		}
 
 	}

@@ -166,5 +166,6 @@ private:
 public:
     PlayerDate date_;
 
+    Vector3 rotate_{};
 
 };
