@@ -606,6 +606,9 @@ void Player::Attack() {
 
 void Player::MoveLimit() {
 	worldTransform_.translation_.z = clamp(worldTransform_.translation_.z, -10.5f + bodyModelSize_.z / 2.0f, FLT_MAX);
+	if (worldTransform_.GetWorldTranslate().y <= -20.0f) {
+		hp_ = 0;
+	}
 }
 
 void Player::InsertData() {
