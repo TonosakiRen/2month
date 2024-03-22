@@ -370,7 +370,7 @@ void GameScene::InGameUpdate() {
 
 	if ((input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_P)) || inGameScene_->GetEndClearAnimation()) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::Title;
+			sceneRequest_ = Scene::StageSelect;
 		}
 	}
 
