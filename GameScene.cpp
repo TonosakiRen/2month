@@ -344,6 +344,7 @@ void GameScene::TitleUpdate() {
 void GameScene::StageSelectInitialize() {
 	selectScene_.reset(new StageSelectScene());
 	selectScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
+	chackPointNum_ = 0u;
 }
 void GameScene::StageSelectUpdate() {
 	if (selectScene_->SceneChange()) {
@@ -362,7 +363,7 @@ void GameScene::InGameInitialize() {
 		inGameScene_.reset(new InGameScene());
 		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, chackPointNum_,selectScene_->GetStageNumber());
 
-		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
+		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->GetWorldTranslate());
 	}
 }
 void GameScene::InGameUpdate() {
