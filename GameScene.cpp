@@ -363,7 +363,7 @@ void GameScene::InGameInitialize() {
 		inGameScene_.reset(new InGameScene());
 		inGameScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_, chackPointNum_,selectScene_->GetStageNumber());
 
-		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->GetWorldTranslate());
+		directionalLights_.SetPlayerPos(inGameScene_->GetPlayerTrans()->translation_);
 	}
 }
 void GameScene::InGameUpdate() {
