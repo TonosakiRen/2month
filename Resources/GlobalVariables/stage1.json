@@ -1782,10 +1782,10 @@
         "StageLightNumber : 1 : intensity": 5.5,
         "StageLightNumber : 10 : Distance": 29.5,
         "StageLightNumber : 10 : Rotate": [
-            -0.061264656484127045,
-            0.6788795590400696,
-            -0.06576310843229294,
-            0.7287272214889526
+            -0.05926448851823807,
+            0.700432538986206,
+            -0.06757118552923203,
+            0.7080360054969788
         ],
         "StageLightNumber : 10 : Scale": [
             1.0,
@@ -1794,7 +1794,7 @@
         ],
         "StageLightNumber : 10 : ShadeDistance": 5.0,
         "StageLightNumber : 10 : Translate": [
-            441.5,
+            437.79998779296875,
             0.6000000238418579,
             -13.100000381469727
         ],
