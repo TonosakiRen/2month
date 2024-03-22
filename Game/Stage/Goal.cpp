@@ -31,8 +31,8 @@ void Goal::Draw() {
 #ifndef _DEBUG
 	if (!isActive_) { return; }
 #endif // RELEASE
-	collider_.Draw();
-	GameObject::Draw(Vector4(0.06f, 0.40f, 0.26f, 1.0f));
+	//collider_.Draw();
+	//GameObject::Draw(Vector4(0.06f, 0.40f, 0.26f, 1.0f));
 }
 
 void Goal::DrawImGui() {
