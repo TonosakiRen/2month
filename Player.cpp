@@ -442,11 +442,6 @@ void Player::CollisionProcess(const Vector3& pushBackVector) {
 
 void Player::Move() {
 
-
-	if (input_->TriggerKey(DIK_U)) {
-		worldTransform_.translation_ = { 430.0f,-0.816f,-3.6f };
-	}
-
 	if (!isDash_) {
  		Vector3 direction = { 0.0f,0.0f,0.0f };
 
@@ -679,8 +674,6 @@ void Player::ClearUpdate()
 {
 
 	rotate_ = { 1.6f,3.2f,0.0f };
-
-	ImGui::DragFloat3("a",&rotate_.x,0.1f);
 
 	ty_.worldTransform_.quaternion_ = MakeFromEulerAngle(rotate_);
 
