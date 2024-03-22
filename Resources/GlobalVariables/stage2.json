@@ -1161,7 +1161,7 @@
         "MoveFloorConfirmation": 2,
         "MoveFloorNumber : 0 : EndPosition": [
             601.2000122070313,
-            20.0,
+            25.0,
             -3.200000047683716
         ],
         "MoveFloorNumber : 0 : Rotate": [
@@ -1178,7 +1178,7 @@
         "MoveFloorNumber : 0 : Speed": 262.20001220703125,
         "MoveFloorNumber : 0 : StartPosition": [
             601.2000122070313,
-            6.5,
+            5.300000190734863,
             -3.200000047683716
         ],
         "MoveFloorNumber : 1 : EndPosition": [
@@ -1479,9 +1479,9 @@
         ],
         "Player : Rotate": [
             0.0,
-            -0.7071067690849304,
+            -0.465498149394989,
             0.0,
-            0.7071067690849304
+            0.8850488662719727
         ],
         "Player : Scale": [
             1.0,
@@ -1489,9 +1489,9 @@
             1.0
         ],
         "Player : Translate": [
-            411.13299560546875,
-            2.378000020980835,
-            -2.2339999675750732
+            -1.90374755859375,
+            2.084054946899414,
+            -2.027881383895874
         ],
         "SavePointConfirmation": 3,
         "SavePointNumber : 0 : Rotate": [
