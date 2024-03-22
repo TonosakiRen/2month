@@ -96,7 +96,7 @@
             4.0,
             -11.5
         ],
-        "CoinConfirmation": 46,
+        "CoinConfirmation": 23,
         "CoinNumber : 0 : Draw": 0,
         "CoinNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -1216,7 +1216,7 @@
             1.600000023841858,
             -4.199999809265137
         ],
-        "HeartConfirmation": 5,
+        "HeartConfirmation": 1,
         "HeartNumber : 0 : Draw": 0,
         "HeartNumber : 0 : Rotate": [
             4.371138473402425e-08,
