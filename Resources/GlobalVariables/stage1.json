@@ -2221,7 +2221,7 @@
         "StageLightNumber : 9 : decay": 1.0,
         "StageLightNumber : 9 : intensity": 1.899999976158142,
         "StandLightEnemyConfirmation": 0,
-        "ThornEnemyConfirmation": 6,
+        "ThornEnemyConfirmation": 4,
         "ThornEnemyNumber : 0 : Amplitube": [
             0.0,
             0.0,
@@ -2384,6 +2384,7 @@
             -7.199999809265137
         ],
         "TrapConfirmation": 1,
+        "TrapNumber : 0 : Number": 0,
         "TrapNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -2400,7 +2401,6 @@
             0.4000000059604645,
             -4.699999809265137
         ],
-        "TrapNumber : 0 : Number": 0,
         "TrapNumber : 1 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
