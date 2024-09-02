@@ -344,6 +344,7 @@ void GameScene::TitleUpdate() {
 void GameScene::StageSelectInitialize() {
 	selectScene_.reset(new StageSelectScene());
 	selectScene_->Initialize(&pointLights_, &spotLights_, &shadowSpotLights_);
+	chackPointNum_ = 0u;
 }
 void GameScene::StageSelectUpdate() {
 	if (selectScene_->SceneChange()) {
@@ -369,7 +370,7 @@ void GameScene::InGameUpdate() {
 
 	if ((input_->PushKey(DIK_LCONTROL) && input_->TriggerKey(DIK_P)) || inGameScene_->GetEndClearAnimation()) {
 		if (!Transition::isTransition_) {
-			sceneRequest_ = Scene::Title;
+			sceneRequest_ = Scene::StageSelect;
 		}
 	}
 

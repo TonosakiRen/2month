@@ -4,10 +4,8 @@
 #include "Game/Character/BaseCharacter.h"
 #undef min
 
-decltype(TrapButton::masterNumber_) TrapButton::masterNumber_ = 0u;
+TrapButton::TrapButton() {
 
-TrapButton::TrapButton() : kNumber_(masterNumber_) {
-	masterNumber_++;
 }
 
 TrapButton::~TrapButton() {
@@ -54,6 +52,9 @@ void TrapButton::DrawImGui() {
 	Vector3 handle = Vector3(Radian(rotate.x), Radian(rotate.y), Radian(rotate.z));
 	worldTransform_.quaternion_ = MakeFromEulerAngle(handle);
 	ImGui::DragFloat3("translate", &worldTransform_.translation_.x, 0.1f);
+	static int iHandle = static_cast<int>(kNumber_);
+	ImGui::DragInt("number", &iHandle, 1);
+	kNumber_ = static_cast<uint32_t>(iHandle);
 
 	UpdateMatrix();
 #endif // _DEBUG
