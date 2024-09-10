@@ -129,6 +129,7 @@ void EnemyManager::DrawImGui() {
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", nEnemis_.size());
 			for (int i = 0; i < nEnemis_.size(); i++) {
+				nEnemis_.at(i)->color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				if (ImGui::TreeNode(("nEnemyNumber : " + std::to_string(i)).c_str())) {
 					nEnemis_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
@@ -146,6 +147,7 @@ void EnemyManager::DrawImGui() {
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", nLightEnemis_.size());
 			for (int i = 0; i < nLightEnemis_.size(); i++) {
+				nLightEnemis_.at(i)->color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				if (ImGui::TreeNode(("nlEnemyNumber : " + std::to_string(i)).c_str())) {
 					nLightEnemis_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
@@ -163,7 +165,9 @@ void EnemyManager::DrawImGui() {
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", tEnemis_.size());
 			for (int i = 0; i < tEnemis_.size(); i++) {
+				tEnemis_.at(i)->color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				if (ImGui::TreeNode(("tEnemyNumber : " + std::to_string(i)).c_str())) {
+					tEnemis_.at(i)->color_ = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 					tEnemis_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
 						tEnemis_.erase(tEnemis_.begin() + i);
@@ -197,7 +201,9 @@ void EnemyManager::DrawImGui() {
 			// 要素数確認
 			ImGui::Text("ElementCount = %d", cEnemis_.size());
 			for (int i = 0; i < cEnemis_.size(); i++) {
+				cEnemis_.at(i)->color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 				if (ImGui::TreeNode(("cEnemyNumber : " + std::to_string(i)).c_str())) {
+					cEnemis_.at(i)->color_ = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
 					cEnemis_.at(i)->DrawImGui();
 					if (ImGui::Button("Delete")) {
 						cEnemis_.erase(cEnemis_.begin() + i);

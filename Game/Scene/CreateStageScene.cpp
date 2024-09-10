@@ -42,10 +42,10 @@ void CreateStageScene::Update() {
 	Player::hitShadowEnemyIndex_ = -1;
 	Player::hitCollider_ = nullptr;
 
-	stage_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
-
 	player_->Update();
 	enemy_->Update(player_->GetWorldTransform()->GetWorldTranslate());
+
+	stage_->Update(MakeTranslation(player_->GetWorldTransform()->matWorld_));
 	// trapが起動されたら
 	if (isTrapped_) {
 		// 敵を生成する

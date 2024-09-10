@@ -1,6 +1,25 @@
 {
     "house0": {
-        "CannonEnemyConfirmation": 0,
+        "CannonEnemyConfirmation": 1,
+        "CannonEnemyNumber : 0 : BulletSpeed": 1.0,
+        "CannonEnemyNumber : 0 : Draw": 0,
+        "CannonEnemyNumber : 0 : Interval": 60,
+        "CannonEnemyNumber : 0 : Rotate": [
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
+        ],
+        "CannonEnemyNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CannonEnemyNumber : 0 : Translate": [
+            10.899999618530273,
+            0.800000011920929,
+            -7.599999904632568
+        ],
         "CoinConfirmation": 0,
         "FloorConfirmation": 1,
         "FloorNumber : 0 : Rotate": [
@@ -20,10 +39,10 @@
             -3.0
         ],
         "Goal : Rotate": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+            4.371138473402425e-08,
+            -4.371139183945161e-08,
+            4.371138473402425e-08,
+            -1.0
         ],
         "Goal : Scale": [
             0.0,
@@ -32,13 +51,13 @@
         ],
         "Goal : Translate": [
             0.0,
-            0.0,
+            100.0,
             0.0
         ],
         "HeartConfirmation": 0,
         "MoveFloorConfirmation": 0,
-        "NormalEnemyConfirmation": 0,
-        "NormalEnemyNumber : 0 : Draw": 0,
+        "NormalEnemyConfirmation": 1,
+        "NormalEnemyNumber : 0 : Draw": 1,
         "NormalEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -51,9 +70,9 @@
             1.0
         ],
         "NormalEnemyNumber : 0 : Translate": [
-            -4.400000095367432,
-            2.5,
-            -3.4000000953674316
+            -6.0,
+            4.5,
+            2.5999999046325684
         ],
         "NormalEnemyNumber : 1 : Draw": 0,
         "NormalEnemyNumber : 1 : Rotate": [
@@ -143,9 +162,9 @@
         ],
         "Player : Rotate": [
             0.0,
-            0.7818900346755981,
+            0.9833335280418396,
             0.0,
-            0.6234163641929626
+            0.18181058764457703
         ],
         "Player : Scale": [
             1.0,
@@ -153,9 +172,9 @@
             1.0
         ],
         "Player : Translate": [
-            -0.8689467906951904,
-            0.7840552926063538,
-            -2.0890984535217285
+            0.0,
+            1.0,
+            -6.900000095367432
         ],
         "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
@@ -178,14 +197,35 @@
             0.0
         ],
         "SpawnerNumber : 0 : hp": 3,
-        "StageLightConfirmation": 0,
-        "StandLightEnemyConfirmation": 0,
-        "ThornEnemyConfirmation": 0,
-        "ThornEnemyNumber : 0 : Amplitube": [
-            0.5,
-            0.0,
-            0.0
+        "StageLightConfirmation": 1,
+        "StageLightNumber : 0 : Distance": 20.0,
+        "StageLightNumber : 0 : Rotate": [
+            0.04347698763012886,
+            0.6577694416046143,
+            -0.0547885037958622,
+            0.7499650120735168
         ],
+        "StageLightNumber : 0 : Scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "StageLightNumber : 0 : ShadeDistance": 5.0,
+        "StageLightNumber : 0 : Translate": [
+            0.0,
+            3.4000000953674316,
+            -12.5
+        ],
+        "StageLightNumber : 0 : decay": 1.0,
+        "StageLightNumber : 0 : intensity": 5.5,
+        "StandLightEnemyConfirmation": 0,
+        "ThornEnemyConfirmation": 1,
+        "ThornEnemyNumber : 0 : Amplitube": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "ThornEnemyNumber : 0 : Draw": 0,
         "ThornEnemyNumber : 0 : Rotate": [
             4.371138473402425e-08,
             -4.371139183945161e-08,
@@ -197,10 +237,10 @@
             1.0,
             1.0
         ],
-        "ThornEnemyNumber : 0 : Time": 20,
+        "ThornEnemyNumber : 0 : Time": 5,
         "ThornEnemyNumber : 0 : Translate": [
-            -4.5,
-            5.5,
+            7.0,
+            1.7000000476837158,
             0.0
         ],
         "TrapConfirmation": 0,

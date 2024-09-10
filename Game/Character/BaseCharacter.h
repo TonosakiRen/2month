@@ -46,6 +46,7 @@ protected:
 
 public:
 	bool shadowOnly_ = false; // 影だけ描画するか
+	Vector4 color_ = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	Collider collider_;
 	const WorldTransform* GetWorldTransform() { return &worldTransform_; }
 	const bool& GetIsAlive() const { return isAlive_; }
