@@ -13,7 +13,11 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 		positions.push_back(point->GetWorldTransform()->GetWorldTranslate());
 	}
 	int closestSegment = FindClosestSegment(playerTranslate, positions, T);
-	closestSegment = std::clamp(closestSegment, 0, static_cast<int>(points.size()) - 2);
+	int max = static_cast<int>(points.size()) - 2;
+	if (max <= 0) {
+		max = 1;
+	}
+	closestSegment = std::clamp(closestSegment, 0, max);
 	
 
 	// 座標を取得
