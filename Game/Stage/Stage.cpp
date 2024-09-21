@@ -48,6 +48,9 @@ void Stage::Update(const Vector3& playerWorldPosition) {
 	for (auto& point : savePoints_) {
 		point->Update(playerWorldPosition);
 	}
+	for (auto& point : controlPoints_) {
+		point->Update();
+	}
 
 	if (mHouse_.isFalled_) {
 		Confine();
@@ -93,6 +96,9 @@ void Stage::Draw() {
 	for (auto& point : savePoints_) {
 		point->Draw();
 	}
+	for (auto& point : controlPoints_) {
+		point->Draw();
+	}
 }
 
 
@@ -116,9 +122,6 @@ void Stage::ShadowDraw() {
 		trap->Draw();
 	}
 	goal_->Draw();
-	for (auto& point : savePoints_) {
-		point->Draw();
-	}
 	for (auto& point : savePoints_) {
 		point->Draw();
 	}
@@ -309,6 +312,24 @@ void Stage::DrawImGui() {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("ControlPointButton")) {
+			if (ImGui::Button("Create")) {
+				controlPoints_.emplace_back(std::make_shared<ControlPoint>())->Initialize(Quaternion(0.0f, 0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+			}
+			// 要素数確認
+			ImGui::Text("ElementCount = %d", controlPoints_.size());
+			for (int i = 0; i < controlPoints_.size(); i++) {
+				if (ImGui::TreeNode(("ControlPointButtonNumber : " + std::to_string(i)).c_str())) {
+					controlPoints_.at(i)->DrawImGui();
+					if (ImGui::Button("Delete")) {
+						controlPoints_.erase(controlPoints_.begin() + i);
+					}
+					ImGui::TreePop();
+				}
+			}
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenu();
 	}
 	
@@ -450,6 +471,18 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 	else {
 		playerRespawnPoint_.translate = Vector3(-20.0f, 0.0f, -5.0f);
 	}
+
+	num = global->GetIntValue(selectName, "ControlPoint");
+	controlPoints_.clear(); // 要素の全削除
+	for (int i = 0; i < num; i++) {
+		Quaternion rotate = global->GetQuaternionValue(selectName, ("ControlPointNumber : " + std::to_string(i) + " : Rotate").c_str());
+		Vector3 trans = global->GetVector3Value(selectName, ("ControlPointNumber : " + std::to_string(i) + " : Translate").c_str());
+		auto& point = controlPoints_.emplace_back(std::shared_ptr<ControlPoint>());
+		point->GetWorldTransform()->scale_ = Vector3(1.0f, 1.0f, 1.0f);
+		point->GetWorldTransform()->quaternion_ = rotate;
+		point->GetWorldTransform()->translation_ = trans;
+		point->GetWorldTransform()->Update();
+	}
 }
 
 void Stage::Save(const char* itemName) {
@@ -529,6 +562,12 @@ void Stage::Save(const char* itemName) {
 		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Scale").c_str(), savePoints_[index]->GetWorldTransform()->scale_);
 		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Rotate").c_str(), savePoints_[index]->GetWorldTransform()->quaternion_);
 		global->SetValue(itemName, ("SavePointNumber : " + std::to_string(index) + " : Translate").c_str(), savePoints_[index]->GetWorldTransform()->translation_);
+	}
+
+	global->SetValue(itemName, "ControlPointNumberConfirmation" + std::string(), static_cast<int>(controlPoints_.size()));
+	for (uint32_t index = 0u; index < static_cast<uint32_t>(controlPoints_.size()); index++) {
+		global->SetValue(itemName, ("ControlPointNumberNumber : " + std::to_string(index) + " : Rotate").c_str(), controlPoints_[index]->GetWorldTransform()->quaternion_);
+		global->SetValue(itemName, ("ControlPointNumberNumber : " + std::to_string(index) + " : Translate").c_str(), controlPoints_[index]->GetWorldTransform()->translation_);
 	}
 
 	global->SetValue(itemName, "Player : Scale", playerRespawnPoint_.scale);

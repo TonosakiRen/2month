@@ -29,6 +29,7 @@ void CreateStageScene::Initialize(PointLights* pointLights, SpotLights* spotLigh
 	//isPlay = true;
 
 	followCamera_ = std::make_shared<FollowCamera>();
+	railCamera_ = std::make_shared<RailCamera>();
 	fixedCamera_ = std::make_shared<FixedCamera>();
 }
 
@@ -92,8 +93,9 @@ void CreateStageScene::Update() {
 	RT handle;
 	if (iscamera) {
 		followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate());
-		handle.rotate = followCamera_->GetTransform().quaternion_;
-		handle.position = followCamera_->GetTransform().GetWorldTranslate();
+		railCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate(), stage_->GetControlPoints());
+		handle.rotate = railCamera_->GetTransform().quaternion_;
+		handle.position = railCamera_->GetTransform().GetWorldTranslate();
 	}
 	else {
 		fixedCamera_->Update();

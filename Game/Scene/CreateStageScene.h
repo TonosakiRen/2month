@@ -5,6 +5,7 @@
 #include "Game/Character/EnemyManager.h"
 #include "Game/Camera/FollowCamera.h"
 #include "Game/Camera/FixedCamera.h"
+#include "Game/RailCamera/RailCamera.h"
 
 
 class GlobalVariables;
@@ -63,6 +64,7 @@ private:
 	int fileNumber_ = 0;
 
 	std::shared_ptr<FollowCamera> followCamera_;
+	std::shared_ptr<RailCamera> railCamera_;
 	std::shared_ptr<FixedCamera> fixedCamera_;
 
 	bool isTrapped_ = false; // true:起動している/false:していない

@@ -9,6 +9,7 @@
 #include "TrapButton.h"
 #include "Goal.h"
 #include "SavePoint.h"
+#include "Game/RailCamera/ControlPoint.h"
 #include <memory>
 #include <vector>
 #include <filesystem>
@@ -36,7 +37,7 @@ public:
 	void Collision(Player* player);
 	void Collision(EnemyManager* enemis);
 	Collider& GetWallCollider(uint32_t number) const { return walls_.at(number)->collider_; }
-	const std::vector<std::unique_ptr<Wall>>& GetWalls() const { return walls_; }
+	std::vector<std::shared_ptr<ControlPoint>>& GetControlPoints() { return controlPoints_; }
 	
 	/// <summary>
 	/// *playerを渡し座標を移動させる
@@ -58,6 +59,7 @@ private:
 	std::vector<std::unique_ptr<TrapButton>> trapButtons_;
 	std::unique_ptr<Goal> goal_;
 	std::vector<std::unique_ptr<SavePoint>> savePoints_;
+	std::vector<std::shared_ptr<ControlPoint>> controlPoints_;
 
 	SpotLights* spotLights_;
 	PointLights* pointLights_;

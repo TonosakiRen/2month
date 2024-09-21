@@ -86,6 +86,9 @@
     <Filter Include="Game\Camera">
       <UniqueIdentifier>{246ecb17-fb16-4ddc-a040-106376c47a0b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\RailCamera">
+      <UniqueIdentifier>{90d07f1d-e592-47ee-b425-7354c0717276}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -382,6 +385,12 @@
     </ClCompile>
     <ClCompile Include="DeadParticle.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RailCamera\ControlPoint.cpp">
+      <Filter>Game\RailCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\RailCamera\RailCamera.cpp">
+      <Filter>Game\RailCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -688,6 +697,12 @@
     </ClInclude>
     <ClInclude Include="DeadParticle.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RailCamera\ControlPoint.h">
+      <Filter>Game\RailCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\RailCamera\RailCamera.h">
+      <Filter>Game\RailCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -152,6 +152,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Character\NormalSpawner.cpp" />
     <ClCompile Include="Game\Character\StandLightEnemy.cpp" />
     <ClCompile Include="Game\Character\ThornEnemy.cpp" />
+    <ClCompile Include="Game\RailCamera\ControlPoint.cpp" />
+    <ClCompile Include="Game\RailCamera\RailCamera.cpp" />
     <ClCompile Include="Game\Scene\CreateStageScene.cpp" />
     <ClCompile Include="Game\Scene\InGameScene.cpp" />
     <ClCompile Include="Game\Scene\StageSelectScene.cpp" />
@@ -255,6 +257,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\Character\NormalSpawner.h" />
     <ClInclude Include="Game\Character\StandLightEnemy.h" />
     <ClInclude Include="Game\Character\ThornEnemy.h" />
+    <ClInclude Include="Game\RailCamera\ControlPoint.h" />
+    <ClInclude Include="Game\RailCamera\RailCamera.h" />
     <ClInclude Include="Game\Scene\CreateStageScene.h" />
     <ClInclude Include="Game\Scene\InGameScene.h" />
     <ClInclude Include="Game\Scene\StageSelectScene.h" />
