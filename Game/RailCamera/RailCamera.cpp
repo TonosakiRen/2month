@@ -13,16 +13,21 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 		positions.push_back(point->GetWorldTransform()->GetWorldTranslate());
 	}
 	int closestSegment = FindClosestSegment(playerTranslate, positions, T);
-	int max = static_cast<int>(points.size()) - 2;
-	if (max <= 0) {
-		max = 1;
-	}
-	closestSegment = std::clamp(closestSegment, 0, max);
 	
+	int p0 = closestSegment - 1;
+	if (p0 <= 0) { p0 = 0; }
+	int p2 = closestSegment + 1;
+	if (p2 >= static_cast<int>(points.size())) { p2 = static_cast<int>(points.size()) - 1; }
+	int p3 = closestSegment + 2;
+	if (p3 >= static_cast<int>(points.size())) { p3 = static_cast<int>(points.size()) - 1; }
+
 
 	// 座標を取得
 	worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
 	worldTransform_.translation_ = Lerp(points.at(closestSegment)->GetWorldTransform()->GetWorldTranslate(), points.at(closestSegment + 1)->GetWorldTransform()->GetWorldTranslate(), T);
+	worldTransform_.translation_ = CatmullRomSpline(T, points.at(p0)->GetWorldTransform()->GetWorldTranslate(), points.at(closestSegment)->GetWorldTransform()->GetWorldTranslate(),
+		points.at(p2)->GetWorldTransform()->GetWorldTranslate(), points.at(p3)->GetWorldTransform()->GetWorldTranslate());
+
 	worldTransform_.quaternion_ = Slerp(T, points.at(closestSegment)->GetWorldTransform()->quaternion_, points.at(closestSegment + 1)->GetWorldTransform()->quaternion_);
 	worldTransform_.Update();
 }
