@@ -82,7 +82,7 @@ void CreateStageScene::Update() {
 		iscamera = false;
 		isTrappedInitialize = true;
 		Vector3 centerPos = Vector3(stage_->GetParam().centerPosX_, stage_->GetParam().centerPosY_,0.0f);
-		fixedCamera_->Initialize(centerPos, followCamera_->GetTransform());
+		fixedCamera_->Initialize(centerPos, railCamera_->GetTransform());
 	}
 	// 定点終了初期化処理
 	else if(stage_->GetParam().isMomentActivation_ && stage_->GetParam().isBreaked_) {

@@ -29,7 +29,9 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 
 float RailCamera::DistanceToSegment(const Vector3& point, const Vector3& p1, const Vector3& p2, float& t) {
 	Vector3 segment = p2 - p1;
+	//segment.z = 0.0f;
 	Vector3 toPoint = point - p1;
+	//toPoint.z = 0.0f;
 	float segmentLengthSquared = Dot(segment, segment); // 線分の長さの二乗
 	if (segmentLengthSquared == 0.0f) {
 		// P1とP2が同じ点の場合（稀なケース）
@@ -55,11 +57,11 @@ int RailCamera::FindClosestSegment(const Vector3& playerPosition, const std::vec
 	// 各セグメントをチェック
 	for (int32_t i = 0; i < controlPoints.size() - 1; ++i) {
 		float t = 0.0f; // セグメント内の相対位置
-		float distance = DistanceToSegment(playerPosition, controlPoints[i], controlPoints[i + 1], t);
+		float lDistance = DistanceToSegment(playerPosition, controlPoints[i], controlPoints[i + 1], t);
 
 		// 最も近いセグメントを記録
-		if (distance < minDistance) {
-			minDistance = distance;
+		if (lDistance < minDistance) {
+			minDistance = lDistance;
 			closestSegment = i;
 			tOnSegment = t; // 最も近いセグメント内での相対位置を記録
 		}
