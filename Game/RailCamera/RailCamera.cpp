@@ -24,11 +24,14 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 
 	// 座標を取得
 	worldTransform_.scale_ = Vector3(1.0f, 1.0f, 1.0f);
-	worldTransform_.translation_ = Lerp(points.at(closestSegment)->GetWorldTransform()->GetWorldTranslate(), points.at(closestSegment + 1)->GetWorldTransform()->GetWorldTranslate(), T);
+	
 	worldTransform_.translation_ = CatmullRomSpline(T, points.at(p0)->GetWorldTransform()->GetWorldTranslate(), points.at(closestSegment)->GetWorldTransform()->GetWorldTranslate(),
-		points.at(p2)->GetWorldTransform()->GetWorldTranslate(), points.at(p3)->GetWorldTransform()->GetWorldTranslate());
+			points.at(p2)->GetWorldTransform()->GetWorldTranslate(), points.at(p3)->GetWorldTransform()->GetWorldTranslate());
+	prePosition_ = Lerp(prePosition_, worldTransform_.translation_, 0.95f);
+	worldTransform_.translation_ = prePosition_;
 
-	worldTransform_.quaternion_ = Slerp(T, points.at(closestSegment)->GetWorldTransform()->quaternion_, points.at(closestSegment + 1)->GetWorldTransform()->quaternion_);
+
+	worldTransform_.quaternion_ = Slerp(T, points.at(closestSegment)->GetWorldTransform()->quaternion_, points.at(p2)->GetWorldTransform()->quaternion_);
 	worldTransform_.Update();
 }
 
@@ -65,7 +68,7 @@ int RailCamera::FindClosestSegment(const Vector3& playerPosition, const std::vec
 		float lDistance = DistanceToSegment(playerPosition, controlPoints[i], controlPoints[i + 1], t);
 
 		// 最も近いセグメントを記録
-		if (lDistance < minDistance) {
+		if (lDistance < minDistance && t >= 0.0f && t <= 1.0f + 0.05f) {
 			minDistance = lDistance;
 			closestSegment = i;
 			tOnSegment = t; // 最も近いセグメント内での相対位置を記録
