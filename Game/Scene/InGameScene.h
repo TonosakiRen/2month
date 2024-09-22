@@ -4,6 +4,7 @@
 #include "Game/Character/EnemyManager.h"
 #include "Game/Camera/FollowCamera.h"
 #include "Game/Camera/FixedCamera.h"
+#include "Game/RailCamera/RailCamera.h"
 #include <memory>
 #include <vector>
 class PointLights;
@@ -46,6 +47,7 @@ private:
 
 	std::shared_ptr<FollowCamera> followCamera_;
 	std::shared_ptr<FixedCamera> fixedCamera_;
+	std::shared_ptr<RailCamera> railCamera_;
 
 	bool isTrapped_ = false; // true:起動している/false:していない
 	bool isTrappedInitialize = true;

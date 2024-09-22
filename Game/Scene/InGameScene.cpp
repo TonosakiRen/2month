@@ -10,13 +10,13 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	player_ = std::make_unique<Player>();
 	player_->Initialize("playerBody");
 
-	std::string filePath = "stage1";
+	std::string filePath = "1_Stage";
 	switch (stageNum) {
 	case 0:
-		filePath = "stage1";
+		filePath = "1_Stage";
 		break;
 	case 1:
-		filePath = "stage2";
+		filePath = "2_Stage";
 		break;
 	}
 
@@ -41,6 +41,7 @@ void InGameScene::Initialize(PointLights* pointLights, SpotLights* spotLights, S
 	followCamera_ = std::make_shared<FollowCamera>();
 	//followCamera_->Inisialize(trans);
 	fixedCamera_ = std::make_shared<FixedCamera>();
+	railCamera_ = std::make_shared<RailCamera>();
 
 	isEndClearAnimation_ = false;
 	isEndDeadAnimation_ = false;
@@ -105,8 +106,9 @@ void InGameScene::Update() {
 		RT handle;
 		if (iscamera) {
 			followCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate());
-			handle.rotate = followCamera_->GetTransform().quaternion_;
-			handle.position = followCamera_->GetTransform().GetWorldTranslate();
+			railCamera_->Update(player_->GetWorldTransform()->GetWorldTranslate(), stage_->GetControlPoints());
+			handle.rotate = railCamera_->GetTransform().quaternion_;
+			handle.position = railCamera_->GetTransform().GetWorldTranslate();
 		}
 		else {
 			fixedCamera_->Update();

@@ -470,7 +470,7 @@ void Stage::Load(const std::filesystem::path& loadFile) {
 		playerRespawnPoint_.translate = savePoints_.at(savePointIndex_)->GetWorldTransform()->GetWorldTranslate();
 	}
 	else {
-		playerRespawnPoint_.translate = Vector3(-20.0f, 0.0f, -5.0f);
+		playerRespawnPoint_.translate = global->GetVector3Value(selectName, "Player : Translate");
 	}
 
 	num = global->GetIntValue(selectName, "ControlPointConfirmation");
