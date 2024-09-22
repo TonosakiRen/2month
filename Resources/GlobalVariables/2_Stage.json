@@ -1546,8 +1546,8 @@
             21.200000762939453,
             -20.600000381469727
         ],
-        "StageLightNumber : 5 : decay": 1.0,
-        "StageLightNumber : 5 : intensity": 5.5,
+        "StageLightNumber : 5 : decay": 2.0,
+        "StageLightNumber : 5 : intensity": 2.0,
         "StageLightNumber : 6 : Distance": 20.0,
         "StageLightNumber : 6 : Rotate": [
             0.0,
