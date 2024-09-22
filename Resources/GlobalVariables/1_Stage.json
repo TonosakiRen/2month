@@ -731,9 +731,9 @@
         "NormalLightEnemyConfirmation": 0,
         "Player : Rotate": [
             0.0,
-            -4.572862962959334e-05,
+            0.9972850680351257,
             0.0,
-            0.9999997019767761
+            -0.07363837212324142
         ],
         "Player : Scale": [
             1.0,
@@ -741,14 +741,14 @@
             1.0
         ],
         "Player : Translate": [
-            1.6785154457465978e-06,
-            2.984055519104004,
-            -0.22720931470394135
+            -1.357487678527832,
+            2.9840564727783203,
+            1.0042731761932373
         ],
         "SavePointConfirmation": 0,
         "SpawnerConfirmation": 0,
         "StageLightConfirmation": 9,
-        "StageLightNumber : 0 : Distance": 20.0,
+        "StageLightNumber : 0 : Distance": 30.0,
         "StageLightNumber : 0 : Rotate": [
             0.0,
             0.703279435634613,
@@ -766,8 +766,8 @@
             3.4000000953674316,
             -8.399999618530273
         ],
-        "StageLightNumber : 0 : decay": 1.0,
-        "StageLightNumber : 0 : intensity": 5.5,
+        "StageLightNumber : 0 : decay": 2.0,
+        "StageLightNumber : 0 : intensity": 2.0,
         "StageLightNumber : 1 : Distance": 31.0,
         "StageLightNumber : 1 : Rotate": [
             0.0,
@@ -866,8 +866,8 @@
             12.800000190734863,
             -40.0
         ],
-        "StageLightNumber : 5 : decay": 1.0,
-        "StageLightNumber : 5 : intensity": 5.5,
+        "StageLightNumber : 5 : decay": 2.0,
+        "StageLightNumber : 5 : intensity": 4.0,
         "StageLightNumber : 6 : Distance": 50.0,
         "StageLightNumber : 6 : Rotate": [
             0.02696426399052143,
