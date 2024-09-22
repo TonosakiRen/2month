@@ -326,6 +326,11 @@ void Stage::DrawImGui() {
 					if (ImGui::Button("Delete")) {
 						controlPoints_.erase(controlPoints_.begin() + i);
 					}
+					if (ImGui::Button("PushBack")) {
+						controlPoints_.insert(controlPoints_.begin() + i + 1, std::make_shared<ControlPoint>());
+						controlPoints_.at(i + 1)->Initialize(Quaternion(0.0f, 0.0f, 0.0f, 1.0f), controlPoints_.at(i)->worldTransform_.GetWorldTranslate());
+					}
+
 					ImGui::TreePop();
 				}
 			}

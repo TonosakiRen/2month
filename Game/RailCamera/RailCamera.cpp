@@ -10,7 +10,10 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 	float T = 0.0f;
 	std::vector<Vector3> positions;
 	for (auto& point : points) {
-		positions.push_back(point->GetWorldTransform()->GetWorldTranslate());
+		Vector3 trans = point->GetWorldTransform()->GetWorldTranslate();
+		trans.y = playerTranslate.y;
+		trans.z = playerTranslate.z;
+		positions.push_back(trans);
 	}
 	int closestSegment = FindClosestSegment(playerTranslate, positions, T);
 	
