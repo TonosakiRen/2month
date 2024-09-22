@@ -1,6 +1,6 @@
 {
     "house0": {
-        "CannonEnemyConfirmation": 1,
+        "CannonEnemyConfirmation": 0,
         "CannonEnemyNumber : 0 : BulletSpeed": 1.0,
         "CannonEnemyNumber : 0 : Draw": 0,
         "CannonEnemyNumber : 0 : Interval": 60,
@@ -21,6 +21,7 @@
             -7.599999904632568
         ],
         "CoinConfirmation": 0,
+        "ControlPointConfirmation": 0,
         "FloorConfirmation": 1,
         "FloorNumber : 0 : Rotate": [
             4.371138473402425e-08,
@@ -219,7 +220,7 @@
         "StageLightNumber : 0 : decay": 1.0,
         "StageLightNumber : 0 : intensity": 5.5,
         "StandLightEnemyConfirmation": 0,
-        "ThornEnemyConfirmation": 1,
+        "ThornEnemyConfirmation": 0,
         "ThornEnemyNumber : 0 : Amplitube": [
             0.0,
             0.0,
