@@ -12,7 +12,8 @@ public:
 
 private:
 	void DrawImGui();
-	Vector3 Shake(Vector3 shakeValue);
+public:
+	static inline Vector3 Shake(Vector3 shakeValue);
 
 	WorldTransform transform_;
 	float savePlayerX_ = 0.0f;

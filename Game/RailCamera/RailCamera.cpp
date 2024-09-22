@@ -1,12 +1,15 @@
 #include "RailCamera.h"
 #include <algorithm>
+#include "Game/Camera/FollowCamera.h"
 
-void RailCamera::Initialize()
-{
+void RailCamera::Initialize(const WorldTransform& transform) {
+	start_.translate = transform.GetWorldTranslate();
+	start_.rotate = transform.quaternion_;
+	count_ = 0.0f;
+	isEase_ = true;
 }
 
 void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared_ptr<ControlPoint>> points) {
-
 	float T = 0.0f;
 	std::vector<Vector3> positions;
 	for (auto& point : points) {
@@ -36,6 +39,24 @@ void RailCamera::Update(const Vector3& playerTranslate, std::vector <std::shared
 
 	worldTransform_.quaternion_ = Slerp(T, points.at(closestSegment)->GetWorldTransform()->quaternion_, points.at(p2)->GetWorldTransform()->quaternion_);
 	worldTransform_.Update();
+
+
+	if (isEase_) {
+		float MaxFrame = 20.0f;
+		Vector3 shake(0.5f, 0.5f, 0.0f);
+		shake = FollowCamera::Shake(shake);
+		float Time = count_ / MaxFrame;
+		Time = std::clamp(Time, 0.0f, 1.0f);
+
+		worldTransform_.translation_ = Lerp(start_.translate, worldTransform_.translation_, Time) + shake;
+		worldTransform_.quaternion_ = Slerp(Time, start_.rotate, worldTransform_.quaternion_);
+		worldTransform_.Update();
+		if (count_++ >= MaxFrame) {
+			count_ = MaxFrame;
+			isEase_ = false;
+		}
+	}
+
 }
 
 float RailCamera::DistanceToSegment(const Vector3& point, const Vector3& p1, const Vector3& p2, float& t) {

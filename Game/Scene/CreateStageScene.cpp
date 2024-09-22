@@ -88,6 +88,7 @@ void CreateStageScene::Update() {
 	else if(stage_->GetParam().isMomentActivation_ && stage_->GetParam().isBreaked_) {
 		iscamera = true;
 		followCamera_->Inisialize(fixedCamera_->GetTransform());
+		railCamera_->Initialize(fixedCamera_->GetTransform());
 	}
 
 	RT handle;

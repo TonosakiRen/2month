@@ -9,7 +9,7 @@ public:
 	RailCamera() = default;
 	~RailCamera() = default;
 
-	void Initialize();
+	void Initialize(const WorldTransform& transform);
 
 	void Update(const Vector3& playerTranslate, std::vector<std::shared_ptr<ControlPoint>> points);
 	WorldTransform GetTransform() const { return worldTransform_; }
@@ -22,8 +22,14 @@ private:
 	int FindClosestSegment(const Vector3& playerPosition, const std::vector<Vector3>& controlPoints, float& tOnSegment);
 
 	WorldTransform worldTransform_;
-
-	Vector3 oldPosition_;
+	struct RT {
+		Quaternion rotate;
+		Vector3 translate;
+	};
+	RT start_;
+	RT end_;
+	float count_ = 0.0f;
+	bool isEase_ = false;
 	Vector3 prePosition_;
 
 };
